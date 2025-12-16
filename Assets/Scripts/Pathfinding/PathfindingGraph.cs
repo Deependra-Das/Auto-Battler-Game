@@ -50,7 +50,7 @@ public class PathFindingGraph
         return neighBourList;
     }
 
-    public float GetDistance(Node source, Node destination)
+    public float GetPathWeight(Node source, Node destination)
     {
         foreach (Path path in _pathList)
         {
