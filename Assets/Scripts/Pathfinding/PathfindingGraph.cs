@@ -22,7 +22,7 @@ public class PathFindingGraph
         _nodeList.Add(new Node(_nodeList.Count, worldPosition));
     }
 
-    public void AddEdge(Node source, Node destination)
+    public void AddPath(Node source, Node destination)
     {
         _pathList.Add(new Path(source, destination, _defaultWeight));
     }
