@@ -48,8 +48,17 @@ public class BaseUnit : MonoBehaviour
     protected bool HasEnemy => currentTarget != null;
 
 
-    void Start()
+    public void Initialize(TeamEnum team, Node spawnNode)
     {
-        
+        _team = team;
+
+        if(_team == TeamEnum.Team2)
+        {
+            _spriteRenderer.flipX = true;
+        }
+
+        this.currentNode = spawnNode;
+        transform.position = currentNode.position;
+        currentNode.SetOccupied(true);
     }
 }

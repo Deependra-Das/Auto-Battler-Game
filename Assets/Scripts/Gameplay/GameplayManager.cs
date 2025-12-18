@@ -28,6 +28,8 @@ public class GameplayManager : MonoBehaviour
         {
             BaseUnit newUnit = Instantiate(_unitPrefabList[0]);
             teamService.AddUnitToTeam(newUnit, TeamEnum.Team1);
+
+            newUnit.Initialize(TeamEnum.Team1, graphService.GetUnOccupiedNode(TeamEnum.Team1));
         }
     }
 

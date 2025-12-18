@@ -9,10 +9,15 @@ public class GraphService
 
     private List<Tile> tileList = new List<Tile>();
 
+    private Dictionary<TeamEnum, int> _startPositionForTeam;
+
     public GraphService(List<Tile> spawnedTiles)
     {
         tileList = spawnedTiles;
         InitializeGraph();
+        _startPositionForTeam = new Dictionary<TeamEnum, int>();
+        _startPositionForTeam.Add(TeamEnum.Team1, 0);
+        _startPositionForTeam.Add(TeamEnum.Team2, graph.Nodes.Count - 1);
     }
 
     private void InitializeGraph()
@@ -36,5 +41,29 @@ public class GraphService
                 }
             }
         }
+    }
+
+    public Node GetUnOccupiedNode(TeamEnum team)
+    {
+        int startIndex = _startPositionForTeam[team];
+        int currentIndex = startIndex;
+
+        while (graph.Nodes[currentIndex].IsOccupied)
+        {
+            if(startIndex == 0)
+            {
+                currentIndex++;
+                if (currentIndex == graph.Nodes.Count)
+                    return null;
+            }
+            else
+            {
+                currentIndex--;
+                if (currentIndex == -1)
+                    return null;
+            }
+        }
+
+        return graph.Nodes[currentIndex];
     }
 }
