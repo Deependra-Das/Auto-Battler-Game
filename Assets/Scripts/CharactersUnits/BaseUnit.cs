@@ -3,7 +3,7 @@ using UnityEngine;
 public class BaseUnit : MonoBehaviour
 {
     [SerializeField] private string _characterName;
-    [SerializeField] private UnitTypeEnum _unitEnumType;
+    [SerializeField] private UnitTypeEnum _unitType;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private Animator _animator;
 
@@ -38,8 +38,15 @@ public class BaseUnit : MonoBehaviour
     protected bool isDead = false;
     protected bool canAttack = true;
 
+    private TeamEnum _team;
+
+
+    public string CharacterName => _characterName;
+    public UnitTypeEnum UnitType => _unitType;
+    public TeamEnum Team => _team;
     public Node CurrentNode => currentNode;
     protected bool HasEnemy => currentTarget != null;
+
 
     void Start()
     {
