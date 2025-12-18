@@ -1,19 +1,34 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameplayManager : MonoBehaviour
 {
     [SerializeField] private TileScriptableObjectScript _tile_SO;
-
+    [SerializeField] private List<BaseUnit> _unitPrefabList;
     protected PathFindingGraph graph;
+
+    TileGridService tileGridService;
+    GraphService graphService;
+    TeamService teamService;
 
     void Start()
     {
-        TileGridService tileGridService = new TileGridService(_tile_SO);
+        tileGridService = new TileGridService(_tile_SO);
 
-        GraphService graphService = new GraphService(tileGridService.GetSpawnedTilesList());
+        graphService = new GraphService(tileGridService.GetSpawnedTilesList());
         graph = graphService.Graph;
+
+        teamService = new TeamService();
+        InstantiateUnits();
+    }
+
+    private void InstantiateUnits()
+    {
+        for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team1); i++)
+        {
+            BaseUnit newUnit = Instantiate(_unitPrefabList[0]);
+            teamService.AddUnitToTeam(newUnit, TeamEnum.Team1);
+        }
     }
 
     public int fromIndex = 0;
