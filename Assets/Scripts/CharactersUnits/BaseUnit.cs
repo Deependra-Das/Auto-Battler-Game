@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public class CharacterUnit : MonoBehaviour
+public class BaseUnit : MonoBehaviour
 {
-
+    [SerializeField] private string _characterName;
+    [SerializeField] private UnitTypeEnum _unitEnumType;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private Animator _animator;
 
@@ -27,7 +28,7 @@ public class CharacterUnit : MonoBehaviour
     private float _manaRegenMultiplier = 1f;
 
     protected float attackCoolDown;
-    protected CharacterUnit currentTarget = null;
+    protected BaseUnit currentTarget = null;
     protected Node currentNode;
 
     protected bool isTargetInRange => currentTarget != null && Vector3.Distance(this.transform.position, currentTarget.transform.position) <= baseRange;
