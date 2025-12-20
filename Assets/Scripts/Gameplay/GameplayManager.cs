@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GameplayManager : MonoBehaviour
 {
+    public static GameplayManager Instance;
+
     [SerializeField] private TileScriptableObjectScript _tile_SO;
     [SerializeField] private List<BaseUnit> _unitPrefabList;
     protected PathFindingGraph graph;
@@ -10,6 +12,19 @@ public class GameplayManager : MonoBehaviour
     TileGridService tileGridService;
     GraphService graphService;
     TeamService teamService;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+    }
 
     void Start()
     {
@@ -31,6 +46,22 @@ public class GameplayManager : MonoBehaviour
 
             newUnit.Initialize(TeamEnum.Team1, graphService.GetUnOccupiedNode(TeamEnum.Team1));
         }
+
+        for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team2); i++)
+        {
+            BaseUnit newUnit = Instantiate(_unitPrefabList[0]);
+            teamService.AddUnitToTeam(newUnit, TeamEnum.Team2);
+
+            newUnit.Initialize(TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
+        }
+    }
+
+    public List<BaseUnit> GetOpponentTeamUnits(TeamEnum opponentTeam)
+    {
+        if (opponentTeam == TeamEnum.Team1)
+            return teamService.GetTeamUnits(TeamEnum.Team2);
+        else
+            return teamService.GetTeamUnits(TeamEnum.Team1);
     }
 
     public int fromIndex = 0;
@@ -51,18 +82,15 @@ public class GameplayManager : MonoBehaviour
 
         var NodesList = graph.Nodes;
 
-        if (NodesList == null)
-            return;
+        if (NodesList == null) return;
 
         foreach (Node node in NodesList)
         {
             Gizmos.color = node.IsOccupied ? Color.red : Color.green;
             Gizmos.DrawSphere(node.position, 0.1f);
-
         }
 
-        if (fromIndex >= NodesList.Count || toIndex >= NodesList.Count)
-            return;
+        if (fromIndex >= NodesList.Count || toIndex >= NodesList.Count) return;
 
         List<Node> pathList = graph.GetShortestPath(NodesList[fromIndex], NodesList[toIndex]);
 
@@ -70,7 +98,7 @@ public class GameplayManager : MonoBehaviour
         {
             for (int i = 1; i < pathList.Count; i++)
             {
-                Debug.DrawLine(pathList[i - 1].position, pathList[i].position, Color.red, 10);
+                Debug.DrawLine(pathList[i - 1].position, pathList[i].position, Color.red, 1);
             }
         }
     }
