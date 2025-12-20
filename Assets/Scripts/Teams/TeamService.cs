@@ -13,7 +13,7 @@ public class TeamService
     {
         _teams.Add(TeamEnum.Team1, new List<BaseUnit>());
         _teams.Add(TeamEnum.Team2, new List<BaseUnit>());
-        _teamCapacities = new Dictionary<TeamEnum, int> {{ TeamEnum.Team1, 1 },{ TeamEnum.Team2, 1 }};
+        _teamCapacities = new Dictionary<TeamEnum, int> {{ TeamEnum.Team1, 4 },{ TeamEnum.Team2, 4 }};
     }
 
     public bool AddUnitToTeam(BaseUnit unit, TeamEnum team)
@@ -30,5 +30,14 @@ public class TeamService
     public bool RemoveUnitFromTeam(BaseUnit unit, TeamEnum team)
     {
         return _teams[team].Remove(unit);
+    }
+
+    public List<BaseUnit> GetTeamUnits(TeamEnum team)
+    {
+        if (_teams.ContainsKey(team))
+        {
+            return _teams[team];
+        }
+        return null;
     }
 }
