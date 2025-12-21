@@ -126,16 +126,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3cbe1407f204d42ab1dfe5034764de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crusader_MeleeTankUnit
-  _characterName: 
-  _unitType: 2
-  _spriteRenderer: {fileID: 4168147060520492052}
-  _animator: {fileID: 9161870426814276127}
-  _baseDamage: 1
-  _baseHealth: 5
-  _baseShield: 0
-  _baseMana: 0
-  _baseHealing: 0
+  characterName: 
+  unitType: 2
+  spriteRenderer: {fileID: 4168147060520492052}
+  animator: {fileID: 9161870426814276127}
+  baseDamage: 1
+  baseHealth: 5
+  baseShield: 0
+  baseMana: 0
+  baseHealing: 0
   baseRange: 1
-  _baseAttackSpeed: 1
-  _baseMovementSpeed: 1
-  _baseManaRegenSpeed: 0
+  baseAttackSpeed: 1
+  baseMovementSpeed: 1
+  baseManaRegenSpeed: 0
+  healthBar: {fileID: 0}
