@@ -11,7 +11,7 @@ public class GraphService
 
     private Dictionary<TeamEnum, int> _startPositionForTeam;
 
-    public GraphService(List<Tile> spawnedTiles)
+    public void Initialize(List<Tile> spawnedTiles)
     {
         tileList = spawnedTiles;
         InitializeGraph();
