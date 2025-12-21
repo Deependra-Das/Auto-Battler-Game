@@ -56,4 +56,21 @@ public class BaseUnit : MonoBehaviour
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
     }
+
+    protected void FindTarget()
+    {
+        var allEnemies = GameplayManager.Instance.GetOpponentTeamUnits(_team);
+        float minDistance = Mathf.Infinity;
+        BaseUnit enemyUnit = null;
+        foreach (BaseUnit enemy in allEnemies)
+        {
+            if (Vector3.Distance(enemy.transform.position, this.transform.position) <= minDistance)
+            {
+                minDistance = Vector3.Distance(enemy.transform.position, this.transform.position);
+                enemyUnit = enemy;
+            }
+        }
+
+        currentTarget = enemyUnit;
+    }
 }
