@@ -35,17 +35,15 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team1); i++)
         {
             BaseUnit newUnit = Instantiate(_unitPrefabList[0]);
-            teamService.AddUnitToTeam(newUnit, TeamEnum.Team1);
-
             newUnit.Initialize(TeamEnum.Team1, graphService.GetUnOccupiedNode(TeamEnum.Team1));
+            teamService.AddUnitToTeam(newUnit, TeamEnum.Team1);
         }
 
         for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team2); i++)
         {
             BaseUnit newUnit = Instantiate(_unitPrefabList[0]);
-            teamService.AddUnitToTeam(newUnit, TeamEnum.Team2);
-
             newUnit.Initialize(TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
+            teamService.AddUnitToTeam(newUnit, TeamEnum.Team2);
         }
     }
 
