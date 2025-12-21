@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 396713096338241575}
   - component: {fileID: 4168147060520492052}
   - component: {fileID: 9161870426814276127}
-  - component: {fileID: 4802795144296444329}
+  - component: {fileID: 7568324057790207809}
   m_Layer: 0
   m_Name: Crusader_MeleeAttackerUnitPrefab
   m_TagString: Untagged
@@ -114,7 +114,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4802795144296444329
+--- !u!114 &7568324057790207809
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,8 +128,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Crusader_MeleeAttackerUnit
   _characterName: 
   _unitType: 0
-  _spriteRenderer: {fileID: 0}
-  _animator: {fileID: 0}
+  _spriteRenderer: {fileID: 4168147060520492052}
+  _animator: {fileID: 9161870426814276127}
   _baseDamage: 1
   _baseHealth: 5
   _baseShield: 0

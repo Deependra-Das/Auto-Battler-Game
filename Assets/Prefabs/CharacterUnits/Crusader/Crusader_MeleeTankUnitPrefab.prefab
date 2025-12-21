@@ -127,9 +127,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crusader_MeleeTankUnit
   _characterName: 
-  _unitType: 0
-  _spriteRenderer: {fileID: 0}
-  _animator: {fileID: 0}
+  _unitType: 2
+  _spriteRenderer: {fileID: 4168147060520492052}
+  _animator: {fileID: 9161870426814276127}
   _baseDamage: 1
   _baseHealth: 5
   _baseShield: 0
