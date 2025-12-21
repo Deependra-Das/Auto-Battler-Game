@@ -1,3 +1,6 @@
+using AutoBattler.Main;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BaseUnit : MonoBehaviour
@@ -40,23 +43,15 @@ public class BaseUnit : MonoBehaviour
 
     private TeamEnum _team;
 
-
     public string CharacterName => _characterName;
     public UnitTypeEnum UnitType => _unitType;
     public TeamEnum Team => _team;
     public Node CurrentNode => currentNode;
     protected bool HasEnemy => currentTarget != null;
 
-
     public void Initialize(TeamEnum team, Node spawnNode)
     {
         _team = team;
-
-        if(_team == TeamEnum.Team2)
-        {
-            _spriteRenderer.flipX = true;
-        }
-
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
