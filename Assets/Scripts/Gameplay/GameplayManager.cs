@@ -1,39 +1,32 @@
+using AutoBattler.Main;
+using AutoBattler.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameplayManager : MonoBehaviour
+public class GameplayManager : GenericMonoSingleton<GameplayManager>
 {
-    public static GameplayManager Instance;
-
-    [SerializeField] private TileScriptableObjectScript _tile_SO;
-    [SerializeField] private List<BaseUnit> _unitPrefabList;
     protected PathFindingGraph graph;
-
     TileGridService tileGridService;
     GraphService graphService;
     TeamService teamService;
 
+    private List<BaseUnit> _unitPrefabList;
+
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+        _unitPrefabList = new List<BaseUnit>();
     }
 
-    void Start()
+    public void Initialize(UnitScriptableObjectScript unit_SO)
     {
-        tileGridService = new TileGridService(_tile_SO);
+        tileGridService = GameManager.Instance.Get<TileGridService>();
+        graphService = GameManager.Instance.Get<GraphService>();
+        teamService = GameManager.Instance.Get<TeamService>();
 
-        graphService = new GraphService(tileGridService.GetSpawnedTilesList());
+        graphService.Initialize(tileGridService.GetSpawnedTilesList());
         graph = graphService.Graph;
 
-        teamService = new TeamService();
+        _unitPrefabList = unit_SO.unitPrefabList;
         InstantiateUnits();
     }
 
