@@ -106,5 +106,30 @@ public class BaseUnit : MonoBehaviour
             path[1].SetOccupied(true);
             destination = path[1];
         }
+
+        isMoving = !MoveTowardsNode(destination);
+        if (!isMoving)
+        {
+            currentNode.SetOccupied(false);
+            SetCurrentNode(destination);
+        }
+    }
+
+    protected bool MoveTowardsNode(Node nextNode)
+    {
+        Vector3 direction = (nextNode.position - this.transform.position);
+        if (direction.sqrMagnitude <= 0.005f)
+        {
+            transform.position = nextNode.position;
+            return true;
+        }
+
+        this.transform.position += direction.normalized * _baseMovementSpeed * Time.deltaTime;
+        return false;
+    }
+
+    public void SetCurrentNode(Node node)
+    {
+        currentNode = node;
     }
 }
