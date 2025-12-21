@@ -73,4 +73,38 @@ public class BaseUnit : MonoBehaviour
 
         currentTarget = enemyUnit;
     }
+
+    protected void GetInRange()
+    {
+        if (currentTarget == null)
+            return;
+
+        if (!isMoving)
+        {
+            GraphService graphService = GameManager.Instance.Get<GraphService>();
+            destination = null;
+            List<Node> candidates = graphService.GetNodesCloseTo(currentTarget.CurrentNode);
+            candidates = candidates.OrderBy(x => Vector3.Distance(x.position, this.transform.position)).ToList();
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                if (!candidates[i].IsOccupied)
+                {
+                    destination = candidates[i];
+                    break;
+                }
+            }
+            if (destination == null)
+                return;
+
+            var path = graphService.GetShortestPath(currentNode, destination);
+            if (path == null && path.Count <= 1)
+                return;
+
+            if (path[1].IsOccupied)
+                return;
+
+            path[1].SetOccupied(true);
+            destination = path[1];
+        }
+    }
 }
