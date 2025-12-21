@@ -13,7 +13,8 @@ public class MeleeAttackerUnit : BaseUnit
         {
             if (canAttack)
             {
-                //Attack();
+                Attack();
+                currentTarget.TakeDamage(baseDamage);
             }
         }
         else
