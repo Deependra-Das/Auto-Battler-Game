@@ -55,6 +55,12 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
             return teamService.GetTeamUnits(TeamEnum.Team1);
     }
 
+    public void MarkUnitDead(BaseUnit unit)
+    {
+        teamService.RemoveUnitFromTeam(unit, unit.Team);
+        Destroy(unit.gameObject);
+    }
+
     public int fromIndex = 0;
     public int toIndex = 0;
 
