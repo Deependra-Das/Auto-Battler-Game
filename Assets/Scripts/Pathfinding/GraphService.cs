@@ -66,4 +66,14 @@ public class GraphService
 
         return graph.Nodes[currentIndex];
     }
+
+    public List<Node> GetShortestPath(Node source, Node destination)
+    {
+        return graph.GetShortestPath(source, destination);
+    }
+
+    public List<Node> GetNodesCloseTo(Node destination)
+    {
+        return graph.GetNeighbours(destination);
+    }
 }
