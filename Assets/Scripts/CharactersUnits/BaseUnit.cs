@@ -131,13 +131,20 @@ public class BaseUnit : MonoBehaviour
     protected bool MoveTowardsNode(Node nextNode)
     {
         Vector3 direction = (nextNode.position - this.transform.position);
+        Vector3 dirNormalized = direction.normalized;
+        animator.SetFloat("MoveX", dirNormalized.x);
+        animator.SetFloat("MoveY", dirNormalized.y);
+
         if (direction.sqrMagnitude <= 0.005f)
         {
             transform.position = nextNode.position;
+            animator.SetBool("IsWalking", false);
             return true;
         }
 
-        this.transform.position += direction.normalized * baseMovementSpeed * Time.deltaTime;
+        animator.SetBool("IsWalking", true);
+
+        this.transform.position += dirNormalized * baseMovementSpeed * Time.deltaTime;
         return false;
     }
 
@@ -151,6 +158,12 @@ public class BaseUnit : MonoBehaviour
         if (!canAttack)
             return;
 
+        Vector3 direction = (currentTarget.CurrentNode.position - this.transform.position);
+        Vector3 dirNormalized = direction.normalized;
+        animator.SetFloat("MoveX", dirNormalized.x);
+        animator.SetFloat("MoveY", dirNormalized.y);
+
+        animator.SetTrigger("Attack");
         attackCoolDown = 1 / baseAttackSpeed;
         StartCoroutine(WaitCoroutine());
     }
@@ -159,6 +172,7 @@ public class BaseUnit : MonoBehaviour
     {
         canAttack = false;
         yield return null;
+        animator.ResetTrigger("Attack");
         yield return new WaitForSeconds(attackCoolDown);
         canAttack = true;
     }
@@ -171,6 +185,7 @@ public class BaseUnit : MonoBehaviour
         if (currentHealth <= 0 && !isDead)
         {
             isDead = true;
+            animator.SetBool("IsDead", true);
             currentNode.SetOccupied(false);
             GameplayManager.Instance.MarkUnitDead(this);
         }
