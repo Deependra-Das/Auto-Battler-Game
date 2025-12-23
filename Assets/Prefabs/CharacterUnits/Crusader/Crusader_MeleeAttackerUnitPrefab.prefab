@@ -700,7 +700,7 @@ MonoBehaviour:
   baseMana: 0
   baseHealing: 0
   baseRange: 1
-  baseAttackSpeed: 1
+  baseAttackSpeed: 0.5
   baseMovementSpeed: 1
   baseManaRegenSpeed: 0
   healthBar: {fileID: 2740121747865597655}
