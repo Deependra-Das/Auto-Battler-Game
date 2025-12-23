@@ -2,13 +2,24 @@ using UnityEngine;
 
 public class MeleeTankUnit : BaseUnit
 {
-    void Start()
+    protected void Update()
     {
-        
-    }
+        if (!HasEnemy)
+        {
+            FindTarget();
+        }
 
-    void Update()
-    {
-        
+        if (isTargetInRange && !isMoving)
+        {
+            if (canAttack)
+            {
+                Attack();
+                currentTarget.TakeDamage(baseDamage);
+            }
+        }
+        else
+        {
+            GetInRange();
+        }
     }
 }
