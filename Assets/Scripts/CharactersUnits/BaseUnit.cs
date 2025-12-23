@@ -64,8 +64,9 @@ public class BaseUnit : MonoBehaviour
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
-       totalHealth = baseHealth;
-       currentHealth = totalHealth;
+        attackCoolDown = 1 / baseAttackSpeed;
+        totalHealth = baseHealth;
+        currentHealth = totalHealth;
         healthBar.maxValue = totalHealth;
         UpdateHealthBar(currentHealth);
     }
@@ -155,26 +156,7 @@ public class BaseUnit : MonoBehaviour
 
     protected virtual void Attack()
     {
-        if (!canAttack)
-            return;
-
-        Vector3 direction = (currentTarget.CurrentNode.position - this.transform.position);
-        Vector3 dirNormalized = direction.normalized;
-        animator.SetFloat("MoveX", dirNormalized.x);
-        animator.SetFloat("MoveY", dirNormalized.y);
-
-        animator.SetTrigger("Attack");
-        attackCoolDown = 1 / baseAttackSpeed;
-        StartCoroutine(WaitCoroutine());
-    }
-
-    IEnumerator WaitCoroutine()
-    {
-        canAttack = false;
-        yield return null;
-        animator.ResetTrigger("Attack");
-        yield return new WaitForSeconds(attackCoolDown);
-        canAttack = true;
+        Debug.Log("Base::Attack");
     }
 
     public void TakeDamage(int amount)
@@ -186,9 +168,15 @@ public class BaseUnit : MonoBehaviour
         {
             isDead = true;
             animator.SetBool("IsDead", true);
-            currentNode.SetOccupied(false);
-            GameplayManager.Instance.MarkUnitDead(this);
+            StartCoroutine(WaitForDeathAnimationCoroutine());
         }
+    }
+
+    IEnumerator WaitForDeathAnimationCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        currentNode.SetOccupied(false);
+        GameplayManager.Instance.MarkUnitDead(this);
     }
 
     public void UpdateHealthBar(float currentHealthValue)
