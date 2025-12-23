@@ -417,6 +417,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AutoBattler.Main.GameManager
   _tile_SO: {fileID: 11400000, guid: 9d9aeaa809627ca46a6605ab0925435f, type: 2}
   _unit_SO: {fileID: 11400000, guid: c4ae526f170fffc418cc980a9a3f961e, type: 2}
+  _rangedAbilities_SO: {fileID: 11400000, guid: 2cac3852b0fc522439d1e0df4b9ce797, type: 2}
 --- !u!4 &1700229633
 Transform:
   m_ObjectHideFlags: 0

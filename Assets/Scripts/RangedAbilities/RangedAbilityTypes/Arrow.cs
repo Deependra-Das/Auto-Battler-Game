@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Arrow : MonoBehaviour
+public class Arrow : MonoBehaviour, IRangedAbility
 {
     private BaseUnit _targetUnit;
     private int _damage;

@@ -8,9 +8,11 @@ namespace AutoBattler.Main
     {
         [SerializeField] private TileScriptableObjectScript _tile_SO;
         [SerializeField] private UnitScriptableObjectScript _unit_SO;
+        [SerializeField] private RangedAbilitiesScriptableObjectScript _rangedAbilities_SO;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             RegisterServices();
         }
 
@@ -24,6 +26,7 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new TileGridService(_tile_SO));
             ServiceLocator.Register(new GraphService());
             ServiceLocator.Register(new TeamService());
+            ServiceLocator.Register(new RangedAbilityService(_rangedAbilities_SO));
         }
 
         private void DeregisterServices()

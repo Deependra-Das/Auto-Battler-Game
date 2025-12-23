@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ManaBurst : MonoBehaviour
+public class ManaBurst : MonoBehaviour, IRangedAbility
 {
     private BaseUnit _targetUnit;
     private int _damage;

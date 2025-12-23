@@ -2,8 +2,14 @@ using UnityEngine;
 
 public class RangedAbilityService
 {
-    [SerializeField] private Arrow _arrowPrefab;
-    [SerializeField] private ManaBurst _magicCirclePrefab;
+    private Arrow _arrowPrefab;
+    private ManaBurst _magicBurstPrefab;
+
+    public RangedAbilityService(RangedAbilitiesScriptableObjectScript rangedAbilities_SO)
+    {
+        _arrowPrefab = rangedAbilities_SO.arrowPrefab;
+        _magicBurstPrefab = rangedAbilities_SO.manaBurstPrefab;
+    }
 
     public void SpawnProjectile(RangedAbilityTypeEnum type, BaseUnit owner, BaseUnit target, int damage)
     {
@@ -29,7 +35,7 @@ public class RangedAbilityService
 
     private void SpawnMagicCircle(BaseUnit target, int damage)
     {
-        ManaBurst circle = GameObject.Instantiate(_magicCirclePrefab, target.transform.position, Quaternion.identity);
+        ManaBurst circle = GameObject.Instantiate(_magicBurstPrefab, target.transform.position, Quaternion.identity);
         circle.Initialize(target, damage);
     }
 }

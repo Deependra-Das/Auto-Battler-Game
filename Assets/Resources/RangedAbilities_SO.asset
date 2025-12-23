@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 451b709364e6a2c47bb909b726c9c38a, type: 3}
+  m_Name: RangedAbilities_SO
+  m_EditorClassIdentifier: Assembly-CSharp::RangedAbilitiesScriptableObjectScript
+  arrowPrefab: {fileID: 6893150868743772336, guid: e032d78003cd9964db8d51adc2cbbb22, type: 3}
+  manaBurstPrefab: {fileID: 8106965445191160797, guid: 75afec4c812f390439f30d285269a7ff, type: 3}
