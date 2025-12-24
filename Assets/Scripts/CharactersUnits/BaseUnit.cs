@@ -19,11 +19,13 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected int baseHealing = 0;
 
     [SerializeField] [Range(1, 5)] protected int baseRange = 1;
-    [SerializeField] protected float baseAttackSpeed = 1f;
     [SerializeField] protected float baseMovementSpeed = 1f;
     [SerializeField] protected float baseManaRegenSpeed = 0f;
 
     [SerializeField] protected Slider healthBar;
+
+    [SerializeField] protected float attackCoolDown = 1f;
+    [SerializeField] protected float delayBeforeRangedAttack = 0f;
 
     protected int totalDamage;
     protected int totalHealth;
@@ -39,7 +41,7 @@ public class BaseUnit : MonoBehaviour
     protected int currentShield;
     protected int currentMana;
 
-    protected float attackCoolDown;
+    protected UnitFacingDirectionEnum directionFacing = UnitFacingDirectionEnum.Down;
     protected BaseUnit currentTarget = null;
     protected Node currentNode;
 
@@ -57,6 +59,7 @@ public class BaseUnit : MonoBehaviour
     public TeamEnum Team => _team;
     public Node CurrentNode => currentNode;
     protected bool HasEnemy => currentTarget != null;
+    public UnitFacingDirectionEnum DirectionFacing => directionFacing;
 
     public void Initialize(TeamEnum team, Node spawnNode)
     {
@@ -64,7 +67,6 @@ public class BaseUnit : MonoBehaviour
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
-        attackCoolDown = 1 / baseAttackSpeed;
         totalHealth = baseHealth;
         currentHealth = totalHealth;
         healthBar.maxValue = totalHealth;
@@ -135,6 +137,8 @@ public class BaseUnit : MonoBehaviour
         Vector3 dirNormalized = direction.normalized;
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
+        
+        SetDirectionFacing(dirNormalized);
 
         if (direction.sqrMagnitude <= 0.005f)
         {
@@ -182,5 +186,25 @@ public class BaseUnit : MonoBehaviour
     public void UpdateHealthBar(float currentHealthValue)
     {
         healthBar.value = currentHealthValue;
+    }
+
+    public void SetDirectionFacing(Vector3 direction)
+    {
+        if (direction.x > 0) 
+        {
+            directionFacing = UnitFacingDirectionEnum.Right;
+        }
+        else if (direction.x < 0) 
+        {
+            directionFacing = UnitFacingDirectionEnum.Left;
+        }
+        else if (direction.y > 0)
+        {
+            directionFacing = UnitFacingDirectionEnum.Up;
+        }
+        else if (direction.y < 0)
+        {
+            directionFacing = UnitFacingDirectionEnum.Down;
+        }
     }
 }

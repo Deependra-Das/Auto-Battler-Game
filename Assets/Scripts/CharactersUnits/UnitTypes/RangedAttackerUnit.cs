@@ -2,13 +2,23 @@ using UnityEngine;
 
 public class RangedAttackerUnit : BaseUnit
 {
-    void Start()
+    protected void Update()
     {
-        
-    }
+        if (!HasEnemy)
+        {
+            FindTarget();
+        }
 
-    void Update()
-    {
-        
+        if (isTargetInRange && !isMoving)
+        {
+            if (canAttack)
+            {
+                Attack();
+            }
+        }
+        else
+        {
+            GetInRange();
+        }
     }
 }
