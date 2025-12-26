@@ -1,17 +1,18 @@
 using UnityEngine;
 
-public class ManaBurst : MonoBehaviour, IRangedAbility
+public class ManaBurst : MonoBehaviour
 {
     private BaseUnit _targetUnit;
     private int _damage;
-    private float _lifetime = 1f;
-    private float _damageDelay = 0.2f;
+    private float _lifetime;
+    private float _damageDelay;
 
-    public void Initialize(BaseUnit targetUnit, int damage)
+    public void Initialize(BaseUnit targetUnit, int damage, float lifetime, float damageDelay)
     {
         _targetUnit = targetUnit;
         _damage = damage;
-
+        _lifetime = lifetime;
+        _damageDelay = damageDelay;
         Invoke(nameof(ApplyDamage), _damageDelay);
         Destroy(gameObject, _lifetime);
     }
