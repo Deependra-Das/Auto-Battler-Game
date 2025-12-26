@@ -26,7 +26,7 @@ public class Crusader_RangedAttackerUnit : RangedAttackerUnit
 
     private void ShootArrow()
     {
-        GameManager.Instance.Get<RangedAbilityService>().SpawnRangedAbility(RangedAbilityTypeEnum.Arrow, this, currentTarget, baseDamage);
+        GameManager.Instance.Get<RangedAbilityService>().SpawnArrow(this, currentTarget, baseDamage);
     }
 
     IEnumerator AttackCoolDownWaitCoroutine()
