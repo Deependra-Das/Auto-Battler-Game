@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Crusader_RangedSupportUnit : RangedSupportUnit
 {
+    [SerializeField] protected float lifetime = 1f;
+    [SerializeField] protected float damageDelay = 0.2f;
+
     protected override void Attack()
     {
         if (!canAttack) return;
