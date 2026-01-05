@@ -1,0 +1,990 @@
+fileFormatVersion: 2
+guid: 74956b74ce4c5454bab941a8bc2061e7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3337668062646686816
+    second: Spartan_MeleeTankUnit3_0
+  - first:
+      213: 7814671974337078163
+    second: Spartan_MeleeTankUnit3_1
+  - first:
+      213: 7101318609888589803
+    second: Spartan_MeleeTankUnit3_2
+  - first:
+      213: 1286709896144467496
+    second: Spartan_MeleeTankUnit3_3
+  - first:
+      213: -7218037691170755920
+    second: Spartan_MeleeTankUnit3_4
+  - first:
+      213: 3504012172144637879
+    second: Spartan_MeleeTankUnit3_5
+  - first:
+      213: 4446142471992909011
+    second: Spartan_MeleeTankUnit3_6
+  - first:
+      213: -7393882830114540051
+    second: Spartan_MeleeTankUnit3_7
+  - first:
+      213: 2447765966787091497
+    second: Spartan_MeleeTankUnit3_8
+  - first:
+      213: 9189374963661817908
+    second: Spartan_MeleeTankUnit3_9
+  - first:
+      213: 5943730500504961162
+    second: Spartan_MeleeTankUnit3_10
+  - first:
+      213: -4599455455460204567
+    second: Spartan_MeleeTankUnit3_11
+  - first:
+      213: 5325243361660817815
+    second: Spartan_MeleeTankUnit3_12
+  - first:
+      213: 3781804320788711148
+    second: Spartan_MeleeTankUnit3_13
+  - first:
+      213: 3213142478254615879
+    second: Spartan_MeleeTankUnit3_14
+  - first:
+      213: 4227147411207771356
+    second: Spartan_MeleeTankUnit3_15
+  - first:
+      213: 7323631592246060553
+    second: Spartan_MeleeTankUnit3_16
+  - first:
+      213: -2106884941884652431
+    second: Spartan_MeleeTankUnit3_17
+  - first:
+      213: -1947051249297468521
+    second: Spartan_MeleeTankUnit3_18
+  - first:
+      213: 449321317362582549
+    second: Spartan_MeleeTankUnit3_19
+  - first:
+      213: -3046780333845742330
+    second: Spartan_MeleeTankUnit3_20
+  - first:
+      213: 3178588781964361548
+    second: Spartan_MeleeTankUnit3_21
+  - first:
+      213: 9185893746684393814
+    second: Spartan_MeleeTankUnit3_22
+  - first:
+      213: 1697140771797732731
+    second: Spartan_MeleeTankUnit3_23
+  - first:
+      213: 2973752189608492602
+    second: Spartan_MeleeTankUnit3_24
+  - first:
+      213: 837019694384019251
+    second: Spartan_MeleeTankUnit3_25
+  - first:
+      213: -9006979854688479663
+    second: Spartan_MeleeTankUnit3_26
+  - first:
+      213: 6131693947533112889
+    second: Spartan_MeleeTankUnit3_27
+  - first:
+      213: -2616173232745755610
+    second: Spartan_MeleeTankUnit3_28
+  - first:
+      213: 6004034496110892791
+    second: Spartan_MeleeTankUnit3_29
+  - first:
+      213: 7878053913831202978
+    second: Spartan_MeleeTankUnit3_30
+  - first:
+      213: 5782770995002087568
+    second: Spartan_MeleeTankUnit3_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 576
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 064d8345b67c15e20800000000000000
+      internalID: 3337668062646686816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_1
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 576
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 393ef8ab1ca437c60800000000000000
+      internalID: 7814671974337078163
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 576
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be7b74bb6a3fc8260800000000000000
+      internalID: 7101318609888589803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_3
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 576
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 826bba055df4bd110800000000000000
+      internalID: 1286709896144467496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_4
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 576
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bae26276f064db90800000000000000
+      internalID: -7218037691170755920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_5
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 576
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b773596180c0a030800000000000000
+      internalID: 3504012172144637879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_6
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 576
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3dc1ae7850fd3bd30800000000000000
+      internalID: 4446142471992909011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_7
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 576
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de5b9209db6a36990800000000000000
+      internalID: -7393882830114540051
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 384
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92c92af8d2638f120800000000000000
+      internalID: 2447765966787091497
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_9
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 384
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4384ee097d7378f70800000000000000
+      internalID: 9189374963661817908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_10
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 384
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a80c043266f5c7250800000000000000
+      internalID: 5943730500504961162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_11
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 384
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9efdf09d1a37b20c0800000000000000
+      internalID: -4599455455460204567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_12
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 384
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 791dc428f9017e940800000000000000
+      internalID: 5325243361660817815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_13
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 384
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce606ae2efaab7430800000000000000
+      internalID: 3781804320788711148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_14
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 384
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74da51d5f00679c20800000000000000
+      internalID: 3213142478254615879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_15
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 384
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd450429c28d9aa30800000000000000
+      internalID: 4227147411207771356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 906a7a18124c2a560800000000000000
+      internalID: 7323631592246060553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_17
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 192
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1748850ee47d2c2e0800000000000000
+      internalID: -2106884941884652431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_18
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 192
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 793d426643faaf4e0800000000000000
+      internalID: -1947051249297468521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_19
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 192
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51448678b5f4c3600800000000000000
+      internalID: 449321317362582549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_20
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 192
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60d7a7ccd69a7b5d0800000000000000
+      internalID: -3046780333845742330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_21
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 192
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4ff60408ad9c1c20800000000000000
+      internalID: 3178588781964361548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_22
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 192
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 659fa9391b9da7f70800000000000000
+      internalID: 9185893746684393814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_23
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 192
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7d06d44a847d8710800000000000000
+      internalID: 1697140771797732731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3e77af5cd3e44920800000000000000
+      internalID: 2973752189608492602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_25
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 337f3c13af0bd9b00800000000000000
+      internalID: 837019694384019251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_26
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 156913e0b87c00380800000000000000
+      internalID: -9006979854688479663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_27
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 936bf1e7827281550800000000000000
+      internalID: 6131693947533112889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_28
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62ccd4f4e4c71bbd0800000000000000
+      internalID: -2616173232745755610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_29
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f691ef309d925350800000000000000
+      internalID: 6004034496110892791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_30
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 0
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a0e84f7b48745d60800000000000000
+      internalID: 7878053913831202978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeTankUnit3_31
+      rect:
+        serializedVersion: 2
+        x: 1344
+        y: 0
+        width: 192
+        height: 192
+      alignment: 9
+      pivot: {x: 0.5, y: 0.38}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 098188ed497804050800000000000000
+      internalID: 5782770995002087568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: b781aff2b43c28c44be5f7ad5b2487b9
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":192.0,"y":192.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.3799999952316284},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Spartan_MeleeTankUnit3_0: 3337668062646686816
+      Spartan_MeleeTankUnit3_1: 7814671974337078163
+      Spartan_MeleeTankUnit3_10: 5943730500504961162
+      Spartan_MeleeTankUnit3_11: -4599455455460204567
+      Spartan_MeleeTankUnit3_12: 5325243361660817815
+      Spartan_MeleeTankUnit3_13: 3781804320788711148
+      Spartan_MeleeTankUnit3_14: 3213142478254615879
+      Spartan_MeleeTankUnit3_15: 4227147411207771356
+      Spartan_MeleeTankUnit3_16: 7323631592246060553
+      Spartan_MeleeTankUnit3_17: -2106884941884652431
+      Spartan_MeleeTankUnit3_18: -1947051249297468521
+      Spartan_MeleeTankUnit3_19: 449321317362582549
+      Spartan_MeleeTankUnit3_2: 7101318609888589803
+      Spartan_MeleeTankUnit3_20: -3046780333845742330
+      Spartan_MeleeTankUnit3_21: 3178588781964361548
+      Spartan_MeleeTankUnit3_22: 9185893746684393814
+      Spartan_MeleeTankUnit3_23: 1697140771797732731
+      Spartan_MeleeTankUnit3_24: 2973752189608492602
+      Spartan_MeleeTankUnit3_25: 837019694384019251
+      Spartan_MeleeTankUnit3_26: -9006979854688479663
+      Spartan_MeleeTankUnit3_27: 6131693947533112889
+      Spartan_MeleeTankUnit3_28: -2616173232745755610
+      Spartan_MeleeTankUnit3_29: 6004034496110892791
+      Spartan_MeleeTankUnit3_3: 1286709896144467496
+      Spartan_MeleeTankUnit3_30: 7878053913831202978
+      Spartan_MeleeTankUnit3_31: 5782770995002087568
+      Spartan_MeleeTankUnit3_4: -7218037691170755920
+      Spartan_MeleeTankUnit3_5: 3504012172144637879
+      Spartan_MeleeTankUnit3_6: 4446142471992909011
+      Spartan_MeleeTankUnit3_7: -7393882830114540051
+      Spartan_MeleeTankUnit3_8: 2447765966787091497
+      Spartan_MeleeTankUnit3_9: 9189374963661817908
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

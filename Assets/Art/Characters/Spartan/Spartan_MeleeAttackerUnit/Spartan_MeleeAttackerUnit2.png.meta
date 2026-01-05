@@ -214,7 +214,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -228,7 +228,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -249,10 +249,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -319,12 +319,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_0
       rect:
         serializedVersion: 2
-        x: 40
-        y: 930
-        width: 41
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -341,12 +341,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_1
       rect:
         serializedVersion: 2
-        x: 168
-        y: 930
-        width: 41
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -363,12 +363,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_2
       rect:
         serializedVersion: 2
-        x: 296
-        y: 929
-        width: 41
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -385,12 +385,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_3
       rect:
         serializedVersion: 2
-        x: 424
-        y: 928
-        width: 40
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -407,12 +407,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_4
       rect:
         serializedVersion: 2
-        x: 553
-        y: 929
-        width: 40
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -429,12 +429,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_5
       rect:
         serializedVersion: 2
-        x: 681
-        y: 930
-        width: 40
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -451,12 +451,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_6
       rect:
         serializedVersion: 2
-        x: 809
-        y: 929
-        width: 39
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -473,12 +473,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_7
       rect:
         serializedVersion: 2
-        x: 938
-        y: 928
-        width: 38
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 896
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -495,12 +495,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_8
       rect:
         serializedVersion: 2
-        x: 1065
-        y: 929
-        width: 39
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1024
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -517,12 +517,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_9
       rect:
         serializedVersion: 2
-        x: 25
-        y: 800
-        width: 60
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -539,12 +539,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_10
       rect:
         serializedVersion: 2
-        x: 158
-        y: 801
-        width: 55
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -561,12 +561,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_11
       rect:
         serializedVersion: 2
-        x: 285
-        y: 801
-        width: 56
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -583,12 +583,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_12
       rect:
         serializedVersion: 2
-        x: 414
-        y: 801
-        width: 56
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -605,12 +605,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_13
       rect:
         serializedVersion: 2
-        x: 542
-        y: 801
-        width: 57
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -627,12 +627,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_14
       rect:
         serializedVersion: 2
-        x: 669
-        y: 801
-        width: 59
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -649,12 +649,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_15
       rect:
         serializedVersion: 2
-        x: 795
-        y: 801
-        width: 61
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -671,12 +671,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_16
       rect:
         serializedVersion: 2
-        x: 923
-        y: 801
-        width: 60
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 896
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -693,12 +693,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_17
       rect:
         serializedVersion: 2
-        x: 1054
-        y: 801
-        width: 56
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1024
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -715,12 +715,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_18
       rect:
         serializedVersion: 2
-        x: 40
-        y: 670
-        width: 42
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -737,12 +737,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_19
       rect:
         serializedVersion: 2
-        x: 168
-        y: 670
-        width: 42
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -759,12 +759,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_20
       rect:
         serializedVersion: 2
-        x: 296
-        y: 671
-        width: 42
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -781,12 +781,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_21
       rect:
         serializedVersion: 2
-        x: 424
-        y: 671
-        width: 42
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -803,12 +803,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_22
       rect:
         serializedVersion: 2
-        x: 552
-        y: 670
-        width: 42
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -825,12 +825,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_23
       rect:
         serializedVersion: 2
-        x: 679
-        y: 670
-        width: 43
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -847,12 +847,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_24
       rect:
         serializedVersion: 2
-        x: 808
-        y: 671
-        width: 42
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -869,12 +869,12 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_25
       rect:
         serializedVersion: 2
-        x: 936
-        y: 671
-        width: 41
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 896
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -891,20 +891,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_26
       rect:
         serializedVersion: 2
-        x: 1064
-        y: 670
-        width: 42
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1024
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 108237e49b5ab1060800000000000000
-      internalID: 6925311067315972097
+      spriteID: 1e5e2e21ad030c9469c03886ccc11c16
+      internalID: 867859573
       vertices: []
       indices: 
       edges: []
@@ -913,20 +913,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_27
       rect:
         serializedVersion: 2
-        x: 43
-        y: 544
-        width: 60
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 76d89a5e953edebe0800000000000000
-      internalID: -1446249930071372441
+      spriteID: d07c7fcc68f322b4595ad8b940bcae7e
+      internalID: 220456058
       vertices: []
       indices: 
       edges: []
@@ -935,20 +935,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_28
       rect:
         serializedVersion: 2
-        x: 171
-        y: 545
-        width: 55
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 13497b22e8965a630800000000000000
-      internalID: 3937669508394095665
+      spriteID: 52483cd25e66dd247b42b93396ed28f0
+      internalID: 1236740558
       vertices: []
       indices: 
       edges: []
@@ -957,20 +957,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_29
       rect:
         serializedVersion: 2
-        x: 299
-        y: 546
-        width: 56
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9afd3551285a97540800000000000000
-      internalID: 5006214438921166761
+      spriteID: 36236c89df736ed47a979c9be96d6590
+      internalID: -574559857
       vertices: []
       indices: 
       edges: []
@@ -979,20 +979,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_30
       rect:
         serializedVersion: 2
-        x: 426
-        y: 546
-        width: 56
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 45279c717247b4b30800000000000000
-      internalID: 4272636382742671956
+      spriteID: 3f3a5718e8212d245931da15928dd5b1
+      internalID: -437008519
       vertices: []
       indices: 
       edges: []
@@ -1001,20 +1001,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_31
       rect:
         serializedVersion: 2
-        x: 553
-        y: 545
-        width: 57
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: fc1da9a46edf40120800000000000000
-      internalID: 2379305668694430159
+      spriteID: 596825c3db659e3489fbbc32722e92be
+      internalID: 1420619763
       vertices: []
       indices: 
       edges: []
@@ -1023,20 +1023,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_32
       rect:
         serializedVersion: 2
-        x: 680
-        y: 545
-        width: 59
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: aa82c6929be8ffa30800000000000000
-      internalID: 4251273499176085674
+      spriteID: 67c4729b01aacd74196b54e6ebee6195
+      internalID: -1212765467
       vertices: []
       indices: 
       edges: []
@@ -1045,20 +1045,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_33
       rect:
         serializedVersion: 2
-        x: 808
-        y: 545
-        width: 61
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 98906a254fa7cd9e0800000000000000
-      internalID: -1595264978218776183
+      spriteID: 4848718f6be094749a284c9707f31b33
+      internalID: 1269640167
       vertices: []
       indices: 
       edges: []
@@ -1067,20 +1067,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_34
       rect:
         serializedVersion: 2
-        x: 937
-        y: 545
-        width: 60
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 896
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1a67912ee0e11f5c0800000000000000
-      internalID: -4183529529578785119
+      spriteID: 6722d83e3fb31784390e7d46668b4d87
+      internalID: 941162260
       vertices: []
       indices: 
       edges: []
@@ -1089,20 +1089,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_35
       rect:
         serializedVersion: 2
-        x: 1066
-        y: 545
-        width: 56
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1024
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c1f472a2658acd5d0800000000000000
-      internalID: -3036366960726683876
+      spriteID: 2b9633e9a3cc0f8499d465fc25d226c6
+      internalID: 231553543
       vertices: []
       indices: 
       edges: []
@@ -1111,20 +1111,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_36
       rect:
         serializedVersion: 2
-        x: 40
-        y: 416
-        width: 41
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 99ee786f0d46135b0800000000000000
-      internalID: -5390416430333694311
+      spriteID: d48176d22710dba4c9a7249bd4181937
+      internalID: 580069802
       vertices: []
       indices: 
       edges: []
@@ -1133,20 +1133,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_37
       rect:
         serializedVersion: 2
-        x: 164
-        y: 416
-        width: 44
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d74e194d9a3fa3ac0800000000000000
-      internalID: -3874516618657536899
+      spriteID: bf836ffc8b114f54fb464256a2460a3d
+      internalID: -2070056258
       vertices: []
       indices: 
       edges: []
@@ -1155,20 +1155,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_38
       rect:
         serializedVersion: 2
-        x: 299
-        y: 416
-        width: 35
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8242e3690a644c720800000000000000
-      internalID: 2865492918443844648
+      spriteID: ea55da3a950b72e4f85099a5f959e55c
+      internalID: 15066691
       vertices: []
       indices: 
       edges: []
@@ -1177,20 +1177,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_39
       rect:
         serializedVersion: 2
-        x: 420
-        y: 416
-        width: 46
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 325c6459293a11ea0800000000000000
-      internalID: -5903757786541013725
+      spriteID: 0bc78842907aa614b8ffc66c762e3290
+      internalID: -1370631759
       vertices: []
       indices: 
       edges: []
@@ -1199,20 +1199,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_40
       rect:
         serializedVersion: 2
-        x: 555
-        y: 416
-        width: 47
-        height: 66
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8553f742920ac0160800000000000000
-      internalID: 6993140419965957464
+      spriteID: 557859f5df015f6498db80c3d6062e28
+      internalID: -1201171492
       vertices: []
       indices: 
       edges: []
@@ -1221,20 +1221,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_41
       rect:
         serializedVersion: 2
-        x: 683
-        y: 416
-        width: 64
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ac9b92f017d5d8540800000000000000
-      internalID: 5011764700500310474
+      spriteID: ae84dc0b8fb82f34bbcc0cb49baad140
+      internalID: 514964716
       vertices: []
       indices: 
       edges: []
@@ -1243,20 +1243,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_42
       rect:
         serializedVersion: 2
-        x: 25
-        y: 287
-        width: 60
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 86c15256ad0706660800000000000000
-      internalID: 7377020272934984808
+      spriteID: df012f41a71244f4fb73d112b693a557
+      internalID: 229066227
       vertices: []
       indices: 
       edges: []
@@ -1265,20 +1265,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_43
       rect:
         serializedVersion: 2
-        x: 159
-        y: 276
-        width: 54
-        height: 68
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1f38f94e02390e380800000000000000
-      internalID: -8943987090473909263
+      spriteID: 704a1034b11dc3744872d79d499096cf
+      internalID: 76952032
       vertices: []
       indices: 
       edges: []
@@ -1287,20 +1287,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_44
       rect:
         serializedVersion: 2
-        x: 304
-        y: 283
-        width: 37
-        height: 63
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ac0c9fbe22e756f50800000000000000
-      internalID: 6874039094703931594
+      spriteID: 4e3025a74468de74e9b6ab4582fdf994
+      internalID: 415650718
       vertices: []
       indices: 
       edges: []
@@ -1309,20 +1309,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_45
       rect:
         serializedVersion: 2
-        x: 409
-        y: 281
-        width: 61
-        height: 65
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 79aa5a5d4b8c69690800000000000000
-      internalID: -7595663042509690217
+      spriteID: 407c0a93a9fe01f44a2c562138fbbe94
+      internalID: -716094903
       vertices: []
       indices: 
       edges: []
@@ -1331,20 +1331,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_46
       rect:
         serializedVersion: 2
-        x: 522
-        y: 286
-        width: 77
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 024a0f285f6b15ca0800000000000000
-      internalID: -6029837260492332000
+      spriteID: e220b2193ab1a78408df93da48dbdd2c
+      internalID: -1265499463
       vertices: []
       indices: 
       edges: []
@@ -1353,20 +1353,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_47
       rect:
         serializedVersion: 2
-        x: 654
-        y: 286
-        width: 74
-        height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b6b4c5d46091f2290800000000000000
-      internalID: -7913078505408279701
+      spriteID: 8b6731fd8809e314a977fe07bbfcbf22
+      internalID: 820556345
       vertices: []
       indices: 
       edges: []
@@ -1375,20 +1375,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_48
       rect:
         serializedVersion: 2
-        x: 40
-        y: 159
-        width: 41
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 40c515816aeb7db60800000000000000
-      internalID: 7770889302632913924
+      spriteID: 2e4756cbd48d48b42a437321e3d1827a
+      internalID: -1864565397
       vertices: []
       indices: 
       edges: []
@@ -1397,20 +1397,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_49
       rect:
         serializedVersion: 2
-        x: 164
-        y: 159
-        width: 44
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f39cb42888aeaad30800000000000000
-      internalID: 4443621854376872255
+      spriteID: 621f631fbb61ca14a8dd05dda0d0b27d
+      internalID: -2029528299
       vertices: []
       indices: 
       edges: []
@@ -1419,20 +1419,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_50
       rect:
         serializedVersion: 2
-        x: 295
-        y: 159
-        width: 40
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5f17b26a1c22ae640800000000000000
-      internalID: 5109934942317146613
+      spriteID: 653c85220bb91b74ab02e07499b5a8a0
+      internalID: -1305318107
       vertices: []
       indices: 
       edges: []
@@ -1441,20 +1441,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_51
       rect:
         serializedVersion: 2
-        x: 423
-        y: 160
-        width: 43
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6928c4189d3dd9300800000000000000
-      internalID: 260597284587995798
+      spriteID: b372f67a74a54834fa40af047039879c
+      internalID: -1691802228
       vertices: []
       indices: 
       edges: []
@@ -1463,20 +1463,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_52
       rect:
         serializedVersion: 2
-        x: 555
-        y: 146
-        width: 47
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 03721eab81e8f7c90800000000000000
-      internalID: -7169855844884863184
+      spriteID: b6d845f7b59e7e94fa9b2b9ad0852c4a
+      internalID: 1705139842
       vertices: []
       indices: 
       edges: []
@@ -1485,20 +1485,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_53
       rect:
         serializedVersion: 2
-        x: 683
-        y: 156
-        width: 64
-        height: 62
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d293de103c28b71b0800000000000000
-      internalID: -5657784732798338771
+      spriteID: f6a1871b56b10a8428030632bf73e144
+      internalID: 1039277159
       vertices: []
       indices: 
       edges: []
@@ -1507,20 +1507,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_54
       rect:
         serializedVersion: 2
-        x: 43
-        y: 31
-        width: 60
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: baa7f81381cd5f750800000000000000
-      internalID: 6338214047062653611
+      spriteID: 6692cc6fe2c898544bdc27dcf68898db
+      internalID: -53447349
       vertices: []
       indices: 
       edges: []
@@ -1529,20 +1529,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_55
       rect:
         serializedVersion: 2
-        x: 171
-        y: 21
-        width: 54
-        height: 67
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 447978dd82ded8360800000000000000
-      internalID: 7173650541242193732
+      spriteID: deafa9928e42b5046bc4e32ddc0a8215
+      internalID: -355102126
       vertices: []
       indices: 
       edges: []
@@ -1551,20 +1551,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_56
       rect:
         serializedVersion: 2
-        x: 299
-        y: 27
-        width: 37
-        height: 63
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7ace16aed86cb68a0800000000000000
-      internalID: -6310732140004643673
+      spriteID: 390c89311b8b12140a6e37453eeef48d
+      internalID: 868843189
       vertices: []
       indices: 
       edges: []
@@ -1573,20 +1573,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_57
       rect:
         serializedVersion: 2
-        x: 426
-        y: 24
-        width: 61
-        height: 66
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 56deeb3f2eac6c6e0800000000000000
-      internalID: -1817542323496620699
+      spriteID: 076a8972f142d754dab0123c4f20d992
+      internalID: 922351234
       vertices: []
       indices: 
       edges: []
@@ -1595,20 +1595,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_58
       rect:
         serializedVersion: 2
-        x: 553
-        y: 31
-        width: 77
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 47a9f8763a111dd10800000000000000
-      internalID: 2148517890747243124
+      spriteID: 506c1002aa74bfd4d91b56212c24ca98
+      internalID: 1687114760
       vertices: []
       indices: 
       edges: []
@@ -1617,20 +1617,20 @@ TextureImporter:
       name: Spartan_MeleeAttackerUnit2_59
       rect:
         serializedVersion: 2
-        x: 680
-        y: 31
-        width: 74
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ec696576564d546c0800000000000000
-      internalID: -4159685148816271666
+      spriteID: 49e9fdcb170df7748b0573d8a32c8936
+      internalID: -297742065
       vertices: []
       indices: 
       edges: []
@@ -1639,7 +1639,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 09335da474edeb949a714db86dc2b82f
     internalID: 0
     vertices: []
     indices: 
@@ -1647,7 +1647,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.3499999940395355},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Spartan_MeleeAttackerUnit2_0: -7140027783099044630
       Spartan_MeleeAttackerUnit2_1: -8977083239342986384
@@ -1668,43 +1670,43 @@ TextureImporter:
       Spartan_MeleeAttackerUnit2_23: 7311610352052368807
       Spartan_MeleeAttackerUnit2_24: 4818006143213304577
       Spartan_MeleeAttackerUnit2_25: -715826309103756509
-      Spartan_MeleeAttackerUnit2_26: 6925311067315972097
-      Spartan_MeleeAttackerUnit2_27: -1446249930071372441
-      Spartan_MeleeAttackerUnit2_28: 3937669508394095665
-      Spartan_MeleeAttackerUnit2_29: 5006214438921166761
+      Spartan_MeleeAttackerUnit2_26: 867859573
+      Spartan_MeleeAttackerUnit2_27: 220456058
+      Spartan_MeleeAttackerUnit2_28: 1236740558
+      Spartan_MeleeAttackerUnit2_29: -574559857
       Spartan_MeleeAttackerUnit2_3: -835087304946475685
-      Spartan_MeleeAttackerUnit2_30: 4272636382742671956
-      Spartan_MeleeAttackerUnit2_31: 2379305668694430159
-      Spartan_MeleeAttackerUnit2_32: 4251273499176085674
-      Spartan_MeleeAttackerUnit2_33: -1595264978218776183
-      Spartan_MeleeAttackerUnit2_34: -4183529529578785119
-      Spartan_MeleeAttackerUnit2_35: -3036366960726683876
-      Spartan_MeleeAttackerUnit2_36: -5390416430333694311
-      Spartan_MeleeAttackerUnit2_37: -3874516618657536899
-      Spartan_MeleeAttackerUnit2_38: 2865492918443844648
-      Spartan_MeleeAttackerUnit2_39: -5903757786541013725
+      Spartan_MeleeAttackerUnit2_30: -437008519
+      Spartan_MeleeAttackerUnit2_31: 1420619763
+      Spartan_MeleeAttackerUnit2_32: -1212765467
+      Spartan_MeleeAttackerUnit2_33: 1269640167
+      Spartan_MeleeAttackerUnit2_34: 941162260
+      Spartan_MeleeAttackerUnit2_35: 231553543
+      Spartan_MeleeAttackerUnit2_36: 580069802
+      Spartan_MeleeAttackerUnit2_37: -2070056258
+      Spartan_MeleeAttackerUnit2_38: 15066691
+      Spartan_MeleeAttackerUnit2_39: -1370631759
       Spartan_MeleeAttackerUnit2_4: -4745155861173407553
-      Spartan_MeleeAttackerUnit2_40: 6993140419965957464
-      Spartan_MeleeAttackerUnit2_41: 5011764700500310474
-      Spartan_MeleeAttackerUnit2_42: 7377020272934984808
-      Spartan_MeleeAttackerUnit2_43: -8943987090473909263
-      Spartan_MeleeAttackerUnit2_44: 6874039094703931594
-      Spartan_MeleeAttackerUnit2_45: -7595663042509690217
-      Spartan_MeleeAttackerUnit2_46: -6029837260492332000
-      Spartan_MeleeAttackerUnit2_47: -7913078505408279701
-      Spartan_MeleeAttackerUnit2_48: 7770889302632913924
-      Spartan_MeleeAttackerUnit2_49: 4443621854376872255
+      Spartan_MeleeAttackerUnit2_40: -1201171492
+      Spartan_MeleeAttackerUnit2_41: 514964716
+      Spartan_MeleeAttackerUnit2_42: 229066227
+      Spartan_MeleeAttackerUnit2_43: 76952032
+      Spartan_MeleeAttackerUnit2_44: 415650718
+      Spartan_MeleeAttackerUnit2_45: -716094903
+      Spartan_MeleeAttackerUnit2_46: -1265499463
+      Spartan_MeleeAttackerUnit2_47: 820556345
+      Spartan_MeleeAttackerUnit2_48: -1864565397
+      Spartan_MeleeAttackerUnit2_49: -2029528299
       Spartan_MeleeAttackerUnit2_5: 2179529978937541218
-      Spartan_MeleeAttackerUnit2_50: 5109934942317146613
-      Spartan_MeleeAttackerUnit2_51: 260597284587995798
-      Spartan_MeleeAttackerUnit2_52: -7169855844884863184
-      Spartan_MeleeAttackerUnit2_53: -5657784732798338771
-      Spartan_MeleeAttackerUnit2_54: 6338214047062653611
-      Spartan_MeleeAttackerUnit2_55: 7173650541242193732
-      Spartan_MeleeAttackerUnit2_56: -6310732140004643673
-      Spartan_MeleeAttackerUnit2_57: -1817542323496620699
-      Spartan_MeleeAttackerUnit2_58: 2148517890747243124
-      Spartan_MeleeAttackerUnit2_59: -4159685148816271666
+      Spartan_MeleeAttackerUnit2_50: -1305318107
+      Spartan_MeleeAttackerUnit2_51: -1691802228
+      Spartan_MeleeAttackerUnit2_52: 1705139842
+      Spartan_MeleeAttackerUnit2_53: 1039277159
+      Spartan_MeleeAttackerUnit2_54: -53447349
+      Spartan_MeleeAttackerUnit2_55: -355102126
+      Spartan_MeleeAttackerUnit2_56: 868843189
+      Spartan_MeleeAttackerUnit2_57: 922351234
+      Spartan_MeleeAttackerUnit2_58: 1687114760
+      Spartan_MeleeAttackerUnit2_59: -297742065
       Spartan_MeleeAttackerUnit2_6: -1143694782109165618
       Spartan_MeleeAttackerUnit2_7: -18217532139593860
       Spartan_MeleeAttackerUnit2_8: 7523217594889974122

@@ -142,7 +142,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -156,7 +156,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 64
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -177,10 +177,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -247,12 +247,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_0
       rect:
         serializedVersion: 2
-        x: 40
-        y: 418
-        width: 62
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -269,12 +269,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_1
       rect:
         serializedVersion: 2
-        x: 168
-        y: 418
-        width: 62
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -291,12 +291,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_2
       rect:
         serializedVersion: 2
-        x: 296
-        y: 417
-        width: 62
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -313,12 +313,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_3
       rect:
         serializedVersion: 2
-        x: 424
-        y: 416
-        width: 61
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -335,12 +335,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_4
       rect:
         serializedVersion: 2
-        x: 553
-        y: 417
-        width: 61
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -357,12 +357,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_5
       rect:
         serializedVersion: 2
-        x: 681
-        y: 418
-        width: 61
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -379,12 +379,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_6
       rect:
         serializedVersion: 2
-        x: 809
-        y: 417
-        width: 61
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -401,12 +401,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_7
       rect:
         serializedVersion: 2
-        x: 938
-        y: 416
-        width: 60
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 896
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -423,12 +423,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_8
       rect:
         serializedVersion: 2
-        x: 1065
-        y: 417
-        width: 61
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1024
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -445,12 +445,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_9
       rect:
         serializedVersion: 2
-        x: 35
-        y: 287
-        width: 50
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -467,12 +467,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_10
       rect:
         serializedVersion: 2
-        x: 167
-        y: 289
-        width: 46
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -489,12 +489,12 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_11
       rect:
         serializedVersion: 2
-        x: 295
-        y: 289
-        width: 46
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -511,19 +511,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_12
       rect:
         serializedVersion: 2
-        x: 429
-        y: 289
-        width: 45
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b9691f65dcba73160800000000000000
+      spriteID: 9ed229575e2ffe947a096a3e8d8e419d
       internalID: 7005256643813414555
       vertices: []
       indices: 
@@ -533,19 +533,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_13
       rect:
         serializedVersion: 2
-        x: 556
-        y: 289
-        width: 43
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a4e35809fcb6bbe70800000000000000
+      spriteID: 3f3d0cad2f398c8479b5303b601adae9
       internalID: 9132011208650866250
       vertices: []
       indices: 
@@ -555,19 +555,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_14
       rect:
         serializedVersion: 2
-        x: 683
-        y: 289
-        width: 45
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3473f42296c876d50800000000000000
+      spriteID: a7d274faabdee0c478aea3d276728403
       internalID: 6730502551303567171
       vertices: []
       indices: 
@@ -577,19 +577,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_15
       rect:
         serializedVersion: 2
-        x: 810
-        y: 289
-        width: 46
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2f4b9c0ff437f1810800000000000000
+      spriteID: ee6dd6fed665c0746b0ee43375ca5973
       internalID: 1738234768367662322
       vertices: []
       indices: 
@@ -599,19 +599,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_16
       rect:
         serializedVersion: 2
-        x: 933
-        y: 289
-        width: 50
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 896
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 42599501df4955130800000000000000
+      spriteID: 81eeb7db6e2da5f45b0d7a752d9528f1
       internalID: 3554911295500817700
       vertices: []
       indices: 
@@ -621,19 +621,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_17
       rect:
         serializedVersion: 2
-        x: 1062
-        y: 289
-        width: 48
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1024
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8dc2cfec2aba26450800000000000000
+      spriteID: 0346522a4795331408d8f0ebb6046567
       internalID: 6080611162649275608
       vertices: []
       indices: 
@@ -643,19 +643,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_18
       rect:
         serializedVersion: 2
-        x: 40
-        y: 159
-        width: 52
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 388a99d917352efb0800000000000000
+      spriteID: 6f6fdd529dc58704381edf29d2a387fc
       internalID: -4620038520288204669
       vertices: []
       indices: 
@@ -665,19 +665,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_19
       rect:
         serializedVersion: 2
-        x: 168
-        y: 159
-        width: 52
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0a870c96db696b1f0800000000000000
+      spriteID: b361d73d76b0822418b599b25ca73a59
       internalID: -1029469724540372832
       vertices: []
       indices: 
@@ -687,19 +687,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_20
       rect:
         serializedVersion: 2
-        x: 296
-        y: 159
-        width: 52
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6f42ff429ccaec970800000000000000
+      spriteID: d19297798d3b9f649a46150707ac49d0
       internalID: 8777142703700780278
       vertices: []
       indices: 
@@ -709,19 +709,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_21
       rect:
         serializedVersion: 2
-        x: 424
-        y: 159
-        width: 51
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c22406c4425ed4170800000000000000
+      spriteID: 68d9a46ec9353624588e34582f443f88
       internalID: 8164433643555537452
       vertices: []
       indices: 
@@ -731,19 +731,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_22
       rect:
         serializedVersion: 2
-        x: 552
-        y: 159
-        width: 52
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 709d156407545a480800000000000000
+      spriteID: a3231bb022869f94a9a9e9b5f5916aef
       internalID: -8888621941027383033
       vertices: []
       indices: 
@@ -753,19 +753,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_23
       rect:
         serializedVersion: 2
-        x: 679
-        y: 159
-        width: 53
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 995c6e2712719f750800000000000000
+      spriteID: 9e9503b44c52cdc41a859acb7cda966e
       internalID: 6339123382929769881
       vertices: []
       indices: 
@@ -775,19 +775,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_24
       rect:
         serializedVersion: 2
-        x: 808
-        y: 159
-        width: 52
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f411add903b102110800000000000000
+      spriteID: d43ac4152481cef438f7232bf4fec019
       internalID: 1234016193520210255
       vertices: []
       indices: 
@@ -797,19 +797,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_25
       rect:
         serializedVersion: 2
-        x: 936
-        y: 159
-        width: 51
-        height: 58
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 896
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 4bc75547a565775f0800000000000000
+      spriteID: 287e3132b3986c340b77e7150aa1062d
       internalID: -759043065689834316
       vertices: []
       indices: 
@@ -819,19 +819,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_26
       rect:
         serializedVersion: 2
-        x: 1064
-        y: 159
-        width: 52
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1024
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 32036e8fbb5b9c500800000000000000
+      spriteID: 04da03e1f5a935c4d8720ba9eec8554d
       internalID: 417064259447828515
       vertices: []
       indices: 
@@ -841,19 +841,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_27
       rect:
         serializedVersion: 2
-        x: 43
-        y: 31
-        width: 50
-        height: 59
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 0
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: fa81b645a94d470a0800000000000000
+      spriteID: 7961fd640fadfe04182dd57c3d24d98d
       internalID: -6884644171036288849
       vertices: []
       indices: 
@@ -863,19 +863,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_28
       rect:
         serializedVersion: 2
-        x: 171
-        y: 33
-        width: 47
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 128
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ed29228fd1f0894d0800000000000000
+      spriteID: ea86da9ca03401f4289f960a76c998ac
       internalID: -3127733319817325858
       vertices: []
       indices: 
@@ -885,19 +885,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_29
       rect:
         serializedVersion: 2
-        x: 299
-        y: 33
-        width: 46
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 256
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0f6c9f56ee07c4b30800000000000000
+      spriteID: a3629ccdd1aecf44092e597b1ee4eaaa
       internalID: 4272914315683153648
       vertices: []
       indices: 
@@ -907,19 +907,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_30
       rect:
         serializedVersion: 2
-        x: 422
-        y: 33
-        width: 45
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 384
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: da31472e3e5fea1e0800000000000000
+      spriteID: 1ff408a6b7f4957488db7ed03cd63fab
       internalID: -2184538410122472531
       vertices: []
       indices: 
@@ -929,19 +929,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_31
       rect:
         serializedVersion: 2
-        x: 553
-        y: 33
-        width: 43
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 512
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 17be17829ab88cb90800000000000000
+      spriteID: 41aaa46e1848f8b40929b9072afdd09b
       internalID: -7221368443844301967
       vertices: []
       indices: 
@@ -951,19 +951,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_32
       rect:
         serializedVersion: 2
-        x: 680
-        y: 33
-        width: 45
-        height: 56
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 640
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f37cf4aafdbd3c150800000000000000
+      spriteID: 85d5c9ed9037cd54c9fa95f64f032ca3
       internalID: 5891794491212285759
       vertices: []
       indices: 
@@ -973,19 +973,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_33
       rect:
         serializedVersion: 2
-        x: 808
-        y: 33
-        width: 46
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 768
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ef2d4f6d922415970800000000000000
+      spriteID: 2f45a334167a5f647a51369f16e74732
       internalID: 8741841099170304766
       vertices: []
       indices: 
@@ -995,19 +995,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_34
       rect:
         serializedVersion: 2
-        x: 937
-        y: 33
-        width: 50
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 896
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 582f67b7fa54005e0800000000000000
+      spriteID: afd41c574c7bb514987f5d5db04a189c
       internalID: -1945478419031068027
       vertices: []
       indices: 
@@ -1017,19 +1017,19 @@ TextureImporter:
       name: Spartan_RangedAttackerUnit2_35
       rect:
         serializedVersion: 2
-        x: 1066
-        y: 33
-        width: 48
-        height: 57
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 1024
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.34}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1c952160d55eb7830800000000000000
+      spriteID: 55a62b339d8a21144ada6b65462aad2f
       internalID: 4070098875955960257
       vertices: []
       indices: 
@@ -1039,7 +1039,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 9ced2c32448352a46822054fc610bab3
     internalID: 0
     vertices: []
     indices: 
@@ -1047,7 +1047,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.3400000035762787},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Spartan_RangedAttackerUnit2_0: 3888044659258844741
       Spartan_RangedAttackerUnit2_1: 521661140315264519
