@@ -1,0 +1,1092 @@
+fileFormatVersion: 2
+guid: 93519cfacb27e554eaf013dcea9cb631
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8689829956687182070
+    second: Viking_RangedAttackerUnit_2_0
+  - first:
+      213: 15097805424632741
+    second: Viking_RangedAttackerUnit_2_1
+  - first:
+      213: 8305951601420603306
+    second: Viking_RangedAttackerUnit_2_2
+  - first:
+      213: 1132007712728961249
+    second: Viking_RangedAttackerUnit_2_3
+  - first:
+      213: -3705375533910223582
+    second: Viking_RangedAttackerUnit_2_4
+  - first:
+      213: 6586329115158144938
+    second: Viking_RangedAttackerUnit_2_5
+  - first:
+      213: -8731863703400285686
+    second: Viking_RangedAttackerUnit_2_6
+  - first:
+      213: -486125773257236614
+    second: Viking_RangedAttackerUnit_2_7
+  - first:
+      213: 3071189515310303816
+    second: Viking_RangedAttackerUnit_2_8
+  - first:
+      213: 6661986613452615219
+    second: Viking_RangedAttackerUnit_2_9
+  - first:
+      213: -6600172692719535869
+    second: Viking_RangedAttackerUnit_2_10
+  - first:
+      213: 1113360245176336373
+    second: Viking_RangedAttackerUnit_2_11
+  - first:
+      213: -2243883618318664900
+    second: Viking_RangedAttackerUnit_2_12
+  - first:
+      213: 2814973030100841367
+    second: Viking_RangedAttackerUnit_2_13
+  - first:
+      213: -1348341672978729871
+    second: Viking_RangedAttackerUnit_2_14
+  - first:
+      213: -3209726455256408731
+    second: Viking_RangedAttackerUnit_2_15
+  - first:
+      213: -5946650865354781181
+    second: Viking_RangedAttackerUnit_2_16
+  - first:
+      213: -8020540494998763876
+    second: Viking_RangedAttackerUnit_2_17
+  - first:
+      213: -4755595335477156944
+    second: Viking_RangedAttackerUnit_2_18
+  - first:
+      213: -8613877514749479893
+    second: Viking_RangedAttackerUnit_2_19
+  - first:
+      213: -714423452057154714
+    second: Viking_RangedAttackerUnit_2_20
+  - first:
+      213: -2176403987057787668
+    second: Viking_RangedAttackerUnit_2_21
+  - first:
+      213: 4114610552334661055
+    second: Viking_RangedAttackerUnit_2_22
+  - first:
+      213: -5069672825904492510
+    second: Viking_RangedAttackerUnit_2_23
+  - first:
+      213: 829496563265161581
+    second: Viking_RangedAttackerUnit_2_24
+  - first:
+      213: -3884127022369810864
+    second: Viking_RangedAttackerUnit_2_25
+  - first:
+      213: 4824607976077185204
+    second: Viking_RangedAttackerUnit_2_26
+  - first:
+      213: -6683181828675462105
+    second: Viking_RangedAttackerUnit_2_27
+  - first:
+      213: 8934127557729704092
+    second: Viking_RangedAttackerUnit_2_28
+  - first:
+      213: -1447986958311676508
+    second: Viking_RangedAttackerUnit_2_29
+  - first:
+      213: -4498115768443720991
+    second: Viking_RangedAttackerUnit_2_30
+  - first:
+      213: -2922529522071209275
+    second: Viking_RangedAttackerUnit_2_31
+  - first:
+      213: 55078338584706979
+    second: Viking_RangedAttackerUnit_2_32
+  - first:
+      213: 3388114597477782407
+    second: Viking_RangedAttackerUnit_2_33
+  - first:
+      213: 2918451231284869494
+    second: Viking_RangedAttackerUnit_2_34
+  - first:
+      213: 3358478814301822448
+    second: Viking_RangedAttackerUnit_2_35
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_0
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 418
+        width: 55
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f833ee0e4a789870800000000000000
+      internalID: 8689829956687182070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_1
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 417
+        width: 55
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a32931cf53a53000800000000000000
+      internalID: 15097805424632741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_2
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 416
+        width: 54
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aaf034489faa44370800000000000000
+      internalID: 8305951601420603306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_3
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 415
+        width: 53
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e056306403b5bf00800000000000000
+      internalID: 1132007712728961249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_4
+      rect:
+        serializedVersion: 2
+        x: 561
+        y: 416
+        width: 55
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2259bd5759cd39cc0800000000000000
+      internalID: -3705375533910223582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_5
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 417
+        width: 55
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa760d23f67576b50800000000000000
+      internalID: 6586329115158144938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_6
+      rect:
+        serializedVersion: 2
+        x: 818
+        y: 416
+        width: 54
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0af2b3a93032d680800000000000000
+      internalID: -8731863703400285686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_7
+      rect:
+        serializedVersion: 2
+        x: 946
+        y: 415
+        width: 54
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7f17d05f2fe049f0800000000000000
+      internalID: -486125773257236614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_8
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 416
+        width: 55
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84a89f1a79e0f9a20800000000000000
+      internalID: 3071189515310303816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_9
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 289
+        width: 54
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33e20493781247c50800000000000000
+      internalID: 6661986613452615219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_10
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 289
+        width: 53
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 309f73ab7e97764a0800000000000000
+      internalID: -6600172692719535869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_11
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 289
+        width: 54
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fff6c08e33737f00800000000000000
+      internalID: 1113360245176336373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_12
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 289
+        width: 53
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3b3cccdcbf1cd0e0800000000000000
+      internalID: -2243883618318664900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_13
+      rect:
+        serializedVersion: 2
+        x: 550
+        y: 289
+        width: 48
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79337777e0bc01720800000000000000
+      internalID: 2814973030100841367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_14
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 289
+        width: 48
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1743f3a646ab94de0800000000000000
+      internalID: -1348341672978729871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_15
+      rect:
+        serializedVersion: 2
+        x: 801
+        y: 289
+        width: 53
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56d94487bc2c473d0800000000000000
+      internalID: -3209726455256408731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_16
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 289
+        width: 54
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30e424f6b80497da0800000000000000
+      internalID: -5946650865354781181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_17
+      rect:
+        serializedVersion: 2
+        x: 1056
+        y: 289
+        width: 53
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9686f81ae051b090800000000000000
+      internalID: -8020540494998763876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_18
+      rect:
+        serializedVersion: 2
+        x: 45
+        y: 161
+        width: 49
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b321651d3bb00eb0800000000000000
+      internalID: -4755595335477156944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_19
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 161
+        width: 49
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b24f1a2e90c557880800000000000000
+      internalID: -8613877514749479893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_20
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 159
+        width: 49
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66bcce0d7abd516f0800000000000000
+      internalID: -714423452057154714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_21
+      rect:
+        serializedVersion: 2
+        x: 428
+        y: 159
+        width: 49
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cec3da7da1cdbc1e0800000000000000
+      internalID: -2176403987057787668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_22
+      rect:
+        serializedVersion: 2
+        x: 557
+        y: 159
+        width: 49
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb53bf84f780a1930800000000000000
+      internalID: 4114610552334661055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_23
+      rect:
+        serializedVersion: 2
+        x: 685
+        y: 161
+        width: 49
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2201384dc67e4a9b0800000000000000
+      internalID: -5069672825904492510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_24
+      rect:
+        serializedVersion: 2
+        x: 812
+        y: 159
+        width: 49
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d69c3dbbab6f28b00800000000000000
+      internalID: 829496563265161581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_25
+      rect:
+        serializedVersion: 2
+        x: 939
+        y: 159
+        width: 49
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 056d6295d0fc81ac0800000000000000
+      internalID: -3884127022369810864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_26
+      rect:
+        serializedVersion: 2
+        x: 1069
+        y: 159
+        width: 49
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b0d892746374f240800000000000000
+      internalID: 4824607976077185204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_27
+      rect:
+        serializedVersion: 2
+        x: 44
+        y: 33
+        width: 54
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72c147c29819043a0800000000000000
+      internalID: -6683181828675462105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_28
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 33
+        width: 53
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c98d180cda56cfb70800000000000000
+      internalID: 8934127557729704092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_29
+      rect:
+        serializedVersion: 2
+        x: 296
+        y: 33
+        width: 54
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a52f6e7887b7ebe0800000000000000
+      internalID: -1447986958311676508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_30
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 33
+        width: 53
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ea24576a8b7391c0800000000000000
+      internalID: -4498115768443720991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_31
+      rect:
+        serializedVersion: 2
+        x: 554
+        y: 33
+        width: 48
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ca7a5742e61177d0800000000000000
+      internalID: -2922529522071209275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_32
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 33
+        width: 48
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3aff826057da3c000800000000000000
+      internalID: 55078338584706979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_33
+      rect:
+        serializedVersion: 2
+        x: 810
+        y: 33
+        width: 53
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7839af08640050f20800000000000000
+      internalID: 3388114597477782407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_34
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 33
+        width: 54
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6793907aeeb608820800000000000000
+      internalID: 2918451231284869494
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Viking_RangedAttackerUnit_2_35
+      rect:
+        serializedVersion: 2
+        x: 1067
+        y: 33
+        width: 53
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0fd922800b6bb9e20800000000000000
+      internalID: 3358478814301822448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Viking_RangedAttackerUnit_2_0: 8689829956687182070
+      Viking_RangedAttackerUnit_2_1: 15097805424632741
+      Viking_RangedAttackerUnit_2_10: -6600172692719535869
+      Viking_RangedAttackerUnit_2_11: 1113360245176336373
+      Viking_RangedAttackerUnit_2_12: -2243883618318664900
+      Viking_RangedAttackerUnit_2_13: 2814973030100841367
+      Viking_RangedAttackerUnit_2_14: -1348341672978729871
+      Viking_RangedAttackerUnit_2_15: -3209726455256408731
+      Viking_RangedAttackerUnit_2_16: -5946650865354781181
+      Viking_RangedAttackerUnit_2_17: -8020540494998763876
+      Viking_RangedAttackerUnit_2_18: -4755595335477156944
+      Viking_RangedAttackerUnit_2_19: -8613877514749479893
+      Viking_RangedAttackerUnit_2_2: 8305951601420603306
+      Viking_RangedAttackerUnit_2_20: -714423452057154714
+      Viking_RangedAttackerUnit_2_21: -2176403987057787668
+      Viking_RangedAttackerUnit_2_22: 4114610552334661055
+      Viking_RangedAttackerUnit_2_23: -5069672825904492510
+      Viking_RangedAttackerUnit_2_24: 829496563265161581
+      Viking_RangedAttackerUnit_2_25: -3884127022369810864
+      Viking_RangedAttackerUnit_2_26: 4824607976077185204
+      Viking_RangedAttackerUnit_2_27: -6683181828675462105
+      Viking_RangedAttackerUnit_2_28: 8934127557729704092
+      Viking_RangedAttackerUnit_2_29: -1447986958311676508
+      Viking_RangedAttackerUnit_2_3: 1132007712728961249
+      Viking_RangedAttackerUnit_2_30: -4498115768443720991
+      Viking_RangedAttackerUnit_2_31: -2922529522071209275
+      Viking_RangedAttackerUnit_2_32: 55078338584706979
+      Viking_RangedAttackerUnit_2_33: 3388114597477782407
+      Viking_RangedAttackerUnit_2_34: 2918451231284869494
+      Viking_RangedAttackerUnit_2_35: 3358478814301822448
+      Viking_RangedAttackerUnit_2_4: -3705375533910223582
+      Viking_RangedAttackerUnit_2_5: 6586329115158144938
+      Viking_RangedAttackerUnit_2_6: -8731863703400285686
+      Viking_RangedAttackerUnit_2_7: -486125773257236614
+      Viking_RangedAttackerUnit_2_8: 3071189515310303816
+      Viking_RangedAttackerUnit_2_9: 6661986613452615219
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
