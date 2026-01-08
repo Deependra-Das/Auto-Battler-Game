@@ -23,6 +23,7 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected float baseManaRegenSpeed = 0f;
 
     [SerializeField] protected Slider healthBar;
+    [SerializeField] protected Slider shieldBar;
 
     [SerializeField] protected float attackCoolDown = 1f;
     [SerializeField] protected float delayBeforeRangedAttack = 0f;
@@ -67,10 +68,25 @@ public class BaseUnit : MonoBehaviour
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
+
+        InitializeHealth();
+        InitializeShield();
+    }
+
+    protected void InitializeHealth()
+    {
         totalHealth = baseHealth;
         currentHealth = totalHealth;
         healthBar.maxValue = totalHealth;
         UpdateHealthBar(currentHealth);
+    }
+
+    protected void InitializeShield()
+    {
+        totalShield = baseShield;
+        currentShield = totalShield;
+        shieldBar.maxValue = totalShield;
+        UpdateShieldBar(currentShield);
     }
 
     protected void FindTarget()
@@ -165,8 +181,23 @@ public class BaseUnit : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        currentHealth -= amount;
-        UpdateHealthBar(currentHealth);
+        if (isDead) return;
+
+        int remainingDamage = amount;
+
+        if (currentShield > 0)
+        {
+            int shieldDamage = Mathf.Min(currentShield, remainingDamage);
+            currentShield -= shieldDamage;
+            remainingDamage -= shieldDamage;
+            UpdateShieldBar(currentShield);
+        }
+
+        if (remainingDamage > 0)
+        {
+            currentHealth -= remainingDamage;
+            UpdateHealthBar(currentHealth);
+        }
 
         if (currentHealth <= 0 && !isDead)
         {
@@ -195,6 +226,11 @@ public class BaseUnit : MonoBehaviour
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, totalHealth);
         UpdateHealthBar(currentHealth);
+    }
+
+    public void UpdateShieldBar(float currentShieldValue)
+    {
+        shieldBar.value = currentShieldValue;
     }
 
     public void SetDirectionFacing(Vector3 direction)
