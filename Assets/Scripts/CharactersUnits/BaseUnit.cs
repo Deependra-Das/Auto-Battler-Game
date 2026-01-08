@@ -188,6 +188,15 @@ public class BaseUnit : MonoBehaviour
         healthBar.value = currentHealthValue;
     }
 
+    public void Heal(int amount)
+    {
+        if (isDead) return;
+
+        currentHealth += amount;
+        currentHealth = Mathf.Min(currentHealth, totalHealth);
+        UpdateHealthBar(currentHealth);
+    }
+
     public void SetDirectionFacing(Vector3 direction)
     {
         if (direction.x > 0) 
