@@ -1,3 +1,4 @@
+using AutoBattler.Main;
 using UnityEngine;
 
 public class RangedSupportUnit : BaseUnit
@@ -19,6 +20,16 @@ public class RangedSupportUnit : BaseUnit
         else
         {
             GetInRange();
+        }
+    }
+
+    protected void HealAllTeammates()
+    {
+        var teammates = GameManager.Instance.Get<TeamService>().GetTeamUnits(Team);
+
+        foreach (BaseUnit unit in teammates)
+        {
+            unit.Heal(baseHealing);
         }
     }
 }
