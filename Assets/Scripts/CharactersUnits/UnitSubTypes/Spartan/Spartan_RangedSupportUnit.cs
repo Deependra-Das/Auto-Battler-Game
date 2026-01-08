@@ -23,6 +23,7 @@ public class Spartan_RangedSupportUnit : RangedSupportUnit
     private void ManaBurst()
     {
         GameManager.Instance.Get<RangedAbilityService>().SpawnManaBurst(this, currentTarget, baseDamage, lifetime, damageDelay);
+        HealAllTeammates();
     }
 
     IEnumerator AttackCoolDownWaitCoroutine()

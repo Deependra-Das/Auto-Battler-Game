@@ -713,17 +713,17 @@ MonoBehaviour:
   unitType: 3
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
-  baseDamage: 1
+  baseDamage: 2
   baseHealth: 5
   baseShield: 0
   baseMana: 0
-  baseHealing: 0
+  baseHealing: 1
   baseRange: 5
   baseMovementSpeed: 1
   baseManaRegenSpeed: 0
   healthBar: {fileID: 6358816749425927278}
   attackCoolDown: 1
-  delayBeforeRangedAttack: 0
+  delayBeforeRangedAttack: 1
   lifetime: 1
   damageDelay: 0.2
 --- !u!1 &6964803075369754594
