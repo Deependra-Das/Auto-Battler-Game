@@ -44,7 +44,7 @@ public class PathFindingGraph
         foreach (Path path in _pathList)
         {
             if (path.source == source)
-                neighBourList.Add(path.source);
+                neighBourList.Add(path.destination);
         }
 
         return neighBourList;

@@ -1,19 +1,64 @@
+using AutoBattler.Main;
+using AutoBattler.Utilities;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class GameplayManager : MonoBehaviour
+public class GameplayManager : GenericMonoSingleton<GameplayManager>
 {
-    [SerializeField] private TileScriptableObjectScript _tile_SO;
-
     protected PathFindingGraph graph;
+    TileGridService tileGridService;
+    GraphService graphService;
+    TeamService teamService;
 
-    void Start()
+    private List<BaseUnit> _unitPrefabList;
+
+    private void Awake()
     {
-        TileGridService tileGridService = new TileGridService(_tile_SO);
+        _unitPrefabList = new List<BaseUnit>();
+    }
 
-        GraphService graphService = new GraphService(tileGridService.GetSpawnedTilesList());
+    public void Initialize(UnitScriptableObjectScript unit_SO)
+    {
+        tileGridService = GameManager.Instance.Get<TileGridService>();
+        graphService = GameManager.Instance.Get<GraphService>();
+        teamService = GameManager.Instance.Get<TeamService>();
+
+        graphService.Initialize(tileGridService.GetSpawnedTilesList());
         graph = graphService.Graph;
+
+        _unitPrefabList = unit_SO.unitPrefabList;
+        InstantiateUnits();
+    }
+
+    private void InstantiateUnits()
+    {
+        for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team1); i++)
+        {
+            BaseUnit newUnit = Instantiate(_unitPrefabList[3]);
+            newUnit.Initialize(TeamEnum.Team1, graphService.GetUnOccupiedNode(TeamEnum.Team1));
+            teamService.AddUnitToTeam(newUnit, TeamEnum.Team1);
+        }
+
+        for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team2); i++)
+        {
+            BaseUnit newUnit = Instantiate(_unitPrefabList[3]);
+            newUnit.Initialize(TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
+            teamService.AddUnitToTeam(newUnit, TeamEnum.Team2);
+        }
+    }
+
+    public List<BaseUnit> GetOpponentTeamUnits(TeamEnum opponentTeam)
+    {
+        if (opponentTeam == TeamEnum.Team1)
+            return teamService.GetTeamUnits(TeamEnum.Team2);
+        else
+            return teamService.GetTeamUnits(TeamEnum.Team1);
+    }
+
+    public void MarkUnitDead(BaseUnit unit)
+    {
+        teamService.RemoveUnitFromTeam(unit, unit.Team);
+        Destroy(unit.gameObject);
     }
 
     public int fromIndex = 0;
@@ -34,18 +79,15 @@ public class GameplayManager : MonoBehaviour
 
         var NodesList = graph.Nodes;
 
-        if (NodesList == null)
-            return;
+        if (NodesList == null) return;
 
         foreach (Node node in NodesList)
         {
             Gizmos.color = node.IsOccupied ? Color.red : Color.green;
             Gizmos.DrawSphere(node.position, 0.1f);
-
         }
 
-        if (fromIndex >= NodesList.Count || toIndex >= NodesList.Count)
-            return;
+        if (fromIndex >= NodesList.Count || toIndex >= NodesList.Count) return;
 
         List<Node> pathList = graph.GetShortestPath(NodesList[fromIndex], NodesList[toIndex]);
 
@@ -53,7 +95,7 @@ public class GameplayManager : MonoBehaviour
         {
             for (int i = 1; i < pathList.Count; i++)
             {
-                Debug.DrawLine(pathList[i - 1].position, pathList[i].position, Color.red, 10);
+                Debug.DrawLine(pathList[i - 1].position, pathList[i].position, Color.red, 1);
             }
         }
     }

@@ -1,0 +1,1718 @@
+fileFormatVersion: 2
+guid: 84152564c903f454bb098433a2ddb6e2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7140027783099044630
+    second: Spartan_MeleeAttackerUnit2_0
+  - first:
+      213: -8977083239342986384
+    second: Spartan_MeleeAttackerUnit2_1
+  - first:
+      213: -567581394161864123
+    second: Spartan_MeleeAttackerUnit2_2
+  - first:
+      213: -835087304946475685
+    second: Spartan_MeleeAttackerUnit2_3
+  - first:
+      213: -4745155861173407553
+    second: Spartan_MeleeAttackerUnit2_4
+  - first:
+      213: 2179529978937541218
+    second: Spartan_MeleeAttackerUnit2_5
+  - first:
+      213: -1143694782109165618
+    second: Spartan_MeleeAttackerUnit2_6
+  - first:
+      213: -18217532139593860
+    second: Spartan_MeleeAttackerUnit2_7
+  - first:
+      213: 7523217594889974122
+    second: Spartan_MeleeAttackerUnit2_8
+  - first:
+      213: -5003963390082345640
+    second: Spartan_MeleeAttackerUnit2_9
+  - first:
+      213: -6857367072350643834
+    second: Spartan_MeleeAttackerUnit2_10
+  - first:
+      213: 1359759507975563180
+    second: Spartan_MeleeAttackerUnit2_11
+  - first:
+      213: -1850185190369121639
+    second: Spartan_MeleeAttackerUnit2_12
+  - first:
+      213: 4182441313360404503
+    second: Spartan_MeleeAttackerUnit2_13
+  - first:
+      213: 8173698360362598519
+    second: Spartan_MeleeAttackerUnit2_14
+  - first:
+      213: -5917334559702445140
+    second: Spartan_MeleeAttackerUnit2_15
+  - first:
+      213: 5957365087640102344
+    second: Spartan_MeleeAttackerUnit2_16
+  - first:
+      213: 3659847571078630404
+    second: Spartan_MeleeAttackerUnit2_17
+  - first:
+      213: -4343815220072114579
+    second: Spartan_MeleeAttackerUnit2_18
+  - first:
+      213: 2347513019194439030
+    second: Spartan_MeleeAttackerUnit2_19
+  - first:
+      213: -8592502532195100241
+    second: Spartan_MeleeAttackerUnit2_20
+  - first:
+      213: 3511606976075986483
+    second: Spartan_MeleeAttackerUnit2_21
+  - first:
+      213: 7038170145993877666
+    second: Spartan_MeleeAttackerUnit2_22
+  - first:
+      213: 7311610352052368807
+    second: Spartan_MeleeAttackerUnit2_23
+  - first:
+      213: 4818006143213304577
+    second: Spartan_MeleeAttackerUnit2_24
+  - first:
+      213: -715826309103756509
+    second: Spartan_MeleeAttackerUnit2_25
+  - first:
+      213: 6925311067315972097
+    second: Spartan_MeleeAttackerUnit2_26
+  - first:
+      213: -1446249930071372441
+    second: Spartan_MeleeAttackerUnit2_27
+  - first:
+      213: 3937669508394095665
+    second: Spartan_MeleeAttackerUnit2_28
+  - first:
+      213: 5006214438921166761
+    second: Spartan_MeleeAttackerUnit2_29
+  - first:
+      213: 4272636382742671956
+    second: Spartan_MeleeAttackerUnit2_30
+  - first:
+      213: 2379305668694430159
+    second: Spartan_MeleeAttackerUnit2_31
+  - first:
+      213: 4251273499176085674
+    second: Spartan_MeleeAttackerUnit2_32
+  - first:
+      213: -1595264978218776183
+    second: Spartan_MeleeAttackerUnit2_33
+  - first:
+      213: -4183529529578785119
+    second: Spartan_MeleeAttackerUnit2_34
+  - first:
+      213: -3036366960726683876
+    second: Spartan_MeleeAttackerUnit2_35
+  - first:
+      213: -5390416430333694311
+    second: Spartan_MeleeAttackerUnit2_36
+  - first:
+      213: -3874516618657536899
+    second: Spartan_MeleeAttackerUnit2_37
+  - first:
+      213: 2865492918443844648
+    second: Spartan_MeleeAttackerUnit2_38
+  - first:
+      213: -5903757786541013725
+    second: Spartan_MeleeAttackerUnit2_39
+  - first:
+      213: 6993140419965957464
+    second: Spartan_MeleeAttackerUnit2_40
+  - first:
+      213: 5011764700500310474
+    second: Spartan_MeleeAttackerUnit2_41
+  - first:
+      213: 7377020272934984808
+    second: Spartan_MeleeAttackerUnit2_42
+  - first:
+      213: -8943987090473909263
+    second: Spartan_MeleeAttackerUnit2_43
+  - first:
+      213: 6874039094703931594
+    second: Spartan_MeleeAttackerUnit2_44
+  - first:
+      213: -7595663042509690217
+    second: Spartan_MeleeAttackerUnit2_45
+  - first:
+      213: -6029837260492332000
+    second: Spartan_MeleeAttackerUnit2_46
+  - first:
+      213: -7913078505408279701
+    second: Spartan_MeleeAttackerUnit2_47
+  - first:
+      213: 7770889302632913924
+    second: Spartan_MeleeAttackerUnit2_48
+  - first:
+      213: 4443621854376872255
+    second: Spartan_MeleeAttackerUnit2_49
+  - first:
+      213: 5109934942317146613
+    second: Spartan_MeleeAttackerUnit2_50
+  - first:
+      213: 260597284587995798
+    second: Spartan_MeleeAttackerUnit2_51
+  - first:
+      213: -7169855844884863184
+    second: Spartan_MeleeAttackerUnit2_52
+  - first:
+      213: -5657784732798338771
+    second: Spartan_MeleeAttackerUnit2_53
+  - first:
+      213: 6338214047062653611
+    second: Spartan_MeleeAttackerUnit2_54
+  - first:
+      213: 7173650541242193732
+    second: Spartan_MeleeAttackerUnit2_55
+  - first:
+      213: -6310732140004643673
+    second: Spartan_MeleeAttackerUnit2_56
+  - first:
+      213: -1817542323496620699
+    second: Spartan_MeleeAttackerUnit2_57
+  - first:
+      213: 2148517890747243124
+    second: Spartan_MeleeAttackerUnit2_58
+  - first:
+      213: -4159685148816271666
+    second: Spartan_MeleeAttackerUnit2_59
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aec26fd8f8689ec90800000000000000
+      internalID: -7140027783099044630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_1
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07b29df3b5efa6380800000000000000
+      internalID: -8977083239342986384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_2
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5427cdbaabb8f18f0800000000000000
+      internalID: -567581394161864123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_3
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5d1a38458c2964f0800000000000000
+      internalID: -835087304946475685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_4
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb075ea92e1d52eb0800000000000000
+      internalID: -4745155861173407553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_5
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 26203ebd7fe3f3e10800000000000000
+      internalID: 2179529978937541218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_6
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec75aecb7a7c020f0800000000000000
+      internalID: -1143694782109165618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_7
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7f922440474fbff0800000000000000
+      internalID: -18217532139593860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_8
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 896
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a61b267fa86d76860800000000000000
+      internalID: 7523217594889974122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85515111fc95e8ab0800000000000000
+      internalID: -5003963390082345640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_10
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6895416cafcb5d0a0800000000000000
+      internalID: -6857367072350643834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_11
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca7e7d47116ded210800000000000000
+      internalID: 1359759507975563180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_12
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99a2c5f3f52d256e0800000000000000
+      internalID: -1850185190369121639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_13
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 710e3c807340b0a30800000000000000
+      internalID: 4182441313360404503
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_14
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7700b964a5fce6170800000000000000
+      internalID: 8173698360362598519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_15
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca31bcfb19761eda0800000000000000
+      internalID: -5917334559702445140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_16
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c52a16dbffcca250800000000000000
+      internalID: 5957365087640102344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_17
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 768
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 40cc736a9f36ac230800000000000000
+      internalID: 3659847571078630404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d669aa5621ba7b3c0800000000000000
+      internalID: -4343815220072114579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_19
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67570be37aa049020800000000000000
+      internalID: 2347513019194439030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_20
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa9ddd4d87c41c880800000000000000
+      internalID: -8592502532195100241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_21
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 336facf70fbbbb030800000000000000
+      internalID: 3511606976075986483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_22
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2a869bc357a9ca160800000000000000
+      internalID: 7038170145993877666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_23
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a5762a60ee087560800000000000000
+      internalID: 7311610352052368807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_24
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10bf0e37f0ffcd240800000000000000
+      internalID: 4818006143213304577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_25
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32bddf4b3cfd016f0800000000000000
+      internalID: -715826309103756509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_26
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 640
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e5e2e21ad030c9469c03886ccc11c16
+      internalID: 867859573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_27
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d07c7fcc68f322b4595ad8b940bcae7e
+      internalID: 220456058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_28
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52483cd25e66dd247b42b93396ed28f0
+      internalID: 1236740558
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_29
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36236c89df736ed47a979c9be96d6590
+      internalID: -574559857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_30
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f3a5718e8212d245931da15928dd5b1
+      internalID: -437008519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_31
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 596825c3db659e3489fbbc32722e92be
+      internalID: 1420619763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_32
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67c4729b01aacd74196b54e6ebee6195
+      internalID: -1212765467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_33
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4848718f6be094749a284c9707f31b33
+      internalID: 1269640167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_34
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6722d83e3fb31784390e7d46668b4d87
+      internalID: 941162260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_35
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 512
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b9633e9a3cc0f8499d465fc25d226c6
+      internalID: 231553543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_36
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d48176d22710dba4c9a7249bd4181937
+      internalID: 580069802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_37
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf836ffc8b114f54fb464256a2460a3d
+      internalID: -2070056258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_38
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea55da3a950b72e4f85099a5f959e55c
+      internalID: 15066691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_39
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0bc78842907aa614b8ffc66c762e3290
+      internalID: -1370631759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_40
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 557859f5df015f6498db80c3d6062e28
+      internalID: -1201171492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_41
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 384
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae84dc0b8fb82f34bbcc0cb49baad140
+      internalID: 514964716
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_42
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df012f41a71244f4fb73d112b693a557
+      internalID: 229066227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_43
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 704a1034b11dc3744872d79d499096cf
+      internalID: 76952032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_44
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e3025a74468de74e9b6ab4582fdf994
+      internalID: 415650718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_45
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 407c0a93a9fe01f44a2c562138fbbe94
+      internalID: -716094903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_46
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e220b2193ab1a78408df93da48dbdd2c
+      internalID: -1265499463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_47
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 256
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b6731fd8809e314a977fe07bbfcbf22
+      internalID: 820556345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e4756cbd48d48b42a437321e3d1827a
+      internalID: -1864565397
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_49
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 621f631fbb61ca14a8dd05dda0d0b27d
+      internalID: -2029528299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_50
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 653c85220bb91b74ab02e07499b5a8a0
+      internalID: -1305318107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_51
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b372f67a74a54834fa40af047039879c
+      internalID: -1691802228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_52
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6d845f7b59e7e94fa9b2b9ad0852c4a
+      internalID: 1705139842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_53
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 128
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6a1871b56b10a8428030632bf73e144
+      internalID: 1039277159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_54
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6692cc6fe2c898544bdc27dcf68898db
+      internalID: -53447349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_55
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: deafa9928e42b5046bc4e32ddc0a8215
+      internalID: -355102126
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_56
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 390c89311b8b12140a6e37453eeef48d
+      internalID: 868843189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_57
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 076a8972f142d754dab0123c4f20d992
+      internalID: 922351234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_58
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 506c1002aa74bfd4d91b56212c24ca98
+      internalID: 1687114760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Spartan_MeleeAttackerUnit2_59
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.5, y: 0.35}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49e9fdcb170df7748b0573d8a32c8936
+      internalID: -297742065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 09335da474edeb949a714db86dc2b82f
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.3499999940395355},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      Spartan_MeleeAttackerUnit2_0: -7140027783099044630
+      Spartan_MeleeAttackerUnit2_1: -8977083239342986384
+      Spartan_MeleeAttackerUnit2_10: -6857367072350643834
+      Spartan_MeleeAttackerUnit2_11: 1359759507975563180
+      Spartan_MeleeAttackerUnit2_12: -1850185190369121639
+      Spartan_MeleeAttackerUnit2_13: 4182441313360404503
+      Spartan_MeleeAttackerUnit2_14: 8173698360362598519
+      Spartan_MeleeAttackerUnit2_15: -5917334559702445140
+      Spartan_MeleeAttackerUnit2_16: 5957365087640102344
+      Spartan_MeleeAttackerUnit2_17: 3659847571078630404
+      Spartan_MeleeAttackerUnit2_18: -4343815220072114579
+      Spartan_MeleeAttackerUnit2_19: 2347513019194439030
+      Spartan_MeleeAttackerUnit2_2: -567581394161864123
+      Spartan_MeleeAttackerUnit2_20: -8592502532195100241
+      Spartan_MeleeAttackerUnit2_21: 3511606976075986483
+      Spartan_MeleeAttackerUnit2_22: 7038170145993877666
+      Spartan_MeleeAttackerUnit2_23: 7311610352052368807
+      Spartan_MeleeAttackerUnit2_24: 4818006143213304577
+      Spartan_MeleeAttackerUnit2_25: -715826309103756509
+      Spartan_MeleeAttackerUnit2_26: 867859573
+      Spartan_MeleeAttackerUnit2_27: 220456058
+      Spartan_MeleeAttackerUnit2_28: 1236740558
+      Spartan_MeleeAttackerUnit2_29: -574559857
+      Spartan_MeleeAttackerUnit2_3: -835087304946475685
+      Spartan_MeleeAttackerUnit2_30: -437008519
+      Spartan_MeleeAttackerUnit2_31: 1420619763
+      Spartan_MeleeAttackerUnit2_32: -1212765467
+      Spartan_MeleeAttackerUnit2_33: 1269640167
+      Spartan_MeleeAttackerUnit2_34: 941162260
+      Spartan_MeleeAttackerUnit2_35: 231553543
+      Spartan_MeleeAttackerUnit2_36: 580069802
+      Spartan_MeleeAttackerUnit2_37: -2070056258
+      Spartan_MeleeAttackerUnit2_38: 15066691
+      Spartan_MeleeAttackerUnit2_39: -1370631759
+      Spartan_MeleeAttackerUnit2_4: -4745155861173407553
+      Spartan_MeleeAttackerUnit2_40: -1201171492
+      Spartan_MeleeAttackerUnit2_41: 514964716
+      Spartan_MeleeAttackerUnit2_42: 229066227
+      Spartan_MeleeAttackerUnit2_43: 76952032
+      Spartan_MeleeAttackerUnit2_44: 415650718
+      Spartan_MeleeAttackerUnit2_45: -716094903
+      Spartan_MeleeAttackerUnit2_46: -1265499463
+      Spartan_MeleeAttackerUnit2_47: 820556345
+      Spartan_MeleeAttackerUnit2_48: -1864565397
+      Spartan_MeleeAttackerUnit2_49: -2029528299
+      Spartan_MeleeAttackerUnit2_5: 2179529978937541218
+      Spartan_MeleeAttackerUnit2_50: -1305318107
+      Spartan_MeleeAttackerUnit2_51: -1691802228
+      Spartan_MeleeAttackerUnit2_52: 1705139842
+      Spartan_MeleeAttackerUnit2_53: 1039277159
+      Spartan_MeleeAttackerUnit2_54: -53447349
+      Spartan_MeleeAttackerUnit2_55: -355102126
+      Spartan_MeleeAttackerUnit2_56: 868843189
+      Spartan_MeleeAttackerUnit2_57: 922351234
+      Spartan_MeleeAttackerUnit2_58: 1687114760
+      Spartan_MeleeAttackerUnit2_59: -297742065
+      Spartan_MeleeAttackerUnit2_6: -1143694782109165618
+      Spartan_MeleeAttackerUnit2_7: -18217532139593860
+      Spartan_MeleeAttackerUnit2_8: 7523217594889974122
+      Spartan_MeleeAttackerUnit2_9: -5003963390082345640
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
