@@ -1,4 +1,6 @@
+using AutoBattler.Main;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,15 +39,13 @@ public class ShopUnitCard : MonoBehaviour
     private void SetupCardData()
     {
         _unitIcon.sprite = _unitData.unitIcon;
-        //_unitFaction.sprite = ;
-        //_unitType.sprite = ;
         _unitName.text = _unitData.unitName.ToString();
         _unitCost.text = _unitData.unitCost.ToString();
-        //_unitLevel.sprite = ;
     }
 
     private void OnShopUnitCardClicked()
     {
-        Debug.Log(_unitData.unitID);
+        GameManager.Instance.Get<ShopService>().BuyUnit(_unitData);
+        UIManager.Instance.RemoveShopUnitCard(this);
     }
 }
