@@ -45,7 +45,6 @@ public class ShopUnitCard : MonoBehaviour
 
     private void OnShopUnitCardClicked()
     {
-        GameManager.Instance.Get<ShopService>().BuyUnit(_unitData);
-        UIManager.Instance.RemoveShopUnitCard(this);
+        GameManager.Instance.Get<ShopService>().BuyUnit(this, _unitData);
     }
 }

@@ -1,6 +1,7 @@
 using AutoBattler.Main;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class ShopService
 {
@@ -31,10 +32,20 @@ public class ShopService
         UIManager.Instance.AddShopUnitCard(randomUnit);
     }
 
-    public void BuyUnit(UnitData shopUnit)
+    public void BuyUnit(ShopUnitCard card, UnitData shopUnitData)
     {
-        GameManager.Instance.Get<InventoryService>().AddUnit(shopUnit);
-        _currentUnitsInShop.Remove(shopUnit);
+        CurrencyService currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
+        if (!currencyServiceObj.SpendCurrency(shopUnitData.unitCost))
+        {
+            Debug.Log("Not enough Currency!");
+            return;
+        }
+
+        GameManager.Instance.Get<InventoryService>().AddUnit(shopUnitData);
+        Debug.Log($"Bought {shopUnitData.unitID}");
+
+        _currentUnitsInShop.Remove(shopUnitData);
+        UIManager.Instance.RemoveShopUnitCard(card);
         AddRandomUnitInShop();
     }
 }

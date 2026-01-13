@@ -8,6 +8,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 {
     [SerializeField] private GameObject _gameplayUIContainer;
     [SerializeField] private Button _btnShopToggle;
+    [SerializeField] private TMP_Text _balanceCurrencyText;
 
     [Header("Shop UI")]
     [SerializeField] private GameObject _shopPanel;
@@ -81,5 +82,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void ToggleShopPanelVisibility()
     {
         _shopPanel.SetActive(!_shopPanel.activeSelf);
+    }
+
+    public void UpdateCurrenyUI(int balance)
+    {
+        _balanceCurrencyText.text = balance.ToString();
     }
 }
