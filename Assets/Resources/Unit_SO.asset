@@ -12,16 +12,100 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 611fa6ba7639548478bd92069bcf70fc, type: 3}
   m_Name: Unit_SO
   m_EditorClassIdentifier: Assembly-CSharp::UnitScriptableObjectScript
-  unitPrefabList:
-  - {fileID: 7568324057790207809, guid: ac8fb9b1ddd0afa44877e5c0b7aae3b1, type: 3}
-  - {fileID: -1251695100462667638, guid: ba7ab46a162d63f4c89ebc244c1e0a28, type: 3}
-  - {fileID: -8795649597047712193, guid: 5dfd34d238ea8534bbb01e455e8cdc91, type: 3}
-  - {fileID: -2209156698936974914, guid: b8f89c186008fb347bf5767733d0071f, type: 3}
-  - {fileID: -6260095563541404708, guid: 6a56b4fe37286d648b08178c1ae7864c, type: 3}
-  - {fileID: 7886757113014607428, guid: ef303ae4da8168742a2401fa9d8702e5, type: 3}
-  - {fileID: 8636628523063946614, guid: 4f9c45fcbbb4678428c126954913ceab, type: 3}
-  - {fileID: -2026209505828979296, guid: 6df4c9a969374be44b402be99cc2fc78, type: 3}
-  - {fileID: -6902306450138930433, guid: 632336a2bc941b04d91718005cb0fcf0, type: 3}
-  - {fileID: -8653463163959054984, guid: 5dc13c8833dbccb4f840f62063d0ae83, type: 3}
-  - {fileID: 1556450604000695653, guid: 32a7312e57dab7e4b98895fe85c2ba54, type: 3}
-  - {fileID: 6942306304810124459, guid: d1c60a64b8b3b8c43bac56c9890e77f2, type: 3}
+  unitDataList:
+  - unitID: 0
+    unitPrefab: {fileID: 7568324057790207809, guid: ac8fb9b1ddd0afa44877e5c0b7aae3b1, type: 3}
+    unitIcon: {fileID: 339261780, guid: f0c17ea6448c3044886123d9637721f4, type: 3}
+    unitName: 
+    unitFaction: 0
+    unitType: 0
+    unitLevel: 0
+    unitCost: 5
+  - unitID: 1
+    unitPrefab: {fileID: -1251695100462667638, guid: ba7ab46a162d63f4c89ebc244c1e0a28, type: 3}
+    unitIcon: {fileID: 1001853020, guid: 78c22cb21167b5f4ca9186d6a14d92dc, type: 3}
+    unitName: 
+    unitFaction: 0
+    unitType: 2
+    unitLevel: 0
+    unitCost: 5
+  - unitID: 2
+    unitPrefab: {fileID: -8795649597047712193, guid: 5dfd34d238ea8534bbb01e455e8cdc91, type: 3}
+    unitIcon: {fileID: 790496568, guid: 894d701e06960094a8ffee743e4f6f93, type: 3}
+    unitName: 
+    unitFaction: 0
+    unitType: 1
+    unitLevel: 0
+    unitCost: 5
+  - unitID: 3
+    unitPrefab: {fileID: -2209156698936974914, guid: b8f89c186008fb347bf5767733d0071f, type: 3}
+    unitIcon: {fileID: 1345224006, guid: e02f90bd308d92a4cb906d41812f26ae, type: 3}
+    unitName: 
+    unitFaction: 0
+    unitType: 3
+    unitLevel: 0
+    unitCost: 5
+  - unitID: 4
+    unitPrefab: {fileID: -6902306450138930433, guid: 632336a2bc941b04d91718005cb0fcf0, type: 3}
+    unitIcon: {fileID: -6854871457767645384, guid: 50d5601ba1a06fc4586777114b146c49, type: 3}
+    unitName: 
+    unitFaction: 1
+    unitType: 0
+    unitLevel: 0
+    unitCost: 5
+  - unitID: 5
+    unitPrefab: {fileID: -8653463163959054984, guid: 5dc13c8833dbccb4f840f62063d0ae83, type: 3}
+    unitIcon: {fileID: 5267402234816793484, guid: 8befd0a79752b1144ba01631f15cae44, type: 3}
+    unitName: 
+    unitFaction: 1
+    unitType: 2
+    unitLevel: 0
+    unitCost: 5
+  - unitID: 6
+    unitPrefab: {fileID: 1556450604000695653, guid: 32a7312e57dab7e4b98895fe85c2ba54, type: 3}
+    unitIcon: {fileID: 2786025090814906546, guid: 4a4f9b371ba5fff4198d5de6b44a37ef, type: 3}
+    unitName: 
+    unitFaction: 1
+    unitType: 1
+    unitLevel: 0
+    unitCost: 5
+  - unitID: 7
+    unitPrefab: {fileID: 6942306304810124459, guid: d1c60a64b8b3b8c43bac56c9890e77f2, type: 3}
+    unitIcon: {fileID: 8804136043111226768, guid: 3e4fb1de7b585a34886d8db2273ade44, type: 3}
+    unitName: 
+    unitFaction: 1
+    unitType: 3
+    unitLevel: 0
+    unitCost: 5
+  - unitID: 8
+    unitPrefab: {fileID: -6260095563541404708, guid: 6a56b4fe37286d648b08178c1ae7864c, type: 3}
+    unitIcon: {fileID: -1896043947, guid: 957559c7da87ab148a51d2ea5060cd70, type: 3}
+    unitName: 
+    unitFaction: 2
+    unitType: 0
+    unitLevel: 0
+    unitCost: 5
+  - unitID: 9
+    unitPrefab: {fileID: 7886757113014607428, guid: ef303ae4da8168742a2401fa9d8702e5, type: 3}
+    unitIcon: {fileID: -5259514187705045419, guid: a6bfec389189c3c40ae22eabec81c943, type: 3}
+    unitName: 
+    unitFaction: 0
+    unitType: 2
+    unitLevel: 0
+    unitCost: 5
+  - unitID: 10
+    unitPrefab: {fileID: 8636628523063946614, guid: 4f9c45fcbbb4678428c126954913ceab, type: 3}
+    unitIcon: {fileID: 3791042181826488500, guid: c916b3176dc090e46950da4c1f8c9e2b, type: 3}
+    unitName: 
+    unitFaction: 2
+    unitType: 1
+    unitLevel: 0
+    unitCost: 5
+  - unitID: 11
+    unitPrefab: {fileID: -2026209505828979296, guid: 6df4c9a969374be44b402be99cc2fc78, type: 3}
+    unitIcon: {fileID: 2477030900967564349, guid: a3f7f9770d6088d4faa37d08a43f7471, type: 3}
+    unitName: 
+    unitFaction: 2
+    unitType: 3
+    unitLevel: 0
+    unitCost: 5
