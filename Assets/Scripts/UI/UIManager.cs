@@ -2,10 +2,12 @@ using AutoBattler.Utilities;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : GenericMonoSingleton<UIManager>
 {
     [SerializeField] private GameObject _gameplayUIContainer;
+    [SerializeField] private Button _btnShopToggle;
 
     [Header("Shop UI")]
     [SerializeField] private GameObject _shopPanel;
@@ -27,10 +29,21 @@ public class UIManager : GenericMonoSingleton<UIManager>
         Initialize();
     }
 
+    private void OnEnable()
+    {
+        _btnShopToggle.onClick.AddListener(ToggleShopPanelVisibility);
+    }
+
+    private void OnDisable()
+    {
+        _btnShopToggle.onClick.RemoveListener(ToggleShopPanelVisibility);
+    }
+
     public void Initialize()
     {
         _shopUnitCardList = new List<ShopUnitCard>();
         _inventoryUnitCardList = new List<InventoryUnitCard>();
+        _shopPanel.SetActive(false);
     }
 
     public void AddShopUnitCard(UnitData unitData)
@@ -63,5 +76,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
             _inventoryUnitCardList.Remove(cardToRemove);
             Destroy(cardToRemove.gameObject);
         }
+    }
+
+    private void ToggleShopPanelVisibility()
+    {
+        _shopPanel.SetActive(!_shopPanel.activeSelf);
     }
 }
