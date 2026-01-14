@@ -10,14 +10,15 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     GraphService graphService;
     TeamService teamService;
 
-    private List<BaseUnit> _unitPrefabList;
+    private List<UnitData> _unitPrefabList;
 
-    private void Awake()
+    protected override void Awake()
     {
-        _unitPrefabList = new List<BaseUnit>();
+        base.Awake();
+        _unitPrefabList = new List<UnitData>();
     }
 
-    public void Initialize(UnitScriptableObjectScript unit_SO)
+    public void Initialize(UnitScriptableObject unit_SO)
     {
         tileGridService = GameManager.Instance.Get<TileGridService>();
         graphService = GameManager.Instance.Get<GraphService>();
@@ -26,22 +27,23 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         graphService.Initialize(tileGridService.GetSpawnedTilesList());
         graph = graphService.Graph;
 
-        _unitPrefabList = unit_SO.unitPrefabList;
-        InstantiateUnits();
+        _unitPrefabList = unit_SO.unitDataList;
+        GameManager.Instance.Get<ShopService>().GenerateShopUnits();
+        //InstantiateUnits();
     }
 
     private void InstantiateUnits()
     {
         for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team1); i++)
         {
-            BaseUnit newUnit = Instantiate(_unitPrefabList[3]);
+            BaseUnit newUnit = Instantiate(_unitPrefabList[3].unitPrefab);
             newUnit.Initialize(TeamEnum.Team1, graphService.GetUnOccupiedNode(TeamEnum.Team1));
             teamService.AddUnitToTeam(newUnit, TeamEnum.Team1);
         }
 
         for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team2); i++)
         {
-            BaseUnit newUnit = Instantiate(_unitPrefabList[3]);
+            BaseUnit newUnit = Instantiate(_unitPrefabList[3].unitPrefab);
             newUnit.Initialize(TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
             teamService.AddUnitToTeam(newUnit, TeamEnum.Team2);
         }
