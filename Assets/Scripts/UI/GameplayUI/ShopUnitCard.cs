@@ -14,7 +14,7 @@ public class ShopUnitCard : MonoBehaviour
     [SerializeField] private TMP_Text _unitCost;
     [SerializeField] private Image _unitLevel;
 
-    private UnitData _unitData;
+    public UnitData unitData;
 
     private void OnEnable() => SubscribeToEvents();
 
@@ -32,19 +32,19 @@ public class ShopUnitCard : MonoBehaviour
 
     public void Initialize(UnitData unitData)
     {
-        _unitData = unitData;
+        this.unitData = unitData;
         SetupCardData();
     }
 
     private void SetupCardData()
     {
-        _unitIcon.sprite = _unitData.unitIcon;
-        _unitName.text = _unitData.unitName.ToString();
-        _unitCost.text = _unitData.unitCost.ToString();
+        _unitIcon.sprite = unitData.unitIcon;
+        _unitName.text = unitData.unitName.ToString();
+        _unitCost.text = unitData.unitCost.ToString();
     }
 
     private void OnShopUnitCardClicked()
     {
-        GameManager.Instance.Get<ShopService>().BuyUnit(this, _unitData);
+        GameManager.Instance.Get<ShopService>().BuyUnit(this);
     }
 }

@@ -1,3 +1,4 @@
+using AutoBattler.Main;
 using AutoBattler.Utilities;
 using System.Collections.Generic;
 using TMPro;
@@ -7,12 +8,13 @@ using UnityEngine.UI;
 public class UIManager : GenericMonoSingleton<UIManager>
 {
     [SerializeField] private GameObject _gameplayUIContainer;
-    [SerializeField] private Button _btnShopToggle;
+    [SerializeField] private Button _shopToggleButton;
     [SerializeField] private TMP_Text _balanceCurrencyText;
 
     [Header("Shop UI")]
     [SerializeField] private GameObject _shopPanel;
     [SerializeField] private TMP_Text _refreshCostText;
+    [SerializeField] private Button _refreshShopButton;
     [SerializeField] private Transform _shopUnitCardContainer;
     [SerializeField] private ShopUnitCard _shopUnitCard;
 
@@ -32,12 +34,14 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnEnable()
     {
-        _btnShopToggle.onClick.AddListener(ToggleShopPanelVisibility);
+        _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
+        _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
     }
 
     private void OnDisable()
     {
-        _btnShopToggle.onClick.RemoveListener(ToggleShopPanelVisibility);
+        _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
+        _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
     }
 
     public void Initialize()
@@ -63,6 +67,15 @@ public class UIManager : GenericMonoSingleton<UIManager>
         }
     }
 
+    public void RemoveAllShopUnitCards()
+    {
+        foreach (var card in _shopUnitCardList)
+        {
+            Destroy(card.gameObject);
+        }
+        _shopUnitCardList.Clear();
+    }
+
     public void AddInventoryUnitCard(UnitData unitData)
     {
         InventoryUnitCard newInventoryUnitCard = Instantiate(_inventorytUnitCard, _inventoryUnitCardContainer);
@@ -79,6 +92,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
         }
     }
 
+    private void OnShopToggleButtonClicked()
+    {
+        ToggleShopPanelVisibility();
+    }
+
     private void ToggleShopPanelVisibility()
     {
         _shopPanel.SetActive(!_shopPanel.activeSelf);
@@ -88,4 +106,16 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         _balanceCurrencyText.text = balance.ToString();
     }
+
+    public void UpdateRefreshCostUI(int cost)
+    {
+        _refreshCostText.text = cost.ToString();
+    }
+
+    private void OnRefreshShopButtonClicked()
+    {
+        ShopService shopServiceObj = GameManager.Instance.Get<ShopService>();
+        shopServiceObj.RefreshShop();
+    }
+
 }

@@ -2673,10 +2673,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameplayUIManager
   _gameplayUIContainer: {fileID: 1085591945}
-  _btnShopToggle: {fileID: 945748260}
+  _shopToggleButton: {fileID: 945748260}
   _balanceCurrencyText: {fileID: 86719705}
   _shopPanel: {fileID: 313270657}
-  _refreshCostText: {fileID: 1311086756}
+  _refreshCostText: {fileID: 1704534491}
+  _refreshShopButton: {fileID: 1661763603}
   _shopUnitCardContainer: {fileID: 490521682}
   _shopUnitCard: {fileID: -3570950631372336357, guid: 6baa808f57bded748be4ab21f64ea126, type: 3}
   _inventoryPanel: {fileID: 824427429}
@@ -3129,7 +3130,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5280389004840090332, guid: 0d6a51d02cb85394c96d0da1580aeca0, type: 3}
       propertyPath: m_Name
-      value: PrimaryButton
+      value: RefreshShopButton
       objectReference: {fileID: 0}
     - target: {fileID: 7309245550518439259, guid: 0d6a51d02cb85394c96d0da1580aeca0, type: 3}
       propertyPath: m_Color.b
@@ -3367,6 +3368,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2041320442907763491, guid: 839d557d9155cf44aa2e654a00dbc479, type: 3}
   m_PrefabInstance: {fileID: 1641414054}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1661763603 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9189843310381436339, guid: 0d6a51d02cb85394c96d0da1580aeca0, type: 3}
+  m_PrefabInstance: {fileID: 1621972588}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &1700229631
 GameObject:
   m_ObjectHideFlags: 0
@@ -3400,6 +3412,7 @@ MonoBehaviour:
   _unit_SO: {fileID: 11400000, guid: c4ae526f170fffc418cc980a9a3f961e, type: 2}
   _rangedAbilities_SO: {fileID: 11400000, guid: 2cac3852b0fc522439d1e0df4b9ce797, type: 2}
   _startingBalance: 10
+  _shopRefreshCost: 1
 --- !u!4 &1700229633
 Transform:
   m_ObjectHideFlags: 0

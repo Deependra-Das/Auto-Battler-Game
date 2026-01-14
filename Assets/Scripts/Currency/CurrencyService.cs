@@ -6,7 +6,7 @@ public class CurrencyService
 
     public CurrencyService(int startingCurrencyAmount)
     {
-        Balance = startingCurrencyAmount;
+        AddCurrency(startingCurrencyAmount);
     }
 
     public bool CanAfford(int amount)
