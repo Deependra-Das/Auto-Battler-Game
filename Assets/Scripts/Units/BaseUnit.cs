@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,19 +53,33 @@ public class BaseUnit : MonoBehaviour
 
     protected bool isDead = false;
     protected bool canAttack = true;
-
-    protected TeamEnum _team;
+    protected bool isActive = false;
+    protected TeamEnum team;
 
     public string CharacterName => characterName;
     public UnitTypeEnum UnitType => unitType;
-    public TeamEnum Team => _team;
+    public TeamEnum Team => team;
     public Node CurrentNode => currentNode;
     protected bool HasEnemy => currentTarget != null;
     public UnitFacingDirectionEnum DirectionFacing => directionFacing;
 
+    void OnEnable() => SubscribeToEvents();
+
+    void OnDisable() => UnsubscribeToEvents();
+
+    void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.GameStart, OnGameStart_BaseUnit);
+    }
+
+    void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.GameStart, OnGameStart_BaseUnit);
+    }
+
     public void Initialize(TeamEnum team, Node spawnNode)
     {
-        _team = team;
+        this.team = team;
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
@@ -91,7 +106,7 @@ public class BaseUnit : MonoBehaviour
 
     protected void FindTarget()
     {
-        var allEnemies = GameplayManager.Instance.GetOpponentTeamUnits(_team);
+        var allEnemies = GameplayManager.Instance.GetOpponentTeamUnits(team);
         float minDistance = Mathf.Infinity;
         BaseUnit enemyUnit = null;
         foreach (BaseUnit enemy in allEnemies)
@@ -251,5 +266,10 @@ public class BaseUnit : MonoBehaviour
         {
             directionFacing = UnitFacingDirectionEnum.Down;
         }
+    }
+
+    protected void OnGameStart_BaseUnit(object[] parameters)
+    {
+        isActive = true;
     }
 }
