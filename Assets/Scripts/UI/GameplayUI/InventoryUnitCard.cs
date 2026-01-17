@@ -1,4 +1,4 @@
-using TMPro;
+using AutoBattler.Main;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +10,7 @@ public class InventoryUnitCard : MonoBehaviour
     [SerializeField] private Image _unitType;
     [SerializeField] private Image _unitLevel;
 
-    private UnitData _unitData;
+    public UnitData unitData;
 
     private void OnEnable() => SubscribeToEvents();
 
@@ -28,19 +28,20 @@ public class InventoryUnitCard : MonoBehaviour
 
     public void Initialize(UnitData unitData)
     {
-        _unitData = unitData;
+        this.unitData = unitData;
         SetupCardData();
     }
 
     private void SetupCardData()
     {
-        _unitIcon.sprite = _unitData.unitIcon;
+        _unitIcon.sprite = unitData.unitIcon;
         //_unitFaction.sprite = ;
         //_unitType.sprite = ;
         //_unitLevel.sprite = ;
     }
+
     private void OnInventoryUnitCardClicked()
     {
-        Debug.Log(_unitData.unitID);
+        GameManager.Instance.Get<InventoryService>().DeployUnit(this);
     }
 }
