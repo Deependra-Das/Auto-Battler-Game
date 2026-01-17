@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using UnityEngine.UI;
 
 public class UIManager : GenericMonoSingleton<UIManager>
 {
+    [SerializeField] private Button _playButton;
     [SerializeField] private GameObject _gameplayUIContainer;
     [SerializeField] private Button _shopToggleButton;
     [SerializeField] private TMP_Text _balanceCurrencyText;
@@ -34,12 +36,14 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnEnable()
     {
+        _playButton.onClick.AddListener(OnPlayButtonClicked); 
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
     }
 
     private void OnDisable()
     {
+        _playButton.onClick.RemoveListener(OnPlayButtonClicked);
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
     }
@@ -118,4 +122,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         shopServiceObj.RefreshShop();
     }
 
+    private void OnPlayButtonClicked()
+    {
+        EventBusManager.Instance.RaiseNoParams(EventNameEnum.GameStart);
+    }
 }
