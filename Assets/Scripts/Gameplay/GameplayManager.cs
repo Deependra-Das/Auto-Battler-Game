@@ -29,21 +29,23 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
 
         _unitPrefabList = unit_SO.unitDataList;
         GameManager.Instance.Get<ShopService>().GenerateShopUnits();
-        //InstantiateUnits();
+
+        InstantiateTeam2Units();
     }
 
-    private void InstantiateUnits()
+    public void InstantiateUnit(UnitData unitData, TeamEnum team )
     {
-        for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team1); i++)
-        {
-            BaseUnit newUnit = Instantiate(_unitPrefabList[3].unitPrefab);
-            newUnit.Initialize(TeamEnum.Team1, graphService.GetUnOccupiedNode(TeamEnum.Team1));
-            teamService.AddUnitToTeam(newUnit, TeamEnum.Team1);
-        }
+        BaseUnit newUnit = Instantiate(unitData.unitPrefab);
+        newUnit.Initialize(team, graphService.GetUnOccupiedNode(team));
+        teamService.AddUnitToTeam(newUnit, team);
+    }
 
+    private void InstantiateTeam2Units()
+    {
         for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team2); i++)
         {
-            BaseUnit newUnit = Instantiate(_unitPrefabList[3].unitPrefab);
+            UnitData randomUnitData = _unitPrefabList[Random.Range(0, _unitPrefabList.Count)];
+            BaseUnit newUnit = Instantiate(randomUnitData.unitPrefab);
             newUnit.Initialize(TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
             teamService.AddUnitToTeam(newUnit, TeamEnum.Team2);
         }
