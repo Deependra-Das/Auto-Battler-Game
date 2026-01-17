@@ -45,7 +45,7 @@ public class ShopService
         }
 
         GameManager.Instance.Get<InventoryService>().AddUnit(card.unitData);
-        Debug.Log($"Bought {card.unitData.unitID}");
+        //Debug.Log($"Bought {card.unitData.unitID}");
 
         _currentUnitsInShop.Remove(card.unitData);
         UIManager.Instance.RemoveShopUnitCard(card);
