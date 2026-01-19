@@ -1,47 +1,81 @@
-using AutoBattler.Main;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventoryUnitCard : MonoBehaviour
+public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [SerializeField] private Button _btnInventoryUnitCard;
     [SerializeField] private Image _unitIcon;
     [SerializeField] private Image _unitFaction;
     [SerializeField] private Image _unitType;
     [SerializeField] private Image _unitLevel;
 
-    public UnitData unitData;
+    public UnitData UnitData { get; private set; }
 
-    private void OnEnable() => SubscribeToEvents();
+    private Canvas _canvas;
+    private CanvasGroup _canvasGroup;
+    private LayoutElement _layoutElement;
 
-    private void OnDisable() => UnsubscribeToEvents();
+    private Transform _container;
+    private GameObject _placeholder;
 
-    private void SubscribeToEvents()
+    private void Awake()
     {
-        _btnInventoryUnitCard.onClick.AddListener(OnInventoryUnitCardClicked);
+        _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        _layoutElement = GetComponent<LayoutElement>() ?? gameObject.AddComponent<LayoutElement>();
     }
 
-    private void UnsubscribeToEvents()
+    public void Initialize(UnitData unitData, Canvas canvas)
     {
-        _btnInventoryUnitCard.onClick.RemoveListener(OnInventoryUnitCardClicked);
-    }
-
-    public void Initialize(UnitData unitData)
-    {
-        this.unitData = unitData;
-        SetupCardData();
-    }
-
-    private void SetupCardData()
-    {
+        UnitData = unitData;
         _unitIcon.sprite = unitData.unitIcon;
-        //_unitFaction.sprite = ;
-        //_unitType.sprite = ;
-        //_unitLevel.sprite = ;
+        _canvas = canvas;
     }
 
-    private void OnInventoryUnitCardClicked()
+    public void OnBeginDrag(PointerEventData eventData)
     {
-        GameManager.Instance.Get<InventoryService>().DeployUnit(this);
+        _container = transform.parent;
+
+        _placeholder = new GameObject("Placeholder");
+        _placeholder.transform.SetParent(_container);
+        _placeholder.transform.SetSiblingIndex(transform.GetSiblingIndex());
+
+        LayoutElement layoutElement = _placeholder.AddComponent<LayoutElement>();
+        layoutElement.preferredWidth = _layoutElement.preferredWidth;
+        layoutElement.preferredHeight = _layoutElement.preferredHeight;
+
+        transform.SetParent(_canvas.transform);
+        _canvasGroup.blocksRaycasts = false;
+        _canvasGroup.alpha = 0.85f;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        transform.position = eventData.position;
+
+        int targetIndex = _container.childCount;
+
+        for (int i = 0; i < _container.childCount; i++)
+        {
+            if (transform.position.x < _container.GetChild(i).position.x)
+            {
+                targetIndex = i;
+                break;
+            }
+        }
+
+        _placeholder.transform.SetSiblingIndex(targetIndex);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        transform.SetParent(_container);
+        transform.SetSiblingIndex(_placeholder.transform.GetSiblingIndex());
+
+        _canvasGroup.blocksRaycasts = true;
+        _canvasGroup.alpha = 1f;
+
+        Destroy(_placeholder);
+
+        //UIManager.Instance.RefreshInventoryOrder();
     }
 }

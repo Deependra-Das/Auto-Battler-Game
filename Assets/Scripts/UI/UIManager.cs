@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class UIManager : GenericMonoSingleton<UIManager>
 {
+    [SerializeField] private Canvas _uiCanvas;
     [SerializeField] private Button _playButton;
     [SerializeField] private GameObject _gameplayUIContainer;
     [SerializeField] private Button _shopToggleButton;
@@ -24,6 +25,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private GameObject _inventoryPanel;
     [SerializeField] private Transform _inventoryUnitCardContainer;
     [SerializeField] private InventoryUnitCard _inventorytUnitCard;
+    [SerializeField] private CanvasGroup _inventoryDragCanvasGroup;
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
@@ -83,7 +85,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     public void AddInventoryUnitCard(UnitData unitData)
     {
         InventoryUnitCard newInventoryUnitCard = Instantiate(_inventorytUnitCard, _inventoryUnitCardContainer);
-        newInventoryUnitCard.Initialize(unitData);
+        newInventoryUnitCard.Initialize(unitData, _uiCanvas);
         _inventoryUnitCardList.Add(newInventoryUnitCard);
     }
 
@@ -94,6 +96,28 @@ public class UIManager : GenericMonoSingleton<UIManager>
             _inventoryUnitCardList.Remove(cardToRemove);
             Destroy(cardToRemove.gameObject);
         }
+    }
+
+    public void RefreshInventoryOrder()
+    {
+        _inventoryUnitCardList.Clear();
+
+        List<UnitData> newOrder = new();
+
+        for (int i = 0; i < _inventoryUnitCardContainer.childCount; i++)
+        {
+            InventoryUnitCard card = _inventoryUnitCardContainer.GetChild(i).GetComponent<InventoryUnitCard>();
+
+            if (card == null)
+                continue;
+
+            _inventoryUnitCardList.Add(card);
+            newOrder.Add(card.UnitData);
+        }
+
+        InventoryService inventory = GameManager.Instance.Get<InventoryService>();
+
+        inventory.ReorderUnits(newOrder);
     }
 
     private void OnShopToggleButtonClicked()

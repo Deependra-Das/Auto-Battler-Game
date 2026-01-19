@@ -3019,6 +3019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34a481aeaf99ce643a7dc870243c8f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameplayUIManager
+  _uiCanvas: {fileID: 1264077421}
   _playButton: {fileID: 2133473195}
   _gameplayUIContainer: {fileID: 1085591945}
   _shopToggleButton: {fileID: 945748260}
@@ -3031,6 +3032,7 @@ MonoBehaviour:
   _inventoryPanel: {fileID: 824427429}
   _inventoryUnitCardContainer: {fileID: 1861119333}
   _inventorytUnitCard: {fileID: -3820523665162992874, guid: 82e43d3b50c2f9248aac65d1f7ef2d06, type: 3}
+  _inventoryDragCanvasGroup: {fileID: 0}
 --- !u!1 &1311086754
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,8 +27,14 @@ public class InventoryService
 
     public void DeployUnit(InventoryUnitCard card)
     {
-        GameplayManager.Instance.InstantiateUnit(card.unitData, TeamEnum.Team1);
-        _currentUnitsInInventory.Remove(card.unitData);
-        UIManager.Instance.RemoveInventoryUnitCard(card);
+        //GameplayManager.Instance.InstantiateUnit(card.unitData, TeamEnum.Team1);
+        //_currentUnitsInInventory.Remove(card.unitData);
+        //UIManager.Instance.RemoveInventoryUnitCard(card);
+    }
+
+    public void ReorderUnits(List<UnitData> newOrder)
+    {
+        _currentUnitsInInventory.Clear();
+        _currentUnitsInInventory.AddRange(newOrder);
     }
 }
