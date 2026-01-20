@@ -25,11 +25,11 @@ public class InventoryService
         MaxInventorySize = newSize;
     }
 
-    public void DeployUnit(InventoryUnitCard card)
+    public void DeployUnit(InventoryUnitCard card, Node node)
     {
-        //GameplayManager.Instance.InstantiateUnit(card.unitData, TeamEnum.Team1);
-        //_currentUnitsInInventory.Remove(card.unitData);
-        //UIManager.Instance.RemoveInventoryUnitCard(card);
+        GameplayManager.Instance.InstantiateUnit(card.UnitData, node, TeamEnum.Team1);
+        _currentUnitsInInventory.Remove(card.UnitData);
+        UIManager.Instance.RemoveInventoryUnitCard(card);
     }
 
     public void ReorderUnits(List<UnitData> newOrder)
