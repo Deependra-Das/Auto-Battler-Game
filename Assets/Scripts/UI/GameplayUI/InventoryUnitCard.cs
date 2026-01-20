@@ -15,13 +15,14 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private CanvasGroup _canvasGroup;
     private LayoutElement _layoutElement;
 
-    private Transform _container;
+    private Transform _cardContainer;
     private GameObject _placeholder;
 
     private void Awake()
     {
         _canvasGroup = gameObject.AddComponent<CanvasGroup>();
         _layoutElement = GetComponent<LayoutElement>() ?? gameObject.AddComponent<LayoutElement>();
+        _cardContainer = transform.parent;
     }
 
     public void Initialize(UnitData unitData, Canvas canvas)
@@ -33,15 +34,13 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        _container = transform.parent;
-
         _placeholder = new GameObject("Placeholder");
-        _placeholder.transform.SetParent(_container);
+        _placeholder.transform.SetParent(_cardContainer);
         _placeholder.transform.SetSiblingIndex(transform.GetSiblingIndex());
 
-        LayoutElement layoutElement = _placeholder.AddComponent<LayoutElement>();
-        layoutElement.preferredWidth = _layoutElement.preferredWidth;
-        layoutElement.preferredHeight = _layoutElement.preferredHeight;
+        LayoutElement placeholderLayout = _placeholder.AddComponent<LayoutElement>();
+        placeholderLayout.preferredWidth = _layoutElement.preferredWidth;
+        placeholderLayout.preferredHeight = _layoutElement.preferredHeight;
 
         transform.SetParent(_canvas.transform);
         _canvasGroup.blocksRaycasts = false;
@@ -52,11 +51,11 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         transform.position = eventData.position;
 
-        int targetIndex = _container.childCount;
+        int targetIndex = _cardContainer.childCount;
 
-        for (int i = 0; i < _container.childCount; i++)
+        for (int i = 0; i < _cardContainer.childCount; i++)
         {
-            if (transform.position.x < _container.GetChild(i).position.x)
+            if (transform.position.x < _cardContainer.GetChild(i).position.x)
             {
                 targetIndex = i;
                 break;
@@ -68,7 +67,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        transform.SetParent(_container);
+        transform.SetParent(_cardContainer);
         transform.SetSiblingIndex(_placeholder.transform.GetSiblingIndex());
 
         _canvasGroup.blocksRaycasts = true;
@@ -76,6 +75,6 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         Destroy(_placeholder);
 
-        //UIManager.Instance.RefreshInventoryOrder();
+        UIManager.Instance.RefreshInventoryOrder();
     }
 }
