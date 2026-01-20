@@ -33,10 +33,10 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         InstantiateTeam2Units();
     }
 
-    public void InstantiateUnit(UnitData unitData, TeamEnum team )
+    public void InstantiateUnit(UnitData unitData, Node node, TeamEnum team )
     {
         BaseUnit newUnit = Instantiate(unitData.unitPrefab);
-        newUnit.Initialize(team, graphService.GetUnOccupiedNode(team));
+        newUnit.Initialize(team, node);
         teamService.AddUnitToTeam(newUnit, team);
     }
 
