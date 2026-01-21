@@ -4,6 +4,9 @@ namespace AutoBattler.Event
 {
     public enum EventNameEnum
     {
-        GameStart
+        PreparationStart,
+        CombatStart,
+        GameOver,
+        RoundOver,
     }
 }
