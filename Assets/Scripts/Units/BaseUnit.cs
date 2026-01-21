@@ -69,12 +69,12 @@ public class BaseUnit : MonoBehaviour
 
     void SubscribeToEvents()
     {
-        EventBusManager.Instance.Subscribe(EventNameEnum.GameStart, OnGameStart_BaseUnit);
+        EventBusManager.Instance.Subscribe(EventNameEnum.CombatStart, OnCombatStart_BaseUnit);
     }
 
     void UnsubscribeToEvents()
     {
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.GameStart, OnGameStart_BaseUnit);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.CombatStart, OnCombatStart_BaseUnit);
     }
 
     public void Initialize(TeamEnum team, Node spawnNode)
@@ -268,7 +268,7 @@ public class BaseUnit : MonoBehaviour
         }
     }
 
-    protected void OnGameStart_BaseUnit(object[] parameters)
+    protected void OnCombatStart_BaseUnit(object[] parameters)
     {
         isActive = true;
     }

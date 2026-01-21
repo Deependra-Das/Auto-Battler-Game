@@ -161,6 +161,9 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     private bool TrySpawnUnitOnTile(PointerEventData eventData)
     {
+        if (GameplayManager.Instance.CurrentState != GameplayStateEnum.Preparation)
+            return false;
+
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
         Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
 
@@ -173,7 +176,6 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
             return false;
 
         _inventoryService.DeployUnit(this, tile.Node);
-        tile.Node.SetOccupied(true);
 
         return true;
     }

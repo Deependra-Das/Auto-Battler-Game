@@ -148,6 +148,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnPlayButtonClicked()
     {
-        EventBusManager.Instance.RaiseNoParams(EventNameEnum.GameStart);
+        GameplayManager.Instance.UpdateGameplayState(GameplayStateEnum.Combat);
     }
 }

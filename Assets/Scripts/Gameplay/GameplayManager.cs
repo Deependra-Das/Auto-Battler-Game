@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     TeamService teamService;
 
     private List<UnitData> _unitPrefabList;
+    public GameplayStateEnum CurrentState { get; private set; } = GameplayStateEnum.Preparation;
 
     protected override void Awake()
     {
@@ -102,5 +104,34 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
                 Debug.DrawLine(pathList[i - 1].position, pathList[i].position, Color.red, 1);
             }
         }
+    }
+
+    public void UpdateGameplayState(GameplayStateEnum newState)
+    {
+        if (CurrentState == newState)
+            return;
+
+        CurrentState = newState;
+
+        switch (CurrentState)
+        {
+            case GameplayStateEnum.Preparation:
+                EventBusManager.Instance.Raise(EventNameEnum.PreparationStart);
+                break;
+
+            case GameplayStateEnum.Combat:
+                EventBusManager.Instance.Raise(EventNameEnum.CombatStart);
+                break;
+
+            case GameplayStateEnum.GameOver:
+                EventBusManager.Instance.Raise(EventNameEnum.GameOver);
+                break;
+
+            default:
+                Debug.LogWarning("Unhandled gameplay state: " + CurrentState);
+                break;
+        }
+
+
     }
 }
