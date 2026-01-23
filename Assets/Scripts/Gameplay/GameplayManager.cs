@@ -10,7 +10,6 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     TileGridService tileGridService;
     GraphService graphService;
     TeamService teamService;
-
     private List<UnitData> _unitPrefabList;
     public GameplayStateEnum CurrentState { get; private set; } = GameplayStateEnum.Preparation;
 
@@ -31,14 +30,14 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
 
         _unitPrefabList = unit_SO.unitDataList;
         GameManager.Instance.Get<ShopService>().GenerateShopUnits();
-
         InstantiateTeam2Units();
     }
 
     public void InstantiateUnit(UnitData unitData, Node node, TeamEnum team )
     {
         BaseUnit newUnit = Instantiate(unitData.unitPrefab);
-        newUnit.Initialize(team, node);
+        newUnit.Initialize(unitData, team, node);
+
         teamService.AddUnitToTeam(newUnit, team);
     }
 
@@ -48,7 +47,7 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         {
             UnitData randomUnitData = _unitPrefabList[Random.Range(0, _unitPrefabList.Count)];
             BaseUnit newUnit = Instantiate(randomUnitData.unitPrefab);
-            newUnit.Initialize(TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
+            newUnit.Initialize(randomUnitData, TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
             teamService.AddUnitToTeam(newUnit, TeamEnum.Team2);
         }
     }

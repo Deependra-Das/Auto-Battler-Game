@@ -2070,6 +2070,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 824427430}
+  - component: {fileID: 824427432}
+  - component: {fileID: 824427431}
   m_Layer: 5
   m_Name: InventoryPanel
   m_TagString: Untagged
@@ -2098,6 +2100,30 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1140, y: 240}
   m_Pivot: {x: 0.5, y: 0}
+--- !u!225 &824427431
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824427429}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &824427432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 824427429}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c8ee416fc68a82459557b398dc2ebd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InventoryDropZoneManager
 --- !u!1001 &884167173
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4253,7 +4279,6 @@ GameObject:
   - component: {fileID: 1861119333}
   - component: {fileID: 1861119335}
   - component: {fileID: 1861119334}
-  - component: {fileID: 1861119336}
   m_Layer: 5
   m_Name: InentoryCardContainer
   m_TagString: Untagged
@@ -4314,18 +4339,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1861119332}
   m_CullTransparentMesh: 1
---- !u!114 &1861119336
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1861119332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c8ee416fc68a82459557b398dc2ebd1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InventoryDropZoneManager
 --- !u!1 &1876816387
 GameObject:
   m_ObjectHideFlags: 0
