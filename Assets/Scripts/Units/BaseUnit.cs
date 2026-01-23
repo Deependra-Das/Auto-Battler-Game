@@ -4,9 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BaseUnit : MonoBehaviour
+public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] protected string characterName;
     [SerializeField] protected UnitTypeEnum unitType;
@@ -63,6 +64,12 @@ public class BaseUnit : MonoBehaviour
     protected bool HasEnemy => currentTarget != null;
     public UnitFacingDirectionEnum DirectionFacing => directionFacing;
 
+    protected bool isDragging;
+    protected Vector3 dragOffset;
+    protected Node originalNode;
+    protected Camera mainCamera;
+    protected Collider2D unitCollider;
+
     void OnEnable() => SubscribeToEvents();
 
     void OnDisable() => UnsubscribeToEvents();
@@ -75,6 +82,11 @@ public class BaseUnit : MonoBehaviour
     void UnsubscribeToEvents()
     {
         EventBusManager.Instance.Unsubscribe(EventNameEnum.CombatStart, OnCombatStart_BaseUnit);
+    }
+    protected virtual void Awake()
+    {
+        mainCamera = Camera.main;
+        unitCollider = GetComponent<Collider2D>();
     }
 
     public void Initialize(TeamEnum team, Node spawnNode)
@@ -271,5 +283,71 @@ public class BaseUnit : MonoBehaviour
     protected void OnCombatStart_BaseUnit(object[] parameters)
     {
         isActive = true;
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (isActive || isDead) return;
+
+        isDragging = true;
+        originalNode = currentNode;
+        currentNode.SetOccupied(false);
+        unitCollider.enabled = false;
+        Vector3 worldPos = ScreenToWorld(eventData.position);
+        dragOffset = transform.position - worldPos;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (!isDragging) return;
+
+        Vector3 worldPos = ScreenToWorld(eventData.position);
+        transform.position = worldPos + dragOffset;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (!isDragging) return;
+
+        isDragging = false;
+        unitCollider.enabled = true;
+        Node targetNode = GetNodeUnderPointer(eventData);
+
+        if (targetNode != null && !targetNode.IsOccupied)
+        {
+            SnapToNode(targetNode);
+        }
+        else
+        {
+            SnapToNode(originalNode);
+        }
+    }
+
+    protected Vector3 ScreenToWorld(Vector2 screenPosition)
+    {
+        Vector3 pos = screenPosition;
+        pos.z = Mathf.Abs(mainCamera.transform.position.z);
+        return mainCamera.ScreenToWorldPoint(pos);
+    }
+
+    protected Node GetNodeUnderPointer(PointerEventData eventData)
+    {
+        var go = eventData.pointerCurrentRaycast.gameObject;
+        if (go == null)
+            return null;
+
+        // If raycast hit the unit itself, try parent
+        Tile tile = go.GetComponent<Tile>() ?? go.GetComponentInParent<Tile>();
+        if (tile == null)
+            return null;
+
+        return tile.Node;
+    }
+
+    protected void SnapToNode(Node node)
+    {
+        transform.position = node.position;
+        node.SetOccupied(true);
+        SetCurrentNode(node);
     }
 }
