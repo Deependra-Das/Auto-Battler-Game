@@ -29,10 +29,14 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
+    public Canvas UICanvas => _uiCanvas;
+
+    public RectTransform CanvasRect { get; private set; }
 
     protected override void Awake()
     {
         base.Awake();
+        CanvasRect = _uiCanvas.GetComponent<RectTransform>();
         Initialize();
     }
 
