@@ -24,12 +24,14 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [SerializeField] protected float baseMovementSpeed = 1f;
     [SerializeField] protected float baseManaRegenSpeed = 0f;
 
+    [SerializeField] protected Transform unitUIContainer;
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider shieldBar;
 
     [SerializeField] protected float attackCoolDown = 1f;
     [SerializeField] protected float delayBeforeRangedAttack = 0f;
 
+    protected UnitData unitData;
     protected int totalDamage;
     protected int totalHealth;
     protected int totalShield;
@@ -57,6 +59,7 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     protected bool isActive = false;
     protected TeamEnum team;
 
+    public UnitData UnitData => unitData;
     public string CharacterName => characterName;
     public UnitTypeEnum UnitType => unitType;
     public TeamEnum Team => team;
@@ -64,11 +67,16 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     protected bool HasEnemy => currentTarget != null;
     public UnitFacingDirectionEnum DirectionFacing => directionFacing;
 
-    protected bool isDragging;
-    protected Vector3 dragOffset;
-    protected Node originalNode;
     protected Camera mainCamera;
     protected Collider2D unitCollider;
+    protected Node originalNode;
+    protected bool isDragging;
+    protected Vector3 dragOffset;
+    protected bool droppedOnValidDropZone;
+    private GameObject dragSprite;
+    private Canvas canvas;
+    private RectTransform canvasRect;
+
 
     void OnEnable() => SubscribeToEvents();
 
@@ -89,13 +97,15 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         unitCollider = GetComponent<Collider2D>();
     }
 
-    public void Initialize(TeamEnum team, Node spawnNode)
+    public void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
     {
+        this.unitData = unitData;
         this.team = team;
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
-
+        canvas = UIManager.Instance.UICanvas;
+        canvasRect = UIManager.Instance.CanvasRect;
         InitializeHealth();
         InitializeShield();
     }
@@ -288,13 +298,31 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (isActive || isDead) return;
-
+        droppedOnValidDropZone = false;
         isDragging = true;
+
         originalNode = currentNode;
         currentNode.SetOccupied(false);
         unitCollider.enabled = false;
         Vector3 worldPos = ScreenToWorld(eventData.position);
         dragOffset = transform.position - worldPos;
+
+        dragSprite = new GameObject("DragUnitSprite");
+        dragSprite.transform.SetParent(canvas.transform, false);
+
+        Image spriteImage = dragSprite.AddComponent<Image>();
+        spriteImage.sprite = spriteRenderer.sprite;
+        spriteImage.SetNativeSize();
+        spriteImage.raycastTarget = false;
+        spriteRenderer.enabled = false;
+        unitUIContainer.gameObject.SetActive(false);
+
+        Vector3 globalMousePos;
+        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
+            canvasRect, eventData.position, eventData.pressEventCamera, out globalMousePos))
+        {
+            dragSprite.transform.position = globalMousePos;
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -302,7 +330,19 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if (!isDragging) return;
 
         Vector3 worldPos = ScreenToWorld(eventData.position);
-        transform.position = worldPos + dragOffset;
+        transform.position = worldPos;
+
+        if (dragSprite != null && canvasRect != null)
+        {
+            Vector2 localPoint;
+            bool isInside = RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRect, eventData.position, canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera, out localPoint);
+
+            if (isInside)
+            {
+                dragSprite.GetComponent<RectTransform>().localPosition = localPoint;
+            }
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -311,16 +351,26 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         isDragging = false;
         unitCollider.enabled = true;
+
         Node targetNode = GetNodeUnderPointer(eventData);
 
+        if (droppedOnValidDropZone)
+        { 
+            return;
+        }
+
         if (targetNode != null && !targetNode.IsOccupied)
-        {
             SnapToNode(targetNode);
-        }
         else
-        {
             SnapToNode(originalNode);
+
+        if (dragSprite != null)
+        {
+            Destroy(dragSprite);
+            dragSprite = null;
         }
+        spriteRenderer.enabled = true;
+        unitUIContainer.gameObject.SetActive(true);
     }
 
     protected Vector3 ScreenToWorld(Vector2 screenPosition)
@@ -336,7 +386,6 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if (go == null)
             return null;
 
-        // If raycast hit the unit itself, try parent
         Tile tile = go.GetComponent<Tile>() ?? go.GetComponentInParent<Tile>();
         if (tile == null)
             return null;
@@ -349,5 +398,20 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         transform.position = node.position;
         node.SetOccupied(true);
         SetCurrentNode(node);
+    }
+
+    public void MarkDroppedOnValidZone()
+    {
+        droppedOnValidDropZone = true;
+        DragIconCleanUp();
+    }
+
+    private void DragIconCleanUp()
+    {
+        if (dragSprite != null)
+        {
+            Destroy(dragSprite);
+            dragSprite = null;
+        }
     }
 }
