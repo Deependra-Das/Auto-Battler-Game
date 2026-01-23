@@ -140,6 +140,7 @@ MonoBehaviour:
   baseRange: 3
   baseMovementSpeed: 1
   baseManaRegenSpeed: 0
+  unitUIContainer: {fileID: 3079093695033804139}
   healthBar: {fileID: 8648716444539556994}
   shieldBar: {fileID: 332892460062953603}
   attackCoolDown: 1
