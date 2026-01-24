@@ -4,7 +4,8 @@ using UnityEngine.EventSystems;
 
 public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
 {
-    InventoryService inventory;
+    InventoryService inventoryServiceObj;
+    TeamService teamServiceObj;
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -16,9 +17,12 @@ public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
         if (unit.CurrentNode != null)
             unit.CurrentNode.SetOccupied(false);
 
-        inventory = GameManager.Instance.Get<InventoryService>();
-        inventory.AddUnit(unit.UnitData);
+        inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
+        inventoryServiceObj.AddUnit(unit.UnitData);
 
+        teamServiceObj = GameManager.Instance.Get<TeamService>();
+        teamServiceObj.RemoveUnitFromTeam(unit, unit.Team);
         Destroy(unit.gameObject);
+
     }
 }
