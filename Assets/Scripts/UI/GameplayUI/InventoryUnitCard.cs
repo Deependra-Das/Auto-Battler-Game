@@ -18,7 +18,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     private RectTransform _cardContainer;
     private GameObject _placeholder;
-
+    private Tile _highlightedTile;
     private bool _isOutsideContainer;
     private int _originalSiblingIndex;
 
@@ -73,10 +73,12 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         {
             HandleReorder();
             DestroyGhostIcon();
+            ClearHighlightedTile();
         }
         else
         {
             HandleOutsideDrag(eventData);
+            HighlightTileUnderPointer(eventData);
         }
     }
 
@@ -131,6 +133,8 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         _canvasGroup.blocksRaycasts = true;
         _canvasGroup.alpha = 1f;
 
+        ClearHighlightedTile();
+
         bool spawned = false;
 
         if (_isOutsideContainer)
@@ -178,5 +182,47 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         _inventoryService.DeployUnit(this, tile.Node);
 
         return true;
+    }
+
+    private void HighlightTileUnderPointer(PointerEventData eventData)
+    {
+        Tile tile = GetTileUnderPointer(eventData);
+
+        if (tile == _highlightedTile)
+            return;
+
+        ClearHighlightedTile();
+
+        if (tile == null)
+            return;
+
+        bool isValid =
+            GameplayManager.Instance.CurrentState == GameplayStateEnum.Preparation &&
+            tile.Node != null &&
+            !tile.Node.IsOccupied;
+
+        tile.SetHighlight(true, isValid);
+        _highlightedTile = tile;
+    }
+
+    private void ClearHighlightedTile()
+    {
+        if (_highlightedTile != null)
+        {
+            _highlightedTile.SetHighlight(false, false);
+            _highlightedTile = null;
+        }
+    }
+
+    private Tile GetTileUnderPointer(PointerEventData eventData)
+    {
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
+        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
+
+        RaycastHit2D hit = Physics2D.Raycast(worldPos2D, Vector2.zero);
+        if (hit.collider == null)
+            return null;
+
+        return hit.collider.GetComponent<Tile>();
     }
 }
