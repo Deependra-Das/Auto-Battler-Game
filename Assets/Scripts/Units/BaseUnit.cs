@@ -317,12 +317,7 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         spriteRenderer.enabled = false;
         unitUIContainer.gameObject.SetActive(false);
 
-        Vector3 globalMousePos;
-        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(
-            canvasRect, eventData.position, eventData.pressEventCamera, out globalMousePos))
-        {
-            dragSprite.transform.position = globalMousePos;
-        }
+        UpdateDragSpritePosition(eventData);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -352,25 +347,17 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         isDragging = false;
         unitCollider.enabled = true;
 
-        Node targetNode = GetNodeUnderPointer(eventData);
-
         if (droppedOnValidDropZone)
-        { 
             return;
-        }
+
+        Node targetNode = GetNodeUnderPointer(eventData);
 
         if (targetNode != null && !targetNode.IsOccupied)
             SnapToNode(targetNode);
         else
             SnapToNode(originalNode);
 
-        if (dragSprite != null)
-        {
-            Destroy(dragSprite);
-            dragSprite = null;
-        }
-        spriteRenderer.enabled = true;
-        unitUIContainer.gameObject.SetActive(true);
+        CleanupAfterDrag();
     }
 
     protected Vector3 ScreenToWorld(Vector2 screenPosition)
@@ -399,19 +386,33 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         node.SetOccupied(true);
         SetCurrentNode(node);
     }
+    private void UpdateDragSpritePosition(PointerEventData eventData)
+    {
+        if (canvasRect == null || dragSprite == null) return;
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, eventData.position,
+            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera, out Vector2 localPoint);
+
+        dragSprite.GetComponent<RectTransform>().localPosition = localPoint;
+    }
 
     public void MarkDroppedOnValidZone()
     {
         droppedOnValidDropZone = true;
-        DragIconCleanUp();
+        CleanupAfterDrag();
     }
 
-    private void DragIconCleanUp()
+    private void CleanupAfterDrag()
     {
         if (dragSprite != null)
         {
             Destroy(dragSprite);
             dragSprite = null;
+        }
+        if (!droppedOnValidDropZone)
+        {
+            spriteRenderer.enabled = true;
+            unitUIContainer.gameObject.SetActive(true);
         }
     }
 }

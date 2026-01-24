@@ -14,9 +14,6 @@ public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
 
         unit.MarkDroppedOnValidZone();
 
-        if (unit.CurrentNode != null)
-            unit.CurrentNode.SetOccupied(false);
-
         inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
         inventoryServiceObj.AddUnit(unit.UnitData);
 
