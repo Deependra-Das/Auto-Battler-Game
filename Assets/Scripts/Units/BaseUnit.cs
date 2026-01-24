@@ -76,7 +76,7 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private GameObject dragSprite;
     private Canvas canvas;
     private RectTransform canvasRect;
-
+    protected Tile highlightedTile;
 
     void OnEnable() => SubscribeToEvents();
 
@@ -324,20 +324,8 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         if (!isDragging) return;
 
-        Vector3 worldPos = ScreenToWorld(eventData.position);
-        transform.position = worldPos;
-
-        if (dragSprite != null && canvasRect != null)
-        {
-            Vector2 localPoint;
-            bool isInside = RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                canvasRect, eventData.position, canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera, out localPoint);
-
-            if (isInside)
-            {
-                dragSprite.GetComponent<RectTransform>().localPosition = localPoint;
-            }
-        }
+        UpdateDragSpritePosition(eventData);
+        HighlightTileUnderPointer(eventData);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -346,6 +334,8 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         isDragging = false;
         unitCollider.enabled = true;
+
+        ClearHighlightedTile();
 
         if (droppedOnValidDropZone)
             return;
@@ -399,6 +389,7 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void MarkDroppedOnValidZone()
     {
         droppedOnValidDropZone = true;
+        ClearHighlightedTile();
         CleanupAfterDrag();
     }
 
@@ -414,5 +405,39 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             spriteRenderer.enabled = true;
             unitUIContainer.gameObject.SetActive(true);
         }
+    }
+
+    private void HighlightTileUnderPointer(PointerEventData eventData)
+    {
+        Tile tile = GetTileUnderPointer(eventData);
+
+        if (tile == highlightedTile)
+            return;
+
+        ClearHighlightedTile();
+
+        if (tile == null)
+            return;
+
+        bool isValid = !tile.Node.IsOccupied;
+        tile.SetHighlight(true, isValid);
+        highlightedTile = tile;
+    }
+
+    private void ClearHighlightedTile()
+    {
+        if (highlightedTile != null)
+        {
+            highlightedTile.SetHighlight(false, false);
+            highlightedTile = null;
+        }
+    }
+
+    private Tile GetTileUnderPointer(PointerEventData eventData)
+    {
+        var go = eventData.pointerCurrentRaycast.gameObject;
+        if (go == null) return null;
+
+        return go.GetComponent<Tile>() ?? go.GetComponentInParent<Tile>();
     }
 }
