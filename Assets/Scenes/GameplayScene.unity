@@ -2145,10 +2145,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 824427430}
-  - component: {fileID: 824427432}
+  - component: {fileID: 824427433}
   - component: {fileID: 824427431}
   - component: {fileID: 824427434}
-  - component: {fileID: 824427433}
+  - component: {fileID: 824427432}
   m_Layer: 5
   m_Name: InventoryPanel
   m_TagString: Untagged
@@ -2202,6 +2202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c8ee416fc68a82459557b398dc2ebd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryDropZoneManager
+  _highlightPanel: {fileID: 220494015}
 --- !u!114 &824427433
 MonoBehaviour:
   m_ObjectHideFlags: 0
