@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class BaseUnit : MonoBehaviour
 {
     [SerializeField] protected string characterName;
     [SerializeField] protected UnitTypeEnum unitType;
@@ -31,6 +31,7 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [SerializeField] protected float attackCoolDown = 1f;
     [SerializeField] protected float delayBeforeRangedAttack = 0f;
 
+    protected Collider2D unitCollider;
     protected UnitData unitData;
     protected int totalDamage;
     protected int totalHealth;
@@ -66,17 +67,7 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public Node CurrentNode => currentNode;
     protected bool HasEnemy => currentTarget != null;
     public UnitFacingDirectionEnum DirectionFacing => directionFacing;
-
-    protected Camera mainCamera;
-    protected Collider2D unitCollider;
-    protected Node originalNode;
-    protected bool isDragging;
-    protected Vector3 dragOffset;
-    protected bool droppedOnValidDropZone;
-    private GameObject dragSprite;
-    private Canvas canvas;
-    private RectTransform canvasRect;
-    protected Tile highlightedTile;
+    public bool CanBeDragged => !isActive && !isDead;
 
     void OnEnable() => SubscribeToEvents();
 
@@ -93,7 +84,6 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
     protected virtual void Awake()
     {
-        mainCamera = Camera.main;
         unitCollider = GetComponent<Collider2D>();
     }
 
@@ -104,8 +94,6 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
-        canvas = UIManager.Instance.UICanvas;
-        canvasRect = UIManager.Instance.CanvasRect;
         InitializeHealth();
         InitializeShield();
     }
@@ -295,149 +283,35 @@ public class BaseUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         isActive = true;
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void TemporarilyReleaseNode()
     {
-        if (isActive || isDead) return;
-        droppedOnValidDropZone = false;
-        isDragging = true;
-
-        originalNode = currentNode;
-        currentNode.SetOccupied(false);
-        unitCollider.enabled = false;
-        Vector3 worldPos = ScreenToWorld(eventData.position);
-        dragOffset = transform.position - worldPos;
-
-        dragSprite = new GameObject("DragUnitSprite");
-        dragSprite.transform.SetParent(canvas.transform, false);
-
-        Image spriteImage = dragSprite.AddComponent<Image>();
-        spriteImage.sprite = spriteRenderer.sprite;
-        spriteImage.SetNativeSize();
-        spriteImage.raycastTarget = false;
-        spriteRenderer.enabled = false;
-        unitUIContainer.gameObject.SetActive(false);
-
-        UpdateDragSpritePosition(eventData);
+        if (currentNode != null)
+            currentNode.SetOccupied(false);
     }
 
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (!isDragging) return;
-
-        UpdateDragSpritePosition(eventData);
-        HighlightTileUnderPointer(eventData);
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        if (!isDragging) return;
-
-        isDragging = false;
-        unitCollider.enabled = true;
-
-        ClearHighlightedTile();
-
-        if (droppedOnValidDropZone)
-            return;
-
-        Node targetNode = GetNodeUnderPointer(eventData);
-
-        if (targetNode != null && !targetNode.IsOccupied)
-            SnapToNode(targetNode);
-        else
-            SnapToNode(originalNode);
-
-        CleanupAfterDrag();
-    }
-
-    protected Vector3 ScreenToWorld(Vector2 screenPosition)
-    {
-        Vector3 pos = screenPosition;
-        pos.z = Mathf.Abs(mainCamera.transform.position.z);
-        return mainCamera.ScreenToWorldPoint(pos);
-    }
-
-    protected Node GetNodeUnderPointer(PointerEventData eventData)
-    {
-        var go = eventData.pointerCurrentRaycast.gameObject;
-        if (go == null)
-            return null;
-
-        Tile tile = go.GetComponent<Tile>() ?? go.GetComponentInParent<Tile>();
-        if (tile == null)
-            return null;
-
-        return tile.Node;
-    }
-
-    protected void SnapToNode(Node node)
+    public void SnapToNode(Node node)
     {
         transform.position = node.position;
         node.SetOccupied(true);
         SetCurrentNode(node);
     }
-    private void UpdateDragSpritePosition(PointerEventData eventData)
+
+    public void OnDragCancelled(Node fallbackNode)
     {
-        if (canvasRect == null || dragSprite == null) return;
-
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, eventData.position,
-            canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : canvas.worldCamera, out Vector2 localPoint);
-
-        dragSprite.GetComponent<RectTransform>().localPosition = localPoint;
+        SnapToNode(fallbackNode);
     }
 
-    public void MarkDroppedOnValidZone()
+    public void OnDragCompleted()
     {
-        droppedOnValidDropZone = true;
-        ClearHighlightedTile();
-        CleanupAfterDrag();
     }
 
-    private void CleanupAfterDrag()
+    public void UpdateUnitSpriteVisibility(bool state)
     {
-        if (dragSprite != null)
-        {
-            Destroy(dragSprite);
-            dragSprite = null;
-        }
-        if (!droppedOnValidDropZone)
-        {
-            spriteRenderer.enabled = true;
-            unitUIContainer.gameObject.SetActive(true);
-        }
+        spriteRenderer.enabled = state;
     }
 
-    private void HighlightTileUnderPointer(PointerEventData eventData)
+    public void UpdateUnitUIVisibility(bool state)
     {
-        Tile tile = GetTileUnderPointer(eventData);
-
-        if (tile == highlightedTile)
-            return;
-
-        ClearHighlightedTile();
-
-        if (tile == null)
-            return;
-
-        bool isValid = !tile.Node.IsOccupied;
-        tile.SetHighlight(true, isValid);
-        highlightedTile = tile;
-    }
-
-    private void ClearHighlightedTile()
-    {
-        if (highlightedTile != null)
-        {
-            highlightedTile.SetHighlight(false, false);
-            highlightedTile = null;
-        }
-    }
-
-    private Tile GetTileUnderPointer(PointerEventData eventData)
-    {
-        var go = eventData.pointerCurrentRaycast.gameObject;
-        if (go == null) return null;
-
-        return go.GetComponent<Tile>() ?? go.GetComponentInParent<Tile>();
+        unitUIContainer.gameObject.SetActive(false);
     }
 }
