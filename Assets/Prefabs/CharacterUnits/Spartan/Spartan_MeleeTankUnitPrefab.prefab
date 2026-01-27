@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 396713096338241575}
   - component: {fileID: 4168147060520492052}
   - component: {fileID: 9161870426814276127}
-  - component: {fileID: -8653463163959054984}
   - component: {fileID: 8787280388847269392}
+  - component: {fileID: -8653463163959054984}
+  - component: {fileID: 7588912948155472616}
   m_Layer: 0
   m_Name: Spartan_MeleeTankUnitPrefab
   m_TagString: Untagged
@@ -116,35 +117,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-8653463163959054984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6120299871593806300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4d5bc2622594ef4c83a90a69bd47c9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Spartan_MeleeTankUnit
-  characterName: 
-  unitType: 0
-  spriteRenderer: {fileID: 4168147060520492052}
-  animator: {fileID: 9161870426814276127}
-  baseDamage: 1
-  baseHealth: 5
-  baseShield: 5
-  baseMana: 0
-  baseHealing: 0
-  baseRange: 1
-  baseMovementSpeed: 1
-  baseManaRegenSpeed: 0
-  unitUIContainer: {fileID: 3822931708492869758}
-  healthBar: {fileID: 7471615320557740439}
-  shieldBar: {fileID: 1956885132847392150}
-  attackCoolDown: 1
-  delayBeforeRangedAttack: 0
 --- !u!61 &8787280388847269392
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -191,6 +163,47 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.75}
   m_EdgeRadius: 0
+--- !u!114 &-8653463163959054984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120299871593806300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d5bc2622594ef4c83a90a69bd47c9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Spartan_MeleeTankUnit
+  characterName: 
+  unitType: 0
+  spriteRenderer: {fileID: 4168147060520492052}
+  animator: {fileID: 9161870426814276127}
+  baseDamage: 1
+  baseHealth: 5
+  baseShield: 5
+  baseMana: 0
+  baseHealing: 0
+  baseRange: 1
+  baseMovementSpeed: 1
+  baseManaRegenSpeed: 0
+  unitUIContainer: {fileID: 3822931708492869758}
+  healthBar: {fileID: 7471615320557740439}
+  shieldBar: {fileID: 1956885132847392150}
+  attackCoolDown: 1
+  delayBeforeRangedAttack: 0
+--- !u!114 &7588912948155472616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120299871593806300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 037d7e834a39e5e42b1de8eaab46a8eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitDragHandler
 --- !u!1001 &1796243321419196524
 PrefabInstance:
   m_ObjectHideFlags: 0

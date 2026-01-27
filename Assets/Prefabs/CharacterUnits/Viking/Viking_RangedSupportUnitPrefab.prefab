@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 396713096338241575}
   - component: {fileID: 4168147060520492052}
   - component: {fileID: 9161870426814276127}
-  - component: {fileID: -2026209505828979296}
   - component: {fileID: 8821217825878630739}
+  - component: {fileID: -2026209505828979296}
+  - component: {fileID: 1897118266821813316}
   m_Layer: 0
   m_Name: Viking_RangedSupportUnitPrefab
   m_TagString: Untagged
@@ -116,37 +117,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-2026209505828979296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6120299871593806300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65787370940bd674ab5cccccffc50dec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Viking_RangedSupportUnit
-  characterName: 
-  unitType: 3
-  spriteRenderer: {fileID: 4168147060520492052}
-  animator: {fileID: 9161870426814276127}
-  baseDamage: 2
-  baseHealth: 5
-  baseShield: 0
-  baseMana: 0
-  baseHealing: 1
-  baseRange: 5
-  baseMovementSpeed: 1
-  baseManaRegenSpeed: 0
-  unitUIContainer: {fileID: 2558491521807641214}
-  healthBar: {fileID: 8159639435014568855}
-  shieldBar: {fileID: 982944637279190934}
-  attackCoolDown: 1
-  delayBeforeRangedAttack: 1
-  lifetime: 1
-  damageDelay: 0.2
 --- !u!61 &8821217825878630739
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -193,6 +163,49 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.75}
   m_EdgeRadius: 0
+--- !u!114 &-2026209505828979296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120299871593806300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65787370940bd674ab5cccccffc50dec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Viking_RangedSupportUnit
+  characterName: 
+  unitType: 3
+  spriteRenderer: {fileID: 4168147060520492052}
+  animator: {fileID: 9161870426814276127}
+  baseDamage: 2
+  baseHealth: 5
+  baseShield: 0
+  baseMana: 0
+  baseHealing: 1
+  baseRange: 5
+  baseMovementSpeed: 1
+  baseManaRegenSpeed: 0
+  unitUIContainer: {fileID: 2558491521807641214}
+  healthBar: {fileID: 8159639435014568855}
+  shieldBar: {fileID: 982944637279190934}
+  attackCoolDown: 1
+  delayBeforeRangedAttack: 1
+  lifetime: 1
+  damageDelay: 0.2
+--- !u!114 &1897118266821813316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120299871593806300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 037d7e834a39e5e42b1de8eaab46a8eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitDragHandler
 --- !u!1001 &1036346407916794476
 PrefabInstance:
   m_ObjectHideFlags: 0

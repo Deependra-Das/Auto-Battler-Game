@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 396713096338241575}
   - component: {fileID: 4168147060520492052}
   - component: {fileID: 9161870426814276127}
-  - component: {fileID: 6942306304810124459}
   - component: {fileID: 9168567766635546148}
+  - component: {fileID: 6942306304810124459}
+  - component: {fileID: 7706574788225107642}
   m_Layer: 0
   m_Name: Spartan_RangedSupportUnitPrefab
   m_TagString: Untagged
@@ -116,37 +117,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6942306304810124459
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6120299871593806300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd3aa34b11ce6eb429b2aca2e8b7e2cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Spartan_RangedSupportUnit
-  characterName: 
-  unitType: 3
-  spriteRenderer: {fileID: 4168147060520492052}
-  animator: {fileID: 9161870426814276127}
-  baseDamage: 2
-  baseHealth: 5
-  baseShield: 0
-  baseMana: 0
-  baseHealing: 1
-  baseRange: 5
-  baseMovementSpeed: 1
-  baseManaRegenSpeed: 0
-  unitUIContainer: {fileID: 8244604720886512290}
-  healthBar: {fileID: 2366627180484258635}
-  shieldBar: {fileID: 6651588795322150730}
-  attackCoolDown: 1
-  delayBeforeRangedAttack: 1
-  lifetime: 1
-  damageDelay: 0.2
 --- !u!61 &9168567766635546148
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -193,6 +163,49 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.75}
   m_EdgeRadius: 0
+--- !u!114 &6942306304810124459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120299871593806300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3aa34b11ce6eb429b2aca2e8b7e2cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Spartan_RangedSupportUnit
+  characterName: 
+  unitType: 3
+  spriteRenderer: {fileID: 4168147060520492052}
+  animator: {fileID: 9161870426814276127}
+  baseDamage: 2
+  baseHealth: 5
+  baseShield: 0
+  baseMana: 0
+  baseHealing: 1
+  baseRange: 5
+  baseMovementSpeed: 1
+  baseManaRegenSpeed: 0
+  unitUIContainer: {fileID: 8244604720886512290}
+  healthBar: {fileID: 2366627180484258635}
+  shieldBar: {fileID: 6651588795322150730}
+  attackCoolDown: 1
+  delayBeforeRangedAttack: 1
+  lifetime: 1
+  damageDelay: 0.2
+--- !u!114 &7706574788225107642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120299871593806300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 037d7e834a39e5e42b1de8eaab46a8eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitDragHandler
 --- !u!1001 &6884589468257510064
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 396713096338241575}
   - component: {fileID: 4168147060520492052}
   - component: {fileID: 9161870426814276127}
-  - component: {fileID: -6260095563541404708}
   - component: {fileID: 1861768515947078179}
+  - component: {fileID: -6260095563541404708}
+  - component: {fileID: 5621455976533373444}
   m_Layer: 0
   m_Name: Viking_MeleeAttackerUnitPrefab
   m_TagString: Untagged
@@ -116,35 +117,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-6260095563541404708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6120299871593806300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 287ce8111b99e764aa1dbb4bd0e50b26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Viking_MeleeAttackerUnit
-  characterName: 
-  unitType: 0
-  spriteRenderer: {fileID: 4168147060520492052}
-  animator: {fileID: 9161870426814276127}
-  baseDamage: 1
-  baseHealth: 5
-  baseShield: 0
-  baseMana: 0
-  baseHealing: 0
-  baseRange: 1
-  baseMovementSpeed: 1
-  baseManaRegenSpeed: 0
-  unitUIContainer: {fileID: 3279025182254906450}
-  healthBar: {fileID: 9168267442443759035}
-  shieldBar: {fileID: 262607962249030074}
-  attackCoolDown: 1
-  delayBeforeRangedAttack: 0
 --- !u!61 &1861768515947078179
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -191,6 +163,47 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.75}
   m_EdgeRadius: 0
+--- !u!114 &-6260095563541404708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120299871593806300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 287ce8111b99e764aa1dbb4bd0e50b26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Viking_MeleeAttackerUnit
+  characterName: 
+  unitType: 0
+  spriteRenderer: {fileID: 4168147060520492052}
+  animator: {fileID: 9161870426814276127}
+  baseDamage: 1
+  baseHealth: 5
+  baseShield: 0
+  baseMana: 0
+  baseHealing: 0
+  baseRange: 1
+  baseMovementSpeed: 1
+  baseManaRegenSpeed: 0
+  unitUIContainer: {fileID: 3279025182254906450}
+  healthBar: {fileID: 9168267442443759035}
+  shieldBar: {fileID: 262607962249030074}
+  attackCoolDown: 1
+  delayBeforeRangedAttack: 0
+--- !u!114 &5621455976533373444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120299871593806300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 037d7e834a39e5e42b1de8eaab46a8eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitDragHandler
 --- !u!1001 &27357967922603072
 PrefabInstance:
   m_ObjectHideFlags: 0

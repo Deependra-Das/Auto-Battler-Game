@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 396713096338241575}
   - component: {fileID: 4168147060520492052}
   - component: {fileID: 9161870426814276127}
-  - component: {fileID: -1251695100462667638}
   - component: {fileID: 4036650574025017653}
+  - component: {fileID: -1251695100462667638}
+  - component: {fileID: 4534015920957285816}
   m_Layer: 0
   m_Name: Crusader_MeleeTankUnitPrefab
   m_TagString: Untagged
@@ -116,35 +117,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-1251695100462667638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6120299871593806300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b3cbe1407f204d42ab1dfe5034764de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Crusader_MeleeTankUnit
-  characterName: 
-  unitType: 2
-  spriteRenderer: {fileID: 4168147060520492052}
-  animator: {fileID: 9161870426814276127}
-  baseDamage: 1
-  baseHealth: 5
-  baseShield: 5
-  baseMana: 0
-  baseHealing: 0
-  baseRange: 1
-  baseMovementSpeed: 1
-  baseManaRegenSpeed: 0
-  unitUIContainer: {fileID: 1435061085891046662}
-  healthBar: {fileID: 4708257061584714991}
-  shieldBar: {fileID: 4454012748498630894}
-  attackCoolDown: 1
-  delayBeforeRangedAttack: 0
 --- !u!61 &4036650574025017653
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -191,6 +163,47 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5, y: 0.75}
   m_EdgeRadius: 0
+--- !u!114 &-1251695100462667638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120299871593806300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3cbe1407f204d42ab1dfe5034764de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Crusader_MeleeTankUnit
+  characterName: 
+  unitType: 2
+  spriteRenderer: {fileID: 4168147060520492052}
+  animator: {fileID: 9161870426814276127}
+  baseDamage: 1
+  baseHealth: 5
+  baseShield: 5
+  baseMana: 0
+  baseHealing: 0
+  baseRange: 1
+  baseMovementSpeed: 1
+  baseManaRegenSpeed: 0
+  unitUIContainer: {fileID: 1435061085891046662}
+  healthBar: {fileID: 4708257061584714991}
+  shieldBar: {fileID: 4454012748498630894}
+  attackCoolDown: 1
+  delayBeforeRangedAttack: 0
+--- !u!114 &4534015920957285816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6120299871593806300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 037d7e834a39e5e42b1de8eaab46a8eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UnitDragHandler
 --- !u!1001 &4470418147607131412
 PrefabInstance:
   m_ObjectHideFlags: 0
