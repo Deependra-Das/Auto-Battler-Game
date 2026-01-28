@@ -10,6 +10,7 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     TileGridService tileGridService;
     GraphService graphService;
     TeamService teamService;
+    InventoryService inventoryService;
     private List<UnitData> _unitPrefabList;
     public GameplayStateEnum CurrentState { get; private set; } = GameplayStateEnum.Preparation;
 
@@ -24,12 +25,15 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         tileGridService = GameManager.Instance.Get<TileGridService>();
         graphService = GameManager.Instance.Get<GraphService>();
         teamService = GameManager.Instance.Get<TeamService>();
+        inventoryService = GameManager.Instance.Get<InventoryService>();
 
         graphService.Initialize(tileGridService.GetSpawnedTilesList());
         graph = graphService.Graph;
 
         _unitPrefabList = unit_SO.unitDataList;
         GameManager.Instance.Get<ShopService>().GenerateShopUnits();
+
+        inventoryService.SetMaxInventorySize(8);
         InstantiateTeam2Units();
     }
 
