@@ -5,13 +5,13 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
     public Node Node { get; set; }
-    public SpriteRenderer highlightSprite;
-    public Color validColor;
-    public Color wrongColor;
+    [SerializeField] private SpriteRenderer _highlightSprite;
+    [SerializeField] private Color _validColor;
+    [SerializeField] private Color _wrongColor;
 
-    public void SetHighlight(bool active, bool valid)
+    public void OnInteractSetHighlight(bool active, bool valid)
     {
-        highlightSprite.gameObject.SetActive(active);
-        highlightSprite.color = valid ? validColor : wrongColor;
+        _highlightSprite.gameObject.SetActive(active);
+        _highlightSprite.color = valid ? _validColor : _wrongColor;
     }
 }
