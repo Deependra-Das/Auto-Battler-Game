@@ -201,7 +201,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
             tile.Node != null &&
             !tile.Node.IsOccupied;
 
-        tile.SetHighlight(true, isValid);
+        tile.OnInteractSetHighlight(true, isValid);
         _highlightedTile = tile;
     }
 
@@ -209,7 +209,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (_highlightedTile != null)
         {
-            _highlightedTile.SetHighlight(false, false);
+            _highlightedTile.OnInteractSetHighlight(false, false);
             _highlightedTile = null;
         }
     }
