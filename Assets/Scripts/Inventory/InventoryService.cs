@@ -37,4 +37,6 @@ public class InventoryService
         _currentUnitsInInventory.Clear();
         _currentUnitsInInventory.AddRange(newOrder);
     }
+
+    public bool CanAddUnit => _currentUnitsInInventory.Count < MaxInventorySize;
 }
