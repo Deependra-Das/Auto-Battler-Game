@@ -20,6 +20,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Node _originalNode;
     private Tile _highlightedTile;
     private bool isDragging;
+    private InventoryDropZoneManager _highlightInventoryPanel;
 
     void Awake()
     {
@@ -55,8 +56,19 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if (!isDragging) return;
 
         UpdateDragPosition(eventData);
-        HighlightTileUnderPointer(eventData);
-        HighlightInventoryDropZone(eventData);
+
+        var gameObject = eventData.pointerCurrentRaycast.gameObject;
+
+        if (!gameObject) return;
+
+        if (gameObject.TryGetComponent<Tile>(out Tile tile))
+        {
+            HighlightTileUnderPointer(tile);
+        }
+        else if (gameObject.TryGetComponent<InventoryDropZoneManager>(out InventoryDropZoneManager inventoryDropZone))
+        {
+            HighlightInventoryDropZone(inventoryDropZone);
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -121,19 +133,15 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private Node GetNodeUnderPointer(PointerEventData eventData)
     {
-        var go = eventData.pointerCurrentRaycast.gameObject;
-        if (go == null) return null;
+        var tile_GO = eventData.pointerCurrentRaycast.gameObject;
+        if (tile_GO == null) return null;
 
-        Tile tile = go.GetComponent<Tile>() ?? go.GetComponentInParent<Tile>();
+        Tile tile = tile_GO.GetComponent<Tile>() ?? tile_GO.GetComponentInParent<Tile>();
         return tile?.Node;
     }
 
-    private void HighlightTileUnderPointer(PointerEventData eventData)
+    private void HighlightTileUnderPointer(Tile tile)
     {
-        var go = eventData.pointerCurrentRaycast.gameObject;
-        if (go == null) return;
-
-        Tile tile = go.GetComponent<Tile>() ?? go.GetComponentInParent<Tile>();
         if (_highlightedTile == tile) return;
 
         ClearHighlightedTile();
@@ -141,7 +149,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if (tile == null) return;
 
         bool valid = !tile.Node.IsOccupied;
-        tile.SetHighlight(true, valid);
+        tile.OnInteractSetHighlight(true, valid);
         _highlightedTile = tile;
     }
 
@@ -149,36 +157,27 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if (_highlightedTile != null)
         {
-            _highlightedTile.SetHighlight(false, false);
+            _highlightedTile.OnInteractSetHighlight(false, false);
             _highlightedTile = null;
         }
     }
 
-    private void HighlightInventoryDropZone(PointerEventData eventData)
+    private void HighlightInventoryDropZone(InventoryDropZoneManager inventoryDropZone)
     {
-        if (eventData.pointerCurrentRaycast.gameObject == null) return;
+        if (_highlightInventoryPanel == inventoryDropZone) return;
 
-        InventoryDropZoneManager dropZone = eventData.pointerCurrentRaycast.gameObject
-            .GetComponent<InventoryDropZoneManager>() ??
-            eventData.pointerCurrentRaycast.gameObject.GetComponentInParent<InventoryDropZoneManager>();
+        ClearInventoryHighlight();
 
-        if (dropZone != null)
-        {
-            dropZone.SetHighlight(true);
-        }
-        else
-        {
-            ClearInventoryHighlight();
-        }
+        _highlightInventoryPanel = inventoryDropZone;
+        inventoryDropZone.OnInteractSetHighlight(true);
     }
 
     private void ClearInventoryHighlight()
     {
-        var zones = FindObjectsOfType<InventoryDropZoneManager>();
-        foreach (var zone in zones)
-        {
-            zone.SetHighlight(false);
-        }
+        if (_highlightInventoryPanel == null) return;
+
+        _highlightInventoryPanel.OnInteractSetHighlight(false);
+        _highlightInventoryPanel = null;
     }
 
     private void CleanupAfterDrag()
