@@ -195,9 +195,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d97195ef7b0aaef49ad2997cbdcb6d27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Tile
-  highlightSprite: {fileID: 8745667891427077804}
-  validColor: {r: 0.5446778, g: 0.754717, b: 0.5590531, a: 1}
-  wrongColor: {r: 0.7735849, g: 0.48531505, b: 0.48531505, a: 1}
+  _highlightSprite: {fileID: 8745667891427077804}
+  _validColor: {r: 0.6367924, g: 0.8490566, b: 0.7129449, a: 1}
+  _wrongColor: {r: 0.8584906, g: 0.6033731, b: 0.6033731, a: 1}
 --- !u!60 &2820947504585173516
 PolygonCollider2D:
   m_ObjectHideFlags: 0

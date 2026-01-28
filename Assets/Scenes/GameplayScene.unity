@@ -559,7 +559,7 @@ GameObject:
   m_Component:
   - component: {fileID: 220494016}
   - component: {fileID: 220494018}
-  - component: {fileID: 220494017}
+  - component: {fileID: 220494020}
   m_Layer: 5
   m_Name: HighlightPanel
   m_TagString: Untagged
@@ -586,7 +586,15 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &220494017
+--- !u!222 &220494018
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 220494015}
+  m_CullTransparentMesh: 1
+--- !u!114 &220494020
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -599,15 +607,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7803044, g: 0.94055957, b: 0.990566, a: 0.39215687}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 0}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -616,14 +624,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!222 &220494018
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 220494015}
-  m_CullTransparentMesh: 1
 --- !u!1 &261997197
 GameObject:
   m_ObjectHideFlags: 0
@@ -2202,7 +2202,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c8ee416fc68a82459557b398dc2ebd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryDropZoneManager
-  _highlightPanel: {fileID: 220494015}
+  _highlightInventoryPanel: {fileID: 220494020}
+  _validColor: {r: 0.6304735, g: 0.8301887, b: 0.69524145, a: 1}
+  _wrongColor: {r: 0.8773585, g: 0.63318795, b: 0.63318795, a: 1}
 --- !u!114 &824427433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3996,7 +3998,7 @@ MonoBehaviour:
   _tile_SO: {fileID: 11400000, guid: 9d9aeaa809627ca46a6605ab0925435f, type: 2}
   _unit_SO: {fileID: 11400000, guid: c4ae526f170fffc418cc980a9a3f961e, type: 2}
   _rangedAbilities_SO: {fileID: 11400000, guid: 2cac3852b0fc522439d1e0df4b9ce797, type: 2}
-  _startingBalance: 20
+  _startingBalance: 200
   _shopRefreshCost: 1
 --- !u!4 &1700229633
 Transform:
