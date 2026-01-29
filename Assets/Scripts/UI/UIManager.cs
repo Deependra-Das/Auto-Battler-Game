@@ -25,7 +25,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private GameObject _inventoryPanel;
     [SerializeField] private Transform _inventoryUnitCardContainer;
     [SerializeField] private InventoryUnitCard _inventorytUnitCard;
-    [SerializeField] private CanvasGroup _inventoryDragCanvasGroup;
+
+    [Header("Discard UI")]
+    [SerializeField] private GameObject _discardUnitPanel;
+    [SerializeField] private TMP_Text _refundText;
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
@@ -37,21 +40,27 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         base.Awake();
         CanvasRect = _uiCanvas.GetComponent<RectTransform>();
+        ToggleDiscardPanelVisibility(false);
         Initialize();
     }
 
-    private void OnEnable()
+    private void OnEnable() => SubscribeToEvents();
+    private void OnDisable() => UnsubscribeToEvents();
+
+    void SubscribeToEvents()
     {
         _playButton.onClick.AddListener(OnPlayButtonClicked); 
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
+        EventBusManager.Instance.Subscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
     }
 
-    private void OnDisable()
+    void UnsubscribeToEvents()
     {
         _playButton.onClick.RemoveListener(OnPlayButtonClicked);
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
     }
 
     public void Initialize()
@@ -153,5 +162,16 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnPlayButtonClicked()
     {
         GameplayManager.Instance.UpdateGameplayState(GameplayStateEnum.Combat);
+    }
+
+    private void OnUnitDragged_UI(object[] parameters)
+    {
+        bool value = (bool)parameters[0];
+        ToggleDiscardPanelVisibility(value);
+    }
+    
+    private void ToggleDiscardPanelVisibility(bool value)
+    {
+        _discardUnitPanel.SetActive(value);
     }
 }
