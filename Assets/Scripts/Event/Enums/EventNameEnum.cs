@@ -8,5 +8,7 @@ namespace AutoBattler.Event
         CombatStart,
         GameOver,
         RoundOver,
+        UnitDragged,
+        InventoryUnitCardDragged,
     }
 }
