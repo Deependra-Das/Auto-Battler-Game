@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,6 +48,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         Vector3 worldPos = ScreenToWorld(eventData.position);
         _dragOffset = transform.position - worldPos;
 
+        EventBusManager.Instance.Raise(EventNameEnum.UnitDragged, true);
         CreateDragSprite();
         UpdateDragPosition(eventData);
     }
@@ -78,6 +80,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         isDragging = false;
         _unitCollider.enabled = true;
 
+        EventBusManager.Instance.Raise(EventNameEnum.UnitDragged, false);
         ClearHighlightedTile();
         ClearInventoryHighlight();
 
