@@ -16,7 +16,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private GameObject _dragSprite;
     private Vector3 _dragOffset;
-    private bool _droppedOnValidDropZone;
+    private bool _droppedOnInventoryZone;
 
     private Node _originalNode;
     private Tile _highlightedTile;
@@ -37,7 +37,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if (!_unit.CanBeDragged) return;
 
-        _droppedOnValidDropZone = false;
+        _droppedOnInventoryZone = false;
         isDragging = true;
 
         _originalNode = _unit.CurrentNode;
@@ -84,7 +84,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         ClearHighlightedTile();
         ClearInventoryHighlight();
 
-        if (_droppedOnValidDropZone)
+        if (_droppedOnInventoryZone)
         {
             _unit.OnDragCompleted();
             return;
@@ -99,9 +99,9 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         CleanupAfterDrag();
     }
 
-    public void MarkDroppedOnValidZone()
+    public void MarkDroppedOnInventoryZone()
     {
-        _droppedOnValidDropZone = true;
+        _droppedOnInventoryZone = true;
         ClearHighlightedTile();
         ClearInventoryHighlight();
         CleanupAfterDrag();
