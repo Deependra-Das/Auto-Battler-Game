@@ -23,12 +23,11 @@ public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
         if (unit == null) return;
 
         _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
-        Debug.Log(_inventoryServiceObj.CanAddUnit +" "+ _inventoryServiceObj.MaxInventorySize);
         if (!_inventoryServiceObj.CanAddUnit) return;
 
         UnitDragHandler dragHandler = eventData.pointerDrag.GetComponent<UnitDragHandler>();
         if (dragHandler != null)
-            dragHandler.MarkDroppedOnValidZone();
+            dragHandler.MarkDroppedOnInventoryZone();
 
         _inventoryServiceObj.AddUnit(unit.UnitData);
 
