@@ -19,9 +19,9 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private bool _droppedOnInventoryZone;
 
     private Node _originalNode;
-    private Tile _highlightedTile;
+    private Tile _highlighTileObj;
     private bool isDragging;
-    private InventoryDropZoneManager _highlightInventoryPanel;
+    private InventoryDropZoneManager _highlightInventoryDropZoneObj;
 
     void Awake()
     {
@@ -145,42 +145,41 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private void HighlightTileUnderPointer(Tile tile)
     {
-        if (_highlightedTile == tile) return;
+        if (tile == null) return;
+        if (_highlighTileObj == tile) return;
 
         ClearHighlightedTile();
 
-        if (tile == null) return;
-
         bool valid = !tile.Node.IsOccupied;
         tile.OnInteractSetHighlight(true, valid);
-        _highlightedTile = tile;
+        _highlighTileObj = tile;
     }
 
     private void ClearHighlightedTile()
     {
-        if (_highlightedTile != null)
+        if (_highlighTileObj != null)
         {
-            _highlightedTile.OnInteractSetHighlight(false, false);
-            _highlightedTile = null;
+            _highlighTileObj.OnInteractSetHighlight(false, false);
+            _highlighTileObj = null;
         }
     }
 
     private void HighlightInventoryDropZone(InventoryDropZoneManager inventoryDropZone)
     {
-        if (_highlightInventoryPanel == inventoryDropZone) return;
+        if (_highlightInventoryDropZoneObj == inventoryDropZone) return;
 
         ClearInventoryHighlight();
 
-        _highlightInventoryPanel = inventoryDropZone;
-        inventoryDropZone.OnInteractSetHighlight(true);
+        _highlightInventoryDropZoneObj = inventoryDropZone;
+        _highlightInventoryDropZoneObj.OnInteractSetHighlight(true);
     }
 
     private void ClearInventoryHighlight()
     {
-        if (_highlightInventoryPanel == null) return;
+        if (_highlightInventoryDropZoneObj == null) return;
 
-        _highlightInventoryPanel.OnInteractSetHighlight(false);
-        _highlightInventoryPanel = null;
+        _highlightInventoryDropZoneObj.OnInteractSetHighlight(false);
+        _highlightInventoryDropZoneObj = null;
     }
 
     private void CleanupAfterDrag()
