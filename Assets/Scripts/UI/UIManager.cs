@@ -53,6 +53,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
         EventBusManager.Instance.Subscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
     }
 
     void UnsubscribeToEvents()
@@ -61,6 +62,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
     }
 
     public void Initialize()
@@ -169,7 +171,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
         bool value = (bool)parameters[0];
         ToggleDiscardPanelVisibility(value);
     }
-    
+
+    private void OnInventoryUnitCardDragged_UI(object[] parameters)
+    {
+        bool value = (bool)parameters[0];
+        ToggleDiscardPanelVisibility(value);
+    }
+
     private void ToggleDiscardPanelVisibility(bool value)
     {
         _discardUnitPanel.SetActive(value);
