@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,8 +22,9 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private Tile _highlightedTile;
     private bool _isOutsideContainer;
     private int _originalSiblingIndex;
-
-    private Image _ghostIcon;
+    private DiscardUnitDropZoneManager _highlightdiscardUnitPanel;
+    private bool _droppedOnDiscardUnitZone;
+    private Image _dragSprite;
     private InventoryService _inventoryService;
 
     private void Awake()
@@ -31,6 +33,10 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         _canvasGroup = gameObject.AddComponent<CanvasGroup>();
         _layoutElement = GetComponent<LayoutElement>() ?? gameObject.AddComponent<LayoutElement>();
         _cardContainer = transform.parent as RectTransform;
+    }
+    private void OnDestroy()
+    {
+        CleanupAfterDrag();
     }
 
     public void Initialize(UnitData unitData, Canvas canvas)
@@ -44,7 +50,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         _originalSiblingIndex = transform.GetSiblingIndex();
         _isOutsideContainer = false;
-
+        _droppedOnDiscardUnitZone = false;
         _placeholder = new GameObject("Placeholder");
         _placeholder.transform.SetParent(_cardContainer);
         _placeholder.transform.SetSiblingIndex(_originalSiblingIndex);
@@ -57,6 +63,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.alpha = 0.85f;
 
+        EventBusManager.Instance.Raise(EventNameEnum.InventoryUnitCardDragged, true);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -72,13 +79,24 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (isInsideContainer)
         {
             HandleReorder();
-            DestroyGhostIcon();
+            CleanupAfterDrag();
             ClearHighlightedTile();
         }
         else
         {
             HandleOutsideDrag(eventData);
-            HighlightTileUnderPointer(eventData);
+            var gameObject = GetTileUnderPointer(eventData);
+
+            if (!gameObject) return;
+
+            if (gameObject.TryGetComponent<Tile>(out Tile tile))
+            {
+                HighlightTileUnderPointer(tile);
+            }
+            else if (gameObject.TryGetComponent<DiscardUnitDropZoneManager>(out DiscardUnitDropZoneManager discardUnitDropZone))
+            {
+                HighlightDiscardUnitDropZone(discardUnitDropZone);
+            }
         }
     }
 
@@ -111,21 +129,21 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
             _isOutsideContainer = true;
             _canvasGroup.alpha = 0f;
 
-            if (_unitIcon != null && _ghostIcon == null)
+            if (_unitIcon != null && _dragSprite == null)
             {
-                GameObject ghostGO = new GameObject("GhostIcon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+                GameObject ghostGO = new GameObject("DragSprite", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
                 ghostGO.transform.SetParent(_canvas.transform);
                 ghostGO.transform.SetAsLastSibling();
 
-                _ghostIcon = ghostGO.GetComponent<Image>();
-                _ghostIcon.sprite = _unitIcon.sprite;
-                _ghostIcon.SetNativeSize();
-                _ghostIcon.raycastTarget = false;
+                _dragSprite = ghostGO.GetComponent<Image>();
+                _dragSprite.sprite = _unitIcon.sprite;
+                _dragSprite.SetNativeSize();
+                _dragSprite.raycastTarget = false;
             }
         }
 
-        if (_ghostIcon != null)
-            _ghostIcon.transform.position = eventData.position;
+        if (_dragSprite != null)
+            _dragSprite.transform.position = eventData.position;
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -134,11 +152,15 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         _canvasGroup.alpha = 1f;
 
         ClearHighlightedTile();
-
+        ClearDiscardUnitDropZoneHighlight();
         bool spawned = false;
 
         if (_isOutsideContainer)
         {
+            if(_droppedOnDiscardUnitZone)
+            {
+                return;
+            }
             spawned = TrySpawnUnitOnTile(eventData);
         }
 
@@ -149,17 +171,17 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
 
         Destroy(_placeholder);
-        DestroyGhostIcon();
-
+        CleanupAfterDrag();
+        DragCompleted();
         UIManager.Instance.RefreshInventoryOrder();
     }
 
-    private void DestroyGhostIcon()
+    private void CleanupAfterDrag()
     {
-        if (_ghostIcon != null)
+        if (_dragSprite != null)
         {
-            Destroy(_ghostIcon.gameObject);
-            _ghostIcon = null;
+            Destroy(_dragSprite.gameObject);
+            _dragSprite = null;
         }
     }
 
@@ -184,22 +206,15 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         return true;
     }
 
-    private void HighlightTileUnderPointer(PointerEventData eventData)
+    private void HighlightTileUnderPointer(Tile tile)
     {
-        Tile tile = GetTileUnderPointer(eventData);
-
-        if (tile == _highlightedTile)
-            return;
+        if (tile == null) return;
+        if (_highlightedTile == tile) return;
 
         ClearHighlightedTile();
 
-        if (tile == null)
-            return;
-
-        bool isValid =
-            GameplayManager.Instance.CurrentState == GameplayStateEnum.Preparation &&
-            tile.Node != null &&
-            !tile.Node.IsOccupied;
+        bool isValid = GameplayManager.Instance.CurrentState == GameplayStateEnum.Preparation &&
+            tile.Node != null && !tile.Node.IsOccupied;
 
         tile.OnInteractSetHighlight(true, isValid);
         _highlightedTile = tile;
@@ -214,7 +229,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
     }
 
-    private Tile GetTileUnderPointer(PointerEventData eventData)
+    private GameObject GetTileUnderPointer(PointerEventData eventData)
     {
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
         Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
@@ -223,6 +238,38 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (hit.collider == null)
             return null;
 
-        return hit.collider.GetComponent<Tile>();
+        return hit.collider.gameObject;
+    }
+
+    private void HighlightDiscardUnitDropZone(DiscardUnitDropZoneManager discardUnitDropZone)
+    {
+        if (_highlightdiscardUnitPanel == discardUnitDropZone) return;
+
+        ClearDiscardUnitDropZoneHighlight();
+
+        _highlightdiscardUnitPanel = discardUnitDropZone;
+        _highlightdiscardUnitPanel.OnInteractSetHighlight(true);
+    }
+
+    private void ClearDiscardUnitDropZoneHighlight()
+    {
+        if (_highlightdiscardUnitPanel == null) return;
+
+        _highlightdiscardUnitPanel.OnInteractSetHighlight(false);
+        _highlightdiscardUnitPanel = null;
+    }
+
+    public void MarkDroppedOnDiscardUnitZone()
+    {
+        _droppedOnDiscardUnitZone = true;
+        ClearHighlightedTile();
+        ClearDiscardUnitDropZoneHighlight();
+        CleanupAfterDrag();
+        DragCompleted();
+    }
+
+    private void DragCompleted()
+    {
+        EventBusManager.Instance.Raise(EventNameEnum.InventoryUnitCardDragged, false);
     }
 }
