@@ -34,8 +34,12 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         _layoutElement = GetComponent<LayoutElement>() ?? gameObject.AddComponent<LayoutElement>();
         _cardContainer = transform.parent as RectTransform;
     }
+
     private void OnDestroy()
     {
+        if (_placeholder != null)
+            Destroy(_placeholder);
+
         CleanupAfterDrag();
     }
 
@@ -119,7 +123,10 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
             }
         }
 
-        _placeholder.transform.SetSiblingIndex(targetIndex);
+        if (_placeholder != null)
+        {
+            _placeholder.transform.SetSiblingIndex(targetIndex);
+        }
     }
 
     private void HandleOutsideDrag(PointerEventData eventData)
@@ -155,12 +162,23 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         ClearDiscardUnitDropZoneHighlight();
         bool spawned = false;
 
+        if (_isOutsideContainer && _droppedOnDiscardUnitZone)
+        {
+            if (_placeholder != null)
+            {
+                Destroy(_placeholder);
+                _placeholder = null;
+            }
+
+            CleanupAfterDrag();
+            DragCompleted();
+            UIManager.Instance.RefreshInventoryOrder();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_cardContainer);
+            return;
+        }
+
         if (_isOutsideContainer)
         {
-            if(_droppedOnDiscardUnitZone)
-            {
-                return;
-            }
             spawned = TrySpawnUnitOnTile(eventData);
         }
 
@@ -170,10 +188,16 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
             transform.SetSiblingIndex(_placeholder.transform.GetSiblingIndex());
         }
 
-        Destroy(_placeholder);
+        if (_placeholder != null)
+        {
+            Destroy(_placeholder);
+            _placeholder = null;
+        }
+
         CleanupAfterDrag();
         DragCompleted();
         UIManager.Instance.RefreshInventoryOrder();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_cardContainer);
     }
 
     private void CleanupAfterDrag()
@@ -202,7 +226,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
             return false;
 
         _inventoryService.DeployUnit(this, tile.Node);
-
+        UIManager.Instance.RemoveInventoryUnitCard(this);
         return true;
     }
 
@@ -266,6 +290,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         ClearDiscardUnitDropZoneHighlight();
         CleanupAfterDrag();
         DragCompleted();
+        UIManager.Instance.RefreshInventoryOrder();
     }
 
     private void DragCompleted()
