@@ -26,7 +26,7 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
         }
         else if (gameObject.TryGetComponent<InventoryUnitCard>(out InventoryUnitCard inventoryUnitCard))
         {
-            refundAmount = inventoryUnitCard.UnitData.unitLevel;
+            refundAmount = inventoryUnitCard.UnitData.unitCost;
             inventoryUnitCard.MarkDroppedOnDiscardUnitZone();
             UIManager.Instance.RemoveInventoryUnitCard(inventoryUnitCard);
             Destroy(inventoryUnitCard.gameObject);
