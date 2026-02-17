@@ -301,10 +301,6 @@ public class BaseUnit : MonoBehaviour
         SnapToNode(fallbackNode);
     }
 
-    public void OnDragCompleted()
-    {
-    }
-
     public void UpdateUnitSpriteVisibility(bool state)
     {
         spriteRenderer.enabled = state;
