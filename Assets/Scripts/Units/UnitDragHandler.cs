@@ -17,11 +17,15 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private GameObject _dragSprite;
     private Vector3 _dragOffset;
     private bool _droppedOnInventoryZone;
+    private InventoryDropZoneManager _highlightInventoryDropZoneObj;
+
+    private bool _droppedOnDiscardUnitZone;
+    private DiscardUnitDropZoneManager _highlightdiscardUnitPanel;
 
     private Node _originalNode;
     private Tile _highlighTileObj;
     private bool isDragging;
-    private InventoryDropZoneManager _highlightInventoryDropZoneObj;
+
 
     void Awake()
     {
@@ -38,6 +42,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if (!_unit.CanBeDragged) return;
 
         _droppedOnInventoryZone = false;
+        _droppedOnDiscardUnitZone = false;
         isDragging = true;
 
         _originalNode = _unit.CurrentNode;
@@ -71,6 +76,10 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             HighlightInventoryDropZone(inventoryDropZone);
         }
+        else if (gameObject.TryGetComponent<DiscardUnitDropZoneManager>(out DiscardUnitDropZoneManager discardUnitDropZone))
+        {
+            HighlightDiscardUnitDropZone(discardUnitDropZone);
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -80,13 +89,12 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         isDragging = false;
         _unitCollider.enabled = true;
 
-        EventBusManager.Instance.Raise(EventNameEnum.UnitDragged, false);
+        DragCompleted();
         ClearHighlightedTile();
         ClearInventoryHighlight();
 
-        if (_droppedOnInventoryZone)
+        if (_droppedOnInventoryZone || _droppedOnDiscardUnitZone)
         {
-            _unit.OnDragCompleted();
             return;
         }
 
@@ -102,8 +110,12 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void MarkDroppedOnInventoryZone()
     {
         _droppedOnInventoryZone = true;
-        ClearHighlightedTile();
-        ClearInventoryHighlight();
+        CleanupAfterDrag();
+    }
+
+    public void MarkDroppedOnDiscardUnitZone()
+    {
+        _droppedOnDiscardUnitZone = true;
         CleanupAfterDrag();
     }
 
@@ -189,6 +201,9 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         _unit.UpdateUnitSpriteVisibility(true);
         _unit.UpdateUnitUIVisibility(true);
+
+        ClearHighlightedTile();
+        ClearInventoryHighlight();
     }
 
     protected Vector3 ScreenToWorld(Vector2 screenPosition)
@@ -196,5 +211,28 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         Vector3 pos = screenPosition;
         pos.z = Mathf.Abs(_mainCamera.transform.position.z);
         return _mainCamera.ScreenToWorldPoint(pos);
+    }
+
+    private void HighlightDiscardUnitDropZone(DiscardUnitDropZoneManager discardUnitDropZone)
+    {
+        if (_highlightdiscardUnitPanel == discardUnitDropZone) return;
+
+        ClearDiscardUnitDropZoneHighlight();
+
+        _highlightdiscardUnitPanel = discardUnitDropZone;
+        _highlightdiscardUnitPanel.OnInteractSetHighlight(true);
+    }
+
+    private void ClearDiscardUnitDropZoneHighlight()
+    {
+        if (_highlightdiscardUnitPanel == null) return;
+
+        _highlightdiscardUnitPanel.OnInteractSetHighlight(false);
+        _highlightdiscardUnitPanel = null;
+    }
+
+    private void DragCompleted()
+    {
+        EventBusManager.Instance.Raise(EventNameEnum.UnitDragged, false);
     }
 }
