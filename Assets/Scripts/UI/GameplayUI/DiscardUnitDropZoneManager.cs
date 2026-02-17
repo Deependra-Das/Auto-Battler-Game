@@ -8,6 +8,8 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
     [SerializeField] private Image _highlightDiscardUnitPanel;
     [SerializeField] private Color _highlightColor;
 
+    private TeamService _teamServiceObj;
+
     private void Awake()
     {
         _highlightDiscardUnitPanel.gameObject.SetActive(false);
@@ -21,7 +23,13 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
         int refundAmount = 0;
         if (gameObject.TryGetComponent<BaseUnit>(out BaseUnit baseUnit))
         {
-            refundAmount = baseUnit.UnitData.unitLevel;
+            refundAmount = baseUnit.UnitData.unitCost;
+            UnitDragHandler dragHandler = eventData.pointerDrag.GetComponent<UnitDragHandler>();
+            if (dragHandler != null)
+                dragHandler.MarkDroppedOnDiscardUnitZone();
+
+            _teamServiceObj = GameManager.Instance.Get<TeamService>();
+            _teamServiceObj.RemoveUnitFromTeam(baseUnit, baseUnit.Team);
             Destroy(baseUnit.gameObject);
         }
         else if (gameObject.TryGetComponent<InventoryUnitCard>(out InventoryUnitCard inventoryUnitCard))
