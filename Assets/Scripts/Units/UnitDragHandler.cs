@@ -89,20 +89,15 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         isDragging = false;
         _unitCollider.enabled = true;
 
-        DragCompleted();
-        ClearHighlightedTile();
-        ClearInventoryHighlight();
-
-        if (_droppedOnInventoryZone || _droppedOnDiscardUnitZone)
+        if (!_droppedOnInventoryZone && !_droppedOnDiscardUnitZone)
         {
-            return;
-        }
+            Node targetNode = GetNodeUnderPointer(eventData);
 
-        Node targetNode = GetNodeUnderPointer(eventData);
-        if (targetNode != null && !targetNode.IsOccupied)
-            _unit.SnapToNode(targetNode);
-        else
-            _unit.OnDragCancelled(_originalNode);
+            if (targetNode != null && !targetNode.IsOccupied)
+                _unit.SnapToNode(targetNode);
+            else
+                _unit.OnDragCancelled(_originalNode);
+        }
 
         CleanupAfterDrag();
     }
@@ -202,8 +197,10 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         _unit.UpdateUnitSpriteVisibility(true);
         _unit.UpdateUnitUIVisibility(true);
 
+        ClearDiscardUnitDropZoneHighlight();
         ClearHighlightedTile();
         ClearInventoryHighlight();
+        DragCompleted();
     }
 
     protected Vector3 ScreenToWorld(Vector2 screenPosition)
