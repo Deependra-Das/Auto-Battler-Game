@@ -178,14 +178,14 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         ClearInventoryHighlight();
 
         _highlightInventoryDropZoneObj = inventoryDropZone;
-        _highlightInventoryDropZoneObj.OnInteractSetHighlight(true);
+        EventBusManager.Instance.Raise(EventNameEnum.HighlightInventoryPanel, true);
     }
 
     private void ClearInventoryHighlight()
     {
         if (_highlightInventoryDropZoneObj == null) return;
 
-        _highlightInventoryDropZoneObj.OnInteractSetHighlight(false);
+        EventBusManager.Instance.Raise(EventNameEnum.HighlightInventoryPanel, false);
         _highlightInventoryDropZoneObj = null;
     }
 
@@ -217,14 +217,14 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         ClearDiscardUnitDropZoneHighlight();
 
         _highlightdiscardUnitPanel = discardUnitDropZone;
-        _highlightdiscardUnitPanel.OnInteractSetHighlight(true);
+        EventBusManager.Instance.Raise(EventNameEnum.HighlightDiscardPanel, true);
     }
 
     private void ClearDiscardUnitDropZoneHighlight()
     {
         if (_highlightdiscardUnitPanel == null) return;
 
-        _highlightdiscardUnitPanel.OnInteractSetHighlight(false);
+        EventBusManager.Instance.Raise(EventNameEnum.HighlightDiscardPanel, false);
         _highlightdiscardUnitPanel = null;
     }
 

@@ -276,14 +276,14 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         ClearDiscardUnitDropZoneHighlight();
 
         _highlightdiscardUnitPanel = discardUnitDropZone;
-        _highlightdiscardUnitPanel.OnInteractSetHighlight(true);
+        EventBusManager.Instance.Raise(EventNameEnum.HighlightDiscardPanel, true);
     }
 
     private void ClearDiscardUnitDropZoneHighlight()
     {
         if (_highlightdiscardUnitPanel == null) return;
 
-        _highlightdiscardUnitPanel.OnInteractSetHighlight(false);
+        EventBusManager.Instance.Raise(EventNameEnum.HighlightDiscardPanel, false);
         _highlightdiscardUnitPanel = null;
     }
 

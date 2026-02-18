@@ -10,5 +10,7 @@ namespace AutoBattler.Event
         RoundOver,
         UnitDragged,
         InventoryUnitCardDragged,
+        HighlightInventoryPanel,
+        HighlightDiscardPanel,
     }
 }

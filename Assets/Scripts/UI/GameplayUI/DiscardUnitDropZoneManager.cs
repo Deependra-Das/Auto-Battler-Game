@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,10 +10,23 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
     [SerializeField] private Color _highlightColor;
 
     private TeamService _teamServiceObj;
+    private bool _isDiscardHighlightActive = false;
 
     private void Awake()
     {
         _highlightDiscardUnitPanel.gameObject.SetActive(false);
+    }
+
+    private void OnEnable() => SubscribeToEvents();
+    private void OnDisable() => UnsubscribeToEvents();
+
+    void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.HighlightDiscardPanel, OnInteractDiscardPanelSetHighlight);
+    }
+    void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.HighlightDiscardPanel, OnInteractDiscardPanelSetHighlight);
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -43,9 +57,11 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
         GameManager.Instance.Get<CurrencyService>().AddCurrency(refundAmount);
     }
 
-    public void OnInteractSetHighlight(bool active)
+    private void OnInteractDiscardPanelSetHighlight(object[] parameters)
     {
-        if (!active)
+        _isDiscardHighlightActive = (bool)parameters[0];
+
+        if (!_isDiscardHighlightActive)
         {
             _highlightDiscardUnitPanel.gameObject.SetActive(false);
             return;

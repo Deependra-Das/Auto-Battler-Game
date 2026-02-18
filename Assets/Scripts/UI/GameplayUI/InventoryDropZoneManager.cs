@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,10 +12,22 @@ public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
 
     private InventoryService _inventoryServiceObj;
     private TeamService _teamServiceObj;
+    private bool _isInventoryHighlightActive = false;
 
     private void Awake()
     {
         _highlightInventoryPanel.gameObject.SetActive(false);
+    }
+    private void OnEnable() => SubscribeToEvents();
+    private void OnDisable() => UnsubscribeToEvents();
+
+    void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.HighlightInventoryPanel, OnInteractInventorySetHighlight);
+    }
+    void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.HighlightInventoryPanel, OnInteractInventorySetHighlight);
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -36,9 +49,11 @@ public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
         Destroy(unit.gameObject);
     }
 
-    public void OnInteractSetHighlight(bool active)
+    private void OnInteractInventorySetHighlight(object[] parameters)
     {
-        if (!active)
+        _isInventoryHighlightActive = (bool)parameters[0];
+
+        if (!_isInventoryHighlightActive)
         {
             _highlightInventoryPanel.gameObject.SetActive(false);
             return;
