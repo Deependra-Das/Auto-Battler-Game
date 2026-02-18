@@ -197,9 +197,9 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         _unit.UpdateUnitSpriteVisibility(true);
         _unit.UpdateUnitUIVisibility(true);
 
-        ClearDiscardUnitDropZoneHighlight();
         ClearHighlightedTile();
         ClearInventoryHighlight();
+        ClearDiscardUnitDropZoneHighlight();
         DragCompleted();
     }
 
