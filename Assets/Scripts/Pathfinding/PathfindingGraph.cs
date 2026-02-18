@@ -17,9 +17,11 @@ public class PathFindingGraph
         _pathList = new List<Path>();
     }
 
-    public void AddNode(Vector3 worldPosition)
+    public Node AddNode(Vector3 worldPosition)
     {
-        _nodeList.Add(new Node(_nodeList.Count, worldPosition));
+        Node node = new Node(_nodeList.Count, worldPosition);
+        _nodeList.Add(node);
+        return node;
     }
 
     public void AddPath(Node source, Node destination)

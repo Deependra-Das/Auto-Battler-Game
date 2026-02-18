@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
 using System.Collections.Generic;
@@ -7,6 +8,8 @@ using UnityEngine.UI;
 
 public class UIManager : GenericMonoSingleton<UIManager>
 {
+    [SerializeField] private Canvas _uiCanvas;
+    [SerializeField] private Button _playButton;
     [SerializeField] private GameObject _gameplayUIContainer;
     [SerializeField] private Button _shopToggleButton;
     [SerializeField] private TMP_Text _balanceCurrencyText;
@@ -23,25 +26,43 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Transform _inventoryUnitCardContainer;
     [SerializeField] private InventoryUnitCard _inventorytUnitCard;
 
+    [Header("Discard UI")]
+    [SerializeField] private GameObject _discardUnitPanel;
+    [SerializeField] private TMP_Text _refundText;
+
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
+    public Canvas UICanvas => _uiCanvas;
+
+    public RectTransform CanvasRect { get; private set; }
 
     protected override void Awake()
     {
         base.Awake();
+        CanvasRect = _uiCanvas.GetComponent<RectTransform>();
+        ToggleDiscardPanelVisibility(false);
         Initialize();
     }
 
-    private void OnEnable()
+    private void OnEnable() => SubscribeToEvents();
+    private void OnDisable() => UnsubscribeToEvents();
+
+    void SubscribeToEvents()
     {
+        _playButton.onClick.AddListener(OnPlayButtonClicked); 
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
+        EventBusManager.Instance.Subscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
     }
 
-    private void OnDisable()
+    void UnsubscribeToEvents()
     {
+        _playButton.onClick.RemoveListener(OnPlayButtonClicked);
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
     }
 
     public void Initialize()
@@ -79,7 +100,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     public void AddInventoryUnitCard(UnitData unitData)
     {
         InventoryUnitCard newInventoryUnitCard = Instantiate(_inventorytUnitCard, _inventoryUnitCardContainer);
-        newInventoryUnitCard.Initialize(unitData);
+        newInventoryUnitCard.Initialize(unitData, _uiCanvas);
         _inventoryUnitCardList.Add(newInventoryUnitCard);
     }
 
@@ -90,6 +111,28 @@ public class UIManager : GenericMonoSingleton<UIManager>
             _inventoryUnitCardList.Remove(cardToRemove);
             Destroy(cardToRemove.gameObject);
         }
+    }
+
+    public void RefreshInventoryOrder()
+    {
+        _inventoryUnitCardList.Clear();
+
+        List<UnitData> newOrder = new();
+
+        for (int i = 0; i < _inventoryUnitCardContainer.childCount; i++)
+        {
+            InventoryUnitCard card = _inventoryUnitCardContainer.GetChild(i).GetComponent<InventoryUnitCard>();
+
+            if (card == null)
+                continue;
+
+            _inventoryUnitCardList.Add(card);
+            newOrder.Add(card.UnitData);
+        }
+
+        InventoryService inventory = GameManager.Instance.Get<InventoryService>();
+
+        inventory.ReorderUnits(newOrder);
     }
 
     private void OnShopToggleButtonClicked()
@@ -118,4 +161,25 @@ public class UIManager : GenericMonoSingleton<UIManager>
         shopServiceObj.RefreshShop();
     }
 
+    private void OnPlayButtonClicked()
+    {
+        GameplayManager.Instance.UpdateGameplayState(GameplayStateEnum.Combat);
+    }
+
+    private void OnUnitDragged_UI(object[] parameters)
+    {
+        bool value = (bool)parameters[0];
+        ToggleDiscardPanelVisibility(value);
+    }
+
+    private void OnInventoryUnitCardDragged_UI(object[] parameters)
+    {
+        bool value = (bool)parameters[0];
+        ToggleDiscardPanelVisibility(value);
+    }
+
+    private void ToggleDiscardPanelVisibility(bool value)
+    {
+        _discardUnitPanel.SetActive(value);
+    }
 }

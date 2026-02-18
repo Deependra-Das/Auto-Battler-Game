@@ -1,8 +1,10 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BaseUnit : MonoBehaviour
@@ -22,12 +24,15 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected float baseMovementSpeed = 1f;
     [SerializeField] protected float baseManaRegenSpeed = 0f;
 
+    [SerializeField] protected Transform unitUIContainer;
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider shieldBar;
 
     [SerializeField] protected float attackCoolDown = 1f;
     [SerializeField] protected float delayBeforeRangedAttack = 0f;
 
+    protected Collider2D unitCollider;
+    protected UnitData unitData;
     protected int totalDamage;
     protected int totalHealth;
     protected int totalShield;
@@ -52,23 +57,43 @@ public class BaseUnit : MonoBehaviour
 
     protected bool isDead = false;
     protected bool canAttack = true;
+    protected bool isActive = false;
+    protected TeamEnum team;
 
-    protected TeamEnum _team;
-
+    public UnitData UnitData => unitData;
     public string CharacterName => characterName;
     public UnitTypeEnum UnitType => unitType;
-    public TeamEnum Team => _team;
+    public TeamEnum Team => team;
     public Node CurrentNode => currentNode;
     protected bool HasEnemy => currentTarget != null;
     public UnitFacingDirectionEnum DirectionFacing => directionFacing;
+    public bool CanBeDragged => !isActive && !isDead;
 
-    public void Initialize(TeamEnum team, Node spawnNode)
+    void OnEnable() => SubscribeToEvents();
+
+    void OnDisable() => UnsubscribeToEvents();
+
+    void SubscribeToEvents()
     {
-        _team = team;
+        EventBusManager.Instance.Subscribe(EventNameEnum.CombatStart, OnCombatStart_BaseUnit);
+    }
+
+    void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.CombatStart, OnCombatStart_BaseUnit);
+    }
+    protected virtual void Awake()
+    {
+        unitCollider = GetComponent<Collider2D>();
+    }
+
+    public void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
+    {
+        this.unitData = unitData;
+        this.team = team;
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
-
         InitializeHealth();
         InitializeShield();
     }
@@ -91,7 +116,7 @@ public class BaseUnit : MonoBehaviour
 
     protected void FindTarget()
     {
-        var allEnemies = GameplayManager.Instance.GetOpponentTeamUnits(_team);
+        var allEnemies = GameplayManager.Instance.GetOpponentTeamUnits(team);
         float minDistance = Mathf.Infinity;
         BaseUnit enemyUnit = null;
         foreach (BaseUnit enemy in allEnemies)
@@ -251,5 +276,38 @@ public class BaseUnit : MonoBehaviour
         {
             directionFacing = UnitFacingDirectionEnum.Down;
         }
+    }
+
+    protected void OnCombatStart_BaseUnit(object[] parameters)
+    {
+        isActive = true;
+    }
+
+    public void TemporarilyReleaseNode()
+    {
+        if (currentNode != null)
+            currentNode.SetOccupied(false);
+    }
+
+    public void SnapToNode(Node node)
+    {
+        transform.position = node.position;
+        node.SetOccupied(true);
+        SetCurrentNode(node);
+    }
+
+    public void OnDragCancelled(Node fallbackNode)
+    {
+        SnapToNode(fallbackNode);
+    }
+
+    public void UpdateUnitSpriteVisibility(bool state)
+    {
+        spriteRenderer.enabled = state;
+    }
+
+    public void UpdateUnitUIVisibility(bool state)
+    {
+        unitUIContainer.gameObject.SetActive(false);
     }
 }

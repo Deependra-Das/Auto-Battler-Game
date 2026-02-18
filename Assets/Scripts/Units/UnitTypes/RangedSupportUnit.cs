@@ -5,6 +5,8 @@ public class RangedSupportUnit : BaseUnit
 {
     protected void Update()
     {
+        if (!isActive) return;
+
         if (!HasEnemy)
         {
             FindTarget();

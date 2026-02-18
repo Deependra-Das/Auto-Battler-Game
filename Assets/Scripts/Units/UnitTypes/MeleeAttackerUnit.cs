@@ -4,6 +4,8 @@ public class MeleeAttackerUnit : BaseUnit
 {
     protected void Update()
     {
+        if (!isActive) return; 
+
         if (!HasEnemy)
         {
             FindTarget();

@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
 using System.Collections.Generic;
@@ -9,8 +10,9 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     TileGridService tileGridService;
     GraphService graphService;
     TeamService teamService;
-
+    InventoryService inventoryService;
     private List<UnitData> _unitPrefabList;
+    public GameplayStateEnum CurrentState { get; private set; } = GameplayStateEnum.Preparation;
 
     protected override void Awake()
     {
@@ -23,28 +25,33 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         tileGridService = GameManager.Instance.Get<TileGridService>();
         graphService = GameManager.Instance.Get<GraphService>();
         teamService = GameManager.Instance.Get<TeamService>();
+        inventoryService = GameManager.Instance.Get<InventoryService>();
 
         graphService.Initialize(tileGridService.GetSpawnedTilesList());
         graph = graphService.Graph;
 
         _unitPrefabList = unit_SO.unitDataList;
         GameManager.Instance.Get<ShopService>().GenerateShopUnits();
-        //InstantiateUnits();
+
+        inventoryService.SetMaxInventorySize(8);
+        InstantiateTeam2Units();
     }
 
-    private void InstantiateUnits()
+    public void InstantiateUnit(UnitData unitData, Node node, TeamEnum team )
     {
-        for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team1); i++)
-        {
-            BaseUnit newUnit = Instantiate(_unitPrefabList[3].unitPrefab);
-            newUnit.Initialize(TeamEnum.Team1, graphService.GetUnOccupiedNode(TeamEnum.Team1));
-            teamService.AddUnitToTeam(newUnit, TeamEnum.Team1);
-        }
+        BaseUnit newUnit = Instantiate(unitData.unitPrefab);
+        newUnit.Initialize(unitData, team, node);
 
+        teamService.AddUnitToTeam(newUnit, team);
+    }
+
+    private void InstantiateTeam2Units()
+    {
         for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team2); i++)
         {
-            BaseUnit newUnit = Instantiate(_unitPrefabList[3].unitPrefab);
-            newUnit.Initialize(TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
+            UnitData randomUnitData = _unitPrefabList[Random.Range(0, _unitPrefabList.Count)];
+            BaseUnit newUnit = Instantiate(randomUnitData.unitPrefab);
+            newUnit.Initialize(randomUnitData, TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
             teamService.AddUnitToTeam(newUnit, TeamEnum.Team2);
         }
     }
@@ -100,5 +107,34 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
                 Debug.DrawLine(pathList[i - 1].position, pathList[i].position, Color.red, 1);
             }
         }
+    }
+
+    public void UpdateGameplayState(GameplayStateEnum newState)
+    {
+        if (CurrentState == newState)
+            return;
+
+        CurrentState = newState;
+
+        switch (CurrentState)
+        {
+            case GameplayStateEnum.Preparation:
+                EventBusManager.Instance.Raise(EventNameEnum.PreparationStart);
+                break;
+
+            case GameplayStateEnum.Combat:
+                EventBusManager.Instance.Raise(EventNameEnum.CombatStart);
+                break;
+
+            case GameplayStateEnum.GameOver:
+                EventBusManager.Instance.Raise(EventNameEnum.GameOver);
+                break;
+
+            default:
+                Debug.LogWarning("Unhandled gameplay state: " + CurrentState);
+                break;
+        }
+
+
     }
 }

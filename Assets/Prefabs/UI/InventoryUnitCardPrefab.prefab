@@ -135,11 +135,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ed0fbc90830d124980c0b54f615a8e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitCard_InventoryUI
-  _btnInventoryUnitCard: {fileID: 7349849747802049485}
   _unitIcon: {fileID: 7516265599719612403}
-  _unitFaction: {fileID: 7666936073422881449}
-  _unitType: {fileID: 1203885285476947877}
-  _unitLevel: {fileID: 4253985078729028675}
+  _unitFaction: {fileID: 0}
+  _unitType: {fileID: 0}
+  _unitLevel: {fileID: 0}
 --- !u!1 &1319368545894509046
 GameObject:
   m_ObjectHideFlags: 0

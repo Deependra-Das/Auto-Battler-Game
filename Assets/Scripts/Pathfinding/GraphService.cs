@@ -27,7 +27,8 @@ public class GraphService
         for (int i = 0; i < tileList.Count; i++)
         {
             Vector3 place = tileList[i].transform.position;
-            graph.AddNode(place);
+            Node node = graph.AddNode(place);
+            tileList[i].Node = node;
         }
 
         var allNodes = graph.Nodes;
