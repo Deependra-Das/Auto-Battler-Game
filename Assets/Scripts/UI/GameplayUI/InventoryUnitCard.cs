@@ -40,7 +40,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (_placeholder != null)
             Destroy(_placeholder);
 
-        CleanupAfterDrag();
+        CleanupDragSprite();
     }
 
     public void Initialize(UnitData unitData, Canvas canvas)
@@ -83,7 +83,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (isInsideContainer)
         {
             HandleReorder();
-            CleanupAfterDrag();
+            CleanupDragSprite();
             ClearHighlightedTile();
         }
         else
@@ -171,9 +171,6 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
             }
 
             CleanupAfterDrag();
-            DragCompleted();
-            UIManager.Instance.RefreshInventoryOrder();
-            LayoutRebuilder.ForceRebuildLayoutImmediate(_cardContainer);
             return;
         }
 
@@ -195,18 +192,25 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
 
         CleanupAfterDrag();
-        DragCompleted();
-        UIManager.Instance.RefreshInventoryOrder();
-        LayoutRebuilder.ForceRebuildLayoutImmediate(_cardContainer);
     }
 
-    private void CleanupAfterDrag()
+    private void CleanupDragSprite()
     {
         if (_dragSprite != null)
         {
             Destroy(_dragSprite.gameObject);
             _dragSprite = null;
         }
+    }
+
+    private void CleanupAfterDrag()
+    {
+        CleanupDragSprite();
+        ClearHighlightedTile();
+        ClearDiscardUnitDropZoneHighlight();
+        DragCompleted();
+        UIManager.Instance.RefreshInventoryOrder();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_cardContainer);
     }
 
     private bool TrySpawnUnitOnTile(PointerEventData eventData)
@@ -286,11 +290,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void MarkDroppedOnDiscardUnitZone()
     {
         _droppedOnDiscardUnitZone = true;
-        ClearHighlightedTile();
-        ClearDiscardUnitDropZoneHighlight();
         CleanupAfterDrag();
-        DragCompleted();
-        UIManager.Instance.RefreshInventoryOrder();
     }
 
     private void DragCompleted()
