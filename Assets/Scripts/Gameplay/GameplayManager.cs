@@ -56,7 +56,7 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         }
     }
 
-    public List<BaseUnit> GetOpponentTeamUnits(TeamEnum opponentTeam)
+    public IReadOnlyList<BaseUnit> GetOpponentTeamUnits(TeamEnum opponentTeam)
     {
         if (opponentTeam == TeamEnum.Team1)
             return teamService.GetTeamUnits(TeamEnum.Team2);
