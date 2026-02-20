@@ -1,3 +1,4 @@
+using AutoBattler.Main;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ public class InventoryService
     public void AddUnit(UnitData unitData)
     {
         _currentUnitsInInventory.Add(unitData);
+        GameManager.Instance.Get<TeamService>().AddUnitToTeam(unitData, TeamEnum.Team1);
         UIManager.Instance.AddInventoryUnitCard(unitData);
     }
 
