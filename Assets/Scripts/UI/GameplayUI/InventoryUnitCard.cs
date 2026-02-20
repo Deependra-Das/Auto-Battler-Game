@@ -215,8 +215,11 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     private bool TrySpawnUnitOnTile(PointerEventData eventData)
     {
-        if (GameplayManager.Instance.CurrentState != GameplayStateEnum.Preparation)
-            return false;
+        if (GameplayManager.Instance.CurrentState != GameplayStateEnum.Preparation) return false;
+
+        var teamService = GameManager.Instance.Get<TeamService>();
+
+        if (!teamService.CanAddUnitToField(TeamEnum.Team1)) return false;
 
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
         Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
