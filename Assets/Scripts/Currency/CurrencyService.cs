@@ -14,14 +14,10 @@ public class CurrencyService
         return Balance >= amount;
     }
 
-    public bool SpendCurrency(int amount)
+    public void SpendCurrency(int amount)
     {
-        if (!CanAfford(amount))
-            return false;
-
         Balance -= amount;
         UIManager.Instance.UpdateCurrenyUI(Balance);
-        return true;
     }
 
     public void AddCurrency(int amount)
