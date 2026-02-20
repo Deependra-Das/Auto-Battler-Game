@@ -27,7 +27,7 @@ public class RangedSupportUnit : BaseUnit
 
     protected void HealAllTeammates()
     {
-        var teammates = GameManager.Instance.Get<TeamService>().GetTeamUnits(Team);
+        var teammates = GameManager.Instance.Get<TeamService>().GetFieldUnits(Team);
 
         foreach (BaseUnit unit in teammates)
         {
