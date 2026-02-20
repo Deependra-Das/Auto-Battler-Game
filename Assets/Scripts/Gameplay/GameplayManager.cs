@@ -42,31 +42,31 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         BaseUnit newUnit = Instantiate(unitData.unitPrefab);
         newUnit.Initialize(unitData, team, node);
 
-        teamService.AddUnitToTeam(newUnit, team);
+        teamService.MoveToField(newUnit, team);
     }
 
     private void InstantiateTeam2Units()
     {
-        for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team2); i++)
+        for (int i = 0; i < teamService.GetFieldCapacity(TeamEnum.Team2); i++)
         {
             UnitData randomUnitData = _unitPrefabList[Random.Range(0, _unitPrefabList.Count)];
             BaseUnit newUnit = Instantiate(randomUnitData.unitPrefab);
             newUnit.Initialize(randomUnitData, TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
-            teamService.AddUnitToTeam(newUnit, TeamEnum.Team2);
+            teamService.MoveToField(newUnit, TeamEnum.Team2);
         }
     }
 
     public IReadOnlyList<BaseUnit> GetOpponentTeamUnits(TeamEnum opponentTeam)
     {
         if (opponentTeam == TeamEnum.Team1)
-            return teamService.GetTeamUnits(TeamEnum.Team2);
+            return teamService.GetFieldUnits(TeamEnum.Team2);
         else
-            return teamService.GetTeamUnits(TeamEnum.Team1);
+            return teamService.GetFieldUnits(TeamEnum.Team1);
     }
 
     public void MarkUnitDead(BaseUnit unit)
     {
-        teamService.RemoveUnitFromTeam(unit, unit.Team);
+        teamService.RemoveUnitFromField(unit, unit.Team);
         Destroy(unit.gameObject);
     }
 

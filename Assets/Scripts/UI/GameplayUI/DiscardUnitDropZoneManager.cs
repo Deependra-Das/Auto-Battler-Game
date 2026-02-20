@@ -35,6 +35,8 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
         if (!gameObject) return;
 
         int refundAmount = 0;
+        _teamServiceObj = GameManager.Instance.Get<TeamService>();
+
         if (gameObject.TryGetComponent<BaseUnit>(out BaseUnit baseUnit))
         {
             refundAmount = baseUnit.UnitData.unitCost;
@@ -42,15 +44,16 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
             if (dragHandler != null)
                 dragHandler.MarkDroppedOnDiscardUnitZone();
 
-            _teamServiceObj = GameManager.Instance.Get<TeamService>();
-            _teamServiceObj.RemoveUnitFromTeam(baseUnit, baseUnit.Team);
+            _teamServiceObj.RemoveUnitFromField(baseUnit, baseUnit.Team);
             Destroy(baseUnit.gameObject);
         }
         else if (gameObject.TryGetComponent<InventoryUnitCard>(out InventoryUnitCard inventoryUnitCard))
         {
             refundAmount = inventoryUnitCard.UnitData.unitCost;
             inventoryUnitCard.MarkDroppedOnDiscardUnitZone();
+
             UIManager.Instance.RemoveInventoryUnitCard(inventoryUnitCard);
+            _teamServiceObj.RemoveUnitFromInventory(inventoryUnitCard.UnitData, TeamEnum.Team1);
             Destroy(inventoryUnitCard.gameObject);
         }
 
