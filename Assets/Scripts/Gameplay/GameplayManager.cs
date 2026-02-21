@@ -43,6 +43,7 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         newUnit.Initialize(unitData, team, node);
 
         teamService.MoveToField(newUnit, team);
+        inventoryService.RemoveUnit(newUnit.UnitData);
     }
 
     private void InstantiateTeam2Units()
@@ -53,6 +54,7 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
             BaseUnit newUnit = Instantiate(randomUnitData.unitPrefab);
             newUnit.Initialize(randomUnitData, TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
             teamService.MoveToField(newUnit, TeamEnum.Team2);
+            inventoryService.RemoveUnit(newUnit.UnitData);
         }
     }
 

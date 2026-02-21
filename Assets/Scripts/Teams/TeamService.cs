@@ -26,6 +26,8 @@ public class TeamService
             _teamCapacities[team] = defaultTeamCapacity;
             _fieldCapacities[team] = defaultFieldCapacity;
         }
+
+        Debug.Log(_fieldCapacities[TeamEnum.Team1] + "---" + _fieldCapacities[TeamEnum.Team2]);
     }
 
     public bool AddUnitToTeam(UnitData unit, TeamEnum team)

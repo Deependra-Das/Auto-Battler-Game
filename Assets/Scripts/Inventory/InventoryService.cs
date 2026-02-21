@@ -30,7 +30,6 @@ public class InventoryService
     public void DeployUnit(InventoryUnitCard card, Node node)
     {
         GameplayManager.Instance.InstantiateUnit(card.UnitData, node, TeamEnum.Team1);
-        RemoveUnit(card.UnitData);
     }
 
     public void ReorderUnits(List<UnitData> newOrder)
