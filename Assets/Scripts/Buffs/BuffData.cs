@@ -5,7 +5,10 @@ using UnityEngine.UI;
 [Serializable]
 public struct BuffData
 {
-    public Image buffImage;
+    public BuffNameEnum buffName;
     public BuffTypeEnum buffType;
-    public string buffName;
+    public Image buffImage;
+    public int[] buffParticipants;
+    public float[] buffValue;
+
 }
