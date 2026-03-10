@@ -13,15 +13,29 @@ MonoBehaviour:
   m_Name: Buff_SO
   m_EditorClassIdentifier: Assembly-CSharp::BuffScriptableObjectScript
   buffData:
-  - buffImage: {fileID: 0}
+  - buffName: 0
     buffType: 0
-    buffName: 
-  - buffImage: {fileID: 0}
+    buffImage: {fileID: 0}
+    buffParticipantTierList:
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
+    buffDescription: 
+  - buffName: 1
     buffType: 0
-    buffName: 
-  - buffImage: {fileID: 0}
+    buffImage: {fileID: 0}
+    buffParticipantTierList: []
+    buffDescription: 
+  - buffName: 2
     buffType: 0
-    buffName: 
-  - buffImage: {fileID: 0}
+    buffImage: {fileID: 0}
+    buffParticipantTierList: []
+    buffDescription: 
+  - buffName: 3
     buffType: 0
-    buffName: 
+    buffImage: {fileID: 0}
+    buffParticipantTierList: []
+    buffDescription: 
