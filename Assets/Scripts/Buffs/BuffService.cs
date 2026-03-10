@@ -12,16 +12,20 @@ public class BuffService
         {
             _buffData.Add(buffs.buffName, buffs);
         }
-
-        InitializeAppliedBuffs();
     }
 
-    private void InitializeAppliedBuffs()
+    public void InitializeBuffs()
     {
         foreach(var buffs in _buffData)
         {
+            UIManager.Instance.AddBuffDetailUICard(buffs.Value);
             _appliedBuffs.Add(buffs.Key, 0);
         }
+    }
+
+    public void ResetBuffs()
+    {
+        _appliedBuffs.Clear();
     }
 
     private void UpdateAppliedBuffs()
