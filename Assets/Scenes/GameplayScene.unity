@@ -2731,7 +2731,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000046148143}
+  m_AnchoredPosition: {x: 0, y: 0.00008178065}
   m_SizeDelta: {x: 0, y: 560}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &854440085
@@ -2753,8 +2753,8 @@ MonoBehaviour:
     m_Bottom: 10
   m_ChildAlignment: 1
   m_Spacing: 0
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
@@ -3863,8 +3863,8 @@ MonoBehaviour:
   _inventorytUnitCard: {fileID: -3820523665162992874, guid: 82e43d3b50c2f9248aac65d1f7ef2d06, type: 3}
   _discardUnitPanel: {fileID: 171698036}
   _refundText: {fileID: 618831786}
-  _buffPanel: {fileID: 0}
-  _buffBlockUICardPrefab: {fileID: 0}
+  _buffDetailsContainer: {fileID: 854440084}
+  _buffBlockUICardPrefab: {fileID: 8779752850910391123, guid: ee6fffe33df6edb4c853a39b79e267ef, type: 3}
 --- !u!1 &1289209035
 GameObject:
   m_ObjectHideFlags: 0
@@ -4851,7 +4851,7 @@ MonoBehaviour:
   _tile_SO: {fileID: 11400000, guid: 9d9aeaa809627ca46a6605ab0925435f, type: 2}
   _unit_SO: {fileID: 11400000, guid: c4ae526f170fffc418cc980a9a3f961e, type: 2}
   _rangedAbilities_SO: {fileID: 11400000, guid: 2cac3852b0fc522439d1e0df4b9ce797, type: 2}
-  _buff_SO: {fileID: 0}
+  _buff_SO: {fileID: 11400000, guid: 85452137ca9f8cb4daf26537fa0829f2, type: 2}
   _startingBalance: 200
   _shopRefreshCost: 1
 --- !u!4 &1700229633
