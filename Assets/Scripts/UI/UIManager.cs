@@ -47,7 +47,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
         base.Awake();
         CanvasRect = _uiCanvas.GetComponent<RectTransform>();
         ToggleDiscardPanelVisibility(false);
-        Initialize();
     }
 
     private void OnEnable() => SubscribeToEvents();
@@ -71,10 +70,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
     }
 
-    public void Initialize()
+    public void InitializeGameplayUI()
     {
         _shopUnitCardList = new List<ShopUnitCard>();
         _inventoryUnitCardList = new List<InventoryUnitCard>();
+        _buffDetailsUICardList = new List<BuffDetailsUICard>();
         _shopPanel.SetActive(false);
     }
 
@@ -194,5 +194,15 @@ public class UIManager : GenericMonoSingleton<UIManager>
         BuffDetailsUICard newBuffDetailsUICard = Instantiate(_buffBlockUICardPrefab, _buffDetailsContainer);
         newBuffDetailsUICard.Initialize(buffData);
         _buffDetailsUICardList.Add(newBuffDetailsUICard);
+    }
+
+    public void RemoveAllBuffDetailUICards()
+    {
+        foreach (var card in _buffDetailsUICardList)
+        {
+            Destroy(card.gameObject);
+        }
+
+        _buffDetailsUICardList.Clear();
     }
 }

@@ -11,6 +11,7 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     GraphService graphService;
     TeamService teamService;
     InventoryService inventoryService;
+    BuffService buffService;
     private List<UnitData> _unitPrefabList;
     public GameplayStateEnum CurrentState { get; private set; } = GameplayStateEnum.Preparation;
 
@@ -22,14 +23,18 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
 
     public void Initialize(UnitScriptableObject unit_SO)
     {
+        UIManager.Instance.InitializeGameplayUI();
+
         tileGridService = GameManager.Instance.Get<TileGridService>();
         graphService = GameManager.Instance.Get<GraphService>();
         teamService = GameManager.Instance.Get<TeamService>();
         inventoryService = GameManager.Instance.Get<InventoryService>();
+        buffService = GameManager.Instance.Get<BuffService>();
 
         graphService.Initialize(tileGridService.GetSpawnedTilesList());
         graph = graphService.Graph;
 
+        buffService.InitializeBuffs();
         _unitPrefabList = unit_SO.unitDataList;
         GameManager.Instance.Get<ShopService>().GenerateShopUnits();
 
