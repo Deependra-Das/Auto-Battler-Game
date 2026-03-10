@@ -10,5 +10,5 @@ public struct BuffData
     public Image buffImage;
     public int[] buffParticipants;
     public float[] buffValue;
-
+    public string buffDescription;
 }
