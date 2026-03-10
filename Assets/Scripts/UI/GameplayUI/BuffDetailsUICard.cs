@@ -21,9 +21,9 @@ public class BuffDetailsUICard : MonoBehaviour
         _buffNameText.text = buffData.buffName.ToString();
         _buffIcon = buffData.buffImage;
 
-        for(int num = 0; num < buffData.buffParticipants.Length; num++)
+        for(int num = 0; num < buffData.buffParticipantTierList.Length; num++)
         {
-            _buffParticipantsTextList[num].text = buffData.buffParticipants[num].ToString();
+            _buffParticipantsTextList[num].text = buffData.buffParticipantTierList[num].participants.ToString();
             _buffParticipantsBlockImageList[num] = _deactivatedBlockImage;
         }
     }
@@ -32,9 +32,9 @@ public class BuffDetailsUICard : MonoBehaviour
     {
         DeactivateParticipantBlock();
 
-        for (int num = 0; num < _buffData.buffParticipants[0]; num++)
+        for (int num = 0; num < _buffData.buffParticipantTierList.Length; num++)
         {
-            if (participants > _buffData.buffParticipants[0])
+            if (participants > _buffData.buffParticipantTierList[num].participants)
             {
                 _buffParticipantsBlockImageList[num] = _activatedBlockImage;
             }
