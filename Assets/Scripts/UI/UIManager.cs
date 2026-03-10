@@ -30,8 +30,14 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private GameObject _discardUnitPanel;
     [SerializeField] private TMP_Text _refundText;
 
+    [Header("Buff UI")]
+    [SerializeField] private Transform _buffDetailsContainer;
+    [SerializeField] private BuffDetailsUICard _buffBlockUICardPrefab;
+
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
+    private List<BuffDetailsUICard> _buffDetailsUICardList;
+
     public Canvas UICanvas => _uiCanvas;
 
     public RectTransform CanvasRect { get; private set; }
@@ -181,5 +187,12 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void ToggleDiscardPanelVisibility(bool value)
     {
         _discardUnitPanel.SetActive(value);
+    }
+
+    public void AddBuffDetailUICard(BuffData buffData)
+    {
+        BuffDetailsUICard newBuffDetailsUICard = Instantiate(_buffBlockUICardPrefab, _buffDetailsContainer);
+        newBuffDetailsUICard.Initialize(buffData);
+        _buffDetailsUICardList.Add(newBuffDetailsUICard);
     }
 }
