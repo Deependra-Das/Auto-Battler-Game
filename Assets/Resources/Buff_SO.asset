@@ -17,25 +17,76 @@ MonoBehaviour:
     buffType: 0
     buffImage: {fileID: 0}
     buffParticipantTierList:
-    - participants: 0
+    - participants: 2
       buffValue: 0
-    - participants: 0
+    - participants: 4
       buffValue: 0
-    - participants: 0
+    - participants: 6
       buffValue: 0
     buffDescription: 
   - buffName: 1
     buffType: 0
     buffImage: {fileID: 0}
-    buffParticipantTierList: []
+    buffParticipantTierList:
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
     buffDescription: 
   - buffName: 2
     buffType: 0
     buffImage: {fileID: 0}
-    buffParticipantTierList: []
+    buffParticipantTierList:
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
     buffDescription: 
   - buffName: 3
     buffType: 0
     buffImage: {fileID: 0}
-    buffParticipantTierList: []
+    buffParticipantTierList:
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
+    buffDescription: 
+  - buffName: 4
+    buffType: 1
+    buffImage: {fileID: 0}
+    buffParticipantTierList:
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
+    buffDescription: 
+  - buffName: 5
+    buffType: 1
+    buffImage: {fileID: 0}
+    buffParticipantTierList:
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
+    buffDescription: 
+  - buffName: 6
+    buffType: 1
+    buffImage: {fileID: 0}
+    buffParticipantTierList:
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
+    - participants: 0
+      buffValue: 0
     buffDescription: 
