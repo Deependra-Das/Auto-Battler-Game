@@ -12,6 +12,9 @@ public class TeamService
     private Dictionary<TeamEnum, int> _teamCapacities;
     private readonly Dictionary<TeamEnum, int> _fieldCapacities;
 
+    private readonly Dictionary<TeamEnum, Dictionary<UnitTypeEnum, int>> _typeCount = new();
+    private readonly Dictionary<TeamEnum, Dictionary<UnitFactionEnum, int>> _factionCount = new();
+
     public TeamService(int defaultTeamCapacity = 8, int defaultFieldCapacity = 4)
     {
         _teamCapacities = new Dictionary<TeamEnum, int>();
@@ -25,9 +28,9 @@ public class TeamService
 
             _teamCapacities[team] = defaultTeamCapacity;
             _fieldCapacities[team] = defaultFieldCapacity;
-        }
 
-        Debug.Log(_fieldCapacities[TeamEnum.Team1] + "---" + _fieldCapacities[TeamEnum.Team2]);
+            InitializeTypeAndFactionCounts();
+        }
     }
 
     public bool AddUnitToTeam(UnitData unit, TeamEnum team)
@@ -50,6 +53,7 @@ public class TeamService
     public bool RemoveUnitFromField(BaseUnit unit, TeamEnum team)
     {
         _fieldUnits[team].Remove(unit);
+        RemoveUnitCount(unit, team);
         return RemoveUnitFromTeam(unit.UnitData, team);
     }
 
@@ -72,6 +76,7 @@ public class TeamService
 
         _inventoryUnits[team].Remove(unit.UnitData);
         _fieldUnits[team].Add(unit);
+        AddUnitCount(unit, team);
         return true;
     }
 
@@ -80,6 +85,7 @@ public class TeamService
         if (!_fieldUnits[team].Contains(unit)) return false;
 
         _fieldUnits[team].Remove(unit);
+        RemoveUnitCount(unit, team);
         _inventoryUnits[team].Add(unit.UnitData);
         return true;
     }
@@ -102,5 +108,47 @@ public class TeamService
     public bool CanAddUnitToField(TeamEnum team)
     {
         return _fieldUnits[team].Count < _fieldCapacities[team];
+    }
+
+    private void InitializeTypeAndFactionCounts()
+    {
+        foreach (TeamEnum team in Enum.GetValues(typeof(TeamEnum)))
+        {
+            _typeCount[team] = new Dictionary<UnitTypeEnum, int>();
+            _factionCount[team] = new Dictionary<UnitFactionEnum, int>();
+
+            foreach (UnitTypeEnum type in Enum.GetValues(typeof(UnitTypeEnum)))
+                _typeCount[team][type] = 0;
+
+            foreach (UnitFactionEnum faction in Enum.GetValues(typeof(UnitFactionEnum)))
+                _factionCount[team][faction] = 0;
+        }
+    }
+
+    private void AddUnitCount(BaseUnit unit, TeamEnum team)
+    {
+        var type = unit.UnitData.unitType;
+        var faction = unit.UnitData.unitFaction;
+
+        _typeCount[team][type]++;
+        _factionCount[team][faction]++;
+    }
+    private void RemoveUnitCount(BaseUnit unit, TeamEnum team)
+    {
+        var type = unit.UnitData.unitType;
+        var faction = unit.UnitData.unitFaction;
+
+        _typeCount[team][type]--;
+        _factionCount[team][faction]--;
+    }
+
+    public int GetTypeCount(TeamEnum team, UnitTypeEnum type)
+    {
+        return _typeCount[team][type];
+    }
+
+    public int GetFactionCount(TeamEnum team, UnitFactionEnum faction)
+    {
+        return _factionCount[team][faction];
     }
 }
