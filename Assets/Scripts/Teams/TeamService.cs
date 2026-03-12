@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -132,7 +133,10 @@ public class TeamService
 
         _typeCount[team][type]++;
         _factionCount[team][faction]++;
+
+        EventBusManager.Instance.Raise(EventNameEnum.UnitAddedOnField, team, type, faction); 
     }
+
     private void RemoveUnitCount(BaseUnit unit, TeamEnum team)
     {
         var type = unit.UnitData.unitType;
@@ -140,6 +144,8 @@ public class TeamService
 
         _typeCount[team][type]--;
         _factionCount[team][faction]--;
+
+        EventBusManager.Instance.Raise(EventNameEnum.UnitRemovedFromField, team, type, faction);
     }
 
     public int GetTypeCount(TeamEnum team, UnitTypeEnum type)
