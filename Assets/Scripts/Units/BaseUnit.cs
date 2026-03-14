@@ -11,6 +11,7 @@ public class BaseUnit : MonoBehaviour
 {
     [SerializeField] protected string characterName;
     [SerializeField] protected UnitTypeEnum unitType;
+    [SerializeField] protected UnitFactionEnum unitFaction;
     [SerializeField] protected SpriteRenderer spriteRenderer;
     [SerializeField] protected Animator animator;
 
@@ -62,6 +63,7 @@ public class BaseUnit : MonoBehaviour
 
     public UnitData UnitData => unitData;
     public string CharacterName => characterName;
+    public UnitFactionEnum UnitFaction => unitFaction;
     public UnitTypeEnum UnitType => unitType;
     public TeamEnum Team => team;
     public Node CurrentNode => currentNode;
@@ -91,6 +93,8 @@ public class BaseUnit : MonoBehaviour
     {
         this.unitData = unitData;
         this.team = team;
+        unitType = unitData.unitType;
+        unitFaction = unitData.unitFaction;
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
