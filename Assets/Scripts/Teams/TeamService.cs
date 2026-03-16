@@ -36,12 +36,9 @@ public class TeamService
 
     public bool AddUnitToTeam(UnitData unit, TeamEnum team)
     {
-        var teamList = _teams[team];
-        if (teamList.Contains(unit)) return false;
-        if (teamList.Count >= _teamCapacities[team]) return false;
+        if (_teams[team].Count >= _teamCapacities[team]) return false;
 
-        teamList.Add(unit);
-
+        _teams[team].Add(unit);
         _inventoryUnits[team].Add(unit);
         return true;
     }
@@ -75,8 +72,8 @@ public class TeamService
         if (!_inventoryUnits[team].Contains(unit.UnitData)) return false;
         if (_fieldUnits[team].Count >= _fieldCapacities[team]) return false;
 
-        _inventoryUnits[team].Remove(unit.UnitData);
         _fieldUnits[team].Add(unit);
+        _inventoryUnits[team].Remove(unit.UnitData);
         AddUnitCount(unit, team);
         return true;
     }
