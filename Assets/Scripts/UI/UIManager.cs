@@ -36,7 +36,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
-    private List<BuffDetailsUICard> _buffDetailsUICardList;
+    private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffDetailsUICardDictionary = new();
 
     public Canvas UICanvas => _uiCanvas;
 
@@ -74,7 +74,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         _shopUnitCardList = new List<ShopUnitCard>();
         _inventoryUnitCardList = new List<InventoryUnitCard>();
-        _buffDetailsUICardList = new List<BuffDetailsUICard>();
+        _buffDetailsUICardDictionary = new Dictionary<BuffNameEnum, BuffDetailsUICard>();
         _shopPanel.SetActive(false);
     }
 
@@ -193,16 +193,16 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         BuffDetailsUICard newBuffDetailsUICard = Instantiate(_buffBlockUICardPrefab, _buffDetailsContainer);
         newBuffDetailsUICard.Initialize(buffData);
-        _buffDetailsUICardList.Add(newBuffDetailsUICard);
+        _buffDetailsUICardDictionary.Add(buffData.buffName, newBuffDetailsUICard);
     }
 
     public void RemoveAllBuffDetailUICards()
     {
-        foreach (var card in _buffDetailsUICardList)
+        foreach (var cardData in _buffDetailsUICardDictionary)
         {
-            Destroy(card.gameObject);
+            Destroy(cardData.Value.gameObject);
         }
 
-        _buffDetailsUICardList.Clear();
+        _buffDetailsUICardDictionary.Clear();
     }
 }
