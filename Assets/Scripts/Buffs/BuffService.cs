@@ -72,28 +72,39 @@ public class BuffService
         int typeParticpantCount = GameManager.Instance.Get<TeamService>().GetTypeCount(team, type);
         int factionParticpantCount = GameManager.Instance.Get<TeamService>().GetFactionCount(team, faction);
 
-        switch (type)
-        {
-            case UnitTypeEnum.Attacker:
-                break;
-            case UnitTypeEnum.Ranged:
-                break;
-            case UnitTypeEnum.Support:
-                break;
-            case UnitTypeEnum.Tank:
-                break;
-        }
+        if (!_appliedBuffs.TryGetValue(team, out var buffs))
+            return;
 
-        switch (faction)
+        BuffNameEnum typeBuff = type switch
         {
-            case UnitFactionEnum.Crusader:
-                break;
-            case UnitFactionEnum.Spartan:
-                break;
-            case UnitFactionEnum.Viking:
-                break;
-        }
+            UnitTypeEnum.Attacker => BuffNameEnum.Might,
+            UnitTypeEnum.Ranged => BuffNameEnum.Haste,
+            UnitTypeEnum.Support => BuffNameEnum.Recovery,
+            UnitTypeEnum.Tank => BuffNameEnum.Guard,
+            _ => throw new Exception($"Unhandled UnitTypeEnum: {type}")
+        };
+
+        ApplyBuff(buffs, typeBuff);
+
+        BuffNameEnum factionBuff = faction switch
+        {
+            UnitFactionEnum.Crusader => BuffNameEnum.Flame,
+            UnitFactionEnum.Spartan => BuffNameEnum.Verdant,
+            UnitFactionEnum.Viking => BuffNameEnum.Thunder,
+            _ => throw new Exception($"Unhandled UnitFactionEnum: {faction}")
+        };
+
+        ApplyBuff(buffs, factionBuff);
 
         Debug.Log(typeParticpantCount + "--" + factionParticpantCount);
+    }
+
+    void ApplyBuff(Dictionary<BuffNameEnum, int> buffs, BuffNameEnum buff)
+    {
+        if (buffs.ContainsKey(buff))
+        {
+            buffs[buff]++;
+            UIManager.Instance.UpdateBuffParticipantCount(buff, buffs[buff]);
+        }
     }
 }
