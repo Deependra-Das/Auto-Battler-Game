@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,12 +20,13 @@ public class BuffDetailsUICard : MonoBehaviour
     {
         _buffData = buffData;
         _buffNameText.text = buffData.buffName.ToString();
-        _buffIcon = buffData.buffImage;
+        //_buffIcon.sprite = buffData.buffImage.sprite;
 
         for(int num = 0; num < buffData.buffParticipantTierList.Length; num++)
         {
             _buffParticipantsTextList[num].text = buffData.buffParticipantTierList[num].participants.ToString();
-            _buffParticipantsBlockImageList[num] = _deactivatedBlockImage;
+            //_buffParticipantsBlockImageList[num].sprite = _deactivatedBlockImage.sprite;
+            _buffParticipantsBlockImageList[num].color = Color.lightGray;
         }
     }
 
@@ -32,20 +34,29 @@ public class BuffDetailsUICard : MonoBehaviour
     {
         DeactivateParticipantBlock();
 
-        for (int num = 0; num < _buffData.buffParticipantTierList.Length; num++)
+        int index = _buffData.buffParticipantTierList
+            .Select((tier, i) => new { tier, i })
+            .Where(x => x.tier.participants <= participants)
+            .Select(x => x.i)
+            .DefaultIfEmpty(-1)
+            .Max();
+
+        if (index != -1)
         {
-            if (participants > _buffData.buffParticipantTierList[num].participants)
-            {
-                _buffParticipantsBlockImageList[num] = _activatedBlockImage;
-            }
+            //_buffParticipantsBlockImageList[index].sprite = _activatedBlockImage.sprite;
+            _buffParticipantsBlockImageList[index].color = Color.white;
+            _activatedParticipantBlock = index;
         }
     }
 
     private void DeactivateParticipantBlock()
     {
-        if (_activatedParticipantBlock > -1)
+        if (_activatedParticipantBlock >= 0 && _activatedParticipantBlock < _buffParticipantsBlockImageList.Count)
         {
-            _buffParticipantsBlockImageList[_activatedParticipantBlock] = _deactivatedBlockImage;
+            //_buffParticipantsBlockImageList[_activatedParticipantBlock].sprite = _deactivatedBlockImage.sprite;
+            _buffParticipantsBlockImageList[_activatedParticipantBlock].color = Color.lightGray;
         }
+
+        _activatedParticipantBlock = -1;
     }
 }
