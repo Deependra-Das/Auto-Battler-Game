@@ -2,6 +2,7 @@ using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -204,5 +205,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
         }
 
         _buffDetailsUICardDictionary.Clear();
+    }
+
+    public void UpdateBuffParticipantCount(BuffNameEnum buffName, int participants)
+    {
+        _buffDetailsUICardDictionary[buffName].ActivateParticipantBlock(participants);
     }
 }
