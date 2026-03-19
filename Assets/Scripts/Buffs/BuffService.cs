@@ -27,11 +27,13 @@ public class BuffService
     void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.UnitAddedOnField, OnUnitAddedOnField_Buff);
+        EventBusManager.Instance.Subscribe(EventNameEnum.UnitRemovedFromField, OnUnitRemovedFromField_Buff);
     }
 
     void UnsubscribeToEvents()
     {
         EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitAddedOnField, OnUnitAddedOnField_Buff);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitRemovedFromField, OnUnitRemovedFromField_Buff);
     }
 
 
@@ -64,7 +66,7 @@ public class BuffService
         UnitTypeEnum type = (UnitTypeEnum)parameters[1];
         UnitFactionEnum faction = (UnitFactionEnum)parameters[2];
 
-        UpdateAppliedBuffsParticipants(team, type, faction, true);
+        ManageBuffParticipants(team, type, faction, true);
     }
 
     private void OnUnitRemovedFromField_Buff(object[] parameters)
@@ -73,19 +75,16 @@ public class BuffService
         UnitTypeEnum type = (UnitTypeEnum)parameters[1];
         UnitFactionEnum faction = (UnitFactionEnum)parameters[2];
 
-        UpdateAppliedBuffsParticipants(team, type, faction, false);
+        ManageBuffParticipants(team, type, faction, false);
     }
 
-    private void UpdateAppliedBuffsParticipants(TeamEnum team, UnitTypeEnum type, UnitFactionEnum faction, bool action)
+    private void ManageBuffParticipants(TeamEnum team, UnitTypeEnum type, UnitFactionEnum faction, bool action)
     {
         int typeParticpantCount = GameManager.Instance.Get<TeamService>().GetTypeCount(team, type);
         int factionParticpantCount = GameManager.Instance.Get<TeamService>().GetFactionCount(team, faction);
 
-        if (action)
-        {
-            ApplyBuff(team, GetTypeBuff(type));
-            ApplyBuff(team, GetFactionBuff(faction));
-        }
+        UpdateAppliedBuffs(team, GetTypeBuff(type), action);
+        UpdateAppliedBuffs(team, GetFactionBuff(faction), action);
     }
 
     private BuffNameEnum GetTypeBuff(UnitTypeEnum type)
@@ -115,14 +114,22 @@ public class BuffService
         return factionBuff;
     }
 
-    void ApplyBuff(TeamEnum team, BuffNameEnum buff)
+    void UpdateAppliedBuffs(TeamEnum team, BuffNameEnum buff, bool action)
     {
         if (!_appliedBuffs.TryGetValue(team, out var buffs))
             return;
 
         if (buffs.ContainsKey(buff))
         {
-            buffs[buff]++;
+            if (action)
+            {
+                buffs[buff]++;
+            }
+            else
+            {
+                buffs[buff]--;
+            }
+
             UIManager.Instance.UpdateBuffParticipantCount(buff, buffs[buff]);
         }
     }
