@@ -64,17 +64,32 @@ public class BuffService
         UnitTypeEnum type = (UnitTypeEnum)parameters[1];
         UnitFactionEnum faction = (UnitFactionEnum)parameters[2];
 
-        UpdateAppliedBuffsParticipants(team, type, faction);
+        UpdateAppliedBuffsParticipants(team, type, faction, true);
     }
 
-    private void UpdateAppliedBuffsParticipants(TeamEnum team, UnitTypeEnum type, UnitFactionEnum faction)
+    private void OnUnitRemovedFromField_Buff(object[] parameters)
+    {
+        TeamEnum team = (TeamEnum)parameters[0];
+        UnitTypeEnum type = (UnitTypeEnum)parameters[1];
+        UnitFactionEnum faction = (UnitFactionEnum)parameters[2];
+
+        UpdateAppliedBuffsParticipants(team, type, faction, false);
+    }
+
+    private void UpdateAppliedBuffsParticipants(TeamEnum team, UnitTypeEnum type, UnitFactionEnum faction, bool action)
     {
         int typeParticpantCount = GameManager.Instance.Get<TeamService>().GetTypeCount(team, type);
         int factionParticpantCount = GameManager.Instance.Get<TeamService>().GetFactionCount(team, faction);
 
-        if (!_appliedBuffs.TryGetValue(team, out var buffs))
-            return;
+        if (action)
+        {
+            ApplyBuff(team, GetTypeBuff(type));
+            ApplyBuff(team, GetFactionBuff(faction));
+        }
+    }
 
+    private BuffNameEnum GetTypeBuff(UnitTypeEnum type)
+    {
         BuffNameEnum typeBuff = type switch
         {
             UnitTypeEnum.Attacker => BuffNameEnum.Might,
@@ -84,8 +99,11 @@ public class BuffService
             _ => throw new Exception($"Unhandled UnitTypeEnum: {type}")
         };
 
-        ApplyBuff(buffs, typeBuff);
+        return typeBuff;
+    }
 
+    private BuffNameEnum GetFactionBuff(UnitFactionEnum faction)
+    {
         BuffNameEnum factionBuff = faction switch
         {
             UnitFactionEnum.Crusader => BuffNameEnum.Flame,
@@ -94,13 +112,14 @@ public class BuffService
             _ => throw new Exception($"Unhandled UnitFactionEnum: {faction}")
         };
 
-        ApplyBuff(buffs, factionBuff);
-
-        Debug.Log(typeParticpantCount + "--" + factionParticpantCount);
+        return factionBuff;
     }
 
-    void ApplyBuff(Dictionary<BuffNameEnum, int> buffs, BuffNameEnum buff)
+    void ApplyBuff(TeamEnum team, BuffNameEnum buff)
     {
+        if (!_appliedBuffs.TryGetValue(team, out var buffs))
+            return;
+
         if (buffs.ContainsKey(buff))
         {
             buffs[buff]++;
