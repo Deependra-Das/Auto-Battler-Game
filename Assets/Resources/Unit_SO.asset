@@ -89,7 +89,7 @@ MonoBehaviour:
     unitPrefab: {fileID: 7886757113014607428, guid: ef303ae4da8168742a2401fa9d8702e5, type: 3}
     unitIcon: {fileID: -5259514187705045419, guid: a6bfec389189c3c40ae22eabec81c943, type: 3}
     unitName: Thrain
-    unitFaction: 0
+    unitFaction: 2
     unitType: 2
     unitLevel: 0
     unitCost: 5
