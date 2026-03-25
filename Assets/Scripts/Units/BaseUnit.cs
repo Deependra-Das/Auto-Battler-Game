@@ -18,12 +18,10 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected int baseDamage = 1;
     [SerializeField] protected int baseHealth = 5;
     [SerializeField] protected int baseShield = 0;
-    [SerializeField] protected int baseMana = 0;
     [SerializeField] protected int baseHealing = 0;
 
     [SerializeField] [Range(1, 5)] protected int baseRange = 1;
     [SerializeField] protected float baseMovementSpeed = 1f;
-    [SerializeField] protected float baseManaRegenSpeed = 0f;
 
     [SerializeField] protected Transform unitUIContainer;
     [SerializeField] protected Slider healthBar;
