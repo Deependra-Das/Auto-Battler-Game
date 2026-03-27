@@ -34,7 +34,7 @@ public class Viking_RangedAttackerUnit : RangedAttackerUnit
         canAttack = false;
         yield return null;
         animator.ResetTrigger("Attack");
-        yield return new WaitForSeconds(attackCoolDown);
+        yield return new WaitForSeconds(totalAttackCoolDown);
         canAttack = true;
     }
 }
