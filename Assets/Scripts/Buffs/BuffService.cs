@@ -1,5 +1,4 @@
 using AutoBattler.Event;
-using AutoBattler.Main;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,7 +35,6 @@ public class BuffService
         EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitRemovedFromField, OnUnitRemovedFromField_Buff);
     }
 
-
     public void InitializeBuffs()
     {
         foreach (TeamEnum team in Enum.GetValues(typeof(TeamEnum)))
@@ -62,34 +60,72 @@ public class BuffService
 
     private void OnUnitAddedOnField_Buff(object[] parameters)
     {
-        TeamEnum team = (TeamEnum)parameters[0];
-        UnitTypeEnum type = (UnitTypeEnum)parameters[1];
-        UnitFactionEnum faction = (UnitFactionEnum)parameters[2];
-
-        ManageBuffParticipants(team, type, faction, true);
+        HandleUnitChange(parameters, true);
     }
 
     private void OnUnitRemovedFromField_Buff(object[] parameters)
     {
+        HandleUnitChange(parameters, false);
+    }
+
+    private void HandleUnitChange(object[] parameters, bool isAdded)
+    {
         TeamEnum team = (TeamEnum)parameters[0];
         UnitTypeEnum type = (UnitTypeEnum)parameters[1];
         UnitFactionEnum faction = (UnitFactionEnum)parameters[2];
 
-        ManageBuffParticipants(team, type, faction, false);
+        ModifyBuff(team, GetTypeBuff(type), isAdded);
+        ModifyBuff(team, GetFactionBuff(faction), isAdded);
     }
 
-    private void ManageBuffParticipants(TeamEnum team, UnitTypeEnum type, UnitFactionEnum faction, bool action)
+    private void ModifyBuff(TeamEnum team, BuffNameEnum buff, bool isAdded)
     {
-        int typeParticpantCount = GameManager.Instance.Get<TeamService>().GetTypeCount(team, type);
-        int factionParticpantCount = GameManager.Instance.Get<TeamService>().GetFactionCount(team, faction);
+        if (!_appliedBuffs.ContainsKey(team) || !_appliedBuffs[team].ContainsKey(buff))
+            return;
 
-        UpdateAppliedBuffs(team, GetTypeBuff(type), action);
-        UpdateAppliedBuffs(team, GetFactionBuff(faction), action);
+        int oldCount = _appliedBuffs[team][buff];
+        int newCount = Mathf.Max(0, oldCount + (isAdded ? 1 : -1));
+
+        _appliedBuffs[team][buff] = newCount;
+
+        int oldTier = GetTierIndex(_buffData[buff].buffParticipantTierList, oldCount);
+        int newTier = GetTierIndex(_buffData[buff].buffParticipantTierList, newCount);
+
+        if (oldTier == newTier) return;
+
+        TeamBuffData teamBuff = CalculateTeamBuff(team);
+
+        UIManager.Instance.UpdateBuffParticipantCount(buff, newCount);
+        EventBusManager.Instance.Raise(EventNameEnum.TeamBuffUpdated, team, teamBuff);        
+    }
+
+    private TeamBuffData CalculateTeamBuff(TeamEnum team)
+    {
+        TeamBuffData data = new TeamBuffData();
+
+        foreach (var buff in _appliedBuffs[team])
+        {
+            float value = GetBuffValue(_buffData[buff.Key].buffParticipantTierList, buff.Value);
+
+            switch (buff.Key)
+            {
+                case BuffNameEnum.Might: data.attackBonus = value; break;
+                case BuffNameEnum.Guard: data.shieldBonus = value; break;
+                case BuffNameEnum.Recovery: data.hpBonus = value; break;
+                case BuffNameEnum.Haste: data.attackSpeedBonus = value; break;
+
+                case BuffNameEnum.Flame: data.fireDamageBonus = value; break;
+                case BuffNameEnum.Thunder: data.thunderDamageBonus = value; break;
+                case BuffNameEnum.Verdant: data.natureDamageBonus = value; break;
+            }
+        }
+
+        return data;
     }
 
     private BuffNameEnum GetTypeBuff(UnitTypeEnum type)
     {
-        BuffNameEnum typeBuff = type switch
+        return type switch
         {
             UnitTypeEnum.Attacker => BuffNameEnum.Might,
             UnitTypeEnum.Ranged => BuffNameEnum.Haste,
@@ -97,40 +133,38 @@ public class BuffService
             UnitTypeEnum.Tank => BuffNameEnum.Guard,
             _ => throw new Exception($"Unhandled UnitTypeEnum: {type}")
         };
-
-        return typeBuff;
     }
 
     private BuffNameEnum GetFactionBuff(UnitFactionEnum faction)
     {
-        BuffNameEnum factionBuff = faction switch
+        return faction switch
         {
             UnitFactionEnum.Crusader => BuffNameEnum.Flame,
-            UnitFactionEnum.Spartan => BuffNameEnum.Verdant,
             UnitFactionEnum.Viking => BuffNameEnum.Thunder,
+            UnitFactionEnum.Spartan => BuffNameEnum.Verdant,
             _ => throw new Exception($"Unhandled UnitFactionEnum: {faction}")
         };
-
-        return factionBuff;
     }
 
-    void UpdateAppliedBuffs(TeamEnum team, BuffNameEnum buff, bool action)
+    private float GetBuffValue(BuffParticipantTier[] tiers, int count)
     {
-        if (!_appliedBuffs.TryGetValue(team, out var buffs))
-            return;
-
-        if (buffs.ContainsKey(buff))
+        float value = 0f;
+        foreach (var tier in tiers)
         {
-            if (action)
-            {
-                buffs[buff]++;
-            }
-            else
-            {
-                buffs[buff]--;
-            }
-
-            UIManager.Instance.UpdateBuffParticipantCount(buff, buffs[buff]);
+            if (count >= tier.participants)
+                value = tier.buffValue;
         }
+        return value;
+    }
+
+    private int GetTierIndex(BuffParticipantTier[] tiers, int count)
+    {
+        int index = -1;
+        for (int i = 0; i < tiers.Length; i++)
+        {
+            if (count >= tiers[i].participants)
+                index = i;
+        }
+        return index;
     }
 }
