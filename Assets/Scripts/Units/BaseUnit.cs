@@ -1,4 +1,4 @@
-using AutoBattler.Event;
+﻿using AutoBattler.Event;
 using AutoBattler.Main;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,16 +9,17 @@ using UnityEngine.UI;
 
 public class BaseUnit : MonoBehaviour
 {
+    [SerializeField] protected SpriteRenderer spriteRenderer;
+    [SerializeField] protected Animator animator;
     [SerializeField] protected string characterName;
     [SerializeField] protected UnitTypeEnum unitType;
     [SerializeField] protected UnitFactionEnum unitFaction;
-    [SerializeField] protected SpriteRenderer spriteRenderer;
-    [SerializeField] protected Animator animator;
 
     [SerializeField] protected int baseDamage = 1;
     [SerializeField] protected int baseHealth = 5;
     [SerializeField] protected int baseShield = 0;
     [SerializeField] protected int baseHealing = 0;
+    [SerializeField] protected float baseAttackSpeed = 1f;
 
     [SerializeField] [Range(1, 5)] protected int baseRange = 1;
     [SerializeField] protected float baseMovementSpeed = 1f;
@@ -27,24 +28,22 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider shieldBar;
 
-    [SerializeField] protected float attackCoolDown = 1f;
     [SerializeField] protected float delayBeforeRangedAttack = 0f;
 
     protected Collider2D unitCollider;
     protected UnitData unitData;
+
     protected int totalDamage;
     protected int totalHealth;
     protected int totalShield;
-    protected int totalMana;
     protected int totalHealing;
-    protected int totalRange;
     protected float totalAttackSpeed;
-    protected float totalMovementSpeed;
-    protected float totalManaRegenSpeed;
+    protected float totalAttackCoolDown;
 
     protected int currentHealth;
     protected int currentShield;
-    protected int currentMana;
+
+    protected TeamBuffData currentTeamBuffData;
 
     protected UnitFacingDirectionEnum directionFacing = UnitFacingDirectionEnum.Down;
     protected BaseUnit currentTarget = null;
@@ -76,12 +75,15 @@ public class BaseUnit : MonoBehaviour
     void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.CombatStart, OnCombatStart_BaseUnit);
+        EventBusManager.Instance.Subscribe(EventNameEnum.TeamBuffUpdated, OnTeamBuffUpdated);
     }
 
     void UnsubscribeToEvents()
     {
         EventBusManager.Instance.Unsubscribe(EventNameEnum.CombatStart, OnCombatStart_BaseUnit);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.TeamBuffUpdated, OnTeamBuffUpdated);
     }
+
     protected virtual void Awake()
     {
         unitCollider = GetComponent<Collider2D>();
@@ -96,23 +98,20 @@ public class BaseUnit : MonoBehaviour
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
-        InitializeHealth();
-        InitializeShield();
-    }
-
-    protected void InitializeHealth()
-    {
         totalHealth = baseHealth;
-        currentHealth = totalHealth;
-        healthBar.maxValue = totalHealth;
-        UpdateHealthBar(currentHealth);
+        totalShield = baseShield;
+        ResetVitals();
     }
 
-    protected void InitializeShield()
+    private void ResetVitals()
     {
-        totalShield = baseShield;
+        currentHealth = totalHealth;
         currentShield = totalShield;
+
+        healthBar.maxValue = totalHealth;
         shieldBar.maxValue = totalShield;
+
+        UpdateHealthBar(currentHealth);
         UpdateShieldBar(currentShield);
     }
 
@@ -311,5 +310,28 @@ public class BaseUnit : MonoBehaviour
     public void UpdateUnitUIVisibility(bool state)
     {
         unitUIContainer.gameObject.SetActive(false);
+    }
+
+    private void OnTeamBuffUpdated(object[] parameters)
+    {
+        TeamEnum buffForTeam = (TeamEnum)parameters[0];
+        TeamBuffData updatedBuffData = (TeamBuffData)parameters[1];
+
+        if (buffForTeam != team) return;
+
+        currentTeamBuffData = updatedBuffData;
+        ApplyTeamBuffs();
+    }
+
+    private void ApplyTeamBuffs()
+    {
+        totalDamage = Mathf.RoundToInt(baseDamage * (1 + currentTeamBuffData.attackBonus));
+        totalShield = Mathf.RoundToInt(baseShield * (1 + currentTeamBuffData.shieldBonus));
+        totalHealth = Mathf.RoundToInt(baseHealth * (1 + currentTeamBuffData.hpBonus));
+        totalAttackSpeed = baseAttackSpeed * (1 + currentTeamBuffData.attackSpeedBonus);
+
+        totalAttackCoolDown = 1f / Mathf.Max(0.01f, totalAttackSpeed);
+
+        ResetVitals();
     }
 }
