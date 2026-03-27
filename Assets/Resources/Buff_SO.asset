@@ -51,11 +51,11 @@ MonoBehaviour:
     buffImage: {fileID: 0}
     buffParticipantTierList:
     - participants: 2
-      buffValue: 0
+      buffValue: 0.25
     - participants: 4
-      buffValue: 0
+      buffValue: 0.5
     - participants: 6
-      buffValue: 0
+      buffValue: 1
     buffDescription: 
   - buffName: 4
     buffType: 1
