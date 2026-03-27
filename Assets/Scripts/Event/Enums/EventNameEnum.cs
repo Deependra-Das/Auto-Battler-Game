@@ -14,5 +14,6 @@ namespace AutoBattler.Event
         HighlightDiscardPanel,
         UnitAddedOnField,
         UnitRemovedFromField,
+        TeamBuffUpdated,
     }
 }
