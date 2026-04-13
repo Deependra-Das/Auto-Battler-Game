@@ -9,14 +9,16 @@ public class Arrow : MonoBehaviour
     private Vector3 _direction;
     private float _hitDistance = 0.15f;
     private Vector3 _adjustedTargetPosition;
+    private UnitElementEnum _element;
 
-    public void Initialize(BaseUnit ownerUnit, BaseUnit targetUnit, int dmg, Vector3 adjustedDirection, Vector3 adjustedTargetPosition)
+    public void Initialize(BaseUnit ownerUnit, BaseUnit targetUnit, int damage, UnitElementEnum attackElement, Vector3 adjustedDirection, Vector3 adjustedTargetPosition)
     {
         if (targetUnit != null)
         {
             _ownerUnit = ownerUnit;
             _targetUnit = targetUnit;
-            _damage = dmg;
+            _damage = damage;
+            _element= attackElement;
             _direction = adjustedDirection;
             _adjustedTargetPosition = adjustedTargetPosition;
             RotateTowards(_direction);
@@ -35,7 +37,7 @@ public class Arrow : MonoBehaviour
 
         if (Vector3.Distance(transform.position, _adjustedTargetPosition) <= _hitDistance)
         {
-            _targetUnit.TakeDamage(_damage);
+            _targetUnit.TakeDamage(_damage, _element);
             Destroy(gameObject);
         }
     }

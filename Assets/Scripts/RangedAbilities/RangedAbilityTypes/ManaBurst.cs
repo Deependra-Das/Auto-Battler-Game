@@ -6,11 +6,13 @@ public class ManaBurst : MonoBehaviour
     private int _damage;
     private float _lifetime;
     private float _damageDelay;
+    private UnitElementEnum _element;
 
-    public void Initialize(BaseUnit targetUnit, int damage, float lifetime, float damageDelay)
+    public void Initialize(BaseUnit targetUnit, int damage, UnitElementEnum attackElement, float lifetime, float damageDelay)
     {
         _targetUnit = targetUnit;
         _damage = damage;
+        _element = attackElement;
         _lifetime = lifetime;
         _damageDelay = damageDelay;
         Invoke(nameof(ApplyDamage), _damageDelay);
@@ -22,6 +24,6 @@ public class ManaBurst : MonoBehaviour
         if (_targetUnit == null)
             return;
 
-        _targetUnit.TakeDamage(_damage);
+        _targetUnit.TakeDamage(_damage,_element);
     }
 }

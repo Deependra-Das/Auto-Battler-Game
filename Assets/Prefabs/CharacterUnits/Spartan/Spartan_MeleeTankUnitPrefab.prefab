@@ -186,11 +186,13 @@ MonoBehaviour:
   baseShield: 5
   baseHealing: 0
   baseAttackSpeed: 1
+  baseElementalDamageScalingFactor: 0.5
   baseRange: 1
   baseMovementSpeed: 1
   unitUIContainer: {fileID: 3822931708492869758}
   healthBar: {fileID: 7471615320557740439}
   shieldBar: {fileID: 1956885132847392150}
+  shieldFillImage: {fileID: 7322488311530313286}
   delayBeforeRangedAttack: 0
 --- !u!114 &7588912948155472616
 MonoBehaviour:
@@ -413,6 +415,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3305714603963488274, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
   m_PrefabInstance: {fileID: 1796243321419196524}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7322488311530313286 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9039636609098399274, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
+  m_PrefabInstance: {fileID: 1796243321419196524}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!114 &7471615320557740439 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9177504004877191675, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}

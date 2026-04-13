@@ -26,7 +26,7 @@ public class Viking_RangedAttackerUnit : RangedAttackerUnit
 
     private void ShootArrow()
     {
-        GameManager.Instance.Get<RangedAbilityService>().SpawnArrow(this, currentTarget, baseDamage);
+        GameManager.Instance.Get<RangedAbilityService>().SpawnArrow(this, currentTarget, totalDamage, unitElement);
     }
 
     IEnumerator AttackCoolDownWaitCoroutine()

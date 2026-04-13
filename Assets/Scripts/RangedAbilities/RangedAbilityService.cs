@@ -13,7 +13,7 @@ public class RangedAbilityService
         _magicBurstPrefab = rangedAbilities_SO.manaBurstPrefab;
     }
 
-    public void SpawnArrow(BaseUnit owner, BaseUnit target, int damage)
+    public void SpawnArrow(BaseUnit owner, BaseUnit target, int damage, UnitElementEnum attackElement)
     {
         if (target == null) return;
 
@@ -29,13 +29,13 @@ public class RangedAbilityService
         Arrow arrow = GameObject.Instantiate(_arrowPrefab, spawnPosition, Quaternion.identity);
 
         Vector3 adjustedDirection = (adjustedTargetPosition - spawnPosition);
-        arrow.Initialize(owner, target, damage, adjustedDirection.normalized, adjustedTargetPosition);
+        arrow.Initialize(owner, target, damage, attackElement, adjustedDirection.normalized, adjustedTargetPosition);
     }
 
-    public void SpawnManaBurst(BaseUnit owner, BaseUnit target, int damage, float lifetime, float damageDelay)
+    public void SpawnManaBurst(BaseUnit owner, BaseUnit target, int damage, UnitElementEnum attackElement, float lifetime, float damageDelay)
     {
         if (target == null) return;
         ManaBurst circle = GameObject.Instantiate(_magicBurstPrefab, target.transform.position, Quaternion.identity);
-        circle.Initialize(target, damage, lifetime, damageDelay);
+        circle.Initialize(target, damage, attackElement, lifetime, damageDelay);
     }
 }

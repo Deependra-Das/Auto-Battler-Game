@@ -27,7 +27,7 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected Transform unitUIContainer;
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider shieldBar;
-
+    [SerializeField] private Image shieldFillImage;
     [SerializeField] protected float delayBeforeRangedAttack = 0f;
 
     protected Collider2D unitCollider;
@@ -100,6 +100,7 @@ public class BaseUnit : MonoBehaviour
         currentNode.SetOccupied(true);
         totalHealth = baseHealth;
         totalShield = baseShield;
+        shieldFillImage.color = GetShieldColor(unitElement);
         ResetVitals();
     }
 
@@ -205,7 +206,7 @@ public class BaseUnit : MonoBehaviour
         Debug.Log("Base::Attack");
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(int amount, UnitElementEnum incomingElement)
     {
         if (isDead) return;
 
@@ -213,9 +214,11 @@ public class BaseUnit : MonoBehaviour
 
         if (currentShield > 0)
         {
-            int shieldDamage = Mathf.Min(currentShield, remainingDamage);
+            float multiplier = GetShieldDepletionMultiplier(incomingElement);
+
+            int shieldDamage = Mathf.Min(currentShield, Mathf.RoundToInt(remainingDamage * multiplier));
             currentShield -= shieldDamage;
-            remainingDamage -= shieldDamage;
+            remainingDamage -= Mathf.RoundToInt(shieldDamage / multiplier);
             UpdateShieldBar(currentShield);
         }
 
@@ -346,6 +349,22 @@ public class BaseUnit : MonoBehaviour
             UnitElementEnum.Thunder => currentTeamBuffData.thunderDamageBonus,
             UnitElementEnum.Nature => currentTeamBuffData.natureDamageBonus,
             _ => 0f
+        };
+    }
+
+    private float GetShieldDepletionMultiplier(UnitElementEnum attackElement)
+    {
+        return attackElement == unitElement ? 0.5f : 1f;
+    }
+
+    private Color GetShieldColor(UnitElementEnum element)
+    {
+        return element switch
+        {
+            UnitElementEnum.Fire => new Color(1f, 0.78f, 0.72f),
+            UnitElementEnum.Thunder => new Color(0.65f, 0.9f, 1f),
+            UnitElementEnum.Nature => new Color(0.78f, 1f, 0.65f),
+            _ => new Color(0.95f, 0.95f, 0.95f)
         };
     }
 }

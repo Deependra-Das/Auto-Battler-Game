@@ -22,7 +22,7 @@ public class Crusader_RangedSupportUnit : RangedSupportUnit
 
     private void ManaBurst()
     {
-        GameManager.Instance.Get<RangedAbilityService>().SpawnManaBurst(this, currentTarget, baseDamage, lifetime, damageDelay);
+        GameManager.Instance.Get<RangedAbilityService>().SpawnManaBurst(this, currentTarget, totalDamage, unitElement, lifetime, damageDelay);
         HealAllTeammates();
     }
 

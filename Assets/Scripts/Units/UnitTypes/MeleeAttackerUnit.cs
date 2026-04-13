@@ -16,7 +16,7 @@ public class MeleeAttackerUnit : BaseUnit
             if (canAttack)
             {
                 Attack();
-                currentTarget.TakeDamage(baseDamage);
+                currentTarget.TakeDamage(baseDamage, unitElement);
             }
         }
         else
