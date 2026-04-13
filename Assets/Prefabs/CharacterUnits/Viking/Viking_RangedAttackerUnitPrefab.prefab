@@ -181,7 +181,7 @@ MonoBehaviour:
   unitType: 1
   unitFaction: 2
   unitElement: 2
-  baseDamage: 11
+  baseDamage: 6
   baseHealth: 50
   baseShield: 0
   baseHealing: 0
