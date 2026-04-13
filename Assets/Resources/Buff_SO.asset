@@ -18,33 +18,33 @@ MonoBehaviour:
     buffImage: {fileID: 0}
     buffParticipantTierList:
     - participants: 2
-      buffValue: 0
+      buffValue: 0.25
     - participants: 4
-      buffValue: 0
+      buffValue: 0.5
     - participants: 6
-      buffValue: 0
+      buffValue: 0.75
     buffDescription: 
   - buffName: 1
     buffType: 0
     buffImage: {fileID: 0}
     buffParticipantTierList:
     - participants: 2
-      buffValue: 0
+      buffValue: 0.25
     - participants: 4
-      buffValue: 0
+      buffValue: 0.5
     - participants: 6
-      buffValue: 0
+      buffValue: 0.75
     buffDescription: 
   - buffName: 2
     buffType: 0
     buffImage: {fileID: 0}
     buffParticipantTierList:
     - participants: 2
-      buffValue: 0
+      buffValue: 0.25
     - participants: 4
-      buffValue: 0
+      buffValue: 0.5
     - participants: 6
-      buffValue: 0
+      buffValue: 0.75
     buffDescription: 
   - buffName: 3
     buffType: 0
@@ -55,38 +55,38 @@ MonoBehaviour:
     - participants: 4
       buffValue: 0.5
     - participants: 6
-      buffValue: 1
+      buffValue: 0.75
     buffDescription: 
   - buffName: 4
     buffType: 1
     buffImage: {fileID: 0}
     buffParticipantTierList:
     - participants: 2
-      buffValue: 0
+      buffValue: 0.25
     - participants: 4
-      buffValue: 0
+      buffValue: 0.5
     - participants: 6
-      buffValue: 0
+      buffValue: 0.75
     buffDescription: 
   - buffName: 5
     buffType: 1
     buffImage: {fileID: 0}
     buffParticipantTierList:
     - participants: 2
-      buffValue: 0
+      buffValue: 0.25
     - participants: 4
-      buffValue: 0
+      buffValue: 0.5
     - participants: 6
-      buffValue: 0
+      buffValue: 0.75
     buffDescription: 
   - buffName: 6
     buffType: 1
     buffImage: {fileID: 0}
     buffParticipantTierList:
     - participants: 2
-      buffValue: 0
+      buffValue: 0.25
     - participants: 4
-      buffValue: 0
+      buffValue: 0.5
     - participants: 6
-      buffValue: 0
+      buffValue: 0.75
     buffDescription: 
