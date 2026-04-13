@@ -14,7 +14,7 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected string characterName;
     [SerializeField] protected UnitTypeEnum unitType;
     [SerializeField] protected UnitFactionEnum unitFaction;
-
+    [SerializeField] protected UnitElementEnum unitElement;
     [SerializeField] protected int baseDamage = 1;
     [SerializeField] protected int baseHealth = 5;
     [SerializeField] protected int baseShield = 0;
