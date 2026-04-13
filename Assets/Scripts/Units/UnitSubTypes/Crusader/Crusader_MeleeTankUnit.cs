@@ -18,6 +18,7 @@ public class Crusader_MeleeTankUnit : MeleeTankUnit
     private void PerformWarAxeAttack()
     {
         animator.SetTrigger("Attack");
+        currentTarget.TakeDamage(baseDamage, unitElement);
         StartCoroutine(AttackCoolDownWaitCoroutine());
     }
 

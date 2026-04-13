@@ -18,6 +18,7 @@ public class Viking_MeleeAttackerUnit : MeleeAttackerUnit
     private void PerformSwordAttack()
     {
         animator.SetTrigger("Attack");
+        currentTarget.TakeDamage(baseDamage, unitElement);
         StartCoroutine(AttackCoolDownWaitCoroutine());
     }
 

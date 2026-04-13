@@ -16,7 +16,6 @@ public class MeleeTankUnit : BaseUnit
             if (canAttack)
             {
                 Attack();
-                currentTarget.TakeDamage(baseDamage, unitElement);
             }
         }
         else

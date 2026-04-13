@@ -181,12 +181,13 @@ MonoBehaviour:
   unitType: 1
   unitFaction: 0
   unitElement: 1
-  baseDamage: 1
-  baseHealth: 5
+  baseDamage: 11
+  baseHealth: 50
   baseShield: 0
   baseHealing: 0
-  baseAttackSpeed: 1
+  baseAttackSpeed: 0.8
   baseElementalDamageScalingFactor: 0.5
+  teamShieldScalingFactor: 30
   baseRange: 3
   baseMovementSpeed: 1
   unitUIContainer: {fileID: 3079093695033804139}
