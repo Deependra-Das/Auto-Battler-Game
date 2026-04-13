@@ -13,6 +13,9 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     InventoryService inventoryService;
     BuffService buffService;
     private List<UnitData> _unitPrefabList;
+
+    public int fromIndex = 0;
+    public int toIndex = 0;
     public GameplayStateEnum CurrentState { get; private set; } = GameplayStateEnum.Preparation;
 
     protected override void Awake()
@@ -39,6 +42,7 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         GameManager.Instance.Get<ShopService>().GenerateShopUnits();
 
         inventoryService.SetMaxInventorySize(8);
+        PrepareTeam2Units();
         InstantiateTeam2Units();
     }
 
@@ -51,13 +55,27 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         inventoryService.RemoveUnit(newUnit.UnitData);
     }
 
-    private void InstantiateTeam2Units()
+    private void PrepareTeam2Units()
     {
-        for (int i = 0; i < teamService.GetFieldCapacity(TeamEnum.Team2); i++)
+        int team2FieldCapacity = teamService.GetFieldCapacity(TeamEnum.Team2);
+
+        for (int i = 0; i < team2FieldCapacity; i++)
         {
             UnitData randomUnitData = _unitPrefabList[Random.Range(0, _unitPrefabList.Count)];
-            BaseUnit newUnit = Instantiate(randomUnitData.unitPrefab);
-            newUnit.Initialize(randomUnitData, TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
+            teamService.AddUnitToTeam(randomUnitData, TeamEnum.Team2);
+        }
+    }
+
+    private void InstantiateTeam2Units()
+    {
+        int team2FieldCapacity = teamService.GetFieldCapacity(TeamEnum.Team2);
+
+        IReadOnlyList<UnitData> team2Units = teamService.GetTeamUnits(TeamEnum.Team2);
+        for (int i = 0; i < team2FieldCapacity; i++)
+        {
+            UnitData unitData = team2Units[i];
+            BaseUnit newUnit = Instantiate(unitData.unitPrefab);
+            newUnit.Initialize(unitData, TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
             teamService.MoveToField(newUnit, TeamEnum.Team2);
             inventoryService.RemoveUnit(newUnit.UnitData);
         }
@@ -76,9 +94,6 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         teamService.RemoveUnitFromField(unit, unit.Team);
         Destroy(unit.gameObject);
     }
-
-    public int fromIndex = 0;
-    public int toIndex = 0;
 
     private void OnDrawGizmos()
     {
@@ -141,7 +156,5 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
                 Debug.LogWarning("Unhandled gameplay state: " + CurrentState);
                 break;
         }
-
-
     }
 }
