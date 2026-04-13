@@ -32,9 +32,12 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private TMP_Text _refundText;
 
     [Header("Buff UI")]
+    [SerializeField] private GameObject _buffTeam1ToggleContent;
+    [SerializeField] private GameObject _buffTeam2ToggleContent;
     [SerializeField] private Transform _buffTeam1Container;
     [SerializeField] private Transform _buffTeam2Container;
-
+    [SerializeField] private Toggle _team1ToggleButton;
+    [SerializeField] private Toggle _team2ToggleButton;
     [SerializeField] private BuffDetailsUICard _buffBlockUICardPrefab;
 
     private List<ShopUnitCard> _shopUnitCardList;
@@ -51,6 +54,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         base.Awake();
         CanvasRect = _uiCanvas.GetComponent<RectTransform>();
         ToggleDiscardPanelVisibility(false);
+        HandleTeamBuffTabSwitch(true, 1);
     }
 
     private void OnEnable() => SubscribeToEvents();
@@ -63,6 +67,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
         EventBusManager.Instance.Subscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
+        _team1ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
+        _team2ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
     }
 
     void UnsubscribeToEvents()
@@ -72,6 +78,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
+        _team1ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
+        _team2ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
     }
 
     public void InitializeGameplayUI()
@@ -240,6 +248,23 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 _buffTeam2UICardDictionary[buffName].ActivateParticipantBlock(participants);
                 break;
         }
+    }
 
+    void HandleTeamBuffTabSwitch(bool isOn, int tabIndex)
+    {
+        if (isOn)
+        {
+            if (tabIndex == 1)            {
+                _team2ToggleButton.isOn = false;
+                _buffTeam1ToggleContent.SetActive(true);
+                _buffTeam2ToggleContent.SetActive(false);
+            }
+            else if (tabIndex == 2)
+            {
+                _team1ToggleButton.isOn = false;
+                _buffTeam1ToggleContent.SetActive(false);
+                _buffTeam2ToggleContent.SetActive(true);
+            }
+        }
     }
 }
