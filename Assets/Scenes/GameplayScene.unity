@@ -2874,7 +2874,7 @@ GameObject:
   - component: {fileID: 854440084}
   - component: {fileID: 854440085}
   m_Layer: 5
-  m_Name: BuffDetailsContainer
+  m_Name: BuffTeam2Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4146,7 +4146,8 @@ MonoBehaviour:
   _inventorytUnitCard: {fileID: -3820523665162992874, guid: 82e43d3b50c2f9248aac65d1f7ef2d06, type: 3}
   _discardUnitPanel: {fileID: 171698036}
   _refundText: {fileID: 618831786}
-  _buffDetailsContainer: {fileID: 854440084}
+  _buffTeam1Container: {fileID: 2139422188}
+  _buffTeam2Container: {fileID: 854440084}
   _buffBlockUICardPrefab: {fileID: 8779752850910391123, guid: ee6fffe33df6edb4c853a39b79e267ef, type: 3}
 --- !u!1 &1289209035
 GameObject:
@@ -7097,7 +7098,7 @@ GameObject:
   - component: {fileID: 2139422188}
   - component: {fileID: 2139422189}
   m_Layer: 5
-  m_Name: BuffDetailsContainer
+  m_Name: BuffTeam1Container
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

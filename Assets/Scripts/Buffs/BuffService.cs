@@ -44,11 +44,7 @@ public class BuffService
             foreach (var buffs in _buffData)
             {
                 _appliedBuffs[team].Add(buffs.Key, 0);
-
-                if (team == TeamEnum.Team1)
-                {
-                    UIManager.Instance.AddBuffDetailUICard(buffs.Value);
-                }
+                UIManager.Instance.AddBuffDetailUICard(buffs.Value, team);
             }
         }
     }
@@ -95,7 +91,7 @@ public class BuffService
 
         TeamBuffData teamBuff = CalculateTeamBuff(team);
 
-        UIManager.Instance.UpdateBuffParticipantCount(buff, newCount);
+        UIManager.Instance.UpdateBuffParticipantCount(buff, newCount, team);
         EventBusManager.Instance.Raise(EventNameEnum.TeamBuffUpdated, team, teamBuff);        
     }
 

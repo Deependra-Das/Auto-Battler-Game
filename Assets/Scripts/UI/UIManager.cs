@@ -32,12 +32,15 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private TMP_Text _refundText;
 
     [Header("Buff UI")]
-    [SerializeField] private Transform _buffDetailsContainer;
+    [SerializeField] private Transform _buffTeam1Container;
+    [SerializeField] private Transform _buffTeam2Container;
+
     [SerializeField] private BuffDetailsUICard _buffBlockUICardPrefab;
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
-    private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffDetailsUICardDictionary = new();
+    private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam1UICardDictionary = new();
+    private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam2UICardDictionary = new();
 
     public Canvas UICanvas => _uiCanvas;
 
@@ -75,7 +78,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         _shopUnitCardList = new List<ShopUnitCard>();
         _inventoryUnitCardList = new List<InventoryUnitCard>();
-        _buffDetailsUICardDictionary = new Dictionary<BuffNameEnum, BuffDetailsUICard>();
+        _buffTeam1UICardDictionary = new Dictionary<BuffNameEnum, BuffDetailsUICard>();
+        _buffTeam2UICardDictionary = new Dictionary<BuffNameEnum, BuffDetailsUICard>();
         _shopPanel.SetActive(false);
     }
 
@@ -190,25 +194,52 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _discardUnitPanel.SetActive(value);
     }
 
-    public void AddBuffDetailUICard(BuffData buffData)
+    public void AddBuffDetailUICard(BuffData buffData, TeamEnum team)
     {
-        BuffDetailsUICard newBuffDetailsUICard = Instantiate(_buffBlockUICardPrefab, _buffDetailsContainer);
-        newBuffDetailsUICard.Initialize(buffData);
-        _buffDetailsUICardDictionary.Add(buffData.buffName, newBuffDetailsUICard);
+        BuffDetailsUICard newBuffDetailsUICard;
+
+        switch (team)
+        {
+            case TeamEnum.Team1:
+                newBuffDetailsUICard = Instantiate(_buffBlockUICardPrefab, _buffTeam1Container);
+                newBuffDetailsUICard.Initialize(buffData);
+                _buffTeam1UICardDictionary.Add(buffData.buffName, newBuffDetailsUICard);
+                break;
+            case TeamEnum.Team2:
+                newBuffDetailsUICard = Instantiate(_buffBlockUICardPrefab, _buffTeam2Container);
+                newBuffDetailsUICard.Initialize(buffData);
+                _buffTeam2UICardDictionary.Add(buffData.buffName, newBuffDetailsUICard);
+                break;
+        }
     }
 
     public void RemoveAllBuffDetailUICards()
     {
-        foreach (var cardData in _buffDetailsUICardDictionary)
+        foreach (var cardData in _buffTeam1UICardDictionary)
         {
             Destroy(cardData.Value.gameObject);
         }
 
-        _buffDetailsUICardDictionary.Clear();
+        foreach (var cardData in _buffTeam2UICardDictionary)
+        {
+            Destroy(cardData.Value.gameObject);
+        }
+
+        _buffTeam1UICardDictionary.Clear();
+        _buffTeam2UICardDictionary.Clear();
     }
 
-    public void UpdateBuffParticipantCount(BuffNameEnum buffName, int participants)
+    public void UpdateBuffParticipantCount(BuffNameEnum buffName, int participants, TeamEnum team)
     {
-        _buffDetailsUICardDictionary[buffName].ActivateParticipantBlock(participants);
+        switch(team)
+        {
+            case TeamEnum.Team1:
+                _buffTeam1UICardDictionary[buffName].ActivateParticipantBlock(participants);
+                break;
+            case TeamEnum.Team2:
+                _buffTeam2UICardDictionary[buffName].ActivateParticipantBlock(participants);
+                break;
+        }
+
     }
 }
