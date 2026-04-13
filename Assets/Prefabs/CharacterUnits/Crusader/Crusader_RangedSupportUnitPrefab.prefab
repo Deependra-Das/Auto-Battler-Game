@@ -175,22 +175,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 142303eb3c8dbf04280ff8aa3cc2d0d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crusader_RangedSupportUnit
-  characterName: 
-  unitType: 3
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
+  characterName: 
+  unitType: 3
+  unitFaction: 0
+  unitElement: 1
   baseDamage: 2
   baseHealth: 5
   baseShield: 0
-  baseMana: 0
   baseHealing: 1
+  baseAttackSpeed: 1
   baseRange: 5
   baseMovementSpeed: 1
-  baseManaRegenSpeed: 0
   unitUIContainer: {fileID: 6582667221171649368}
   healthBar: {fileID: 713572431380720305}
   shieldBar: {fileID: 8466728255190003376}
-  attackCoolDown: 1
   delayBeforeRangedAttack: 1
   lifetime: 1
   damageDelay: 0.2

@@ -175,22 +175,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 287ce8111b99e764aa1dbb4bd0e50b26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Viking_MeleeAttackerUnit
-  characterName: 
-  unitType: 0
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
+  characterName: 
+  unitType: 0
+  unitFaction: 2
+  unitElement: 2
   baseDamage: 1
   baseHealth: 5
   baseShield: 0
-  baseMana: 0
   baseHealing: 0
+  baseAttackSpeed: 1
   baseRange: 1
   baseMovementSpeed: 1
-  baseManaRegenSpeed: 0
   unitUIContainer: {fileID: 3279025182254906450}
   healthBar: {fileID: 9168267442443759035}
   shieldBar: {fileID: 262607962249030074}
-  attackCoolDown: 1
   delayBeforeRangedAttack: 0
 --- !u!114 &5621455976533373444
 MonoBehaviour:

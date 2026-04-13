@@ -175,22 +175,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ff4fd97a91ea4944ae105218e11bcaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spartan_MeleeAttackerUnit
-  characterName: 
-  unitType: 0
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
+  characterName: 
+  unitType: 0
+  unitFaction: 1
+  unitElement: 3
   baseDamage: 1
   baseHealth: 5
   baseShield: 0
-  baseMana: 0
   baseHealing: 0
+  baseAttackSpeed: 1
   baseRange: 1
   baseMovementSpeed: 1
-  baseManaRegenSpeed: 0
   unitUIContainer: {fileID: 2011053484715663848}
   healthBar: {fileID: 5284403323610820609}
   shieldBar: {fileID: 3876819682876863488}
-  attackCoolDown: 1
   delayBeforeRangedAttack: 0
 --- !u!114 &624145200076768466
 MonoBehaviour:

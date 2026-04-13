@@ -175,22 +175,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd3aa34b11ce6eb429b2aca2e8b7e2cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spartan_RangedSupportUnit
-  characterName: 
-  unitType: 3
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
+  characterName: 
+  unitType: 3
+  unitFaction: 1
+  unitElement: 3
   baseDamage: 2
   baseHealth: 5
   baseShield: 0
-  baseMana: 0
   baseHealing: 1
+  baseAttackSpeed: 1
   baseRange: 5
   baseMovementSpeed: 1
-  baseManaRegenSpeed: 0
   unitUIContainer: {fileID: 8244604720886512290}
   healthBar: {fileID: 2366627180484258635}
   shieldBar: {fileID: 6651588795322150730}
-  attackCoolDown: 1
   delayBeforeRangedAttack: 1
   lifetime: 1
   damageDelay: 0.2
