@@ -27,15 +27,16 @@ public class Arrow : MonoBehaviour
 
     private void Update()
     {
-        if (_targetUnit == null)
+        if (_targetUnit == null || _targetUnit.IsDead)
         {
             Destroy(gameObject);
             return;
         }
 
         transform.position += _direction * _speed * Time.deltaTime;
-
-        if (Vector3.Distance(transform.position, _adjustedTargetPosition) <= _hitDistance)
+        Vector3 toTarget = _adjustedTargetPosition - transform.position;
+        if (Vector3.Dot(toTarget, _direction) <= 0f || Vector3.Distance(transform.position, 
+            _adjustedTargetPosition) <= _hitDistance)
         {
             _targetUnit.TakeDamage(_damage, _element);
             Destroy(gameObject);
