@@ -20,7 +20,7 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected int baseShield = 0;
     [SerializeField] protected int baseHealing = 0;
     [SerializeField] protected float baseAttackSpeed = 1f;
-
+    [SerializeField] protected float baseElementalDamageScalingFactor = 0.5f;
     [SerializeField] [Range(1, 5)] protected int baseRange = 1;
     [SerializeField] protected float baseMovementSpeed = 1f;
 
@@ -325,7 +325,10 @@ public class BaseUnit : MonoBehaviour
 
     private void ApplyTeamBuffs()
     {
-        totalDamage = Mathf.RoundToInt(baseDamage * (1 + currentTeamBuffData.attackBonus));
+        float attackBonusContribution = currentTeamBuffData.attackBonus;
+        float elementBonusContribution = GetElementBonus() * baseElementalDamageScalingFactor;
+
+        totalDamage = Mathf.RoundToInt(baseDamage * (1 + attackBonusContribution + elementBonusContribution));
         totalShield = Mathf.RoundToInt(baseShield * (1 + currentTeamBuffData.shieldBonus));
         totalHealth = Mathf.RoundToInt(baseHealth * (1 + currentTeamBuffData.hpBonus));
         totalAttackSpeed = baseAttackSpeed * (1 + currentTeamBuffData.attackSpeedBonus);
@@ -333,5 +336,16 @@ public class BaseUnit : MonoBehaviour
         totalAttackCoolDown = 1f / Mathf.Max(0.01f, totalAttackSpeed);
 
         ResetVitals();
+    }
+
+    private float GetElementBonus()
+    {
+        return unitElement switch
+        {
+            UnitElementEnum.Fire => currentTeamBuffData.fireDamageBonus,
+            UnitElementEnum.Thunder => currentTeamBuffData.thunderDamageBonus,
+            UnitElementEnum.Nature => currentTeamBuffData.natureDamageBonus,
+            _ => 0f
+        };
     }
 }
