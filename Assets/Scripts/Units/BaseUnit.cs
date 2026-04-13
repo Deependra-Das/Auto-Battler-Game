@@ -21,6 +21,7 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected int baseHealing = 0;
     [SerializeField] protected float baseAttackSpeed = 1f;
     [SerializeField] protected float baseElementalDamageScalingFactor = 0.5f;
+    [SerializeField] protected float teamShieldScalingFactor = 30f;
     [SerializeField] [Range(1, 5)] protected int baseRange = 1;
     [SerializeField] protected float baseMovementSpeed = 1f;
 
@@ -58,6 +59,7 @@ public class BaseUnit : MonoBehaviour
     protected bool isActive = false;
     protected TeamEnum team;
 
+    public bool IsDead => isDead;
     public UnitData UnitData => unitData;
     public string CharacterName => characterName;
     public UnitFactionEnum UnitFaction => unitFaction;
@@ -332,7 +334,7 @@ public class BaseUnit : MonoBehaviour
         float elementBonusContribution = GetElementBonus() * baseElementalDamageScalingFactor;
 
         totalDamage = Mathf.RoundToInt(baseDamage * (1 + attackBonusContribution + elementBonusContribution));
-        totalShield = Mathf.RoundToInt(baseShield * (1 + currentTeamBuffData.shieldBonus));
+        totalShield = baseShield + Mathf.RoundToInt(currentTeamBuffData.shieldBonus * teamShieldScalingFactor);
         totalHealth = Mathf.RoundToInt(baseHealth * (1 + currentTeamBuffData.hpBonus));
         totalAttackSpeed = baseAttackSpeed * (1 + currentTeamBuffData.attackSpeedBonus);
 
