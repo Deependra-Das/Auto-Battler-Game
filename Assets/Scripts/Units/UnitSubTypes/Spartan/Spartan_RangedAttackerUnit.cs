@@ -26,7 +26,7 @@ public class Spartan_RangedAttackerUnit : RangedAttackerUnit
 
     private void ShootArrow()
     {
-        GameManager.Instance.Get<RangedAbilityService>().SpawnArrow(this, currentTarget, baseDamage);
+        GameManager.Instance.Get<RangedAbilityService>().SpawnArrow(this, currentTarget, totalDamage, unitElement);
     }
 
     IEnumerator AttackCoolDownWaitCoroutine()
@@ -34,7 +34,7 @@ public class Spartan_RangedAttackerUnit : RangedAttackerUnit
         canAttack = false;
         yield return null;
         animator.ResetTrigger("Attack");
-        yield return new WaitForSeconds(attackCoolDown);
+        yield return new WaitForSeconds(totalAttackCoolDown);
         canAttack = true;
     }
 }

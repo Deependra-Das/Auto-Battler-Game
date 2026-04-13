@@ -11,7 +11,11 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     GraphService graphService;
     TeamService teamService;
     InventoryService inventoryService;
+    BuffService buffService;
     private List<UnitData> _unitPrefabList;
+
+    public int fromIndex = 0;
+    public int toIndex = 0;
     public GameplayStateEnum CurrentState { get; private set; } = GameplayStateEnum.Preparation;
 
     protected override void Awake()
@@ -22,18 +26,23 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
 
     public void Initialize(UnitScriptableObject unit_SO)
     {
+        UIManager.Instance.InitializeGameplayUI();
+
         tileGridService = GameManager.Instance.Get<TileGridService>();
         graphService = GameManager.Instance.Get<GraphService>();
         teamService = GameManager.Instance.Get<TeamService>();
         inventoryService = GameManager.Instance.Get<InventoryService>();
+        buffService = GameManager.Instance.Get<BuffService>();
 
         graphService.Initialize(tileGridService.GetSpawnedTilesList());
         graph = graphService.Graph;
 
+        buffService.InitializeBuffs();
         _unitPrefabList = unit_SO.unitDataList;
         GameManager.Instance.Get<ShopService>().GenerateShopUnits();
 
         inventoryService.SetMaxInventorySize(8);
+        PrepareTeam2Units();
         InstantiateTeam2Units();
     }
 
@@ -42,36 +51,49 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         BaseUnit newUnit = Instantiate(unitData.unitPrefab);
         newUnit.Initialize(unitData, team, node);
 
-        teamService.AddUnitToTeam(newUnit, team);
+        teamService.MoveToField(newUnit, team);
+        inventoryService.RemoveUnit(newUnit.UnitData);
+    }
+
+    private void PrepareTeam2Units()
+    {
+        int team2FieldCapacity = teamService.GetFieldCapacity(TeamEnum.Team2);
+
+        for (int i = 0; i < team2FieldCapacity; i++)
+        {
+            UnitData randomUnitData = _unitPrefabList[Random.Range(0, _unitPrefabList.Count)];
+            teamService.AddUnitToTeam(randomUnitData, TeamEnum.Team2);
+        }
     }
 
     private void InstantiateTeam2Units()
     {
-        for (int i = 0; i < teamService.GetTeamCapacity(TeamEnum.Team2); i++)
+        int team2FieldCapacity = teamService.GetFieldCapacity(TeamEnum.Team2);
+
+        IReadOnlyList<UnitData> team2Units = teamService.GetTeamUnits(TeamEnum.Team2);
+        for (int i = 0; i < team2FieldCapacity; i++)
         {
-            UnitData randomUnitData = _unitPrefabList[Random.Range(0, _unitPrefabList.Count)];
-            BaseUnit newUnit = Instantiate(randomUnitData.unitPrefab);
-            newUnit.Initialize(randomUnitData, TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
-            teamService.AddUnitToTeam(newUnit, TeamEnum.Team2);
+            UnitData unitData = team2Units[i];
+            BaseUnit newUnit = Instantiate(unitData.unitPrefab);
+            newUnit.Initialize(unitData, TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
+            teamService.MoveToField(newUnit, TeamEnum.Team2);
+            inventoryService.RemoveUnit(newUnit.UnitData);
         }
     }
 
-    public List<BaseUnit> GetOpponentTeamUnits(TeamEnum opponentTeam)
+    public IReadOnlyList<BaseUnit> GetOpponentTeamUnits(TeamEnum opponentTeam)
     {
         if (opponentTeam == TeamEnum.Team1)
-            return teamService.GetTeamUnits(TeamEnum.Team2);
+            return teamService.GetFieldUnits(TeamEnum.Team2);
         else
-            return teamService.GetTeamUnits(TeamEnum.Team1);
+            return teamService.GetFieldUnits(TeamEnum.Team1);
     }
 
     public void MarkUnitDead(BaseUnit unit)
     {
-        teamService.RemoveUnitFromTeam(unit, unit.Team);
+        teamService.RemoveUnitFromField(unit, unit.Team);
         Destroy(unit.gameObject);
     }
-
-    public int fromIndex = 0;
-    public int toIndex = 0;
 
     private void OnDrawGizmos()
     {
@@ -134,7 +156,5 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
                 Debug.LogWarning("Unhandled gameplay state: " + CurrentState);
                 break;
         }
-
-
     }
 }

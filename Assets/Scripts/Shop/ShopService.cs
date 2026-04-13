@@ -38,29 +38,34 @@ public class ShopService
     public void BuyUnit(ShopUnitCard card)
     {
         CurrencyService currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
-        if (!currencyServiceObj.SpendCurrency(card.unitData.unitCost))
+        if (!currencyServiceObj.CanAfford(card.unitData.unitCost))
         {
             Debug.Log("Not enough Currency!");
             return;
         }
+        var inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
 
-        GameManager.Instance.Get<InventoryService>().AddUnit(card.unitData);
-        //Debug.Log($"Bought {card.unitData.unitID}");
+        if (inventoryServiceObj.CurrentInventorySize < inventoryServiceObj.MaxInventorySize)
+        {
+            currencyServiceObj.SpendCurrency(card.unitData.unitCost);
+            GameManager.Instance.Get<InventoryService>().AddUnit(card.unitData);
 
-        _currentUnitsInShop.Remove(card.unitData);
-        UIManager.Instance.RemoveShopUnitCard(card);
-        AddRandomUnitInShop();
+            _currentUnitsInShop.Remove(card.unitData);
+            UIManager.Instance.RemoveShopUnitCard(card);
+            AddRandomUnitInShop();
+        }   
     }
 
     public void RefreshShop()
     {
         CurrencyService currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
-        if (!currencyServiceObj.SpendCurrency(_shopRefreshCost))
+        if (!currencyServiceObj.CanAfford(_shopRefreshCost))
         {
             Debug.Log("Not enough Currency!");
             return;
         }
 
+        currencyServiceObj.SpendCurrency(_shopRefreshCost);
         _currentUnitsInShop.Clear();
         UIManager.Instance.RemoveAllShopUnitCards();
         GenerateShopUnits();

@@ -18,6 +18,7 @@ public class Viking_MeleeTankUnit : MeleeTankUnit
     private void PerformWarAxeAttack()
     {
         animator.SetTrigger("Attack");
+        currentTarget.TakeDamage(baseDamage, unitElement);
         StartCoroutine(AttackCoolDownWaitCoroutine());
     }
 
@@ -26,7 +27,7 @@ public class Viking_MeleeTankUnit : MeleeTankUnit
         canAttack = false;
         yield return null;
         animator.ResetTrigger("Attack");
-        yield return new WaitForSeconds(attackCoolDown);
+        yield return new WaitForSeconds(totalAttackCoolDown);
         canAttack = true;
     }
 }

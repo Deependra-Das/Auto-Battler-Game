@@ -9,6 +9,7 @@ namespace AutoBattler.Main
         [SerializeField] private TileScriptableObjectScript _tile_SO;
         [SerializeField] private UnitScriptableObject _unit_SO;
         [SerializeField] private RangedAbilitiesScriptableObjectScript _rangedAbilities_SO;
+        [SerializeField] private BuffScriptableObjectScript _buff_SO;
         [SerializeField] private int _startingBalance = 10;
         [SerializeField] private int _shopRefreshCost = 1;
 
@@ -23,6 +24,11 @@ namespace AutoBattler.Main
             GameplayManager.Instance.Initialize(_unit_SO);
         }
 
+        private void OnDestroy()
+        {
+            DeregisterServices();
+        }
+
         private void RegisterServices()
         {
             ServiceLocator.Register(new TileGridService(_tile_SO));
@@ -32,6 +38,7 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new ShopService(_unit_SO, _shopRefreshCost));
             ServiceLocator.Register(new InventoryService());
             ServiceLocator.Register(new CurrencyService(_startingBalance));
+            ServiceLocator.Register(new BuffService(_buff_SO));
         }
 
         private void DeregisterServices()
@@ -43,6 +50,7 @@ namespace AutoBattler.Main
             ServiceLocator.Unregister<ShopService>();
             ServiceLocator.Unregister<InventoryService>();
             ServiceLocator.Unregister<CurrencyService>();
+            ServiceLocator.Unregister<BuffService>();
         }
 
         public T Get<T>()

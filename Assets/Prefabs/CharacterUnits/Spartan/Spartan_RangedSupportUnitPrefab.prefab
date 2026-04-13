@@ -175,22 +175,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd3aa34b11ce6eb429b2aca2e8b7e2cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spartan_RangedSupportUnit
-  characterName: 
-  unitType: 3
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
-  baseDamage: 2
-  baseHealth: 5
+  characterName: 
+  unitType: 3
+  unitFaction: 1
+  unitElement: 3
+  baseDamage: 3
+  baseHealth: 80
   baseShield: 0
-  baseMana: 0
   baseHealing: 1
+  baseAttackSpeed: 0.5
+  baseElementalDamageScalingFactor: 0.5
+  teamShieldScalingFactor: 30
   baseRange: 5
   baseMovementSpeed: 1
-  baseManaRegenSpeed: 0
   unitUIContainer: {fileID: 8244604720886512290}
   healthBar: {fileID: 2366627180484258635}
   shieldBar: {fileID: 6651588795322150730}
-  attackCoolDown: 1
+  shieldFillImage: {fileID: 2520261242293017754}
   delayBeforeRangedAttack: 1
   lifetime: 1
   damageDelay: 0.2
@@ -410,6 +413,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
+--- !u!114 &2520261242293017754 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9039636609098399274, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
+  m_PrefabInstance: {fileID: 6884589468257510064}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!114 &6651588795322150730 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 271844773772873210, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}

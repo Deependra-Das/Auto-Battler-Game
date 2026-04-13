@@ -22,7 +22,7 @@ public class Viking_RangedSupportUnit : RangedSupportUnit
 
     private void ManaBurst()
     {
-        GameManager.Instance.Get<RangedAbilityService>().SpawnManaBurst(this, currentTarget, baseDamage, lifetime, damageDelay);
+        GameManager.Instance.Get<RangedAbilityService>().SpawnManaBurst(this, currentTarget, totalDamage, unitElement, lifetime, damageDelay);
         HealAllTeammates();
     }
 
@@ -31,7 +31,7 @@ public class Viking_RangedSupportUnit : RangedSupportUnit
         canAttack = false;
         yield return null;
         animator.ResetTrigger("Attack");
-        yield return new WaitForSeconds(attackCoolDown);
+        yield return new WaitForSeconds(totalAttackCoolDown);
         canAttack = true;
     }
 }

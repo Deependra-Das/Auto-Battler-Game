@@ -175,22 +175,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4d5bc2622594ef4c83a90a69bd47c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spartan_MeleeTankUnit
-  characterName: 
-  unitType: 0
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
-  baseDamage: 1
-  baseHealth: 5
-  baseShield: 5
-  baseMana: 0
+  characterName: 
+  unitType: 0
+  unitFaction: 1
+  unitElement: 3
+  baseDamage: 5
+  baseHealth: 55
+  baseShield: 25
   baseHealing: 0
+  baseAttackSpeed: 0.4
+  baseElementalDamageScalingFactor: 0.5
+  teamShieldScalingFactor: 30
   baseRange: 1
   baseMovementSpeed: 1
-  baseManaRegenSpeed: 0
   unitUIContainer: {fileID: 3822931708492869758}
   healthBar: {fileID: 7471615320557740439}
   shieldBar: {fileID: 1956885132847392150}
-  attackCoolDown: 1
+  shieldFillImage: {fileID: 7322488311530313286}
   delayBeforeRangedAttack: 0
 --- !u!114 &7588912948155472616
 MonoBehaviour:
@@ -413,6 +416,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3305714603963488274, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
   m_PrefabInstance: {fileID: 1796243321419196524}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7322488311530313286 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9039636609098399274, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
+  m_PrefabInstance: {fileID: 1796243321419196524}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!114 &7471615320557740439 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9177504004877191675, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}

@@ -12,5 +12,8 @@ namespace AutoBattler.Event
         InventoryUnitCardDragged,
         HighlightInventoryPanel,
         HighlightDiscardPanel,
+        UnitAddedOnField,
+        UnitRemovedFromField,
+        TeamBuffUpdated,
     }
 }

@@ -47,7 +47,7 @@ MonoBehaviour:
     unitCost: 5
   - unitID: 4
     unitPrefab: {fileID: -6902306450138930433, guid: 632336a2bc941b04d91718005cb0fcf0, type: 3}
-    unitIcon: {fileID: -6854871457767645384, guid: 50d5601ba1a06fc4586777114b146c49, type: 3}
+    unitIcon: {fileID: -4343815220072114579, guid: 84152564c903f454bb098433a2ddb6e2, type: 3}
     unitName: Xenos
     unitFaction: 1
     unitType: 0
@@ -89,7 +89,7 @@ MonoBehaviour:
     unitPrefab: {fileID: 7886757113014607428, guid: ef303ae4da8168742a2401fa9d8702e5, type: 3}
     unitIcon: {fileID: -5259514187705045419, guid: a6bfec389189c3c40ae22eabec81c943, type: 3}
     unitName: Thrain
-    unitFaction: 0
+    unitFaction: 2
     unitType: 2
     unitLevel: 0
     unitCost: 5

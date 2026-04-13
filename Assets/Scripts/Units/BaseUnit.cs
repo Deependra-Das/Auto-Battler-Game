@@ -1,4 +1,4 @@
-using AutoBattler.Event;
+﻿using AutoBattler.Event;
 using AutoBattler.Main;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,43 +9,42 @@ using UnityEngine.UI;
 
 public class BaseUnit : MonoBehaviour
 {
-    [SerializeField] protected string characterName;
-    [SerializeField] protected UnitTypeEnum unitType;
     [SerializeField] protected SpriteRenderer spriteRenderer;
     [SerializeField] protected Animator animator;
-
+    [SerializeField] protected string characterName;
+    [SerializeField] protected UnitTypeEnum unitType;
+    [SerializeField] protected UnitFactionEnum unitFaction;
+    [SerializeField] protected UnitElementEnum unitElement;
     [SerializeField] protected int baseDamage = 1;
     [SerializeField] protected int baseHealth = 5;
     [SerializeField] protected int baseShield = 0;
-    [SerializeField] protected int baseMana = 0;
     [SerializeField] protected int baseHealing = 0;
-
+    [SerializeField] protected float baseAttackSpeed = 1f;
+    [SerializeField] protected float baseElementalDamageScalingFactor = 0.5f;
+    [SerializeField] protected float teamShieldScalingFactor = 30f;
     [SerializeField] [Range(1, 5)] protected int baseRange = 1;
     [SerializeField] protected float baseMovementSpeed = 1f;
-    [SerializeField] protected float baseManaRegenSpeed = 0f;
 
     [SerializeField] protected Transform unitUIContainer;
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider shieldBar;
-
-    [SerializeField] protected float attackCoolDown = 1f;
+    [SerializeField] private Image shieldFillImage;
     [SerializeField] protected float delayBeforeRangedAttack = 0f;
 
     protected Collider2D unitCollider;
     protected UnitData unitData;
+
     protected int totalDamage;
     protected int totalHealth;
     protected int totalShield;
-    protected int totalMana;
     protected int totalHealing;
-    protected int totalRange;
     protected float totalAttackSpeed;
-    protected float totalMovementSpeed;
-    protected float totalManaRegenSpeed;
+    protected float totalAttackCoolDown;
 
     protected int currentHealth;
     protected int currentShield;
-    protected int currentMana;
+
+    protected TeamBuffData currentTeamBuffData;
 
     protected UnitFacingDirectionEnum directionFacing = UnitFacingDirectionEnum.Down;
     protected BaseUnit currentTarget = null;
@@ -60,8 +59,10 @@ public class BaseUnit : MonoBehaviour
     protected bool isActive = false;
     protected TeamEnum team;
 
+    public bool IsDead => isDead;
     public UnitData UnitData => unitData;
     public string CharacterName => characterName;
+    public UnitFactionEnum UnitFaction => unitFaction;
     public UnitTypeEnum UnitType => unitType;
     public TeamEnum Team => team;
     public Node CurrentNode => currentNode;
@@ -76,12 +77,15 @@ public class BaseUnit : MonoBehaviour
     void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.CombatStart, OnCombatStart_BaseUnit);
+        EventBusManager.Instance.Subscribe(EventNameEnum.TeamBuffUpdated, OnTeamBuffUpdated);
     }
 
     void UnsubscribeToEvents()
     {
         EventBusManager.Instance.Unsubscribe(EventNameEnum.CombatStart, OnCombatStart_BaseUnit);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.TeamBuffUpdated, OnTeamBuffUpdated);
     }
+
     protected virtual void Awake()
     {
         unitCollider = GetComponent<Collider2D>();
@@ -91,26 +95,26 @@ public class BaseUnit : MonoBehaviour
     {
         this.unitData = unitData;
         this.team = team;
+        unitType = unitData.unitType;
+        unitFaction = unitData.unitFaction;
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
-        InitializeHealth();
-        InitializeShield();
-    }
-
-    protected void InitializeHealth()
-    {
         totalHealth = baseHealth;
-        currentHealth = totalHealth;
-        healthBar.maxValue = totalHealth;
-        UpdateHealthBar(currentHealth);
+        totalShield = baseShield;
+        shieldFillImage.color = GetShieldColor(unitElement);
+        ResetVitals();
     }
 
-    protected void InitializeShield()
+    private void ResetVitals()
     {
-        totalShield = baseShield;
+        currentHealth = totalHealth;
         currentShield = totalShield;
+
+        healthBar.maxValue = totalHealth;
         shieldBar.maxValue = totalShield;
+
+        UpdateHealthBar(currentHealth);
         UpdateShieldBar(currentShield);
     }
 
@@ -204,7 +208,7 @@ public class BaseUnit : MonoBehaviour
         Debug.Log("Base::Attack");
     }
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(int amount, UnitElementEnum incomingElement)
     {
         if (isDead) return;
 
@@ -212,9 +216,11 @@ public class BaseUnit : MonoBehaviour
 
         if (currentShield > 0)
         {
-            int shieldDamage = Mathf.Min(currentShield, remainingDamage);
+            float multiplier = GetShieldDepletionMultiplier(incomingElement);
+
+            int shieldDamage = Mathf.Min(currentShield, Mathf.RoundToInt(remainingDamage * multiplier));
             currentShield -= shieldDamage;
-            remainingDamage -= shieldDamage;
+            remainingDamage -= Mathf.RoundToInt(shieldDamage / multiplier);
             UpdateShieldBar(currentShield);
         }
 
@@ -309,5 +315,58 @@ public class BaseUnit : MonoBehaviour
     public void UpdateUnitUIVisibility(bool state)
     {
         unitUIContainer.gameObject.SetActive(false);
+    }
+
+    private void OnTeamBuffUpdated(object[] parameters)
+    {
+        TeamEnum buffForTeam = (TeamEnum)parameters[0];
+        TeamBuffData updatedBuffData = (TeamBuffData)parameters[1];
+
+        if (buffForTeam != team) return;
+
+        currentTeamBuffData = updatedBuffData;
+        ApplyTeamBuffs();
+    }
+
+    private void ApplyTeamBuffs()
+    {
+        float attackBonusContribution = currentTeamBuffData.attackBonus;
+        float elementBonusContribution = GetElementBonus() * baseElementalDamageScalingFactor;
+
+        totalDamage = Mathf.RoundToInt(baseDamage * (1 + attackBonusContribution + elementBonusContribution));
+        totalShield = baseShield + Mathf.RoundToInt(currentTeamBuffData.shieldBonus * teamShieldScalingFactor);
+        totalHealth = Mathf.RoundToInt(baseHealth * (1 + currentTeamBuffData.hpBonus));
+        totalAttackSpeed = baseAttackSpeed * (1 + currentTeamBuffData.attackSpeedBonus);
+
+        totalAttackCoolDown = 1f / Mathf.Max(0.01f, totalAttackSpeed);
+
+        ResetVitals();
+    }
+
+    private float GetElementBonus()
+    {
+        return unitElement switch
+        {
+            UnitElementEnum.Fire => currentTeamBuffData.fireDamageBonus,
+            UnitElementEnum.Thunder => currentTeamBuffData.thunderDamageBonus,
+            UnitElementEnum.Nature => currentTeamBuffData.natureDamageBonus,
+            _ => 0f
+        };
+    }
+
+    private float GetShieldDepletionMultiplier(UnitElementEnum attackElement)
+    {
+        return attackElement == unitElement ? 0.5f : 1f;
+    }
+
+    private Color GetShieldColor(UnitElementEnum element)
+    {
+        return element switch
+        {
+            UnitElementEnum.Fire => new Color(1f, 0.78f, 0.72f),
+            UnitElementEnum.Thunder => new Color(0.65f, 0.9f, 1f),
+            UnitElementEnum.Nature => new Color(0.78f, 1f, 0.65f),
+            _ => new Color(0.95f, 0.95f, 0.95f)
+        };
     }
 }

@@ -45,7 +45,7 @@ public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
         _inventoryServiceObj.AddUnit(unit.UnitData);
 
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
-        _teamServiceObj.RemoveUnitFromTeam(unit, unit.Team);
+        _teamServiceObj.MoveToInventory(unit, unit.Team);
         Destroy(unit.gameObject);
     }
 

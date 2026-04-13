@@ -2,6 +2,7 @@ using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,8 +31,20 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private GameObject _discardUnitPanel;
     [SerializeField] private TMP_Text _refundText;
 
+    [Header("Buff UI")]
+    [SerializeField] private GameObject _buffTeam1ToggleContent;
+    [SerializeField] private GameObject _buffTeam2ToggleContent;
+    [SerializeField] private Transform _buffTeam1Container;
+    [SerializeField] private Transform _buffTeam2Container;
+    [SerializeField] private Toggle _team1ToggleButton;
+    [SerializeField] private Toggle _team2ToggleButton;
+    [SerializeField] private BuffDetailsUICard _buffBlockUICardPrefab;
+
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
+    private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam1UICardDictionary = new();
+    private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam2UICardDictionary = new();
+
     public Canvas UICanvas => _uiCanvas;
 
     public RectTransform CanvasRect { get; private set; }
@@ -41,7 +54,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         base.Awake();
         CanvasRect = _uiCanvas.GetComponent<RectTransform>();
         ToggleDiscardPanelVisibility(false);
-        Initialize();
+        HandleTeamBuffTabSwitch(true, 1);
     }
 
     private void OnEnable() => SubscribeToEvents();
@@ -54,6 +67,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
         EventBusManager.Instance.Subscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
+        _team1ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
+        _team2ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
     }
 
     void UnsubscribeToEvents()
@@ -63,12 +78,16 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
+        _team1ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
+        _team2ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
     }
 
-    public void Initialize()
+    public void InitializeGameplayUI()
     {
         _shopUnitCardList = new List<ShopUnitCard>();
         _inventoryUnitCardList = new List<InventoryUnitCard>();
+        _buffTeam1UICardDictionary = new Dictionary<BuffNameEnum, BuffDetailsUICard>();
+        _buffTeam2UICardDictionary = new Dictionary<BuffNameEnum, BuffDetailsUICard>();
         _shopPanel.SetActive(false);
     }
 
@@ -181,5 +200,71 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void ToggleDiscardPanelVisibility(bool value)
     {
         _discardUnitPanel.SetActive(value);
+    }
+
+    public void AddBuffDetailUICard(BuffData buffData, TeamEnum team)
+    {
+        BuffDetailsUICard newBuffDetailsUICard;
+
+        switch (team)
+        {
+            case TeamEnum.Team1:
+                newBuffDetailsUICard = Instantiate(_buffBlockUICardPrefab, _buffTeam1Container);
+                newBuffDetailsUICard.Initialize(buffData);
+                _buffTeam1UICardDictionary.Add(buffData.buffName, newBuffDetailsUICard);
+                break;
+            case TeamEnum.Team2:
+                newBuffDetailsUICard = Instantiate(_buffBlockUICardPrefab, _buffTeam2Container);
+                newBuffDetailsUICard.Initialize(buffData);
+                _buffTeam2UICardDictionary.Add(buffData.buffName, newBuffDetailsUICard);
+                break;
+        }
+    }
+
+    public void RemoveAllBuffDetailUICards()
+    {
+        foreach (var cardData in _buffTeam1UICardDictionary)
+        {
+            Destroy(cardData.Value.gameObject);
+        }
+
+        foreach (var cardData in _buffTeam2UICardDictionary)
+        {
+            Destroy(cardData.Value.gameObject);
+        }
+
+        _buffTeam1UICardDictionary.Clear();
+        _buffTeam2UICardDictionary.Clear();
+    }
+
+    public void UpdateBuffParticipantCount(BuffNameEnum buffName, int participants, TeamEnum team)
+    {
+        switch(team)
+        {
+            case TeamEnum.Team1:
+                _buffTeam1UICardDictionary[buffName].ActivateParticipantBlock(participants);
+                break;
+            case TeamEnum.Team2:
+                _buffTeam2UICardDictionary[buffName].ActivateParticipantBlock(participants);
+                break;
+        }
+    }
+
+    void HandleTeamBuffTabSwitch(bool isOn, int tabIndex)
+    {
+        if (isOn)
+        {
+            if (tabIndex == 1)            {
+                _team2ToggleButton.isOn = false;
+                _buffTeam1ToggleContent.SetActive(true);
+                _buffTeam2ToggleContent.SetActive(false);
+            }
+            else if (tabIndex == 2)
+            {
+                _team1ToggleButton.isOn = false;
+                _buffTeam1ToggleContent.SetActive(false);
+                _buffTeam2ToggleContent.SetActive(true);
+            }
+        }
     }
 }
