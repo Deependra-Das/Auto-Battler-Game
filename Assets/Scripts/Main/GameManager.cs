@@ -35,9 +35,9 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new GraphService());
             ServiceLocator.Register(new TeamService());
             ServiceLocator.Register(new RangedAbilityService(_rangedAbilities_SO));
-            ServiceLocator.Register(new ShopService(_unit_SO, _shopRefreshCost));
-            ServiceLocator.Register(new InventoryService());
             ServiceLocator.Register(new CurrencyService(_startingBalance));
+            ServiceLocator.Register(new InventoryService());
+            ServiceLocator.Register(new ShopService(_unit_SO, _shopRefreshCost));
             ServiceLocator.Register(new BuffService(_buff_SO));
         }
 

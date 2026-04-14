@@ -6,7 +6,8 @@ public class CurrencyService
 
     public CurrencyService(int startingCurrencyAmount)
     {
-        AddCurrency(startingCurrencyAmount);
+        Balance =startingCurrencyAmount;
+        NotifyBalanceChanged();
     }
 
     public bool CanAfford(int amount)
@@ -14,15 +15,29 @@ public class CurrencyService
         return Balance >= amount;
     }
 
-    public void SpendCurrency(int amount)
+    public bool SpendCurrency(int amount)
     {
+        if (amount <= 0 || !CanAfford(amount))
+        {
+            return false;
+        }
+
         Balance -= amount;
-        UIManager.Instance.UpdateCurrenyUI(Balance);
+        NotifyBalanceChanged();
+        return true;
     }
 
     public void AddCurrency(int amount)
     {
+        if (amount <= 0)
+            return;
+
         Balance += amount;
+        NotifyBalanceChanged();
+    }
+
+    private void NotifyBalanceChanged()
+    {
         UIManager.Instance.UpdateCurrenyUI(Balance);
     }
 }
