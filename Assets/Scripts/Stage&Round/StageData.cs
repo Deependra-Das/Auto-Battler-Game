@@ -1,6 +1,8 @@
+using System.Collections.Generic;
+
 [System.Serializable]
 public class StageData
 {
     public int stageIndex;
-    public RoundData[] rounds;
+    public List<RoundData> roundDataList;
 }
