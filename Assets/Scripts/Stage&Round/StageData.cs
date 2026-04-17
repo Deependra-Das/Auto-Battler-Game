@@ -3,6 +3,8 @@ using System.Collections.Generic;
 [System.Serializable]
 public class StageData
 {
-    public int stageIndex;
+    public int initialCurrency;
+    public int initialPlayerLevel;
+    public int maxPlayerLives;
     public List<RoundData> roundDataList;
 }
