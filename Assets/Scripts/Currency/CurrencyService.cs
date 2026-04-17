@@ -4,9 +4,14 @@ public class CurrencyService
 {
     public int Balance { get; private set; }
 
-    public CurrencyService(int startingCurrencyAmount)
+    public CurrencyService()
     {
-        Balance =startingCurrencyAmount;
+        Balance = 0;
+    }
+
+    public void SetInitialCurrency(int startingCurrencyAmount)
+    {
+        Balance = startingCurrencyAmount;
         NotifyBalanceChanged();
     }
 

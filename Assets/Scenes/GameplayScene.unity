@@ -585,7 +585,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1456997933}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9285715
+  m_Size: 0.9285714
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2678,7 +2678,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1289209036}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9285715
+  m_Size: 0.9285714
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5403,7 +5403,7 @@ MonoBehaviour:
   _unit_SO: {fileID: 11400000, guid: c4ae526f170fffc418cc980a9a3f961e, type: 2}
   _rangedAbilities_SO: {fileID: 11400000, guid: 2cac3852b0fc522439d1e0df4b9ce797, type: 2}
   _buff_SO: {fileID: 11400000, guid: 85452137ca9f8cb4daf26537fa0829f2, type: 2}
-  _startingBalance: 200
+  _stageConfig_SO: {fileID: 11400000, guid: 829c7e7984e6b27409e3d93cf660661d, type: 2}
   _shopRefreshCost: 1
 --- !u!4 &1700229633
 Transform:

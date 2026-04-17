@@ -16,7 +16,7 @@ public class TeamService
     private readonly Dictionary<TeamEnum, Dictionary<UnitTypeEnum, int>> _typeCount = new();
     private readonly Dictionary<TeamEnum, Dictionary<UnitFactionEnum, int>> _factionCount = new();
 
-    public TeamService(int defaultTeamCapacity = 8, int defaultFieldCapacity = 4)
+    public TeamService(int defaultTeamCapacity = 8, int defaultFieldCapacity = 1)
     {
         _teamCapacities = new Dictionary<TeamEnum, int>();
         _fieldCapacities = new Dictionary<TeamEnum, int>();

@@ -10,7 +10,7 @@ namespace AutoBattler.Main
         [SerializeField] private UnitScriptableObject _unit_SO;
         [SerializeField] private RangedAbilitiesScriptableObjectScript _rangedAbilities_SO;
         [SerializeField] private BuffScriptableObjectScript _buff_SO;
-        [SerializeField] private int _startingBalance = 10;
+        [SerializeField] private StageConfigScriptableObjectScript _stageConfig_SO;
         [SerializeField] private int _shopRefreshCost = 1;
 
         protected override void Awake()
@@ -35,7 +35,8 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new GraphService());
             ServiceLocator.Register(new TeamService());
             ServiceLocator.Register(new RangedAbilityService(_rangedAbilities_SO));
-            ServiceLocator.Register(new CurrencyService(_startingBalance));
+            ServiceLocator.Register(new StageService(_stageConfig_SO));
+            ServiceLocator.Register(new CurrencyService());
             ServiceLocator.Register(new InventoryService());
             ServiceLocator.Register(new ShopService(_unit_SO, _shopRefreshCost));
             ServiceLocator.Register(new BuffService(_buff_SO));

@@ -20,12 +20,12 @@ MonoBehaviour:
     - winXPCurrency: 20
       lossXPCurrency: 25
       enemiyList:
-      - enemyID: 0
+      - enemyID: 111
         enemyLevel: 1
         enemySpawnTileIndex: 1
-      - enemyID: 1
+      - enemyID: 112
         enemyLevel: 1
         enemySpawnTileIndex: 2
-      - enemyID: 3
+      - enemyID: 113
         enemyLevel: 1
         enemySpawnTileIndex: 3
