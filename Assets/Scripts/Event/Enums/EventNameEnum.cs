@@ -15,5 +15,7 @@ namespace AutoBattler.Event
         UnitAddedOnField,
         UnitRemovedFromField,
         TeamBuffUpdated,
+        StageStarted,
+        RoundStarted,
     }
 }
