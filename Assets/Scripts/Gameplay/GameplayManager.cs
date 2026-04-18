@@ -58,8 +58,8 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     public void InitializeStageForGameplay(int stageIndex)
     {
         stageService.StartStage(stageIndex);
-        _currentStage = stageService.CurrentStage;
-        _currentRound = stageService.CurrentRound;
+        _currentStage = stageService.CurrentStageIndex;
+        _currentRound = stageService.CurrentRoundIndex;
         GameManager.Instance.Get<ShopService>().GenerateShopUnits();
         PrepareTeam2UnitsForRound();
         InstantiateTeam2Units();

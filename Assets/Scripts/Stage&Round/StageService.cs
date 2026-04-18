@@ -1,29 +1,37 @@
+using AutoBattler.Event;
+using AutoBattler.Main;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StageService
 {
-    private StageConfigScriptableObjectScript _stageConfig;
-    private PlayerLevelService _playerLevelConfig;
+    private List<StageData> _stageConfigDataList;
 
-    public int CurrentStage { get; private set; }
-    public int CurrentRound { get; private set; }
+    public int CurrentStageIndex { get; private set; }
+    public int CurrentRoundIndex { get; private set; }
 
-    public StageService(StageConfigScriptableObjectScript config)
+    public StageService(StageConfigScriptableObjectScript stageConfig)
     {
-        _stageConfig = config;
+        _stageConfigDataList = stageConfig.stageConfigDataList;
     }
 
     public void StartStage(int stageIndex)
     {
-        CurrentStage = stageIndex;
-        CurrentRound = 0;
-        Debug.Log($"Starting Stage {CurrentStage}");
+        CurrentStageIndex = stageIndex;
+        CurrentRoundIndex = 0;
+        Debug.Log($"Starting Stage {CurrentStageIndex}");
+        int initialiPlayerLevel = _stageConfigDataList[CurrentStageIndex].initialPlayerLevel;
+        int initialCurrency = _stageConfigDataList[CurrentStageIndex].initialCurrency;
+        int maxLives = _stageConfigDataList[CurrentStageIndex].maxPlayerLives;
+        int roundCount = _stageConfigDataList[CurrentStageIndex].roundDataList.Count;
+        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, CurrentStageIndex, initialiPlayerLevel, initialCurrency, maxLives, roundCount);
         StartRound();
     }
 
     public void StartRound()
     {
-        Debug.Log($"Starting Stage {CurrentStage} - Round {CurrentRound}");
+        Debug.Log($"Starting Stage {CurrentStageIndex} - Round {CurrentRoundIndex}");
+        EventBusManager.Instance.Raise(EventNameEnum.RoundStarted,CurrentRoundIndex);
     }
 
     public void OnRoundWin()
@@ -36,7 +44,7 @@ public class StageService
     {
         var round = GetCurrentRoundData();
 
-        if (_playerLevelConfig.IsPlayerDead())
+        if (GameManager.Instance.Get<PlayerLevelService>().IsPlayerDead())
         {
             OnStageFailed();
             return;
@@ -47,9 +55,9 @@ public class StageService
 
     private void AdvanceRound()
     {
-        CurrentRound++;
+        CurrentRoundIndex++;
 
-        if (CurrentRound >= 5)
+        if (CurrentRoundIndex >= 5)
         {
             OnStageCleared();
         }
@@ -63,13 +71,13 @@ public class StageService
     {
         Debug.Log("Stage Cleared!");
 
-        if (CurrentStage >= _stageConfig.stages.Count - 1)
+        if (CurrentStageIndex >= _stageConfigDataList.Count - 1)
         {
             OnGameCompleted();
             return;
         }
 
-        StartStage(CurrentStage + 1);
+        StartStage(CurrentStageIndex + 1);
     }
 
     private void OnGameCompleted()
@@ -80,16 +88,16 @@ public class StageService
     private void OnStageFailed()
     {
         Debug.Log("Stage Failed. Restarting...");
-        StartStage(CurrentStage);
+        StartStage(CurrentStageIndex);
     }
 
     public StageData GetCurrentStageData()
     {
-        return _stageConfig.stages[CurrentStage];
+        return _stageConfigDataList[CurrentStageIndex];
     }
 
     public RoundData GetCurrentRoundData()
     {
-        return GetCurrentStageData().roundDataList[CurrentRound];
+        return GetCurrentStageData().roundDataList[CurrentRoundIndex];
     }
 }
