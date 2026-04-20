@@ -21,7 +21,7 @@ public class PlayerLevelService
 
     public PlayerLevelData GetCurrentPlayerLevelData()
     {
-        int index = Mathf.Clamp(Level - 1, 0, MaxLevel - 1);
+        int index = Level - 1;
         return _config.playerProgressionDataList[index];
     }
 
@@ -30,7 +30,8 @@ public class PlayerLevelService
         if (Level >= MaxLevel)
             return 0;
 
-        return _config.playerProgressionDataList[Level].xpCurrencyRequired;
+        int index = Level - 1;
+        return _config.playerProgressionDataList[index].xpRequiredToNextLevel;
     }
 
     public bool CanBuyXP(int amount)
@@ -38,15 +39,16 @@ public class PlayerLevelService
         return _currencyService.CanAfford(amount);
     }
 
-    public bool BuyXP(int amount)
+    public bool BuyXP(int coinsAmount)
     {
         if (Level >= MaxLevel)
             return false;
 
-        if (!_currencyService.SpendCurrency(amount))
+        if (!_currencyService.SpendCurrency(coinsAmount))
             return false;
 
-        CurrentXP += amount;
+        int xpGained = coinsAmount * _config.xpPerCoin;
+        CurrentXP += xpGained;
 
         HandleLevelUp();
         return true;
