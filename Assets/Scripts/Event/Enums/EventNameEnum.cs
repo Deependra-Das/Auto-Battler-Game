@@ -17,5 +17,8 @@ namespace AutoBattler.Event
         TeamBuffUpdated,
         StageStarted,
         RoundStarted,
+        RoundWon,
+        RoundLose,
+        StageCleared,
     }
 }
