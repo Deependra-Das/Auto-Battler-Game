@@ -1,4 +1,6 @@
+using AutoBattler.Event;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CurrencyService
 {
@@ -6,12 +8,28 @@ public class CurrencyService
 
     public CurrencyService()
     {
+        SubscribeToEvents();
         Balance = 0;
     }
 
-    public void SetInitialCurrency(int startingCurrencyAmount)
+    ~CurrencyService()
     {
-        Balance = startingCurrencyAmount;
+        UnsubscribeToEvents();
+    }
+
+    void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStartedSetInitialiCurrency);
+    }
+
+    void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStartedSetInitialiCurrency);
+    }
+
+    private void OnStageStartedSetInitialiCurrency(object[] parameters)
+    {
+        Balance = (int)parameters[2];
         NotifyBalanceChanged();
     }
 
