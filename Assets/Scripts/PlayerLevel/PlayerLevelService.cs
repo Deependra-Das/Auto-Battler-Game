@@ -7,6 +7,7 @@ public class PlayerLevelService
 
     public int Level { get; private set; } = 1;
     public int Lives { get; private set; } = 3;
+    public int CurrentXP { get; private set; } = 0;
 
     public PlayerLevelService(CurrencyService currencyService, PlayerLevelConfigScriptableObjectScript config)
     {
@@ -15,7 +16,8 @@ public class PlayerLevelService
     }
 
     public int MaxLevel => _config.playerProgressionDataList.Count;
-    public int MaxUnits => _config.playerProgressionDataList[MaxLevel-1].maxUnitsAllowed;
+
+    public int MaxUnits => GetCurrentPlayerLevelData().maxUnitsAllowed;
 
     public PlayerLevelData GetCurrentPlayerLevelData()
     {
@@ -23,35 +25,59 @@ public class PlayerLevelService
         return _config.playerProgressionDataList[index];
     }
 
-    public bool CanLevelUp()
+    public int GetXPToNextLevel()
     {
         if (Level >= MaxLevel)
-            return false;
+            return 0;
 
-        int cost = GetNextPlayerLevelCost();
-        return _currencyService.CanAfford(cost);
+        return _config.playerProgressionDataList[Level].xpCurrencyRequired;
     }
 
-    public bool TryLevelUp()
+    public bool CanBuyXP(int amount)
+    {
+        return _currencyService.CanAfford(amount);
+    }
+
+    public bool BuyXP(int amount)
     {
         if (Level >= MaxLevel)
             return false;
 
-        int cost = GetNextPlayerLevelCost();
-
-        if (!_currencyService.SpendCurrency(cost))
+        if (!_currencyService.SpendCurrency(amount))
             return false;
 
-        Level++;
+        CurrentXP += amount;
+
+        HandleLevelUp();
         return true;
     }
 
-    public int GetNextPlayerLevelCost()
+    private void HandleLevelUp()
+    {
+        while (Level < MaxLevel)
+        {
+            int xpRequired = GetXPToNextLevel();
+
+            if (CurrentXP < xpRequired)
+                break;
+
+            CurrentXP -= xpRequired;
+            Level++;
+        }
+
+        if (Level >= MaxLevel)
+        {
+            Level = MaxLevel;
+            CurrentXP = 0;
+        }
+    }
+
+    public float GetXPProgressNormalized()
     {
         if (Level >= MaxLevel)
-            return int.MaxValue;
+            return 1f;
 
-        return _config.playerProgressionDataList[Level].xpCurrencyRequired;
+        return (float)CurrentXP / GetXPToNextLevel();
     }
 
     public void LoseLife()
@@ -68,5 +94,6 @@ public class PlayerLevelService
     {
         Level = 1;
         Lives = 3;
+        CurrentXP = 0;
     }
 }
