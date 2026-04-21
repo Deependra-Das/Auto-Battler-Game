@@ -585,7 +585,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1456997933}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9285714
+  m_Size: 0.9285715
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2678,7 +2678,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1289209036}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.9285714
+  m_Size: 0.9285715
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4208,6 +4208,11 @@ MonoBehaviour:
   _team1ToggleButton: {fileID: 1123041951}
   _team2ToggleButton: {fileID: 1651560861}
   _buffBlockUICardPrefab: {fileID: 8779752850910391123, guid: ee6fffe33df6edb4c853a39b79e267ef, type: 3}
+  _levelXpBarBackgroundImage: {fileID: 2021160176}
+  _levelXpBarfillImage: {fileID: 1682766982}
+  _buyLevelXpButton: {fileID: 1965862241}
+  _maxFillAmount: 0.75
+  _roatationForLevelXPBar: 45
 --- !u!1 &1289209035
 GameObject:
   m_ObjectHideFlags: 0

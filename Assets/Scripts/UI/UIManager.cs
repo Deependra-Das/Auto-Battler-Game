@@ -2,7 +2,6 @@ using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,6 +39,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Toggle _team2ToggleButton;
     [SerializeField] private BuffDetailsUICard _buffBlockUICardPrefab;
 
+    [Header("Level XP UI")]
+    [SerializeField] private Image _levelXpBarBackgroundImage;
+    [SerializeField] private Image _levelXpBarfillImage;
+    [SerializeField] private Button _buyLevelXpButton;
+    [SerializeField] private float _maxFillAmount = 0.75f;
+    [SerializeField] private float _roatationForLevelXPBar =45f;
+
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
     private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam1UICardDictionary = new();
@@ -53,6 +59,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         base.Awake();
         CanvasRect = _uiCanvas.GetComponent<RectTransform>();
+        SetupLevelXPBarUI();
         ToggleDiscardPanelVisibility(false);
         HandleTeamBuffTabSwitch(true, 1);
     }
@@ -69,6 +76,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
         _team1ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
+        _buyLevelXpButton.onClick.AddListener(OnBuyLevelXpButtonClicked);
+        EventBusManager.Instance.Subscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
     }
 
     void UnsubscribeToEvents()
@@ -80,6 +90,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
         _team1ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
+        _buyLevelXpButton.onClick.RemoveListener(OnBuyLevelXpButtonClicked);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
     }
 
     public void InitializeGameplayUI()
@@ -266,5 +279,35 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 _buffTeam2ToggleContent.SetActive(true);
             }
         }
+    }
+
+    private void SetupLevelXPBarUI()
+    {
+        _levelXpBarBackgroundImage.fillAmount = _maxFillAmount;
+        _levelXpBarfillImage.fillAmount = 0;
+        _levelXpBarBackgroundImage.transform.rotation = Quaternion.Euler(0f, 0f, _roatationForLevelXPBar);
+        _levelXpBarfillImage.transform.rotation = Quaternion.Euler(0f, 0f, _roatationForLevelXPBar);
+    }
+
+    private void OnBuyLevelXpButtonClicked()
+    {
+        EventBusManager.Instance.Raise(EventNameEnum.BuyLevelXP);
+    }
+
+    private void OnXPChanged_UI(object[] parameters)
+    {
+        float progressValue = (float)parameters[0];
+        UpdateLevelXPBar(progressValue);
+    }
+
+    private void OnLevelChanged_UI(object[] parameters)
+    {
+        float progressValue = (float)parameters[0];
+        UpdateLevelXPBar(progressValue);
+    }
+
+    void UpdateLevelXPBar(float progressValue)
+    {
+        _levelXpBarfillImage.fillAmount = Mathf.Clamp01((float)progressValue / _maxFillAmount);
     }
 }
