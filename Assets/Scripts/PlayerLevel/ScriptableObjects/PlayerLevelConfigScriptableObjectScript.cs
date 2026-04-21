@@ -6,6 +6,7 @@ public class PlayerLevelConfigScriptableObjectScript : ScriptableObject
 {
     public List<PlayerLevelData> playerProgressionDataList;
     public int xpPerCoin = 1;
+    public int shopRefreshCost = 1;
 
     private void OnValidate()
     {

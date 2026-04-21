@@ -1,3 +1,4 @@
+using AutoBattler.Main;
 using UnityEngine;
 
 public class PlayerLevelService
@@ -9,9 +10,9 @@ public class PlayerLevelService
     public int Lives { get; private set; } = 3;
     public int CurrentXP { get; private set; } = 0;
 
-    public PlayerLevelService(CurrencyService currencyService, PlayerLevelConfigScriptableObjectScript config)
+    public PlayerLevelService(PlayerLevelConfigScriptableObjectScript config)
     {
-        _currencyService = currencyService;
+        _currencyService = GameManager.Instance.Get<CurrencyService>();
         _config = config;
     }
 
