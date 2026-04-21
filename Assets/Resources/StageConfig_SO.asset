@@ -12,20 +12,133 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee7bee715062ee843bae32978daa7b5a, type: 3}
   m_Name: StageConfig_SO
   m_EditorClassIdentifier: Assembly-CSharp::StageConfigScriptableObjectScript
-  stages:
-  - initialCurrency: 0
-    initialPlayerLevel: 0
+  stageConfigDataList:
+  - initialCurrency: 10
+    initialPlayerLevel: 1
     maxPlayerLives: 3
     roundDataList:
-    - winXPCurrency: 20
-      lossXPCurrency: 25
+    - winXPCurrency: 8
+      lossXPCurrency: 6
       enemiyList:
       - enemyID: 111
         enemyLevel: 1
-        enemySpawnTileIndex: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 9
+      lossXPCurrency: 7
+      enemiyList:
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 10
+      lossXPCurrency: 8
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 123
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+  - initialCurrency: 10
+    initialPlayerLevel: 1
+    maxPlayerLives: 3
+    roundDataList:
+    - winXPCurrency: 10
+      lossXPCurrency: 8
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 12
+      lossXPCurrency: 10
+      enemiyList:
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 14
+      lossXPCurrency: 12
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 123
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+  - initialCurrency: 10
+    initialPlayerLevel: 1
+    maxPlayerLives: 3
+    roundDataList:
+    - winXPCurrency: 10
+      lossXPCurrency: 8
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 12
+      lossXPCurrency: 10
+      enemiyList:
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 14
+      lossXPCurrency: 12
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 123
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 16
+      lossXPCurrency: 14
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 123
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 18
+      lossXPCurrency: 16
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 123
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
       - enemyID: 112
         enemyLevel: 1
-        enemySpawnTileIndex: 2
-      - enemyID: 113
+        enemySpawnTileIndex: 0
+      - enemyID: 122
         enemyLevel: 1
-        enemySpawnTileIndex: 3
+        enemySpawnTileIndex: 0
