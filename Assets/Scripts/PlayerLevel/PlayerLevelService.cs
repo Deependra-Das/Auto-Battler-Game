@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using UnityEngine;
 
@@ -9,11 +10,29 @@ public class PlayerLevelService
     public int Level { get; private set; } = 1;
     public int Lives { get; private set; } = 3;
     public int CurrentXP { get; private set; } = 0;
+    public int XPPerCoin { get; private set; } = 0;
 
     public PlayerLevelService(PlayerLevelConfigScriptableObjectScript config)
     {
+        SubscribeToEvents();
         _currencyService = GameManager.Instance.Get<CurrencyService>();
         _config = config;
+        XPPerCoin = _config.xpPerCoin;
+    }
+
+    ~PlayerLevelService()
+    {
+        UnsubscribeToEvents();
+    }
+
+    void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.BuyLevelXP, OnBuyLevelXP_PlayerLevel);
+    }
+
+    void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.BuyLevelXP, OnBuyLevelXP_PlayerLevel);
     }
 
     public int MaxLevel => _config.playerProgressionDataList.Count;
@@ -51,12 +70,16 @@ public class PlayerLevelService
         int xpGained = coinsAmount * _config.xpPerCoin;
         CurrentXP += xpGained;
 
+        EventBusManager.Instance.Raise(EventNameEnum.XPChanged, GetXPProgressNormalized());
+
         HandleLevelUp();
         return true;
     }
 
     private void HandleLevelUp()
     {
+        bool leveledUp = false;
+
         while (Level < MaxLevel)
         {
             int xpRequired = GetXPToNextLevel();
@@ -66,6 +89,7 @@ public class PlayerLevelService
 
             CurrentXP -= xpRequired;
             Level++;
+            leveledUp = true;
         }
 
         if (Level >= MaxLevel)
@@ -73,14 +97,19 @@ public class PlayerLevelService
             Level = MaxLevel;
             CurrentXP = 0;
         }
+        if (leveledUp)
+        {
+            EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, GetXPProgressNormalized());
+        }
+        EventBusManager.Instance.Raise(EventNameEnum.XPChanged, GetXPProgressNormalized());
     }
 
-    public float GetXPProgressNormalized()
+    private float GetXPProgressNormalized()
     {
         if (Level >= MaxLevel)
             return 1f;
 
-        return (float)CurrentXP / GetXPToNextLevel();
+        return Mathf.Clamp01((float)CurrentXP / GetXPToNextLevel());
     }
 
     public void LoseLife()
@@ -98,5 +127,10 @@ public class PlayerLevelService
         Level = 1;
         Lives = 3;
         CurrentXP = 0;
+    }
+
+    private void OnBuyLevelXP_PlayerLevel(object[] parameters)
+    {
+        BuyXP(XPPerCoin);
     }
 }
