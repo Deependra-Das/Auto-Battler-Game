@@ -20,5 +20,8 @@ namespace AutoBattler.Event
         RoundWon,
         RoundLose,
         StageCleared,
+        BuyLevelXP,
+        XPChanged,
+        LevelChanged,
     }
 }
