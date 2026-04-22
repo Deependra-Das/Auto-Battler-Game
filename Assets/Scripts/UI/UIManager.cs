@@ -1,6 +1,7 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -45,6 +46,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Button _buyLevelXpButton;
     [SerializeField] private float _maxFillAmount = 0.75f;
     [SerializeField] private float _roatationForLevelXPBar =45f;
+    [SerializeField] private float _xpLerpSpeed = 8f;
+    private float _displayedXP;
+    private float _targetXP;
+    private Coroutine _xpRoutine;
+    private Coroutine _levelRoutine;
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
@@ -296,18 +302,62 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnXPChanged_UI(object[] parameters)
     {
-        float progressValue = (float)parameters[0];
-        UpdateLevelXPBar(progressValue);
+        _targetXP = (float)parameters[0];
+        if (_xpRoutine != null)
+        {
+            StopCoroutine(_xpRoutine);
+        }
+        _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
     }
 
     private void OnLevelChanged_UI(object[] parameters)
     {
-        float progressValue = (float)parameters[0];
-        UpdateLevelXPBar(progressValue);
+        _targetXP = 1f;
+
+        if (_xpRoutine != null)
+            StopCoroutine(_xpRoutine);
+
+        _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
+
+        StartCoroutine(LevelUpReset());
     }
 
     void UpdateLevelXPBar(float progressValue)
     {
-        _levelXpBarfillImage.fillAmount = Mathf.Clamp01((float)progressValue / _maxFillAmount);
+        _levelXpBarfillImage.fillAmount = progressValue * _maxFillAmount;
+    }
+
+    private IEnumerator SmoothLevelXPFillAnimation()
+    {
+        while (true)
+        {
+            _displayedXP = Mathf.MoveTowards(_displayedXP, _targetXP, Time.deltaTime * _xpLerpSpeed);
+
+            UpdateLevelXPBar(_displayedXP);
+
+            if (Mathf.Abs(_displayedXP - _targetXP) < 0.001f)
+                break;
+
+            yield return null;
+        }
+
+        _xpRoutine = null;
+    }
+
+    private IEnumerator LevelUpReset()
+    {
+        while (Mathf.Abs(_displayedXP - 1f) > 0.01f)
+            yield return null;
+
+        yield return new WaitForSeconds(0.1f);
+
+        _displayedXP = 0f;
+        _targetXP = 0f;
+
+        UpdateLevelXPBar(0f);
+
+        if (_xpRoutine != null)
+            StopCoroutine(_xpRoutine);
+        _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
     }
 }

@@ -10,14 +10,12 @@ public class PlayerLevelService
     public int Level { get; private set; } = 1;
     public int Lives { get; private set; } = 3;
     public int CurrentXP { get; private set; } = 0;
-    public int XPPerCoin { get; private set; } = 0;
 
     public PlayerLevelService(PlayerLevelConfigScriptableObjectScript config)
     {
         SubscribeToEvents();
         _currencyService = GameManager.Instance.Get<CurrencyService>();
         _config = config;
-        XPPerCoin = _config.xpPerCoin;
     }
 
     ~PlayerLevelService()
@@ -45,7 +43,7 @@ public class PlayerLevelService
         return _config.playerProgressionDataList[index];
     }
 
-    public int GetXPToNextLevel()
+    private int GetXPToNextLevel()
     {
         if (Level >= MaxLevel)
             return 0;
@@ -54,25 +52,26 @@ public class PlayerLevelService
         return _config.playerProgressionDataList[index].xpRequiredToNextLevel;
     }
 
-    public bool CanBuyXP(int amount)
-    {
-        return _currencyService.CanAfford(amount);
-    }
-
-    public bool BuyXP(int coinsAmount)
+    private bool BuyXP()
     {
         if (Level >= MaxLevel)
             return false;
 
-        if (!_currencyService.SpendCurrency(coinsAmount))
+        int cost = _config.xpExchangeCost;
+
+        if (!_currencyService.SpendCurrency(cost))
             return false;
 
-        int xpGained = coinsAmount * _config.xpPerCoin;
+        int xpGained = cost * _config.xpExchangeValue;
         CurrentXP += xpGained;
 
-        EventBusManager.Instance.Raise(EventNameEnum.XPChanged, GetXPProgressNormalized());
-
         HandleLevelUp();
+
+        if (CurrentXP > 0)
+        {
+            EventBusManager.Instance.Raise(EventNameEnum.XPChanged, GetXPProgressNormalized());
+        }
+
         return true;
     }
 
@@ -87,8 +86,8 @@ public class PlayerLevelService
             if (CurrentXP < xpRequired)
                 break;
 
-            CurrentXP -= xpRequired;
             Level++;
+            CurrentXP = 0;
             leveledUp = true;
         }
 
@@ -99,9 +98,8 @@ public class PlayerLevelService
         }
         if (leveledUp)
         {
-            EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, GetXPProgressNormalized());
+            EventBusManager.Instance.Raise(EventNameEnum.LevelChanged);
         }
-        EventBusManager.Instance.Raise(EventNameEnum.XPChanged, GetXPProgressNormalized());
     }
 
     private float GetXPProgressNormalized()
@@ -131,6 +129,6 @@ public class PlayerLevelService
 
     private void OnBuyLevelXP_PlayerLevel(object[] parameters)
     {
-        BuyXP(XPPerCoin);
+        BuyXP();
     }
 }

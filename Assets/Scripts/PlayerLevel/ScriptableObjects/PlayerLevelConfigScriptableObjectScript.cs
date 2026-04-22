@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerLevelConfigScriptableObjectScript : ScriptableObject
 {
     public List<PlayerLevelData> playerProgressionDataList;
-    public int xpPerCoin = 1;
+    public int xpExchangeCost  =1;
+    public int xpExchangeValue  = 1;
     public int shopRefreshCost = 1;
 
     private void OnValidate()
@@ -32,6 +33,16 @@ public class PlayerLevelConfigScriptableObjectScript : ScriptableObject
             {
                 Debug.LogWarning("Last level should have 0 XP requirement.");
             }
+        }
+
+        if (xpExchangeCost  <= 0)
+        {
+            Debug.LogError("XP buy cost must be greater than 0!");
+        }
+
+        if (xpExchangeValue  <= 0)
+        {
+            Debug.LogError("XP gain amount must be greater than 0!");
         }
     }
 }
