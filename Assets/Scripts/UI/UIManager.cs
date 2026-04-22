@@ -41,6 +41,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private BuffDetailsUICard _buffBlockUICardPrefab;
 
     [Header("Level XP UI")]
+    [SerializeField] private TMP_Text _currentLevelText;
+    [SerializeField] private TMP_Text _xpText;
+    [SerializeField] private TMP_Text _xpPurchaseCostText;
     [SerializeField] private Image _levelXpBarBackgroundImage;
     [SerializeField] private Image _levelXpBarfillImage;
     [SerializeField] private Button _buyLevelXpButton;
@@ -50,7 +53,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private float _displayedXP;
     private float _targetXP;
     private Coroutine _xpRoutine;
-    private Coroutine _levelRoutine;
+
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
