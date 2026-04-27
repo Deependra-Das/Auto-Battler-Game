@@ -1,6 +1,7 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -123,6 +124,23 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     {
         teamService.RemoveUnitFromField(unit, unit.Team);
         Destroy(unit.gameObject);
+        StartCoroutine(CheckGameOver());
+    }
+
+    private IEnumerator CheckGameOver()
+    {
+        yield return new WaitForSeconds(1f);
+        bool team1 = CheckAllUnitsDeadForTeam(TeamEnum.Team1);
+        bool team2 = CheckAllUnitsDeadForTeam(TeamEnum.Team2);
+
+        if (team1 && team2) Debug.Log("Draw");
+        else if (team1 && !team2) Debug.Log("Team2");
+        else if (!team1 && team2) Debug.Log("Team1");
+    }
+
+    private bool CheckAllUnitsDeadForTeam(TeamEnum team)
+    {
+        return teamService.GetFieldUnitsCount(team) == 0;
     }
 
     private void OnDrawGizmos()

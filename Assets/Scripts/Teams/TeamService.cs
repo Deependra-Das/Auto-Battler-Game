@@ -103,6 +103,9 @@ public class TeamService
     public void SetTeamCapacity(TeamEnum team, int capacity) => _teamCapacities[team] = capacity;
     public void SetFieldCapacity(TeamEnum team, int capacity) => _fieldCapacities[team] = capacity;
 
+    public int GetTeamUnitsCount(TeamEnum team) => _teams[team].Count;
+    public int GetFieldUnitsCount(TeamEnum team) => _fieldUnits[team].Count;
+
     public bool CanAddUnitToField(TeamEnum team)
     {
         return _fieldUnits[team].Count < _fieldCapacities[team];
