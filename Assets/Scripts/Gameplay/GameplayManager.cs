@@ -23,7 +23,7 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     private int _currentStage = -1;
     private int _currentRound = -1;
 
-    public GameplayStateEnum CurrentState { get; private set; } = GameplayStateEnum.Preparation;
+    public GameplayStateEnum CurrentGameplayState { get; private set; } = GameplayStateEnum.Preparation;
 
     protected override void Awake()
     {
@@ -77,13 +77,13 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
 
     private void PrepareTeam2UnitsForRound()
     {
-        List<EnemyData> enemiesForRound = stageService.GetCurrentRoundData().enemiyList;
+        List<RoundEnemyData> enemiesForRound = stageService.GetCurrentRoundData().enemiyList;
         int enemyCount = enemiesForRound.Count;
         teamService.SetFieldCapacity(TeamEnum.Team2, enemyCount);
 
         for (int i = 0; i < enemyCount; i++)
         {
-            EnemyData enemy = enemiesForRound[i];
+            RoundEnemyData enemy = enemiesForRound[i];
 
             if (_unitDatabase.TryGetValue(enemy.enemyID, out UnitData enemyUnitData))
             {
@@ -128,10 +128,10 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     {
         teamService.RemoveUnitFromField(unit, unit.Team);
         Destroy(unit.gameObject);
-        StartCoroutine(CheckGameOver());
+        StartCoroutine(CheckRoundEnd());
     }
 
-    private IEnumerator CheckGameOver()
+    private IEnumerator CheckRoundEnd()
     {
         yield return new WaitForSeconds(1f);
         bool team1 = TeamHasNoUnits(TeamEnum.Team1);
@@ -185,11 +185,11 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
 
     public void UpdateGameplayState(GameplayStateEnum newState)
     {
-        if (CurrentState == newState)
+        if (CurrentGameplayState == newState)
             return;
 
-        CurrentState = newState;
+        CurrentGameplayState = newState;
 
-        EventBusManager.Instance.Raise(EventNameEnum.GameplayStateChanged, CurrentState);
+        EventBusManager.Instance.Raise(EventNameEnum.GameplayStateChanged, CurrentGameplayState);
     }
 }
