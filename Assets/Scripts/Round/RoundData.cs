@@ -6,5 +6,5 @@ public class RoundData
 {
     public int winXPCurrency;
     public int lossXPCurrency;
-    public List<EnemyData> enemiyList;
+    public List<RoundEnemyData> enemiyList;
 }

@@ -31,6 +31,8 @@ public class StageService
     public void StartRound()
     {
         Debug.Log($"Starting Stage {CurrentStageIndex} - Round {CurrentRoundIndex}");
+
+        //GameManager.Instance.Get<RoundService>().CaptureRoundSaveState(CurrentStageIndex, CurrentRoundIndex);
         EventBusManager.Instance.Raise(EventNameEnum.RoundStarted,CurrentRoundIndex);
     }
 
@@ -57,7 +59,7 @@ public class StageService
     {
         CurrentRoundIndex++;
 
-        if (CurrentRoundIndex >= 5)
+        if (CurrentRoundIndex >= GetRoundCount())
         {
             OnStageCleared();
         }
@@ -99,5 +101,10 @@ public class StageService
     public RoundData GetCurrentRoundData()
     {
         return GetCurrentStageData().roundDataList[CurrentRoundIndex];
+    }
+
+    private int GetRoundCount()
+    {
+        return _stageConfigDataList[CurrentStageIndex].roundDataList.Count;
     }
 }

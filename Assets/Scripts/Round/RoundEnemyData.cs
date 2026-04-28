@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class EnemyData
+public class RoundEnemyData
 {
     public int enemyID;
     public int enemyLevel;
