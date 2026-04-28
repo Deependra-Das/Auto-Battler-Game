@@ -120,6 +120,16 @@ public class PlayerLevelService
         return Lives <= 0;
     }
 
+    public void SetLevel(int level)
+    {
+        Level = level;
+    }
+
+    public void SetXP(int xp)
+    {
+        CurrentXP = xp;
+    }
+
     public void Reset()
     {
         Level = 1;
