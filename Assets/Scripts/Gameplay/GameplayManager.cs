@@ -115,9 +115,13 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     public IReadOnlyList<BaseUnit> GetOpponentTeamUnits(TeamEnum opponentTeam)
     {
         if (opponentTeam == TeamEnum.Team1)
+        {
             return teamService.GetFieldUnits(TeamEnum.Team2);
+        }
         else
+        {
             return teamService.GetFieldUnits(TeamEnum.Team1);
+        }
     }
 
     public void MarkUnitDead(BaseUnit unit)
@@ -130,15 +134,15 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     private IEnumerator CheckGameOver()
     {
         yield return new WaitForSeconds(1f);
-        bool team1 = CheckAllUnitsDeadForTeam(TeamEnum.Team1);
-        bool team2 = CheckAllUnitsDeadForTeam(TeamEnum.Team2);
+        bool team1 = TeamHasNoUnits(TeamEnum.Team1);
+        bool team2 = TeamHasNoUnits(TeamEnum.Team2);
 
         if (team1 && team2) Debug.Log("Draw");
         else if (team1 && !team2) Debug.Log("Team2");
         else if (!team1 && team2) Debug.Log("Team1");
     }
 
-    private bool CheckAllUnitsDeadForTeam(TeamEnum team)
+    private bool TeamHasNoUnits(TeamEnum team)
     {
         return teamService.GetFieldUnitsCount(team) == 0;
     }
@@ -186,23 +190,6 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
 
         CurrentState = newState;
 
-        switch (CurrentState)
-        {
-            case GameplayStateEnum.Preparation:
-                EventBusManager.Instance.Raise(EventNameEnum.PreparationStart);
-                break;
-
-            case GameplayStateEnum.Combat:
-                EventBusManager.Instance.Raise(EventNameEnum.CombatStart);
-                break;
-
-            case GameplayStateEnum.GameOver:
-                EventBusManager.Instance.Raise(EventNameEnum.GameOver);
-                break;
-
-            default:
-                Debug.LogWarning("Unhandled gameplay state: " + CurrentState);
-                break;
-        }
+        EventBusManager.Instance.Raise(EventNameEnum.GameplayStateChanged, CurrentState);
     }
 }

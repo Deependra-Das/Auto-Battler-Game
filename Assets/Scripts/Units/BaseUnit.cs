@@ -76,13 +76,13 @@ public class BaseUnit : MonoBehaviour
 
     void SubscribeToEvents()
     {
-        EventBusManager.Instance.Subscribe(EventNameEnum.CombatStart, OnCombatStart_BaseUnit);
+        EventBusManager.Instance.Subscribe(EventNameEnum.GameplayStateChanged, OnGameplayStateChanged_BaseUnit);
         EventBusManager.Instance.Subscribe(EventNameEnum.TeamBuffUpdated, OnTeamBuffUpdated);
     }
 
     void UnsubscribeToEvents()
     {
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.CombatStart, OnCombatStart_BaseUnit);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.GameplayStateChanged, OnGameplayStateChanged_BaseUnit);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.TeamBuffUpdated, OnTeamBuffUpdated);
     }
 
@@ -284,9 +284,30 @@ public class BaseUnit : MonoBehaviour
         }
     }
 
-    protected void OnCombatStart_BaseUnit(object[] parameters)
+    protected void OnGameplayStateChanged_BaseUnit(object[] parameters)
     {
-        isActive = true;
+        if (parameters == null || parameters.Length == 0) return;
+
+        GameplayStateEnum state = (GameplayStateEnum)parameters[0];
+
+        switch (state)
+        {
+            case GameplayStateEnum.Preparation:
+                isActive = false;
+                break;
+
+            case GameplayStateEnum.Combat:
+                isActive = true;
+                break;
+
+            case GameplayStateEnum.StageOver:
+                isActive = false;
+                break;
+
+            case GameplayStateEnum.RoundOver:
+                isActive = false;
+                break;
+        }
     }
 
     public void TemporarilyReleaseNode()
