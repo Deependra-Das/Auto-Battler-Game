@@ -59,6 +59,12 @@ public class CurrencyService
         NotifyBalanceChanged();
     }
 
+    public void SetCurrency(int amount)
+    {
+        Balance = amount;
+        NotifyBalanceChanged();
+    }
+
     private void NotifyBalanceChanged()
     {
         UIManager.Instance.UpdateCurrenyUI(Balance);
