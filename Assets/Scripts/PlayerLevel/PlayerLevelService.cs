@@ -1,5 +1,6 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
+using System;
 using UnityEngine;
 
 public class PlayerLevelService
@@ -35,7 +36,7 @@ public class PlayerLevelService
 
     public int MaxLevel => _config.playerProgressionDataList.Count;
 
-    public int MaxUnits => GetCurrentPlayerLevelData().maxUnitsAllowed;
+    public int MaxUnitsAllowedOnField => GetCurrentPlayerLevelData().maxUnitsAllowed;
 
     public PlayerLevelData GetCurrentPlayerLevelData()
     {
@@ -69,7 +70,7 @@ public class PlayerLevelService
 
         if (CurrentXP > 0)
         {
-            EventBusManager.Instance.Raise(EventNameEnum.XPChanged, GetXPProgressNormalized());
+            EventBusManager.Instance.Raise(EventNameEnum.XPChanged, GetXPProgressNormalized(), CurrentXP, GetXPToNextLevel());
         }
 
         return true;
@@ -98,7 +99,8 @@ public class PlayerLevelService
         }
         if (leveledUp)
         {
-            EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level);
+            int index = Level - 1;
+            EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level, MaxUnitsAllowedOnField, CurrentXP, GetXPToNextLevel());
         }
     }
 

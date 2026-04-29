@@ -306,25 +306,37 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnXPChanged_UI(object[] parameters)
     {
         _targetXP = (float)parameters[0];
+        int currentXP = (int)parameters[1];
+        int requiredXPToNextLevel = (int)parameters[2];
+
         if (_xpRoutine != null)
         {
             StopCoroutine(_xpRoutine);
         }
+
         _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
+        UpdateXPText(currentXP, requiredXPToNextLevel);
     }
 
     private void OnLevelChanged_UI(object[] parameters)
     {
         int level = (int)parameters[0];
+        int maxUnitsAllowedOnField = (int)parameters[1];
+        int currentXP = (int)parameters[2];
+        int requiredXPToNextLevel = (int)parameters[3];
+
         _targetXP = 1f;
 
         if (_xpRoutine != null)
+        {
             StopCoroutine(_xpRoutine);
+        }
 
         _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
 
         StartCoroutine(LevelUpReset());
-        _currentLevelText.text = level.ToString();
+        UpdateLevelText(level);
+        UpdateXPText(currentXP, requiredXPToNextLevel);
     }
 
     void UpdateLevelXPBar(float progressValue)
@@ -364,5 +376,15 @@ public class UIManager : GenericMonoSingleton<UIManager>
         if (_xpRoutine != null)
             StopCoroutine(_xpRoutine);
         _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
+    }
+
+    private void UpdateLevelText(int currentPlayerLevel)
+    {
+        _currentLevelText.text = currentPlayerLevel.ToString();
+    }
+
+    private void UpdateXPText(int currentXP, int requiredXPToNextLevel)
+    {
+        _xpText.text = currentXP.ToString() + "/" + requiredXPToNextLevel.ToString();
     }
 }
