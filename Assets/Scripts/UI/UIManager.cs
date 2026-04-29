@@ -43,7 +43,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [Header("Level XP UI")]
     [SerializeField] private TMP_Text _currentLevelText;
     [SerializeField] private TMP_Text _xpText;
-    [SerializeField] private TMP_Text _xpPurchaseCostText;
+    [SerializeField] private TMP_Text _xpExchangeCostText;
     [SerializeField] private Image _levelXpBarBackgroundImage;
     [SerializeField] private Image _levelXpBarfillImage;
     [SerializeField] private Button _buyLevelXpButton;
@@ -194,6 +194,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
     public void UpdateRefreshCostUI(int cost)
     {
         _refreshCostText.text = cost.ToString();
+    }
+
+    public void UpdateXpExchangeCostUI(int cost)
+    {
+        _xpExchangeCostText.text = cost.ToString();
     }
 
     private void OnRefreshShopButtonClicked()

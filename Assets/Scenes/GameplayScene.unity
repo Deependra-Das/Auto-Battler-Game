@@ -1058,7 +1058,7 @@ GameObject:
   - component: {fileID: 347019645}
   - component: {fileID: 347019644}
   m_Layer: 5
-  m_Name: XPCost
+  m_Name: XpExchangeCost
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4664,7 +4664,7 @@ MonoBehaviour:
   _buffBlockUICardPrefab: {fileID: 8779752850910391123, guid: ee6fffe33df6edb4c853a39b79e267ef, type: 3}
   _currentLevelText: {fileID: 906000399}
   _xpText: {fileID: 1322703051}
-  _xpPurchaseCostText: {fileID: 347019644}
+  _xpExchangeCostText: {fileID: 347019644}
   _levelXpBarBackgroundImage: {fileID: 2021160176}
   _levelXpBarfillImage: {fileID: 1682766982}
   _buyLevelXpButton: {fileID: 1965862241}
@@ -6442,7 +6442,7 @@ GameObject:
   - component: {fileID: 1780226720}
   - component: {fileID: 1780226721}
   m_Layer: 5
-  m_Name: BalanceContainer
+  m_Name: XpExchangeCostContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

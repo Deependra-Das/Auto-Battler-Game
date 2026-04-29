@@ -150,5 +150,6 @@ public class PlayerLevelService
     {
         _xpExchangeCost = (int)parameters[5];
         _xpExchangeValue = (int)parameters[6];
+        UIManager.Instance.UpdateXpExchangeCostUI(_xpExchangeCost);
     }
 }
