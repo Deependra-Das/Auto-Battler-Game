@@ -1,7 +1,7 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class ShopService
 {
@@ -12,13 +12,27 @@ public class ShopService
     CurrencyService currencyServiceObj;
     InventoryService inventoryServiceObj;
 
-    public ShopService(UnitScriptableObject unit_SO, int shopRefreshCost)
+    public ShopService(UnitScriptableObject unit_SO)
     {
+        SubscribeToEvents();
         _allUnits = new List<UnitData>(unit_SO.unitDataList);
-        _shopRefreshCost = shopRefreshCost;
         currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
         inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
-        UIManager.Instance.UpdateRefreshCostUI(_shopRefreshCost);
+    }
+
+    ~ShopService()
+    {
+        UnsubscribeToEvents();
+    }
+
+    void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStarted_Shop);
+    }
+
+    void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStarted_Shop);
     }
 
     public void GenerateShopUnits()
@@ -73,5 +87,11 @@ public class ShopService
         UIManager.Instance.RemoveAllShopUnitCards();
 
         GenerateShopUnits();
+    }
+
+    private void OnStageStarted_Shop(object[] parameters)
+    {
+        _shopRefreshCost = (int)parameters[7];
+        UIManager.Instance.UpdateRefreshCostUI(_shopRefreshCost);
     }
 }

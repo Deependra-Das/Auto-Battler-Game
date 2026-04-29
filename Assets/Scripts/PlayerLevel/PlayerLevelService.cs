@@ -1,6 +1,5 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
-using System;
 using UnityEngine;
 
 public class PlayerLevelService
@@ -11,6 +10,9 @@ public class PlayerLevelService
     public int Level { get; private set; } = 1;
     public int Lives { get; private set; } = 3;
     public int CurrentXP { get; private set; } = 0;
+
+    private int _xpExchangeCost = 0;
+    private int _xpExchangeValue = 0;
 
     public PlayerLevelService(PlayerLevelConfigScriptableObjectScript config)
     {
@@ -27,11 +29,13 @@ public class PlayerLevelService
     void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.BuyLevelXP, OnBuyLevelXP_PlayerLevel);
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStarted_PlayerLevel);
     }
 
     void UnsubscribeToEvents()
     {
         EventBusManager.Instance.Unsubscribe(EventNameEnum.BuyLevelXP, OnBuyLevelXP_PlayerLevel);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStarted_PlayerLevel);
     }
 
     public int MaxLevel => _config.playerProgressionDataList.Count;
@@ -58,12 +62,10 @@ public class PlayerLevelService
         if (Level >= MaxLevel)
             return false;
 
-        int cost = _config.xpExchangeCost;
-
-        if (!_currencyService.SpendCurrency(cost))
+        if (!_currencyService.SpendCurrency(_xpExchangeCost))
             return false;
 
-        int xpGained = cost * _config.xpExchangeValue;
+        int xpGained = _xpExchangeCost * _xpExchangeValue;
         CurrentXP += xpGained;
 
         HandleLevelUp();
@@ -142,5 +144,11 @@ public class PlayerLevelService
     private void OnBuyLevelXP_PlayerLevel(object[] parameters)
     {
         BuyXP();
+    }
+
+    private void OnStageStarted_PlayerLevel(object[] parameters)
+    {
+        _xpExchangeCost = (int)parameters[5];
+        _xpExchangeValue = (int)parameters[6];
     }
 }

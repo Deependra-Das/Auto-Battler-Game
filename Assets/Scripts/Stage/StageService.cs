@@ -9,6 +9,9 @@ public class StageService
 
     public int CurrentStageIndex { get; private set; }
     public int CurrentRoundIndex { get; private set; }
+    public int XpExchangeCost { get; private set; }
+    public int XpExchangeValue { get; private set; }
+    public int ShopRefreshCost { get; private set; }
 
     public StageService(StageConfigScriptableObjectScript stageConfig)
     {
@@ -24,7 +27,10 @@ public class StageService
         int initialCurrency = _stageConfigDataList[CurrentStageIndex].initialCurrency;
         int maxLives = _stageConfigDataList[CurrentStageIndex].maxPlayerLives;
         int roundCount = _stageConfigDataList[CurrentStageIndex].roundDataList.Count;
-        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, CurrentStageIndex, initialiPlayerLevel, initialCurrency, maxLives, roundCount);
+        XpExchangeCost = _stageConfigDataList[CurrentStageIndex].xpExchangeCost;
+        XpExchangeValue = _stageConfigDataList[CurrentStageIndex].xpExchangeValue;
+        ShopRefreshCost = _stageConfigDataList[CurrentStageIndex].shopRefreshCost;
+        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, CurrentStageIndex, initialiPlayerLevel, initialCurrency, maxLives, roundCount, XpExchangeCost, XpExchangeValue, ShopRefreshCost);
         StartRound();
     }
 

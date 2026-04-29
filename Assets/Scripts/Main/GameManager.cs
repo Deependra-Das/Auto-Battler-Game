@@ -39,7 +39,7 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new CurrencyService());
             ServiceLocator.Register(new PlayerLevelService(_playerLevelConfig_SO));
             ServiceLocator.Register(new InventoryService());
-            ServiceLocator.Register(new ShopService(_unit_SO, _playerLevelConfig_SO.shopRefreshCost));
+            ServiceLocator.Register(new ShopService(_unit_SO));
             ServiceLocator.Register(new BuffService(_buff_SO));
         }
 
