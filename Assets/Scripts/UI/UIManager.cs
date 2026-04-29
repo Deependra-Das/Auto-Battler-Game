@@ -315,6 +315,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnLevelChanged_UI(object[] parameters)
     {
+        int level = (int)parameters[0];
         _targetXP = 1f;
 
         if (_xpRoutine != null)
@@ -323,6 +324,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
 
         StartCoroutine(LevelUpReset());
+        _currentLevelText.text = level.ToString();
     }
 
     void UpdateLevelXPBar(float progressValue)

@@ -98,7 +98,7 @@ public class PlayerLevelService
         }
         if (leveledUp)
         {
-            EventBusManager.Instance.Raise(EventNameEnum.LevelChanged);
+            EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level);
         }
     }
 
