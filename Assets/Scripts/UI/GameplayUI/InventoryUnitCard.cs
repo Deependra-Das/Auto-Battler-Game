@@ -215,7 +215,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     private bool TrySpawnUnitOnTile(PointerEventData eventData)
     {
-        if (GameplayManager.Instance.CurrentState != GameplayStateEnum.Preparation) return false;
+        if (GameplayManager.Instance.CurrentGameplayState != GameplayStateEnum.Preparation) return false;
 
         var teamService = GameManager.Instance.Get<TeamService>();
 
@@ -244,7 +244,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         ClearHighlightedTile();
 
-        bool isValid = GameplayManager.Instance.CurrentState == GameplayStateEnum.Preparation &&
+        bool isValid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation &&
             tile.Node != null && !tile.Node.IsOccupied;
 
         tile.OnInteractSetHighlight(true, isValid);

@@ -1,3 +1,4 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using System.Collections.Generic;
 using UnityEngine;
@@ -39,4 +40,19 @@ public class InventoryService
     }
 
     public bool CanAddUnit => _currentUnitsInInventory.Count < MaxInventorySize;
+
+    public List<UnitData> GetInventoryUnits()
+    {
+        return new List<UnitData>(_currentUnitsInInventory);
+    }
+
+    public void Restore(List<UnitData> snapshot)
+    {
+        _currentUnitsInInventory.Clear();
+
+        foreach (var unit in snapshot)
+        {
+            AddUnit(unit);
+        }
+    }
 }

@@ -16,8 +16,10 @@ public class TeamService
     private readonly Dictionary<TeamEnum, Dictionary<UnitTypeEnum, int>> _typeCount = new();
     private readonly Dictionary<TeamEnum, Dictionary<UnitFactionEnum, int>> _factionCount = new();
 
-    public TeamService(int defaultTeamCapacity = 8, int defaultFieldCapacity = 4)
+    public TeamService(int defaultTeamCapacity = 8, int defaultFieldCapacity = 1)
     {
+        SubscribeToEvents();
+
         _teamCapacities = new Dictionary<TeamEnum, int>();
         _fieldCapacities = new Dictionary<TeamEnum, int>();
 
@@ -32,6 +34,20 @@ public class TeamService
 
             InitializeTypeAndFactionCounts();
         }
+    }
+    ~TeamService()
+    {
+        UnsubscribeToEvents();
+    }
+
+    void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.LevelChanged, OnLevelChanged_Team);
+    }
+
+    void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.LevelChanged, OnLevelChanged_Team);
     }
 
     public bool AddUnitToTeam(UnitData unit, TeamEnum team)
@@ -103,6 +119,9 @@ public class TeamService
     public void SetTeamCapacity(TeamEnum team, int capacity) => _teamCapacities[team] = capacity;
     public void SetFieldCapacity(TeamEnum team, int capacity) => _fieldCapacities[team] = capacity;
 
+    public int GetTeamUnitsCount(TeamEnum team) => _teams[team].Count;
+    public int GetFieldUnitsCount(TeamEnum team) => _fieldUnits[team].Count;
+
     public bool CanAddUnitToField(TeamEnum team)
     {
         return _fieldUnits[team].Count < _fieldCapacities[team];
@@ -153,5 +172,11 @@ public class TeamService
     public int GetFactionCount(TeamEnum team, UnitFactionEnum faction)
     {
         return _factionCount[team][faction];
+    }
+
+    private void OnLevelChanged_Team(object[] parameters)
+    {
+        int newFieldCapacity = (int)parameters[1];
+        SetFieldCapacity(TeamEnum.Team1, newFieldCapacity);
     }
 }

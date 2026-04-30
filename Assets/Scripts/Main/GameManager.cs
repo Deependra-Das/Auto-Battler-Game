@@ -10,8 +10,8 @@ namespace AutoBattler.Main
         [SerializeField] private UnitScriptableObject _unit_SO;
         [SerializeField] private RangedAbilitiesScriptableObjectScript _rangedAbilities_SO;
         [SerializeField] private BuffScriptableObjectScript _buff_SO;
-        [SerializeField] private int _startingBalance = 10;
-        [SerializeField] private int _shopRefreshCost = 1;
+        [SerializeField] private StageConfigScriptableObjectScript _stageConfig_SO;
+        [SerializeField] private PlayerLevelConfigScriptableObjectScript _playerLevelConfig_SO;
 
         protected override void Awake()
         {
@@ -35,9 +35,11 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new GraphService());
             ServiceLocator.Register(new TeamService());
             ServiceLocator.Register(new RangedAbilityService(_rangedAbilities_SO));
-            ServiceLocator.Register(new ShopService(_unit_SO, _shopRefreshCost));
+            ServiceLocator.Register(new StageService(_stageConfig_SO));
+            ServiceLocator.Register(new CurrencyService());
+            ServiceLocator.Register(new PlayerLevelService(_playerLevelConfig_SO));
             ServiceLocator.Register(new InventoryService());
-            ServiceLocator.Register(new CurrencyService(_startingBalance));
+            ServiceLocator.Register(new ShopService(_unit_SO));
             ServiceLocator.Register(new BuffService(_buff_SO));
         }
 
@@ -49,6 +51,7 @@ namespace AutoBattler.Main
             ServiceLocator.Unregister<RangedAbilityService>();
             ServiceLocator.Unregister<ShopService>();
             ServiceLocator.Unregister<InventoryService>();
+            ServiceLocator.Unregister<PlayerLevelService>();
             ServiceLocator.Unregister<CurrencyService>();
             ServiceLocator.Unregister<BuffService>();
         }

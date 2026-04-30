@@ -1,8 +1,8 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -40,6 +40,21 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Toggle _team2ToggleButton;
     [SerializeField] private BuffDetailsUICard _buffBlockUICardPrefab;
 
+    [Header("Level XP UI")]
+    [SerializeField] private TMP_Text _currentLevelText;
+    [SerializeField] private TMP_Text _xpText;
+    [SerializeField] private TMP_Text _xpExchangeCostText;
+    [SerializeField] private Image _levelXpBarBackgroundImage;
+    [SerializeField] private Image _levelXpBarfillImage;
+    [SerializeField] private Button _buyLevelXpButton;
+    [SerializeField] private float _maxFillAmount = 0.75f;
+    [SerializeField] private float _roatationForLevelXPBar =45f;
+    [SerializeField] private float _xpLerpSpeed = 8f;
+    private float _displayedXP;
+    private float _targetXP;
+    private Coroutine _xpRoutine;
+
+
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
     private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam1UICardDictionary = new();
@@ -53,6 +68,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         base.Awake();
         CanvasRect = _uiCanvas.GetComponent<RectTransform>();
+        SetupLevelXPBarUI();
         ToggleDiscardPanelVisibility(false);
         HandleTeamBuffTabSwitch(true, 1);
     }
@@ -69,6 +85,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
         _team1ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
+        _buyLevelXpButton.onClick.AddListener(OnBuyLevelXpButtonClicked);
+        EventBusManager.Instance.Subscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
     }
 
     void UnsubscribeToEvents()
@@ -80,6 +99,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
         _team1ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
+        _buyLevelXpButton.onClick.RemoveListener(OnBuyLevelXpButtonClicked);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
     }
 
     public void InitializeGameplayUI()
@@ -174,6 +196,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _refreshCostText.text = cost.ToString();
     }
 
+    public void UpdateXpExchangeCostUI(int cost)
+    {
+        _xpExchangeCostText.text = cost.ToString();
+    }
+
     private void OnRefreshShopButtonClicked()
     {
         ShopService shopServiceObj = GameManager.Instance.Get<ShopService>();
@@ -266,5 +293,103 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 _buffTeam2ToggleContent.SetActive(true);
             }
         }
+    }
+
+    private void SetupLevelXPBarUI()
+    {
+        _levelXpBarBackgroundImage.fillAmount = _maxFillAmount;
+        _levelXpBarfillImage.fillAmount = 0;
+        _levelXpBarBackgroundImage.transform.rotation = Quaternion.Euler(0f, 0f, _roatationForLevelXPBar);
+        _levelXpBarfillImage.transform.rotation = Quaternion.Euler(0f, 0f, _roatationForLevelXPBar);
+    }
+
+    private void OnBuyLevelXpButtonClicked()
+    {
+        EventBusManager.Instance.Raise(EventNameEnum.BuyLevelXP);
+    }
+
+    private void OnXPChanged_UI(object[] parameters)
+    {
+        _targetXP = (float)parameters[0];
+        int currentXP = (int)parameters[1];
+        int requiredXPToNextLevel = (int)parameters[2];
+
+        if (_xpRoutine != null)
+        {
+            StopCoroutine(_xpRoutine);
+        }
+
+        _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
+        UpdateXPText(currentXP, requiredXPToNextLevel);
+    }
+
+    private void OnLevelChanged_UI(object[] parameters)
+    {
+        int level = (int)parameters[0];
+        int maxUnitsAllowedOnField = (int)parameters[1];
+        int currentXP = (int)parameters[2];
+        int requiredXPToNextLevel = (int)parameters[3];
+
+        _targetXP = 1f;
+
+        if (_xpRoutine != null)
+        {
+            StopCoroutine(_xpRoutine);
+        }
+
+        _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
+
+        StartCoroutine(LevelUpReset());
+        UpdateLevelText(level);
+        UpdateXPText(currentXP, requiredXPToNextLevel);
+    }
+
+    void UpdateLevelXPBar(float progressValue)
+    {
+        _levelXpBarfillImage.fillAmount = progressValue * _maxFillAmount;
+    }
+
+    private IEnumerator SmoothLevelXPFillAnimation()
+    {
+        while (true)
+        {
+            _displayedXP = Mathf.MoveTowards(_displayedXP, _targetXP, Time.deltaTime * _xpLerpSpeed);
+
+            UpdateLevelXPBar(_displayedXP);
+
+            if (Mathf.Abs(_displayedXP - _targetXP) < 0.001f)
+                break;
+
+            yield return null;
+        }
+
+        _xpRoutine = null;
+    }
+
+    private IEnumerator LevelUpReset()
+    {
+        while (Mathf.Abs(_displayedXP - 1f) > 0.01f)
+            yield return null;
+
+        yield return new WaitForSeconds(0.1f);
+
+        _displayedXP = 0f;
+        _targetXP = 0f;
+
+        UpdateLevelXPBar(0f);
+
+        if (_xpRoutine != null)
+            StopCoroutine(_xpRoutine);
+        _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
+    }
+
+    private void UpdateLevelText(int currentPlayerLevel)
+    {
+        _currentLevelText.text = currentPlayerLevel.ToString();
+    }
+
+    private void UpdateXPText(int currentXP, int requiredXPToNextLevel)
+    {
+        _xpText.text = currentXP.ToString() + "/" + requiredXPToNextLevel.ToString();
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 [Serializable]
 public struct UnitData
 {
-    [HideInInspector] public int unitID;
+    public int unitID;
     public BaseUnit unitPrefab;
     public Sprite unitIcon;
     public string unitName;

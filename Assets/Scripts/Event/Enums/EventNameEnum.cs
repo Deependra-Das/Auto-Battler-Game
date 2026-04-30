@@ -4,10 +4,7 @@ namespace AutoBattler.Event
 {
     public enum EventNameEnum
     {
-        PreparationStart,
-        CombatStart,
-        GameOver,
-        RoundOver,
+        GameplayStateChanged,
         UnitDragged,
         InventoryUnitCardDragged,
         HighlightInventoryPanel,
@@ -15,5 +12,12 @@ namespace AutoBattler.Event
         UnitAddedOnField,
         UnitRemovedFromField,
         TeamBuffUpdated,
+        StageStarted,
+        RoundStarted,
+        RoundEnded,
+        StageCleared,
+        BuyLevelXP,
+        XPChanged,
+        LevelChanged,
     }
 }

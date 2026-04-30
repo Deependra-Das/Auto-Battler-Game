@@ -1,7 +1,7 @@
+using AutoBattler.Event;
 using AutoBattler.Main;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class ShopService
 {
@@ -9,12 +9,30 @@ public class ShopService
     private List<UnitData> _currentUnitsInShop = new List<UnitData>();
     private const int SHOP_SIZE = 4;
     private int _shopRefreshCost = 0;
+    CurrencyService currencyServiceObj;
+    InventoryService inventoryServiceObj;
 
-    public ShopService(UnitScriptableObject unit_SO, int shopRefreshCost)
+    public ShopService(UnitScriptableObject unit_SO)
     {
+        SubscribeToEvents();
         _allUnits = new List<UnitData>(unit_SO.unitDataList);
-        _shopRefreshCost = shopRefreshCost;
-        UIManager.Instance.UpdateRefreshCostUI(_shopRefreshCost);
+        currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
+        inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
+    }
+
+    ~ShopService()
+    {
+        UnsubscribeToEvents();
+    }
+
+    void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStarted_Shop);
+    }
+
+    void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStarted_Shop);
     }
 
     public void GenerateShopUnits()
@@ -36,38 +54,44 @@ public class ShopService
     }
 
     public void BuyUnit(ShopUnitCard card)
-    {
-        CurrencyService currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
-        if (!currencyServiceObj.CanAfford(card.unitData.unitCost))
+    {    
+        int cost = card.unitData.unitCost;
+
+        if (inventoryServiceObj.CurrentInventorySize >= inventoryServiceObj.MaxInventorySize)
+        {
+            Debug.Log("Inventory Full!");
+            return;
+        }
+
+        if (!currencyServiceObj.SpendCurrency(cost))
         {
             Debug.Log("Not enough Currency!");
             return;
         }
-        var inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
 
-        if (inventoryServiceObj.CurrentInventorySize < inventoryServiceObj.MaxInventorySize)
-        {
-            currencyServiceObj.SpendCurrency(card.unitData.unitCost);
-            GameManager.Instance.Get<InventoryService>().AddUnit(card.unitData);
-
-            _currentUnitsInShop.Remove(card.unitData);
-            UIManager.Instance.RemoveShopUnitCard(card);
-            AddRandomUnitInShop();
-        }   
+        inventoryServiceObj.AddUnit(card.unitData);
+        _currentUnitsInShop.Remove(card.unitData);
+        UIManager.Instance.RemoveShopUnitCard(card);
+        AddRandomUnitInShop();
     }
 
     public void RefreshShop()
     {
-        CurrencyService currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
-        if (!currencyServiceObj.CanAfford(_shopRefreshCost))
+        if (!currencyServiceObj.SpendCurrency(_shopRefreshCost))
         {
             Debug.Log("Not enough Currency!");
             return;
         }
 
-        currencyServiceObj.SpendCurrency(_shopRefreshCost);
         _currentUnitsInShop.Clear();
         UIManager.Instance.RemoveAllShopUnitCards();
+
         GenerateShopUnits();
+    }
+
+    private void OnStageStarted_Shop(object[] parameters)
+    {
+        _shopRefreshCost = (int)parameters[7];
+        UIManager.Instance.UpdateRefreshCostUI(_shopRefreshCost);
     }
 }

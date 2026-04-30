@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7bee715062ee843bae32978daa7b5a, type: 3}
+  m_Name: StageConfig_SO
+  m_EditorClassIdentifier: Assembly-CSharp::StageConfigScriptableObjectScript
+  stageConfigDataList:
+  - xpExchangeCost: 1
+    xpExchangeValue: 1
+    shopRefreshCost: 1
+    initialCurrency: 15
+    initialPlayerLevel: 1
+    maxPlayerLives: 3
+    roundDataList:
+    - winXPCurrency: 8
+      lossXPCurrency: 6
+      enemiyList:
+      - enemyID: 104
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 9
+      lossXPCurrency: 7
+      enemiyList:
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 10
+      lossXPCurrency: 8
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 123
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+  - xpExchangeCost: 1
+    xpExchangeValue: 1
+    shopRefreshCost: 1
+    initialCurrency: 10
+    initialPlayerLevel: 1
+    maxPlayerLives: 3
+    roundDataList:
+    - winXPCurrency: 10
+      lossXPCurrency: 8
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 12
+      lossXPCurrency: 10
+      enemiyList:
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 14
+      lossXPCurrency: 12
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 123
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+  - xpExchangeCost: 1
+    xpExchangeValue: 1
+    shopRefreshCost: 1
+    initialCurrency: 10
+    initialPlayerLevel: 1
+    maxPlayerLives: 3
+    roundDataList:
+    - winXPCurrency: 10
+      lossXPCurrency: 8
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 12
+      lossXPCurrency: 10
+      enemiyList:
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 14
+      lossXPCurrency: 12
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 123
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 16
+      lossXPCurrency: 14
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 123
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+    - winXPCurrency: 18
+      lossXPCurrency: 16
+      enemiyList:
+      - enemyID: 111
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 123
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 124
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 112
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 122
+        enemyLevel: 1
+        enemySpawnTileIndex: 0

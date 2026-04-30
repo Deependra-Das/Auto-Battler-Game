@@ -1,12 +1,36 @@
+using AutoBattler.Event;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CurrencyService
 {
     public int Balance { get; private set; }
 
-    public CurrencyService(int startingCurrencyAmount)
+    public CurrencyService()
     {
-        AddCurrency(startingCurrencyAmount);
+        SubscribeToEvents();
+        Balance = 0;
+    }
+
+    ~CurrencyService()
+    {
+        UnsubscribeToEvents();
+    }
+
+    void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStartedSetInitialiCurrency);
+    }
+
+    void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStartedSetInitialiCurrency);
+    }
+
+    private void OnStageStartedSetInitialiCurrency(object[] parameters)
+    {
+        Balance = (int)parameters[2];
+        NotifyBalanceChanged();
     }
 
     public bool CanAfford(int amount)
@@ -14,15 +38,35 @@ public class CurrencyService
         return Balance >= amount;
     }
 
-    public void SpendCurrency(int amount)
+    public bool SpendCurrency(int amount)
     {
+        if (amount <= 0 || !CanAfford(amount))
+        {
+            return false;
+        }
+
         Balance -= amount;
-        UIManager.Instance.UpdateCurrenyUI(Balance);
+        NotifyBalanceChanged();
+        return true;
     }
 
     public void AddCurrency(int amount)
     {
+        if (amount <= 0)
+            return;
+
         Balance += amount;
+        NotifyBalanceChanged();
+    }
+
+    public void SetCurrency(int amount)
+    {
+        Balance = amount;
+        NotifyBalanceChanged();
+    }
+
+    private void NotifyBalanceChanged()
+    {
         UIManager.Instance.UpdateCurrenyUI(Balance);
     }
 }

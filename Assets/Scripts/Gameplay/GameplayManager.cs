@@ -1,7 +1,9 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameplayManager : GenericMonoSingleton<GameplayManager>
@@ -12,16 +14,21 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     TeamService teamService;
     InventoryService inventoryService;
     BuffService buffService;
-    private List<UnitData> _unitPrefabList;
+    StageService stageService;
+    private Dictionary<int, UnitData> _unitDatabase;
 
     public int fromIndex = 0;
     public int toIndex = 0;
-    public GameplayStateEnum CurrentState { get; private set; } = GameplayStateEnum.Preparation;
+
+    private int _currentStage = -1;
+    private int _currentRound = -1;
+
+    public GameplayStateEnum CurrentGameplayState { get; private set; } = GameplayStateEnum.Preparation;
 
     protected override void Awake()
     {
         base.Awake();
-        _unitPrefabList = new List<UnitData>();
+        _unitDatabase = new Dictionary<int, UnitData>();
     }
 
     public void Initialize(UnitScriptableObject unit_SO)
@@ -33,16 +40,29 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         teamService = GameManager.Instance.Get<TeamService>();
         inventoryService = GameManager.Instance.Get<InventoryService>();
         buffService = GameManager.Instance.Get<BuffService>();
+        stageService = GameManager.Instance.Get<StageService>();
 
         graphService.Initialize(tileGridService.GetSpawnedTilesList());
         graph = graphService.Graph;
 
         buffService.InitializeBuffs();
-        _unitPrefabList = unit_SO.unitDataList;
-        GameManager.Instance.Get<ShopService>().GenerateShopUnits();
-
+        BuildUnitDatabase(unit_SO);
         inventoryService.SetMaxInventorySize(8);
-        PrepareTeam2Units();
+        InitializeStageForGameplay(0);
+    }
+
+    private void BuildUnitDatabase(UnitScriptableObject unit_SO)
+    {
+        _unitDatabase = unit_SO.unitDataList.ToDictionary(unit => unit.unitID, unit => unit);
+    }
+
+    public void InitializeStageForGameplay(int stageIndex)
+    {
+        stageService.StartStage(stageIndex);
+        _currentStage = stageService.CurrentStageIndex;
+        _currentRound = stageService.CurrentRoundIndex;
+        GameManager.Instance.Get<ShopService>().GenerateShopUnits();
+        PrepareTeam2UnitsForRound();
         InstantiateTeam2Units();
     }
 
@@ -55,14 +75,25 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
         inventoryService.RemoveUnit(newUnit.UnitData);
     }
 
-    private void PrepareTeam2Units()
+    private void PrepareTeam2UnitsForRound()
     {
-        int team2FieldCapacity = teamService.GetFieldCapacity(TeamEnum.Team2);
+        List<RoundEnemyData> enemiesForRound = stageService.GetCurrentRoundData().enemiyList;
+        int enemyCount = enemiesForRound.Count;
+        teamService.SetFieldCapacity(TeamEnum.Team2, enemyCount);
 
-        for (int i = 0; i < team2FieldCapacity; i++)
+        for (int i = 0; i < enemyCount; i++)
         {
-            UnitData randomUnitData = _unitPrefabList[Random.Range(0, _unitPrefabList.Count)];
-            teamService.AddUnitToTeam(randomUnitData, TeamEnum.Team2);
+            RoundEnemyData enemy = enemiesForRound[i];
+
+            if (_unitDatabase.TryGetValue(enemy.enemyID, out UnitData enemyUnitData))
+            {
+                enemyUnitData.unitLevel = enemy.enemyLevel;
+                teamService.AddUnitToTeam(enemyUnitData, TeamEnum.Team2);
+            }
+            else
+            {
+                Debug.LogWarning($"Enemy ID {enemy.enemyID} not found in database.");
+            }
         }
     }
 
@@ -84,15 +115,36 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     public IReadOnlyList<BaseUnit> GetOpponentTeamUnits(TeamEnum opponentTeam)
     {
         if (opponentTeam == TeamEnum.Team1)
+        {
             return teamService.GetFieldUnits(TeamEnum.Team2);
+        }
         else
+        {
             return teamService.GetFieldUnits(TeamEnum.Team1);
+        }
     }
 
     public void MarkUnitDead(BaseUnit unit)
     {
         teamService.RemoveUnitFromField(unit, unit.Team);
         Destroy(unit.gameObject);
+        StartCoroutine(CheckRoundEnd());
+    }
+
+    private IEnumerator CheckRoundEnd()
+    {
+        yield return new WaitForSeconds(1f);
+        bool team1 = TeamHasNoUnits(TeamEnum.Team1);
+        bool team2 = TeamHasNoUnits(TeamEnum.Team2);
+
+        if (team1 && team2) Debug.Log("Draw");
+        else if (team1 && !team2) Debug.Log("Team2");
+        else if (!team1 && team2) Debug.Log("Team1");
+    }
+
+    private bool TeamHasNoUnits(TeamEnum team)
+    {
+        return teamService.GetFieldUnitsCount(team) == 0;
     }
 
     private void OnDrawGizmos()
@@ -133,28 +185,11 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
 
     public void UpdateGameplayState(GameplayStateEnum newState)
     {
-        if (CurrentState == newState)
+        if (CurrentGameplayState == newState)
             return;
 
-        CurrentState = newState;
+        CurrentGameplayState = newState;
 
-        switch (CurrentState)
-        {
-            case GameplayStateEnum.Preparation:
-                EventBusManager.Instance.Raise(EventNameEnum.PreparationStart);
-                break;
-
-            case GameplayStateEnum.Combat:
-                EventBusManager.Instance.Raise(EventNameEnum.CombatStart);
-                break;
-
-            case GameplayStateEnum.GameOver:
-                EventBusManager.Instance.Raise(EventNameEnum.GameOver);
-                break;
-
-            default:
-                Debug.LogWarning("Unhandled gameplay state: " + CurrentState);
-                break;
-        }
+        EventBusManager.Instance.Raise(EventNameEnum.GameplayStateChanged, CurrentGameplayState);
     }
 }
