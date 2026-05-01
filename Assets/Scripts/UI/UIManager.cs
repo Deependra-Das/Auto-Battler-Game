@@ -10,28 +10,39 @@ using UnityEngine.UI;
 public class UIManager : GenericMonoSingleton<UIManager>
 {
     [SerializeField] private Canvas _uiCanvas;
-    [SerializeField] private Button _playButton;
+
+    [Header("MainMenu UI")]
+    [SerializeField] private GameObject _mainMenuUIContainer;
+    [SerializeField] private Button _chooseStageButton;
+
+    [Header("StageSelection UI")]
+    [SerializeField] private GameObject _stageSelectionUIContainer;
+    [SerializeField] private GameObject _stageCardUIButtonPrefab;
+    [SerializeField] private Transform _stageSelectionContent;
+
+    [Header("Gameplay UI")]
     [SerializeField] private GameObject _gameplayUIContainer;
+    [SerializeField] private Button _playButton;
     [SerializeField] private Button _shopToggleButton;
     [SerializeField] private TMP_Text _balanceCurrencyText;
 
-    [Header("Shop UI")]
+    [Header("--Shop UI")]
     [SerializeField] private GameObject _shopPanel;
     [SerializeField] private TMP_Text _refreshCostText;
     [SerializeField] private Button _refreshShopButton;
     [SerializeField] private Transform _shopUnitCardContainer;
     [SerializeField] private ShopUnitCard _shopUnitCard;
 
-    [Header("Inventory UI")]
+    [Header("--Inventory UI")]
     [SerializeField] private GameObject _inventoryPanel;
     [SerializeField] private Transform _inventoryUnitCardContainer;
     [SerializeField] private InventoryUnitCard _inventorytUnitCard;
 
-    [Header("Discard UI")]
+    [Header("--Discard UI")]
     [SerializeField] private GameObject _discardUnitPanel;
     [SerializeField] private TMP_Text _refundText;
 
-    [Header("Buff UI")]
+    [Header("--Buff UI")]
     [SerializeField] private GameObject _buffTeam1ToggleContent;
     [SerializeField] private GameObject _buffTeam2ToggleContent;
     [SerializeField] private Transform _buffTeam1Container;
@@ -40,7 +51,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Toggle _team2ToggleButton;
     [SerializeField] private BuffDetailsUICard _buffBlockUICardPrefab;
 
-    [Header("Level XP UI")]
+    [Header("--Level XP UI")]
     [SerializeField] private TMP_Text _currentLevelText;
     [SerializeField] private TMP_Text _xpText;
     [SerializeField] private TMP_Text _xpExchangeCostText;
@@ -68,9 +79,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         base.Awake();
         CanvasRect = _uiCanvas.GetComponent<RectTransform>();
+        CreateStageSelectionButton();
         SetupLevelXPBarUI();
         ToggleDiscardPanelVisibility(false);
         HandleTeamBuffTabSwitch(true, 1);
+        ToggleMainMenuUIContainer(false);
+        ToggleStageSelectionUIContainer(false);
+        ToggleGameplayUIContainer(false);
     }
 
     private void OnEnable() => SubscribeToEvents();
@@ -78,6 +93,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     void SubscribeToEvents()
     {
+        _chooseStageButton.onClick.AddListener(OnChooseStageButtonClicked);
         _playButton.onClick.AddListener(OnPlayButtonClicked); 
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
@@ -92,6 +108,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     void UnsubscribeToEvents()
     {
+        _chooseStageButton.onClick.RemoveListener(OnChooseStageButtonClicked);
         _playButton.onClick.RemoveListener(OnPlayButtonClicked);
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
@@ -391,5 +408,38 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void UpdateXPText(int currentXP, int requiredXPToNextLevel)
     {
         _xpText.text = currentXP.ToString() + "/" + requiredXPToNextLevel.ToString();
+    }
+
+    private void CreateStageSelectionButton()
+    {
+        StageService stageObj = GameManager.Instance.Get<StageService>();
+        int totalStages = stageObj.GetStageCount();
+
+        for (int index = 0; index < totalStages; index++)
+        {
+            StageData stageData = stageObj.GetStageData(index);
+            GameObject stageButton = Instantiate(_stageCardUIButtonPrefab, _stageSelectionContent);
+            stageButton.GetComponent<StageSelectionCardUIView>().Initialize(index, stageData);
+        }
+    }
+
+    private void OnChooseStageButtonClicked()
+    {
+        SceneLoader.Instance.LoadScene(SceneNameEnum.StageSelectionScene);
+    }
+
+    public void ToggleMainMenuUIContainer(bool value)
+    {
+        _mainMenuUIContainer.SetActive(value);
+    }
+
+    public void ToggleStageSelectionUIContainer(bool value)
+    {
+        _stageSelectionUIContainer.SetActive(value);
+    }
+
+    public void ToggleGameplayUIContainer(bool value)
+    {
+        _gameplayUIContainer.SetActive(value);
     }
 }
