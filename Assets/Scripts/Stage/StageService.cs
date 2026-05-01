@@ -109,8 +109,18 @@ public class StageService
         return GetCurrentStageData().roundDataList[CurrentRoundIndex];
     }
 
-    private int GetRoundCount()
+    public int GetRoundCount()
     {
         return _stageConfigDataList[CurrentStageIndex].roundDataList.Count;
+    }
+
+    public int GetStageCount()
+    {
+        return _stageConfigDataList.Count;
+    }
+
+    public StageData GetStageData(int index)
+    {
+        return _stageConfigDataList[index];
     }
 }
