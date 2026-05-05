@@ -1,13 +1,14 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
-using AutoBattler.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class GameplayManager : GenericMonoSingleton<GameplayManager>
+public class GameplayManager : MonoBehaviour
 {
+    public static GameplayManager Instance;
+
     protected PathFindingGraph graph;
     TileGridService tileGridService;
     GraphService graphService;
@@ -15,7 +16,7 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
     InventoryService inventoryService;
     BuffService buffService;
     StageService stageService;
-    private Dictionary<int, UnitData> _unitDatabase;
+    private Dictionary<int, UnitData> _unitDatabase = new Dictionary<int, UnitData>();
 
     public int fromIndex = 0;
     public int toIndex = 0;
@@ -25,10 +26,17 @@ public class GameplayManager : GenericMonoSingleton<GameplayManager>
 
     public GameplayStateEnum CurrentGameplayState { get; private set; } = GameplayStateEnum.Preparation;
 
-    protected override void Awake()
+    protected void Awake()
     {
-        base.Awake();
-        _unitDatabase = new Dictionary<int, UnitData>();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void Initialize(UnitScriptableObject unit_SO)
