@@ -32,7 +32,7 @@ public class StageSelectionCardUIView : MonoBehaviour
     private void OnStageButtonClicked()
     {
         Debug.Log(_stageIndex);
-        GameManager.Instance.currentStageIndexSelected = _stageIndex;
+        GameData.selectedStage = _stageIndex;
         SceneLoader.Instance.LoadScene(SceneNameEnum.GameplayScene);
     }
 }
