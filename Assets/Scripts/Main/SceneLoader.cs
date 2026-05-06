@@ -39,6 +39,7 @@ public class SceneLoader : GenericMonoSingleton<SceneLoader>
                 break;
 
             case nameof(SceneNameEnum.GameplayScene):
+                GameplayManager.Instance.InitializeGameplay();
                 UIManager.Instance.ToggleGameplayUIContainer(true);
                 break;
         }

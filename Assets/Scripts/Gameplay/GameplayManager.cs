@@ -10,13 +10,13 @@ public class GameplayManager : MonoBehaviour
     public static GameplayManager Instance;
 
     protected PathFindingGraph graph;
-    TileGridService tileGridService;
-    GraphService graphService;
-    TeamService teamService;
-    InventoryService inventoryService;
-    BuffService buffService;
-    StageService stageService;
-    private Dictionary<int, UnitData> _unitDatabase = new Dictionary<int, UnitData>();
+    private TileGridService _tileGridServiceObj;
+    private GraphService _graphServiceObj;
+    private TeamService _teamServiceObj;
+    private InventoryService _inventoryServiceObj;
+    private BuffService _buffServiceObj;
+    private StageService _stageServiceObj;
+    private UnitService _unitServiceObj;
 
     public int fromIndex = 0;
     public int toIndex = 0;
@@ -39,36 +39,32 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    public void Initialize(UnitScriptableObject unit_SO)
+    public void InitializeGameplay()
     {
         UIManager.Instance.InitializeGameplayUI();
 
-        tileGridService = GameManager.Instance.Get<TileGridService>();
-        graphService = GameManager.Instance.Get<GraphService>();
-        teamService = GameManager.Instance.Get<TeamService>();
-        inventoryService = GameManager.Instance.Get<InventoryService>();
-        buffService = GameManager.Instance.Get<BuffService>();
-        stageService = GameManager.Instance.Get<StageService>();
+        _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
+        _graphServiceObj = GameManager.Instance.Get<GraphService>();
+        _teamServiceObj = GameManager.Instance.Get<TeamService>();
+        _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
+        _buffServiceObj = GameManager.Instance.Get<BuffService>();
+        _stageServiceObj = GameManager.Instance.Get<StageService>();
+        _unitServiceObj = GameManager.Instance.Get<UnitService>();
 
-        graphService.Initialize(tileGridService.GetSpawnedTilesList());
-        graph = graphService.Graph;
+        _tileGridServiceObj.CreateTileMap();
+        _graphServiceObj.Initialize(_tileGridServiceObj.GetSpawnedTilesList());
+        graph = _graphServiceObj.Graph;
 
-        buffService.InitializeBuffs();
-        BuildUnitDatabase(unit_SO);
-        inventoryService.SetMaxInventorySize(8);
-        InitializeStageForGameplay(0);
-    }
-
-    private void BuildUnitDatabase(UnitScriptableObject unit_SO)
-    {
-        _unitDatabase = unit_SO.unitDataList.ToDictionary(unit => unit.unitID, unit => unit);
+        _buffServiceObj.InitializeBuffs();
+        _inventoryServiceObj.SetMaxInventorySize(8);
+        InitializeStageForGameplay(GameData.selectedStage);
     }
 
     public void InitializeStageForGameplay(int stageIndex)
     {
-        stageService.StartStage(stageIndex);
-        _currentStage = stageService.CurrentStageIndex;
-        _currentRound = stageService.CurrentRoundIndex;
+        _stageServiceObj.StartStage(stageIndex);
+        _currentStage = _stageServiceObj.CurrentStageIndex;
+        _currentRound = _stageServiceObj.CurrentRoundIndex;
         GameManager.Instance.Get<ShopService>().GenerateShopUnits();
         PrepareTeam2UnitsForRound();
         InstantiateTeam2Units();
@@ -79,24 +75,24 @@ public class GameplayManager : MonoBehaviour
         BaseUnit newUnit = Instantiate(unitData.unitPrefab);
         newUnit.Initialize(unitData, team, node);
 
-        teamService.MoveToField(newUnit, team);
-        inventoryService.RemoveUnit(newUnit.UnitData);
+        _teamServiceObj.MoveToField(newUnit, team);
+        _inventoryServiceObj.RemoveUnit(newUnit.UnitData);
     }
 
     private void PrepareTeam2UnitsForRound()
     {
-        List<RoundEnemyData> enemiesForRound = stageService.GetCurrentRoundData().enemiyList;
+        List<RoundEnemyData> enemiesForRound = _stageServiceObj.GetCurrentRoundData().enemiyList;
         int enemyCount = enemiesForRound.Count;
-        teamService.SetFieldCapacity(TeamEnum.Team2, enemyCount);
+        _teamServiceObj.SetFieldCapacity(TeamEnum.Team2, enemyCount);
 
         for (int i = 0; i < enemyCount; i++)
         {
             RoundEnemyData enemy = enemiesForRound[i];
 
-            if (_unitDatabase.TryGetValue(enemy.enemyID, out UnitData enemyUnitData))
+            if (_unitServiceObj.TryGetUnitById(enemy.enemyID, out UnitData enemyUnitData))
             {
                 enemyUnitData.unitLevel = enemy.enemyLevel;
-                teamService.AddUnitToTeam(enemyUnitData, TeamEnum.Team2);
+                _teamServiceObj.AddUnitToTeam(enemyUnitData, TeamEnum.Team2);
             }
             else
             {
@@ -107,16 +103,16 @@ public class GameplayManager : MonoBehaviour
 
     private void InstantiateTeam2Units()
     {
-        int team2FieldCapacity = teamService.GetFieldCapacity(TeamEnum.Team2);
+        int team2FieldCapacity = _teamServiceObj.GetFieldCapacity(TeamEnum.Team2);
 
-        IReadOnlyList<UnitData> team2Units = teamService.GetTeamUnits(TeamEnum.Team2);
+        IReadOnlyList<UnitData> team2Units = _teamServiceObj.GetTeamUnits(TeamEnum.Team2);
         for (int i = 0; i < team2FieldCapacity; i++)
         {
             UnitData unitData = team2Units[i];
             BaseUnit newUnit = Instantiate(unitData.unitPrefab);
-            newUnit.Initialize(unitData, TeamEnum.Team2, graphService.GetUnOccupiedNode(TeamEnum.Team2));
-            teamService.MoveToField(newUnit, TeamEnum.Team2);
-            inventoryService.RemoveUnit(newUnit.UnitData);
+            newUnit.Initialize(unitData, TeamEnum.Team2, _graphServiceObj.GetUnOccupiedNode(TeamEnum.Team2));
+            _teamServiceObj.MoveToField(newUnit, TeamEnum.Team2);
+            _inventoryServiceObj.RemoveUnit(newUnit.UnitData);
         }
     }
 
@@ -124,17 +120,17 @@ public class GameplayManager : MonoBehaviour
     {
         if (opponentTeam == TeamEnum.Team1)
         {
-            return teamService.GetFieldUnits(TeamEnum.Team2);
+            return _teamServiceObj.GetFieldUnits(TeamEnum.Team2);
         }
         else
         {
-            return teamService.GetFieldUnits(TeamEnum.Team1);
+            return _teamServiceObj.GetFieldUnits(TeamEnum.Team1);
         }
     }
 
     public void MarkUnitDead(BaseUnit unit)
     {
-        teamService.RemoveUnitFromField(unit, unit.Team);
+        _teamServiceObj.RemoveUnitFromField(unit, unit.Team);
         Destroy(unit.gameObject);
         StartCoroutine(CheckRoundEnd());
     }
@@ -152,7 +148,7 @@ public class GameplayManager : MonoBehaviour
 
     private bool TeamHasNoUnits(TeamEnum team)
     {
-        return teamService.GetFieldUnitsCount(team) == 0;
+        return _teamServiceObj.GetFieldUnitsCount(team) == 0;
     }
 
     private void OnDrawGizmos()
