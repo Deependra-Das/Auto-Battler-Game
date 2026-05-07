@@ -4,6 +4,7 @@ using AutoBattler.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -59,7 +60,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Image _levelXpBarfillImage;
     [SerializeField] private Button _buyLevelXpButton;
     [SerializeField] private float _maxFillAmount = 0.75f;
-    [SerializeField] private float _roatationForLevelXPBar =45f;
+    [SerializeField] private float _roatationForLevelXPBar = 45f;
     [SerializeField] private float _xpLerpSpeed = 8f;
     private float _displayedXP;
     private float _targetXP;
@@ -79,6 +80,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         base.Awake();
         CanvasRect = _uiCanvas.GetComponent<RectTransform>();
+    }
+
+    public void Initialize()
+    {
+        SubscribeToEvents();
         CreateStageSelectionButton();
         SetupLevelXPBarUI();
         ToggleDiscardPanelVisibility(false);
@@ -88,37 +94,49 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleGameplayUIContainer(false);
     }
 
-    private void OnEnable() => SubscribeToEvents();
-    private void OnDisable() => UnsubscribeToEvents();
-
-    void SubscribeToEvents()
+    private void OnEnable()
     {
         _chooseStageButton.onClick.AddListener(OnChooseStageButtonClicked);
-        _playButton.onClick.AddListener(OnPlayButtonClicked); 
+        _playButton.onClick.AddListener(OnPlayButtonClicked);
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
-        EventBusManager.Instance.Subscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
-        EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
         _team1ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
         _buyLevelXpButton.onClick.AddListener(OnBuyLevelXpButtonClicked);
-        EventBusManager.Instance.Subscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
-        EventBusManager.Instance.Subscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
     }
 
-    void UnsubscribeToEvents()
+    private void OnDisable()
     {
         _chooseStageButton.onClick.RemoveListener(OnChooseStageButtonClicked);
         _playButton.onClick.RemoveListener(OnPlayButtonClicked);
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
         _team1ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
         _buyLevelXpButton.onClick.RemoveListener(OnBuyLevelXpButtonClicked);
+    }
+
+    public void OnDestroy()
+    {
+        UnsubscribeToEvents();
+    }
+
+    private void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
+    }
+
+    private void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
     }
 
     public void InitializeGameplayUI()
@@ -283,7 +301,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     public void UpdateBuffParticipantCount(BuffNameEnum buffName, int participants, TeamEnum team)
     {
-        switch(team)
+        switch (team)
         {
             case TeamEnum.Team1:
                 _buffTeam1UICardDictionary[buffName].ActivateParticipantBlock(participants);
@@ -298,7 +316,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         if (isOn)
         {
-            if (tabIndex == 1)            {
+            if (tabIndex == 1)
+            {
                 _team2ToggleButton.isOn = false;
                 _buffTeam1ToggleContent.SetActive(true);
                 _buffTeam2ToggleContent.SetActive(false);
@@ -441,5 +460,29 @@ public class UIManager : GenericMonoSingleton<UIManager>
     public void ToggleGameplayUIContainer(bool value)
     {
         _gameplayUIContainer.SetActive(value);
+    }
+
+    private void OnSceneLoaded_UI(object[] parameters)
+    {
+        SceneNameEnum sceneLoaded = (SceneNameEnum)parameters[0];
+
+        ToggleMainMenuUIContainer(false);
+        ToggleStageSelectionUIContainer(false);
+        ToggleGameplayUIContainer(false);
+
+        switch (sceneLoaded)
+        {
+            case SceneNameEnum.MainMenuScene:
+                ToggleMainMenuUIContainer(true);
+                break;
+
+            case SceneNameEnum.StageSelectionScene:
+                ToggleStageSelectionUIContainer(true);
+                break;
+
+            case SceneNameEnum.GameplayScene:
+                ToggleGameplayUIContainer(true);
+                break;
+        }
     }
 }

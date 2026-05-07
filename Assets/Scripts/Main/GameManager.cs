@@ -18,7 +18,12 @@ namespace AutoBattler.Main
         protected override void Awake()
         {
             base.Awake();
+        }
+
+        private void Start()
+        {
             RegisterServices();
+            UIManager.Instance.Initialize();
         }
 
         private void OnDestroy()

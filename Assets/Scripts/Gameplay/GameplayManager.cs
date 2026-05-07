@@ -32,6 +32,7 @@ public class GameplayManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            InitializeGameplay();
         }
         else
         {
@@ -42,6 +43,7 @@ public class GameplayManager : MonoBehaviour
     public void InitializeGameplay()
     {
         UIManager.Instance.InitializeGameplayUI();
+        InventoryDropZoneManager.Instance.Initialize();
 
         _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
         _graphServiceObj = GameManager.Instance.Get<GraphService>();
