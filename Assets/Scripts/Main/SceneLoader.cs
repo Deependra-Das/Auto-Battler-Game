@@ -1,4 +1,7 @@
+using AutoBattler.Event;
 using AutoBattler.Utilities;
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -6,6 +9,18 @@ public class SceneLoader : GenericMonoSingleton<SceneLoader>
 {
     private void OnEnable() => SubscribeToEvents();
     private void OnDisable() => UnsubscribeToEvents();
+
+    protected override void Awake()
+    {
+        base.Awake();
+        Debug.Log("SceneLoader");
+    }
+
+    private void Start()
+    {
+       
+        RaiseSceneLoadEventForInitialScene();
+    }
 
     void SubscribeToEvents()
     {
@@ -24,24 +39,26 @@ public class SceneLoader : GenericMonoSingleton<SceneLoader>
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        UIManager.Instance.ToggleMainMenuUIContainer(false);
-        UIManager.Instance.ToggleStageSelectionUIContainer(false);
-        UIManager.Instance.ToggleGameplayUIContainer(false);
+        StartCoroutine(OnSceneLoadedCoroutine(scene));
+    }
 
-        switch (scene.name)
+    private IEnumerator OnSceneLoadedCoroutine(Scene scene)
+    {
+        yield return null;
+
+        RaiseSceneLoadEvent(scene);
+    }
+
+    private void RaiseSceneLoadEventForInitialScene()
+    {
+        RaiseSceneLoadEvent(SceneManager.GetActiveScene());
+    }
+
+    private void RaiseSceneLoadEvent(Scene scene)
+    {
+        if (Enum.TryParse(scene.name, out SceneNameEnum result))
         {
-            case nameof(SceneNameEnum.MainMenuScene):
-                UIManager.Instance.ToggleMainMenuUIContainer(true);
-                break;
-
-            case nameof(SceneNameEnum.StageSelectionScene):
-                UIManager.Instance.ToggleStageSelectionUIContainer(true);
-                break;
-
-            case nameof(SceneNameEnum.GameplayScene):
-                GameplayManager.Instance.InitializeGameplay();
-                UIManager.Instance.ToggleGameplayUIContainer(true);
-                break;
+            EventBusManager.Instance.Raise(EventNameEnum.SceneLoaded, result);
         }
     }
 }
