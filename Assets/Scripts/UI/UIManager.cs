@@ -4,7 +4,6 @@ using AutoBattler.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -128,6 +127,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Subscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStarted_UI);
     }
 
     private void UnsubscribeToEvents()
@@ -137,6 +137,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Unsubscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStarted_UI);
     }
 
     public void InitializeGameplayUI()
@@ -366,16 +367,20 @@ public class UIManager : GenericMonoSingleton<UIManager>
         int currentXP = (int)parameters[2];
         int requiredXPToNextLevel = (int)parameters[3];
 
-        _targetXP = 1f;
+        if (level > 1)
+        {     
+            _targetXP = 1f;
 
-        if (_xpRoutine != null)
-        {
-            StopCoroutine(_xpRoutine);
+            if (_xpRoutine != null)
+            {
+                StopCoroutine(_xpRoutine);
+            }
+
+            _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
+
+            StartCoroutine(LevelUpReset());
         }
 
-        _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
-
-        StartCoroutine(LevelUpReset());
         UpdateLevelText(level);
         UpdateXPText(currentXP, requiredXPToNextLevel);
     }
@@ -484,5 +489,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 ToggleGameplayUIContainer(true);
                 break;
         }
+    }
+
+    private void OnStageStarted_UI(object[] parameters)
+    {
+        UpdateXpExchangeCostUI((int)parameters[5]);
     }
 }

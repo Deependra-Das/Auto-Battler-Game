@@ -17,6 +17,7 @@ public class GameplayManager : MonoBehaviour
     private BuffService _buffServiceObj;
     private StageService _stageServiceObj;
     private UnitService _unitServiceObj;
+    private PlayerLevelService _playerLevelServiceObj;
 
     public int fromIndex = 0;
     public int toIndex = 0;
@@ -52,6 +53,7 @@ public class GameplayManager : MonoBehaviour
         _buffServiceObj = GameManager.Instance.Get<BuffService>();
         _stageServiceObj = GameManager.Instance.Get<StageService>();
         _unitServiceObj = GameManager.Instance.Get<UnitService>();
+        _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
 
         _tileGridServiceObj.CreateTileMap();
         _graphServiceObj.Initialize(_tileGridServiceObj.GetSpawnedTilesList());

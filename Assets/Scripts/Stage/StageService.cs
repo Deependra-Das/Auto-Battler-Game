@@ -23,14 +23,14 @@ public class StageService
         CurrentStageIndex = stageIndex;
         CurrentRoundIndex = 0;
         Debug.Log($"Starting Stage {CurrentStageIndex}");
-        int initialiPlayerLevel = _stageConfigDataList[CurrentStageIndex].initialPlayerLevel;
+        int initialPlayerLevel = _stageConfigDataList[CurrentStageIndex].initialPlayerLevel;
         int initialCurrency = _stageConfigDataList[CurrentStageIndex].initialCurrency;
         int maxLives = _stageConfigDataList[CurrentStageIndex].maxPlayerLives;
         int roundCount = _stageConfigDataList[CurrentStageIndex].roundDataList.Count;
         XpExchangeCost = _stageConfigDataList[CurrentStageIndex].xpExchangeCost;
         XpExchangeValue = _stageConfigDataList[CurrentStageIndex].xpExchangeValue;
         ShopRefreshCost = _stageConfigDataList[CurrentStageIndex].shopRefreshCost;
-        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, CurrentStageIndex, initialiPlayerLevel, initialCurrency, maxLives, roundCount, XpExchangeCost, XpExchangeValue, ShopRefreshCost);
+        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, CurrentStageIndex, initialPlayerLevel, initialCurrency, maxLives, roundCount, XpExchangeCost, XpExchangeValue, ShopRefreshCost);
         StartRound();
     }
 

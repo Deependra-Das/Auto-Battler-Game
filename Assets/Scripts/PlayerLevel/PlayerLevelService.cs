@@ -148,8 +148,9 @@ public class PlayerLevelService
 
     private void OnStageStarted_PlayerLevel(object[] parameters)
     {
+        Level = (int)parameters[1];
         _xpExchangeCost = (int)parameters[5];
         _xpExchangeValue = (int)parameters[6];
-        UIManager.Instance.UpdateXpExchangeCostUI(_xpExchangeCost);
+        EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level, MaxUnitsAllowedOnField, CurrentXP, GetXPToNextLevel());
     }
 }
