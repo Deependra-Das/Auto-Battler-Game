@@ -40,6 +40,55 @@ public class StageService
         EventBusManager.Instance.Raise(EventNameEnum.RoundStarted,CurrentRoundIndex, CurrentStageIndex);
     }
 
+    public void RestartCurrentRound()
+    {
+        Debug.Log($"Restarting Round {CurrentRoundIndex} of Stage {CurrentStageIndex}");
+
+        EventBusManager.Instance.Raise(EventNameEnum.RoundStarted, CurrentRoundIndex, CurrentStageIndex);
+    }
+
+    public void ResumeStageFromSave(RoundSnapshotData saveData)
+    {
+        CurrentStageIndex = saveData.stageIndex;
+        CurrentRoundIndex = saveData.roundIndex;
+
+        ApplyStageConfig();
+
+        Debug.Log($"Resuming Stage {CurrentStageIndex}, Round {CurrentRoundIndex}");
+
+        StartRound();
+    }
+
+    public void RestartStage(int stageIndex)
+    {
+        CurrentStageIndex = stageIndex;
+        CurrentRoundIndex = 0;
+
+        ApplyStageConfig();
+
+        Debug.Log($"Restarting Stage {CurrentStageIndex} from Round 0");
+
+        RaiseStageStartedEvent();
+        StartRound();
+    }
+
+    private void ApplyStageConfig()
+    {
+        var stage = _stageConfigDataList[CurrentStageIndex];
+
+        XpExchangeCost = stage.xpExchangeCost;
+        XpExchangeValue = stage.xpExchangeValue;
+        ShopRefreshCost = stage.shopRefreshCost;
+    }
+
+    private void RaiseStageStartedEvent()
+    {
+        var stage = _stageConfigDataList[CurrentStageIndex];
+
+        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, CurrentStageIndex, stage.initialPlayerLevel,
+            stage.initialCurrency, stage.maxPlayerLives, stage.roundDataList.Count, XpExchangeCost, XpExchangeValue, ShopRefreshCost);
+    }
+
     public bool OnRoundWin(TeamEnum winnerTeam)
     {
         int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].winXPCurrency;
