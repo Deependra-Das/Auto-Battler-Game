@@ -37,66 +37,52 @@ public class StageService
     public void StartRound()
     {
         Debug.Log($"Starting Stage {CurrentStageIndex} - Round {CurrentRoundIndex}");
-
-        //GameManager.Instance.Get<RoundService>().CaptureRoundSaveState(CurrentStageIndex, CurrentRoundIndex);
-        EventBusManager.Instance.Raise(EventNameEnum.RoundStarted,CurrentRoundIndex);
+        EventBusManager.Instance.Raise(EventNameEnum.RoundStarted,CurrentRoundIndex, CurrentStageIndex);
     }
 
-    public void OnRoundWin()
+    public bool OnRoundWin(TeamEnum winnerTeam)
     {
-        var round = GetCurrentRoundData();
-        AdvanceRound();
+        int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].winXPCurrency;
+        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, winnerTeam, currencyReward);     
+        return AdvanceRound();
     }
 
-    public void OnRoundLose()
+    public bool OnRoundLose(TeamEnum loserTeam)
     {
-        var round = GetCurrentRoundData();
+        int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].lossXPCurrency;
+        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, loserTeam, currencyReward);
 
         if (GameManager.Instance.Get<PlayerLevelService>().IsPlayerDead())
         {
-            OnStageFailed();
-            return;
+            EventBusManager.Instance.Raise( EventNameEnum.StageFailed, CurrentStageIndex);
+            return true;
         }
 
-        AdvanceRound();
+        return AdvanceRound();
     }
 
-    private void AdvanceRound()
+    public bool OnRoundDraw()
+    {
+        int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].lossXPCurrency;
+        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, TeamEnum.None, currencyReward);
+
+        return AdvanceRound();
+    }
+
+    private bool AdvanceRound()
     {
         CurrentRoundIndex++;
 
         if (CurrentRoundIndex >= GetRoundCount())
         {
-            OnStageCleared();
-        }
-        else
-        {
-            StartRound();
-        }
-    }
+            EventBusManager.Instance.Raise(EventNameEnum.StageCleared, CurrentStageIndex);
 
-    private void OnStageCleared()
-    {
-        Debug.Log("Stage Cleared!");
-
-        if (CurrentStageIndex >= _stageConfigDataList.Count - 1)
-        {
-            OnGameCompleted();
-            return;
+            return true;
         }
 
-        StartStage(CurrentStageIndex + 1);
-    }
+        StartRound();
 
-    private void OnGameCompleted()
-    {
-        Debug.Log("Game Completed!");
-    }
-
-    private void OnStageFailed()
-    {
-        Debug.Log("Stage Failed. Restarting...");
-        StartStage(CurrentStageIndex);
+        return false;
     }
 
     public StageData GetCurrentStageData()
