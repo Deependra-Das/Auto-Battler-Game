@@ -44,6 +44,7 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new InventoryService());
             ServiceLocator.Register(new ShopService(_unit_SO));
             ServiceLocator.Register(new BuffService(_buff_SO));
+            ServiceLocator.Register(new RoundSaveStateService());
         }
 
         private void DeregisterServices()
@@ -59,6 +60,7 @@ namespace AutoBattler.Main
             ServiceLocator.Unregister<InventoryService>();
             ServiceLocator.Unregister<ShopService>();
             ServiceLocator.Unregister<BuffService>();
+            ServiceLocator.Unregister<RoundSaveStateService>();
         }
 
         public T Get<T>()
