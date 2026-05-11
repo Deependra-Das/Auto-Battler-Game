@@ -35,6 +35,7 @@ public class TeamService
             InitializeTypeAndFactionCounts();
         }
     }
+
     ~TeamService()
     {
         UnsubscribeToEvents();
@@ -104,22 +105,16 @@ public class TeamService
         return true;
     }
 
-    public void ResetFieldUnits(TeamEnum team)
-    {
-        var units = _fieldUnits[team].ToList();
-        foreach (var unit in units)
-        {
-            MoveToInventory(unit, team);
-        }
-    }
-
     public int GetTeamCapacity(TeamEnum team) => _teamCapacities[team];
+
     public int GetFieldCapacity(TeamEnum team) => _fieldCapacities[team];
 
     public void SetTeamCapacity(TeamEnum team, int capacity) => _teamCapacities[team] = capacity;
+
     public void SetFieldCapacity(TeamEnum team, int capacity) => _fieldCapacities[team] = capacity;
 
     public int GetTeamUnitsCount(TeamEnum team) => _teams[team].Count;
+
     public int GetFieldUnitsCount(TeamEnum team) => _fieldUnits[team].Count;
 
     public bool CanAddUnitToField(TeamEnum team)

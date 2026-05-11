@@ -310,7 +310,7 @@ public class BaseUnit : MonoBehaviour
         }
     }
 
-    public void TemporarilyReleaseNode()
+    public void ReleaseCurrentNode()
     {
         if (currentNode != null)
             currentNode.SetOccupied(false);

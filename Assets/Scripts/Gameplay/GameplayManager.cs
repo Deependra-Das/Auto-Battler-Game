@@ -18,14 +18,14 @@ public class GameplayManager : MonoBehaviour
     private StageService _stageServiceObj;
     private UnitService _unitServiceObj;
     private PlayerLevelService _playerLevelServiceObj;
+    private ShopService _shopServiceObj;
 
     public int fromIndex = 0;
     public int toIndex = 0;
 
-    private int _currentStage = -1;
-    private int _currentRound = -1;
+    private bool _isRoundEnding = false;
 
-    public GameplayStateEnum CurrentGameplayState { get; private set; } = GameplayStateEnum.Preparation;
+    public GameplayStateEnum CurrentGameplayState { get; private set; }
 
     protected void Awake()
     {
@@ -46,14 +46,7 @@ public class GameplayManager : MonoBehaviour
         UIManager.Instance.InitializeGameplayUI();
         InventoryDropZoneManager.Instance.Initialize();
 
-        _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
-        _graphServiceObj = GameManager.Instance.Get<GraphService>();
-        _teamServiceObj = GameManager.Instance.Get<TeamService>();
-        _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
-        _buffServiceObj = GameManager.Instance.Get<BuffService>();
-        _stageServiceObj = GameManager.Instance.Get<StageService>();
-        _unitServiceObj = GameManager.Instance.Get<UnitService>();
-        _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
+        ResolveServices();
 
         _tileGridServiceObj.CreateTileMap();
         _graphServiceObj.Initialize(_tileGridServiceObj.GetSpawnedTilesList());
@@ -64,12 +57,30 @@ public class GameplayManager : MonoBehaviour
         InitializeStageForGameplay(GameData.selectedStage);
     }
 
+    private void ResolveServices()
+    {
+        _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
+        _graphServiceObj = GameManager.Instance.Get<GraphService>();
+        _teamServiceObj = GameManager.Instance.Get<TeamService>();
+        _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
+        _buffServiceObj = GameManager.Instance.Get<BuffService>();
+        _stageServiceObj = GameManager.Instance.Get<StageService>();
+        _unitServiceObj = GameManager.Instance.Get<UnitService>();
+        _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
+        _shopServiceObj = GameManager.Instance.Get<ShopService>();
+    }
+
     public void InitializeStageForGameplay(int stageIndex)
     {
+        CleanupStage();
         _stageServiceObj.StartStage(stageIndex);
-        _currentStage = _stageServiceObj.CurrentStageIndex;
-        _currentRound = _stageServiceObj.CurrentRoundIndex;
-        GameManager.Instance.Get<ShopService>().GenerateShopUnits();
+        PrepareCurrentRound();
+    }
+
+    private void PrepareCurrentRound()
+    {
+        UpdateGameplayState(GameplayStateEnum.Preparation);
+        _shopServiceObj.GenerateShopUnits();
         PrepareTeam2UnitsForRound();
         InstantiateTeam2Units();
     }
@@ -141,18 +152,174 @@ public class GameplayManager : MonoBehaviour
 
     private IEnumerator CheckRoundEnd()
     {
-        yield return new WaitForSeconds(1f);
-        bool team1 = TeamHasNoUnits(TeamEnum.Team1);
-        bool team2 = TeamHasNoUnits(TeamEnum.Team2);
+        if (_isRoundEnding)
+            yield break;
 
-        if (team1 && team2) Debug.Log("Draw");
-        else if (team1 && !team2) Debug.Log("Team2");
-        else if (!team1 && team2) Debug.Log("Team1");
+        yield return new WaitForSeconds(1f);
+        bool team1HasNoUnits = TeamHasNoUnits(TeamEnum.Team1);
+        bool team2HasNoUnits = TeamHasNoUnits(TeamEnum.Team2);
+
+        if (!team1HasNoUnits && !team2HasNoUnits)
+            yield break;
+
+        _isRoundEnding = true;
+
+        TeamEnum winnerTeam = TeamEnum.None;
+
+        if (team1HasNoUnits && !team2HasNoUnits)
+        {
+            winnerTeam = TeamEnum.Team2;
+        }
+        else if (team2HasNoUnits && !team1HasNoUnits)
+        {
+            winnerTeam = TeamEnum.Team1;
+        }
+        else if (team1HasNoUnits && team2HasNoUnits)
+        {
+            winnerTeam = TeamEnum.None;
+        }
+        else
+        {
+            yield break;
+        }
+
+        yield return StartCoroutine(HandleRoundEnd(winnerTeam));
     }
 
     private bool TeamHasNoUnits(TeamEnum team)
     {
         return _teamServiceObj.GetFieldUnitsCount(team) == 0;
+    }
+
+    private IEnumerator HandleRoundEnd(TeamEnum winnerTeam)
+    {
+        UpdateGameplayState(GameplayStateEnum.RoundOver);
+
+        yield return new WaitForSeconds(1.5f);
+
+        UpdateGameplayState(GameplayStateEnum.Cleanup);
+
+        CleanupRound();
+
+        yield return new WaitForSeconds(0.5f);
+
+        switch (winnerTeam)
+        {
+            case TeamEnum.Team1:
+            {
+                bool stageCleared = _stageServiceObj.OnRoundWin(TeamEnum.Team1);
+
+                if (stageCleared)
+                {
+                    yield return StartCoroutine(HandleStageCleared());
+                }
+                else
+                {
+                    PrepareCurrentRound();
+                }
+
+                break;
+            }
+
+            case TeamEnum.Team2:
+            {
+                bool stageFailed = _stageServiceObj.OnRoundLose(TeamEnum.Team1);
+
+                if (stageFailed)
+                {
+                    yield return StartCoroutine(HandleStageFailed());
+                }
+                else
+                {
+                    PrepareCurrentRound();
+                }
+
+                break;
+            }
+
+            case TeamEnum.None:
+            {
+                bool stageAdvanced = _stageServiceObj.OnRoundDraw();
+
+                if (!stageAdvanced)
+                {
+                    PrepareCurrentRound();
+                }
+                break;
+            }
+        }
+
+        _isRoundEnding = false;
+    }
+
+    private IEnumerator HandleStageCleared()
+    {
+        UpdateGameplayState(GameplayStateEnum.StageOver);
+
+        Debug.Log("Stage Cleared");
+
+        yield return new WaitForSeconds(2f);
+    }
+
+    private IEnumerator HandleStageFailed()
+    {
+        UpdateGameplayState(GameplayStateEnum.StageOver);
+
+        Debug.Log("Stage Failed");
+
+        yield return new WaitForSeconds(2f);
+    }
+
+    private IEnumerator RestartRoundRoutine()
+    {
+        //UpdateGameplayState(GameplayStateEnum.Cleanup);
+
+        //CleanupRound();
+
+        yield return new WaitForSeconds(0.5f);
+
+        //_roundSaveStateService.RestoreSaveState();
+
+        //PrepareCurrentRound();
+
+        //UpdateGameplayState(GameplayStateEnum.Preparation);
+    }
+
+    private void CleanupRound()
+    {
+        CleanupUnits();
+        CleanupRuntimeGameplayData();
+    }
+
+    private void CleanupStage()
+    {
+        CleanupRound();
+    }
+
+    private void CleanupUnits()
+    {
+        CleanupTeam(TeamEnum.Team1);
+        CleanupTeam(TeamEnum.Team2);
+    }
+
+    private void CleanupTeam(TeamEnum team)
+    {
+        List<BaseUnit> units = new(_teamServiceObj.GetFieldUnits(team));
+
+        foreach (BaseUnit unit in units)
+        {
+            if (unit == null)
+                continue;
+
+            unit.ReleaseCurrentNode();
+            _inventoryServiceObj.AddUnit(unit.UnitData);
+            _teamServiceObj.MoveToInventory(unit, unit.Team);
+            Destroy(unit.gameObject);
+        }
+    }
+
+    private void CleanupRuntimeGameplayData()
+    {
     }
 
     private void OnDrawGizmos()
