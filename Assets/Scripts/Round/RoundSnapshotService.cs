@@ -58,15 +58,15 @@ public class RoundSnapshotService
         };
     }
 
-    private List<UnitSaveData> GetInventorySaveData(IReadOnlyList<UnitData> unitData)
+    private List<UnitSnapshotData> GetInventorySaveData(IReadOnlyList<UnitData> unitData)
     {
-        List<UnitSaveData> unitSaveData = new();
+        List<UnitSnapshotData> unitSaveData = new();
 
         List<UnitData> inventoryUnits = _inventoryServiceObj.GetInventoryUnits();
 
         foreach (var unit in inventoryUnits)
         {
-            unitSaveData.Add(new UnitSaveData
+            unitSaveData.Add(new UnitSnapshotData
             {
                 unitID = unit.unitID,
                 unitLevel = unit.unitLevel

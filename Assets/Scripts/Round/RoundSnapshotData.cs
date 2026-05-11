@@ -11,7 +11,7 @@ public class RoundSnapshotData
     public int playerXP;
     public int playerCurrency;
 
-    public List<UnitSaveData> playerInventoryUnits;
+    public List<UnitSnapshotData> playerInventoryUnits;
 
     public RoundResultEnum result;
 }
