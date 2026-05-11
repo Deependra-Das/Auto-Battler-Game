@@ -1,64 +1,60 @@
+using UnityEngine;
 using AutoBattler.Event;
 using AutoBattler.Main;
-using UnityEngine;
 
 public class RoundSaveStateService
 {
-    private RoundSaveStateData currentSaveState;
+    private RoundSaveStateData _currentSaveState;
 
-    public RoundSaveStateData CurrentSaveState => currentSaveState;
+    private PlayerLevelService _playerLevelServiceObj;
+    private CurrencyService _currencyServiceObj;
+    private InventoryService _inventoryServiceObj;
 
-    public void StartRound(int stageIndex, int roundIndex)
+    public RoundSaveStateService()
     {
-        CaptureSaveState(stageIndex, roundIndex);
-
-        EventBusManager.Instance.Raise(
-            EventNameEnum.RoundStarted,
-            roundIndex
-        );
+        _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
+        _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
+        _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
+        SubscribeToEvents();
     }
 
-    public void CaptureSaveState(int stageIndex, int roundIndex)
+    ~RoundSaveStateService()
     {
-        currentSaveState = new RoundSaveStateData
+        UnsubscribeToEvents();
+    }
+
+    void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.RoundStarted, OnRoundStartSaveState);
+    }
+
+    void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundStarted, OnRoundStartSaveState);
+    }
+
+    private void OnRoundStartSaveState(object[] parameters)
+    {
+        int roundIndex = (int)parameters[0];
+        int stageIndex = (int)parameters[1];
+
+        SaveRoundStateData(stageIndex, roundIndex);
+    }
+
+    private void SaveRoundStateData(int stageIndex, int roundIndex)
+    {
+        _currentSaveState = new RoundSaveStateData
         {
             stageIndex = stageIndex,
             roundIndex = roundIndex,
 
-            playerLevel = GameManager.Instance.Get<PlayerLevelService>().Level,
-            playerXP = GameManager.Instance.Get<PlayerLevelService>().CurrentXP,
-            playerCurrency = GameManager.Instance.Get<CurrencyService>().Balance,
+            playerLevel = _playerLevelServiceObj.Level,
+            playerXP = _playerLevelServiceObj.CurrentXP,
+            playerCurrency = _currencyServiceObj.Balance,
 
-            playerInventoryUnits = GameManager.Instance.Get<InventoryService>().GetInventoryUnits(),
+            playerInventoryUnits = _inventoryServiceObj.GetInventoryUnits(),
 
             result = RoundResultEnum.InProgress
         };
-    }
-
-    public void SetRoundResult(RoundResultEnum result)
-    {
-        currentSaveState.result = result;
-
-        EventBusManager.Instance.Raise(
-            EventNameEnum.RoundEnded,
-            result
-        );
-    }
-
-    public void RestartRound()
-    {
-        if (currentSaveState == null)
-            return;
-
-        var playerLevel = GameManager.Instance.Get<PlayerLevelService>();
-        var inventory = GameManager.Instance.Get<InventoryService>();
-        var currency = GameManager.Instance.Get<CurrencyService>();
-
-        playerLevel.SetLevel(currentSaveState.playerLevel);
-        currency.SetCurrency(currentSaveState.playerCurrency);
-
-        inventory.Restore(currentSaveState.playerInventoryUnits);
-
-        StartRound(currentSaveState.stageIndex, currentSaveState.roundIndex);
     }
 }
