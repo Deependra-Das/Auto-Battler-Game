@@ -1,16 +1,16 @@
-using UnityEngine;
 using AutoBattler.Event;
 using AutoBattler.Main;
+using System.Collections.Generic;
 
-public class RoundSaveStateService
+public class RoundSnapshotService
 {
-    private RoundSaveStateData _currentSaveState;
+    private RoundSnapshotData _currentSaveState;
 
     private PlayerLevelService _playerLevelServiceObj;
     private CurrencyService _currencyServiceObj;
     private InventoryService _inventoryServiceObj;
 
-    public RoundSaveStateService()
+    public RoundSnapshotService()
     {
         _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
         _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
@@ -18,7 +18,7 @@ public class RoundSaveStateService
         SubscribeToEvents();
     }
 
-    ~RoundSaveStateService()
+    ~RoundSnapshotService()
     {
         UnsubscribeToEvents();
     }
@@ -43,7 +43,7 @@ public class RoundSaveStateService
 
     private void SaveRoundStateData(int stageIndex, int roundIndex)
     {
-        _currentSaveState = new RoundSaveStateData
+        _currentSaveState = new RoundSnapshotData
         {
             stageIndex = stageIndex,
             roundIndex = roundIndex,
@@ -52,9 +52,27 @@ public class RoundSaveStateService
             playerXP = _playerLevelServiceObj.CurrentXP,
             playerCurrency = _currencyServiceObj.Balance,
 
-            playerInventoryUnits = _inventoryServiceObj.GetInventoryUnits(),
+            playerInventoryUnits = GetInventorySaveData(_inventoryServiceObj.GetInventoryUnits()),
 
             result = RoundResultEnum.InProgress
         };
+    }
+
+    private List<UnitSaveData> GetInventorySaveData(IReadOnlyList<UnitData> unitData)
+    {
+        List<UnitSaveData> unitSaveData = new();
+
+        List<UnitData> inventoryUnits = _inventoryServiceObj.GetInventoryUnits();
+
+        foreach (var unit in inventoryUnits)
+        {
+            unitSaveData.Add(new UnitSaveData
+            {
+                unitID = unit.unitID,
+                unitLevel = unit.unitLevel
+            });
+        }
+
+        return unitSaveData;
     }
 }
