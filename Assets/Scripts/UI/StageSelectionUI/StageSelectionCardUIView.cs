@@ -1,11 +1,13 @@
-using AutoBattler.Main;
+using AutoBattler.Event;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StageSelectionCardUIView : MonoBehaviour
 {
-    private int _stageIndex;
+    public int StageIndex { get; private set; }
+
+    [SerializeField] private GameObject _selectedHighlight;
     [SerializeField] private TMP_Text _stageNameText;
     [SerializeField] private TMP_Text _numberOfRoundsText;
     [SerializeField] private Button _stageButton;
@@ -25,14 +27,17 @@ public class StageSelectionCardUIView : MonoBehaviour
 
     public void Initialize(int stageIndex, StageData stageData)
     {
-        _stageIndex = stageIndex;
+        StageIndex = stageIndex;
         _numberOfRoundsText.text = stageData.roundDataList.Count.ToString();
     }
 
     private void OnStageButtonClicked()
     {
-        Debug.Log(_stageIndex);
-        GameData.selectedStage = _stageIndex;
-        SceneLoader.Instance.LoadScene(SceneNameEnum.GameplayScene);
+        EventBusManager.Instance.Raise(EventNameEnum.SelectedStageChanged, StageIndex);
+    }
+
+    public void SetStageCardUISelectedHighlight(bool value)
+    {
+        _selectedHighlight.SetActive(value);
     }
 }
