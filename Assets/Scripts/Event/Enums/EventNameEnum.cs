@@ -21,6 +21,7 @@ namespace AutoBattler.Event
         BuyLevelXP,
         XPChanged,
         LevelChanged,
-        SceneLoaded
+        SceneLoaded,
+        SelectedStageChanged,
     }
 }
