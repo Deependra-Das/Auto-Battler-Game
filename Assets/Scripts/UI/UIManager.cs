@@ -17,8 +17,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     [Header("StageSelection UI")]
     [SerializeField] private GameObject _stageSelectionUIContainer;
-    [SerializeField] private GameObject _stageCardUIButtonPrefab;
+    [SerializeField] private GameObject _stageSelectionCardUIPrefab;
     [SerializeField] private Transform _stageSelectionContent;
+    [SerializeField] private Button _startContinueStageButton;
+    [SerializeField] private Button _resetStageButton;
 
     [Header("Gameplay UI")]
     [SerializeField] private GameObject _gameplayUIContainer;
@@ -61,15 +63,17 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private float _maxFillAmount = 0.75f;
     [SerializeField] private float _roatationForLevelXPBar = 45f;
     [SerializeField] private float _xpLerpSpeed = 8f;
+
     private float _displayedXP;
     private float _targetXP;
     private Coroutine _xpRoutine;
-
+    private int _selectedStage = -1;
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
     private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam1UICardDictionary = new();
     private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam2UICardDictionary = new();
+    private List<StageSelectionCardUIView> _stageSelectionUICardList = new();    
 
     public Canvas UICanvas => _uiCanvas;
 
@@ -102,6 +106,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _team1ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
         _buyLevelXpButton.onClick.AddListener(OnBuyLevelXpButtonClicked);
+        _startContinueStageButton.onClick.AddListener(OnStartContinueStageButtonClicked);
+        _resetStageButton.onClick.AddListener(OnResetStageButtonClicked);
     }
 
     private void OnDisable()
@@ -113,6 +119,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _team1ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
         _buyLevelXpButton.onClick.RemoveListener(OnBuyLevelXpButtonClicked);
+        _startContinueStageButton.onClick.RemoveListener(OnStartContinueStageButtonClicked);
+        _resetStageButton.onClick.RemoveListener(OnResetStageButtonClicked);
     }
 
     public void OnDestroy()
@@ -128,6 +136,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Subscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStarted_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.SelectedStageChanged, OnSelectedStageChanged_UI);
     }
 
     private void UnsubscribeToEvents()
@@ -138,6 +147,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Unsubscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStarted_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.SelectedStageChanged, OnSelectedStageChanged_UI);
     }
 
     public void InitializeGameplayUI()
@@ -442,14 +452,40 @@ public class UIManager : GenericMonoSingleton<UIManager>
         for (int index = 0; index < totalStages; index++)
         {
             StageData stageData = stageObj.GetStageData(index);
-            GameObject stageButton = Instantiate(_stageCardUIButtonPrefab, _stageSelectionContent);
-            stageButton.GetComponent<StageSelectionCardUIView>().Initialize(index, stageData);
+            GameObject stageButton = Instantiate(_stageSelectionCardUIPrefab, _stageSelectionContent);
+            StageSelectionCardUIView stageSelectionCardUIViewObj = stageButton.GetComponent<StageSelectionCardUIView>();
+            stageSelectionCardUIViewObj.Initialize(index, stageData);
+            _stageSelectionUICardList.Add(stageSelectionCardUIViewObj);
         }
     }
 
     private void OnChooseStageButtonClicked()
     {
         SceneLoader.Instance.LoadScene(SceneNameEnum.StageSelectionScene);
+    }
+
+    private void OnStartContinueStageButtonClicked()
+    {
+        GameData.selectedStage = _selectedStage;
+        SceneLoader.Instance.LoadScene(SceneNameEnum.GameplayScene);
+    }
+
+    private void OnResetStageButtonClicked()
+    {
+        //Logic to Reset a Stage
+    }
+
+    private void OnSelectedStageChanged_UI(object[] parameters)
+    {
+        _selectedStage = (int)parameters[0];
+
+        foreach (var stage in _stageSelectionUICardList)
+        {
+            if (stage.StageIndex == _selectedStage)
+                stage.SetStageCardUISelectedHighlight(true);
+            else
+                stage.SetStageCardUISelectedHighlight(false);
+        }
     }
 
     public void ToggleMainMenuUIContainer(bool value)
