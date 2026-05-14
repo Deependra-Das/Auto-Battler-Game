@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class StageService
 {
+    private StageSnapshotService _stageSnapshotServiceObj;
+
     private List<StageData> _stageConfigDataList;
 
     public int CurrentStageIndex { get; private set; }
@@ -16,21 +18,32 @@ public class StageService
     public StageService(StageConfigScriptableObjectScript stageConfig)
     {
         _stageConfigDataList = stageConfig.stageConfigDataList;
+        _stageSnapshotServiceObj = GameManager.Instance.Get<StageSnapshotService>();
+    }
+
+    public void InitializeStage(int stageIndex)
+    {
+        var saveData = _stageSnapshotServiceObj.GetStageSnapshot(stageIndex);
+
+        if (saveData != null)
+        {
+            ResumeStageFromSave(saveData);
+        }
+        else
+        {
+            StartStage(stageIndex);
+        }
     }
 
     public void StartStage(int stageIndex)
     {
         CurrentStageIndex = stageIndex;
         CurrentRoundIndex = 0;
+        ApplyStageConfig();
+
         Debug.Log($"Starting Stage {CurrentStageIndex}");
-        int initialPlayerLevel = _stageConfigDataList[CurrentStageIndex].initialPlayerLevel;
-        int initialCurrency = _stageConfigDataList[CurrentStageIndex].initialCurrency;
-        int maxLives = _stageConfigDataList[CurrentStageIndex].maxPlayerLives;
-        int roundCount = _stageConfigDataList[CurrentStageIndex].roundDataList.Count;
-        XpExchangeCost = _stageConfigDataList[CurrentStageIndex].xpExchangeCost;
-        XpExchangeValue = _stageConfigDataList[CurrentStageIndex].xpExchangeValue;
-        ShopRefreshCost = _stageConfigDataList[CurrentStageIndex].shopRefreshCost;
-        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, CurrentStageIndex, initialPlayerLevel, initialCurrency, maxLives, roundCount, XpExchangeCost, XpExchangeValue, ShopRefreshCost);
+        RaiseStageStartedEvent();
+
         StartRound();
     }
 
@@ -50,25 +63,16 @@ public class StageService
     public void ResumeStageFromSave(RoundSnapshotData saveData)
     {
         CurrentStageIndex = saveData.stageIndex;
-        CurrentRoundIndex = saveData.roundIndex;
+        CurrentRoundIndex = saveData.roundIndex + 1;
 
         ApplyStageConfig();
 
         Debug.Log($"Resuming Stage {CurrentStageIndex}, Round {CurrentRoundIndex}");
 
-        StartRound();
-    }
-
-    public void RestartStage(int stageIndex)
-    {
-        CurrentStageIndex = stageIndex;
-        CurrentRoundIndex = 0;
-
-        ApplyStageConfig();
-
-        Debug.Log($"Restarting Stage {CurrentStageIndex} from Round 0");
-
         RaiseStageStartedEvent();
+
+        RestorePlayerState(saveData);
+
         StartRound();
     }
 
@@ -85,15 +89,36 @@ public class StageService
     {
         var stage = _stageConfigDataList[CurrentStageIndex];
 
-        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, CurrentStageIndex, stage.initialPlayerLevel,
-            stage.initialCurrency, stage.maxPlayerLives, stage.roundDataList.Count, XpExchangeCost, XpExchangeValue, ShopRefreshCost);
+        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, CurrentStageIndex,
+            stage.initialPlayerLevel, stage.initialCurrency,stage.maxPlayerLives,
+            stage.roundDataList.Count, XpExchangeCost, XpExchangeValue,ShopRefreshCost
+        );
+    }
+
+    private void RestorePlayerState(RoundSnapshotData saveData)
+    {
+        //var playerLevel = GameManager.Instance.Get<PlayerLevelService>();
+        //var currency = GameManager.Instance.Get<CurrencyService>();
+        //var inventory = GameManager.Instance.Get<InventoryService>();
+
+        //playerLevel.SetLevel(saveData.playerLevel);
+        //playerLevel.SetXP(saveData.playerXP);
+
+        //currency.(saveData.playerCurrency);
+
+        //inventory.ClearInventory();
+
+        //foreach (var unit in saveData.playerInventoryUnits)
+        //{
+        //    inventory.AddUnit(unit);
+        //}
     }
 
     public bool OnRoundWin(TeamEnum winnerTeam)
     {
         int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].winXPCurrency;
         EventBusManager.Instance.Raise(EventNameEnum.RoundOver, winnerTeam, currencyReward);     
-        return AdvanceRound();
+        return AdvanceRound(RoundResultEnum.Win);
     }
 
     public bool OnRoundLose(TeamEnum loserTeam)
@@ -107,7 +132,7 @@ public class StageService
             return true;
         }
 
-        return AdvanceRound();
+        return AdvanceRound(RoundResultEnum.Lose);
     }
 
     public bool OnRoundDraw()
@@ -115,10 +140,10 @@ public class StageService
         int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].lossXPCurrency;
         EventBusManager.Instance.Raise(EventNameEnum.RoundOver, TeamEnum.None, currencyReward);
 
-        return AdvanceRound();
+        return AdvanceRound(RoundResultEnum.Draw);
     }
 
-    private bool AdvanceRound()
+    private bool AdvanceRound(RoundResultEnum result)
     {
         CurrentRoundIndex++;
 
@@ -129,10 +154,34 @@ public class StageService
             return true;
         }
 
+        SaveStageProgress(result);
         StartRound();
 
         return false;
     }
+
+    private void SaveStageProgress(RoundResultEnum roundResult)
+    {
+        PlayerLevelService playerLevelObj = GameManager.Instance.Get<PlayerLevelService>();
+        CurrencyService currencyObj = GameManager.Instance.Get<CurrencyService>();
+        InventoryService inventoryObj = GameManager.Instance.Get<InventoryService>();
+
+        RoundSnapshotData data = new RoundSnapshotData
+        {
+            stageIndex = CurrentStageIndex,
+            roundIndex = CurrentRoundIndex,
+            playerLevel = playerLevelObj.Level,
+            playerXP = playerLevelObj.CurrentXP,
+            playerCurrency = currencyObj.Balance,
+
+            playerInventoryUnits = inventoryObj.GetInventoryUnitsSnapshot(),
+
+            result = roundResult
+        };
+
+        _stageSnapshotServiceObj.Save(data);
+    }
+
 
     public StageData GetCurrentStageData()
     {
