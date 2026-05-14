@@ -1,6 +1,7 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InventoryService
@@ -41,9 +42,15 @@ public class InventoryService
 
     public bool CanAddUnit => _currentUnitsInInventory.Count < MaxInventorySize;
 
-    public List<UnitData> GetInventoryUnits()
+    public List<UnitSnapshotData> GetInventoryUnitsSnapshot()
     {
-        return new List<UnitData>(_currentUnitsInInventory);
+        return _currentUnitsInInventory
+            .Select(u => new UnitSnapshotData
+            {
+                unitID = u.unitID,
+                unitLevel = u.unitLevel
+
+            }).ToList();
     }
 
     public void Restore(List<UnitData> snapshot)
