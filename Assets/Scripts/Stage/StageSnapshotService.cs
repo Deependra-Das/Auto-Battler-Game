@@ -1,12 +1,41 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
 public class StageSnapshotService
 {
-    private const string SAVE_FILE_NAME = "round_save_state.json";
+    private const string SAVE_FILE_NAME = "stage_snapshot_data.json";
+    private const string SAVE_FOLDER = "SaveData";
 
-    private string SavePath => System.IO.Path.Combine(Application.persistentDataPath, SAVE_FILE_NAME);
+    private string SavePath => System.IO.Path.Combine(Application.persistentDataPath, SAVE_FOLDER, SAVE_FILE_NAME);
+
+    public StageSnapshotService()
+    {
+        EnsureFileExists();
+    }
+
+    private void EnsureFileExists()
+    {
+        try
+        {
+            if (!File.Exists(SavePath))
+            {
+                var initialData = new StageSnapshotData
+                {
+                    stageSnapshotList = new List<RoundSnapshotData>()
+                };
+
+                Write(initialData);
+
+                Debug.Log("Stage snapshot file created at: " + SavePath);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Failed to create snapshot file: {ex}");
+        }
+    }
 
     public void Save(RoundSnapshotData data)
     {
@@ -26,6 +55,7 @@ public class StageSnapshotService
             Debug.LogError($"Snapshot saving failed: {ex}");
         }
     }
+
     public StageSnapshotData LoadStageSnapShotData()
     {
         try
