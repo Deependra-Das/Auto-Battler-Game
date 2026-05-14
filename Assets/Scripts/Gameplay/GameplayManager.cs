@@ -19,6 +19,7 @@ public class GameplayManager : MonoBehaviour
     private UnitService _unitServiceObj;
     private PlayerLevelService _playerLevelServiceObj;
     private ShopService _shopServiceObj;
+    private StageSnapshotService _stageSnapshotServiceObj;
 
     public int fromIndex = 0;
     public int toIndex = 0;
@@ -64,6 +65,7 @@ public class GameplayManager : MonoBehaviour
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
         _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
         _buffServiceObj = GameManager.Instance.Get<BuffService>();
+        _stageSnapshotServiceObj = GameManager.Instance.Get<StageSnapshotService>();
         _stageServiceObj = GameManager.Instance.Get<StageService>();
         _unitServiceObj = GameManager.Instance.Get<UnitService>();
         _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
@@ -73,7 +75,7 @@ public class GameplayManager : MonoBehaviour
     public void InitializeStageForGameplay(int stageIndex)
     {
         CleanupStage();
-        _stageServiceObj.StartStage(stageIndex);
+        _stageServiceObj.InitializeStage(stageIndex);
         PrepareCurrentRound();
     }
 
