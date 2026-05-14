@@ -15,6 +15,11 @@ public class StageSelectionCardUIView : MonoBehaviour
     private void OnEnable() => SubscribeToEvents();
     private void OnDisable() => UnsubscribeToEvents();
 
+    private void Awake()
+    {
+        SetStageCardUISelectedHighlight(false);
+    }
+
     void SubscribeToEvents()
     {
         _stageButton.onClick.AddListener(OnStageButtonClicked);
