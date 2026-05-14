@@ -52,27 +52,9 @@ public class RoundSnapshotService
             playerXP = _playerLevelServiceObj.CurrentXP,
             playerCurrency = _currencyServiceObj.Balance,
 
-            playerInventoryUnits = GetInventorySaveData(_inventoryServiceObj.GetInventoryUnits()),
+            playerInventoryUnits = _inventoryServiceObj.GetInventoryUnitsSnapshot(),
 
             result = RoundResultEnum.InProgress
         };
-    }
-
-    private List<UnitSnapshotData> GetInventorySaveData(IReadOnlyList<UnitData> unitData)
-    {
-        List<UnitSnapshotData> unitSaveData = new();
-
-        List<UnitData> inventoryUnits = _inventoryServiceObj.GetInventoryUnits();
-
-        foreach (var unit in inventoryUnits)
-        {
-            unitSaveData.Add(new UnitSnapshotData
-            {
-                unitID = unit.unitID,
-                unitLevel = unit.unitLevel
-            });
-        }
-
-        return unitSaveData;
     }
 }
