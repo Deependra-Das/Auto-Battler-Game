@@ -4,17 +4,17 @@ using System.Collections.Generic;
 
 public class RoundSnapshotService
 {
-    private RoundSnapshotData _currentSaveState;
+    private RoundSnapshotData _currentSaveState = new RoundSnapshotData();
 
     private PlayerLevelService _playerLevelServiceObj;
     private CurrencyService _currencyServiceObj;
-    private InventoryService _inventoryServiceObj;
+    private TeamService _teamServiceObj;
 
     public RoundSnapshotService()
     {
         _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
         _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
-        _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
+        _teamServiceObj = GameManager.Instance.Get<TeamService>();
         SubscribeToEvents();
     }
 
@@ -25,36 +25,41 @@ public class RoundSnapshotService
 
     void SubscribeToEvents()
     {
-        EventBusManager.Instance.Subscribe(EventNameEnum.RoundStarted, OnRoundStartSaveState);
+        EventBusManager.Instance.Subscribe(EventNameEnum.RoundStarted, OnRoundStartSaveSnapshot);
+        EventBusManager.Instance.Subscribe(EventNameEnum.RoundOverSaveSnapshot, OnRoundStartSaveSnapshot);
     }
 
     void UnsubscribeToEvents()
     {
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundStarted, OnRoundStartSaveState);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundStarted, OnRoundStartSaveSnapshot);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundOverSaveSnapshot, OnRoundStartSaveSnapshot);
     }
 
-    private void OnRoundStartSaveState(object[] parameters)
+    private void OnRoundStartSaveSnapshot(object[] parameters)
     {
-        int roundIndex = (int)parameters[0];
-        int stageIndex = (int)parameters[1];
+        int stageIndex = (int)parameters[0];
+        int roundIndex = (int)parameters[1];
+        RoundResultEnum roundResult = (RoundResultEnum)parameters[2];
 
-        SaveRoundStateData(stageIndex, roundIndex);
+        SaveRoundSnapshotData(stageIndex, roundIndex, roundResult);
     }
 
-    private void SaveRoundStateData(int stageIndex, int roundIndex)
+    private void SaveRoundSnapshotData(int stageIndex, int roundIndex, RoundResultEnum roundResult)
     {
-        _currentSaveState = new RoundSnapshotData
-        {
-            stageIndex = stageIndex,
-            roundIndex = roundIndex,
+        _currentSaveState.stageIndex = stageIndex;
+        _currentSaveState.roundIndex = roundIndex;
 
-            playerLevel = _playerLevelServiceObj.Level,
-            playerXP = _playerLevelServiceObj.CurrentXP,
-            playerCurrency = _currencyServiceObj.Balance,
+        _currentSaveState.playerLevel = _playerLevelServiceObj.Level;
+        _currentSaveState.playerXP = _playerLevelServiceObj.CurrentXP;
+        _currentSaveState.playerCurrency = _currencyServiceObj.Balance;
+        _currentSaveState.playerLives = _playerLevelServiceObj.Lives;
+        _currentSaveState.playerInventoryUnits = _teamServiceObj.GetTeamUnitSnapshot(TeamEnum.Team1);
 
-            playerInventoryUnits = _inventoryServiceObj.GetInventoryUnitsSnapshot(),
+        _currentSaveState.result = roundResult;
+    }
 
-            result = RoundResultEnum.InProgress
-        };
+    public RoundSnapshotData GetLastSavedRoundSnapshotData()
+    {
+        return _currentSaveState;
     }
 }
