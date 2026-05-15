@@ -41,25 +41,4 @@ public class InventoryService
     }
 
     public bool CanAddUnit => _currentUnitsInInventory.Count < MaxInventorySize;
-
-    public List<UnitSnapshotData> GetInventoryUnitsSnapshot()
-    {
-        return _currentUnitsInInventory
-            .Select(u => new UnitSnapshotData
-            {
-                unitID = u.unitID,
-                unitLevel = u.unitLevel
-
-            }).ToList();
-    }
-
-    public void Restore(List<UnitData> snapshot)
-    {
-        _currentUnitsInInventory.Clear();
-
-        foreach (var unit in snapshot)
-        {
-            AddUnit(unit);
-        }
-    }
 }
