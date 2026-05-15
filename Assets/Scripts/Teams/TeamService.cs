@@ -174,4 +174,15 @@ public class TeamService
         int newFieldCapacity = (int)parameters[1];
         SetFieldCapacity(TeamEnum.Team1, newFieldCapacity);
     }
+
+    public List<UnitSnapshotData> GetTeamUnitSnapshot(TeamEnum team)
+    {
+        return _teams[team]
+       .Select(u => new UnitSnapshotData
+       {
+           unitID = u.unitID,
+           unitLevel = u.unitLevel
+
+       }).ToList();
+    }
 }
