@@ -1,3 +1,4 @@
+using AutoBattler.Main;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -5,6 +6,8 @@ using UnityEngine;
 
 public class StageSnapshotService
 {
+    private RoundSnapshotService _roundSnapshotDataObj;
+
     private const string SAVE_FILE_NAME = "stage_snapshot_data.json";
     private const string SAVE_FOLDER = "SaveData";
 
@@ -12,6 +15,7 @@ public class StageSnapshotService
 
     public StageSnapshotService()
     {
+        _roundSnapshotDataObj = GameManager.Instance.Get<RoundSnapshotService>();
         EnsureFileExists();
     }
 
@@ -37,8 +41,10 @@ public class StageSnapshotService
         }
     }
 
-    public void Save(RoundSnapshotData data)
+    public void SaveStageSnapshotData()
     {
+        RoundSnapshotData data = _roundSnapshotDataObj.GetLastSavedRoundSnapshotData();
+
         try
         {
             StageSnapshotData snapShotData = LoadStageSnapShotData() ?? new StageSnapshotData();
