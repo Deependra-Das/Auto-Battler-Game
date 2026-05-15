@@ -10,6 +10,7 @@ public class RoundSnapshotData
     public int playerLevel;
     public int playerXP;
     public int playerCurrency;
+    public int playerLives;
 
     public List<UnitSnapshotData> playerInventoryUnits;
 
