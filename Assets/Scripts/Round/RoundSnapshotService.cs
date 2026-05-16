@@ -1,6 +1,6 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
-using System.Collections.Generic;
+using UnityEngine;
 
 public class RoundSnapshotService
 {
@@ -26,16 +26,25 @@ public class RoundSnapshotService
     void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.RoundStarted, OnRoundStartSaveSnapshot);
-        EventBusManager.Instance.Subscribe(EventNameEnum.RoundOverSaveSnapshot, OnRoundStartSaveSnapshot);
+        EventBusManager.Instance.Subscribe(EventNameEnum.RoundOverSaveSnapshot, OnRoundOverSaveSnapshot);
     }
 
     void UnsubscribeToEvents()
     {
         EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundStarted, OnRoundStartSaveSnapshot);
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundOverSaveSnapshot, OnRoundStartSaveSnapshot);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundOverSaveSnapshot, OnRoundOverSaveSnapshot);
     }
 
     private void OnRoundStartSaveSnapshot(object[] parameters)
+    {
+        int stageIndex = (int)parameters[0];
+        int roundIndex = (int)parameters[1];
+        RoundResultEnum roundResult = (RoundResultEnum)parameters[2];
+
+        SaveRoundSnapshotData(stageIndex, roundIndex, roundResult);
+    }
+
+    private void OnRoundOverSaveSnapshot(object[] parameters)
     {
         int stageIndex = (int)parameters[0];
         int roundIndex = (int)parameters[1];
@@ -56,10 +65,27 @@ public class RoundSnapshotService
         _currentSaveState.playerInventoryUnits = _teamServiceObj.GetTeamUnitSnapshot(TeamEnum.Team1);
 
         _currentSaveState.result = roundResult;
+
+        PrintRoundSnapshotData();
     }
 
     public RoundSnapshotData GetLastSavedRoundSnapshotData()
     {
         return _currentSaveState;
+    }
+
+    private void PrintRoundSnapshotData()
+    {
+        Debug.Log(
+            $"===== ROUND SNAPSHOT =====\n" +
+            $"Stage Index      : {_currentSaveState.stageIndex}\n" +
+            $"Round Index      : {_currentSaveState.roundIndex}\n" +
+            $"Player Level     : {_currentSaveState.playerLevel}\n" +
+            $"Player XP        : {_currentSaveState.playerXP}\n" +
+            $"Player Currency  : {_currentSaveState.playerCurrency}\n" +
+            $"Player Lives     : {_currentSaveState.playerLives}\n" +
+            $"Round Result     : {_currentSaveState.result}\n" +
+            $"Inventory Count  : {(_currentSaveState.playerInventoryUnits != null ? _currentSaveState.playerInventoryUnits.Count : 0)}"
+        );
     }
 }
