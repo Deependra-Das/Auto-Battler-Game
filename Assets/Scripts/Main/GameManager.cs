@@ -37,7 +37,6 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new GraphService());
             ServiceLocator.Register(new TeamService());
             ServiceLocator.Register(new RangedAbilityService(_rangedAbilities_SO));
-            ServiceLocator.Register(new StageService(_stageConfig_SO));
             ServiceLocator.Register(new CurrencyService());
             ServiceLocator.Register(new PlayerLevelService(_playerLevelConfig_SO));
             ServiceLocator.Register(new UnitService(_unit_SO));
@@ -46,6 +45,7 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new BuffService(_buff_SO));
             ServiceLocator.Register(new RoundSnapshotService());
             ServiceLocator.Register(new StageSnapshotService());
+            ServiceLocator.Register(new StageService(_stageConfig_SO));
         }
 
         private void DeregisterServices()
