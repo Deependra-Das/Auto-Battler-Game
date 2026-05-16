@@ -16,7 +16,20 @@ public class StageSnapshotService
     public StageSnapshotService()
     {
         _roundSnapshotDataObj = GameManager.Instance.Get<RoundSnapshotService>();
+        EnsureDirectoryExists();
         EnsureFileExists();
+    }
+
+    private void EnsureDirectoryExists()
+    {
+        string directory = System.IO.Path.GetDirectoryName(SavePath);
+
+        if (!System.IO.Directory.Exists(directory))
+        {
+            System.IO.Directory.CreateDirectory(directory);
+        }
+
+        Debug.Log(directory);
     }
 
     private void EnsureFileExists()
@@ -48,7 +61,7 @@ public class StageSnapshotService
         try
         {
             StageSnapshotData snapShotData = LoadStageSnapShotData() ?? new StageSnapshotData();
-
+            snapShotData.stageSnapshotList ??= new List<RoundSnapshotData>();
             snapShotData.stageSnapshotList.RemoveAll(s => s.stageIndex == data.stageIndex);
             snapShotData.stageSnapshotList.Add(data);
 
@@ -81,8 +94,20 @@ public class StageSnapshotService
 
     private void Write(StageSnapshotData data)
     {
+        EnsureDirectoryExists();
+
         string json = JsonUtility.ToJson(data, true);
-        File.WriteAllText(SavePath, json);
+
+        string tempPath = SavePath + ".tmp";
+
+        File.WriteAllText(tempPath, json);
+
+        if (File.Exists(SavePath))
+        {
+            File.Delete(SavePath);
+        }
+
+        File.Move(tempPath, SavePath);
     }
 
     public RoundSnapshotData GetStageSnapshot(int stageIndex)
@@ -123,5 +148,6 @@ public class StageSnapshotService
         {
             File.Delete(SavePath);
         }
+        EnsureFileExists();
     }
 }
