@@ -31,7 +31,7 @@ public class CurrencyService
 
     private void OnStageStartedSetInitialCurrency(object[] parameters)
     {
-        SetCurrency((int)parameters[2]);
+        SetCurrency((int)parameters[9]);
     }
 
     private void OnRoundOverAddCurrency(object[] parameters)

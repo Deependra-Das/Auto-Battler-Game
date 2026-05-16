@@ -124,21 +124,19 @@ public class PlayerLevelService
         return Lives <= 0;
     }
 
-    public void SetLevel(int level)
+    private void SetLevel(int level)
     {
         Level = level;
     }
 
-    public void SetXP(int xp)
+    private void SetCurrentXP(int xp)
     {
         CurrentXP = xp;
     }
 
-    public void Reset()
+    private void SetLives(int lives)
     {
-        Level = 1;
-        Lives = 3;
-        CurrentXP = 0;
+        Lives = lives;
     }
 
     private void OnBuyLevelXP_PlayerLevel(object[] parameters)
@@ -148,9 +146,11 @@ public class PlayerLevelService
 
     private void OnStageStarted_PlayerLevel(object[] parameters)
     {
-        Level = (int)parameters[1];
-        _xpExchangeCost = (int)parameters[5];
-        _xpExchangeValue = (int)parameters[6];
+        SetLevel((int)parameters[3]);
+        SetCurrentXP((int)parameters[4]);
+        SetLives((int)parameters[5]);
+        _xpExchangeCost = (int)parameters[6];
+        _xpExchangeValue = (int)parameters[7];
         EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level, MaxUnitsAllowedOnField, CurrentXP, GetXPToNextLevel());
     }
 }

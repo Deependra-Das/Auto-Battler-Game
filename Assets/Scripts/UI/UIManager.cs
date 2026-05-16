@@ -529,6 +529,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnStageStarted_UI(object[] parameters)
     {
-        UpdateXpExchangeCostUI((int)parameters[5]);
+        UpdateXpExchangeCostUI((int)parameters[6]);
     }
 }

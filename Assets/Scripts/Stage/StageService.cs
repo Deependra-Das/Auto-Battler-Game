@@ -133,6 +133,8 @@ public class StageService
 
     private bool AdvanceRound(RoundResultEnum result)
     {
+        SaveStageProgress(result);
+
         CurrentRoundIndex++;
 
         if (CurrentRoundIndex >= GetRoundCount())
@@ -142,7 +144,6 @@ public class StageService
             return true;
         }
 
-        SaveStageProgress(result);
         StartRound();
 
         return false;
@@ -163,18 +164,20 @@ public class StageService
     {
         var stage = _stageConfigDataList[CurrentStageIndex];
 
-        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, CurrentStageIndex,
-            stage.initialPlayerLevel, initialPlayerXP, stage.initialCurrency, stage.maxPlayerLives,
-            stage.maxPlayerLives, stage.roundDataList.Count, XpExchangeCost, XpExchangeValue, ShopRefreshCost);
+        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, 
+            CurrentStageIndex, CurrentRoundIndex, stage.roundDataList.Count,
+            stage.initialPlayerLevel, initialPlayerXP, stage.maxPlayerLives,
+            XpExchangeCost, XpExchangeValue, ShopRefreshCost, stage.initialCurrency);
     }
 
     private void RaiseStageStartedAfterRestoreEvent(RoundSnapshotData saveData)
     {
         var stage = _stageConfigDataList[CurrentStageIndex];
 
-        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, CurrentStageIndex,
-            saveData.playerLevel, saveData.playerXP, saveData.playerCurrency, stage.maxPlayerLives,
-            saveData.playerLives, stage.roundDataList.Count, XpExchangeCost, XpExchangeValue, ShopRefreshCost
+        EventBusManager.Instance.Raise(EventNameEnum.StageStarted, 
+            CurrentStageIndex, CurrentRoundIndex, stage.roundDataList.Count,
+            saveData.playerLevel, saveData.playerXP, saveData.playerLives, 
+            XpExchangeCost, XpExchangeValue, ShopRefreshCost, saveData.playerCurrency
         );
     }
 

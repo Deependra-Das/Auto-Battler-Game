@@ -91,7 +91,7 @@ public class ShopService
 
     private void OnStageStarted_Shop(object[] parameters)
     {
-        _shopRefreshCost = (int)parameters[7];
+        _shopRefreshCost = (int)parameters[8];
         UIManager.Instance.UpdateRefreshCostUI(_shopRefreshCost);
     }
 }
