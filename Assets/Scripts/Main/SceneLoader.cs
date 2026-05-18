@@ -13,7 +13,6 @@ public class SceneLoader : GenericMonoSingleton<SceneLoader>
     protected override void Awake()
     {
         base.Awake();
-        Debug.Log("SceneLoader");
     }
 
     private void Start()

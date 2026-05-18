@@ -15,7 +15,6 @@ public class InventoryService
     public void AddUnit(UnitData unitData)
     {
         _currentUnitsInInventory.Add(unitData);
-        GameManager.Instance.Get<TeamService>().AddUnitToTeam(unitData, TeamEnum.Team1);
         UIManager.Instance.AddInventoryUnitCard(unitData);
     }
 
@@ -27,11 +26,6 @@ public class InventoryService
     public void SetMaxInventorySize(int newSize)
     {
         MaxInventorySize = newSize;
-    }
-
-    public void DeployUnit(InventoryUnitCard card, Node node)
-    {
-        GameplayManager.Instance.InstantiateUnit(card.UnitData, node, TeamEnum.Team1);
     }
 
     public void ReorderUnits(List<UnitData> newOrder)

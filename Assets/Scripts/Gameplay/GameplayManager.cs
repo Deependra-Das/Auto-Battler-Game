@@ -87,13 +87,14 @@ public class GameplayManager : MonoBehaviour
         InstantiateTeam2Units();
     }
 
-    public void InstantiateUnit(UnitData unitData, Node node, TeamEnum team )
+    public void DeployUnit(InventoryUnitCard card, Node node, TeamEnum team)
     {
-        BaseUnit newUnit = Instantiate(unitData.unitPrefab);
-        newUnit.Initialize(unitData, team, node);
+        BaseUnit newUnit = Instantiate(card.UnitData.unitPrefab);
+        newUnit.Initialize(card.UnitData, team, node);
 
         _teamServiceObj.MoveToField(newUnit, team);
         _inventoryServiceObj.RemoveUnit(newUnit.UnitData);
+        UIManager.Instance.RemoveInventoryUnitCard(card);
     }
 
     private void PrepareTeam2UnitsForRound()
@@ -300,23 +301,45 @@ public class GameplayManager : MonoBehaviour
 
     private void CleanupUnits()
     {
-        CleanupTeam(TeamEnum.Team1);
-        CleanupTeam(TeamEnum.Team2);
+        CleanupTeam1();
+        CleanupTeam2();
     }
 
-    private void CleanupTeam(TeamEnum team)
+    private void CleanupTeam1()
     {
-        List<BaseUnit> units = new(_teamServiceObj.GetFieldUnits(team));
+        List<BaseUnit> fieldUnits = new (_teamServiceObj.GetFieldUnits(TeamEnum.Team1));
 
-        foreach (BaseUnit unit in units)
+        foreach (BaseUnit unit in fieldUnits)
         {
             if (unit == null)
                 continue;
 
             unit.ReleaseCurrentNode();
+            _teamServiceObj.MoveToInventory(unit, TeamEnum.Team1);
             _inventoryServiceObj.AddUnit(unit.UnitData);
-            _teamServiceObj.MoveToInventory(unit, unit.Team);
             Destroy(unit.gameObject);
+        }
+    }
+
+    private void CleanupTeam2()
+    {
+        List<BaseUnit> fieldUnits = new (_teamServiceObj.GetFieldUnits(TeamEnum.Team2));
+
+        foreach (BaseUnit unit in fieldUnits)
+        {
+            if (unit == null)
+                continue;
+
+            unit.ReleaseCurrentNode();
+            _teamServiceObj.RemoveUnitFromField(unit, TeamEnum.Team2);
+            Destroy(unit.gameObject);
+        }
+
+        List<UnitData> teamUnits = new(_teamServiceObj.GetTeamUnits(TeamEnum.Team2));
+
+        foreach (UnitData unitData in teamUnits)
+        {
+            _teamServiceObj.RemoveUnitFromTeam(unitData, TeamEnum.Team2);
         }
     }
 

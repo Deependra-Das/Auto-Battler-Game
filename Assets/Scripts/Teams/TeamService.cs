@@ -60,22 +60,20 @@ public class TeamService
         return true;
     }
 
-    public bool RemoveUnitFromTeam(UnitData unit, TeamEnum team)
+    public void RemoveUnitFromTeam(UnitData unit, TeamEnum team)
     {
-        return _teams[team].Remove(unit);
+        _teams[team].Remove(unit);
     }
 
-    public bool RemoveUnitFromField(BaseUnit unit, TeamEnum team)
+    public void RemoveUnitFromField(BaseUnit unit, TeamEnum team)
     {
         _fieldUnits[team].Remove(unit);
         RemoveUnitCount(unit, team);
-        return RemoveUnitFromTeam(unit.UnitData, team);
     }
 
-    public bool RemoveUnitFromInventory(UnitData unit, TeamEnum team)
+    public void RemoveUnitFromInventory(UnitData unit, TeamEnum team)
     {
         _inventoryUnits[team].Remove(unit);
-        return RemoveUnitFromTeam(unit, team);
     }
 
     public IReadOnlyList<UnitData> GetTeamUnits(TeamEnum team) => _teams[team].AsReadOnly();
@@ -177,6 +175,10 @@ public class TeamService
 
     public List<UnitSnapshotData> GetTeamUnitSnapshot(TeamEnum team)
     {
+
+        Debug.Log($"Team : {team.ToString()}--{GetTeamUnits(team).Count.ToString()}");
+        Debug.Log($"Inventory:{team.ToString()}--{GetInventoryUnits(team).Count.ToString()}");
+
         return _teams[team]
        .Select(u => new UnitSnapshotData
        {
