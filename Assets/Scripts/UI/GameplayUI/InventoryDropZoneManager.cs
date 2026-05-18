@@ -62,9 +62,8 @@ public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
         if (dragHandler != null)
             dragHandler.MarkDroppedOnInventoryZone();
 
-        _inventoryServiceObj.AddUnit(unit.UnitData);
-
         _teamServiceObj.MoveToInventory(unit, unit.Team);
+        _inventoryServiceObj.AddUnit(unit.UnitData);
         Destroy(unit.gameObject);
     }
 
