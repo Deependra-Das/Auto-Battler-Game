@@ -9,15 +9,17 @@ public class ShopService
     private List<UnitData> _currentUnitsInShop = new List<UnitData>();
     private const int SHOP_SIZE = 4;
     private int _shopRefreshCost = 0;
-    CurrencyService currencyServiceObj;
-    InventoryService inventoryServiceObj;
+    private CurrencyService _currencyServiceObj;
+    private InventoryService _inventoryServiceObj;
+    private TeamService _teamServiceObj;
 
     public ShopService(UnitScriptableObject unit_SO)
     {
         SubscribeToEvents();
         _allUnits = new List<UnitData>(unit_SO.unitDataList);
-        currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
-        inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
+        _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
+        _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
+        _teamServiceObj = GameManager.Instance.Get<TeamService>();
     }
 
     ~ShopService()
@@ -57,19 +59,20 @@ public class ShopService
     {    
         int cost = card.unitData.unitCost;
 
-        if (inventoryServiceObj.CurrentInventorySize >= inventoryServiceObj.MaxInventorySize)
+        if (_inventoryServiceObj.CurrentInventorySize >= _inventoryServiceObj.MaxInventorySize)
         {
             Debug.Log("Inventory Full!");
             return;
         }
 
-        if (!currencyServiceObj.SpendCurrency(cost))
+        if (!_currencyServiceObj.SpendCurrency(cost))
         {
             Debug.Log("Not enough Currency!");
             return;
         }
 
-        inventoryServiceObj.AddUnit(card.unitData);
+        _teamServiceObj.AddUnitToTeam(card.unitData, TeamEnum.Team1);
+        _inventoryServiceObj.AddUnit(card.unitData);
         _currentUnitsInShop.Remove(card.unitData);
         UIManager.Instance.RemoveShopUnitCard(card);
         AddRandomUnitInShop();
@@ -77,7 +80,7 @@ public class ShopService
 
     public void RefreshShop()
     {
-        if (!currencyServiceObj.SpendCurrency(_shopRefreshCost))
+        if (!_currencyServiceObj.SpendCurrency(_shopRefreshCost))
         {
             Debug.Log("Not enough Currency!");
             return;
