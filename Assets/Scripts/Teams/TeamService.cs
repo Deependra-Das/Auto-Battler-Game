@@ -175,10 +175,6 @@ public class TeamService
 
     public List<UnitSnapshotData> GetTeamUnitSnapshot(TeamEnum team)
     {
-
-        Debug.Log($"Team : {team.ToString()}--{GetTeamUnits(team).Count.ToString()}");
-        Debug.Log($"Inventory:{team.ToString()}--{GetInventoryUnits(team).Count.ToString()}");
-
         return _teams[team]
        .Select(u => new UnitSnapshotData
        {
