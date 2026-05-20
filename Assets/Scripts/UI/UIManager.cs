@@ -21,6 +21,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Transform _stageSelectionContent;
     [SerializeField] private Button _startContinueStageButton;
     [SerializeField] private Button _resetStageButton;
+    [SerializeField] private GameObject _stageSelectionConfirmationContainer;
+    [SerializeField] private TMP_Text _resetStageConfirmationMessageText;
+    [SerializeField] private Button _resetStageConfirmationYesButton;
+    [SerializeField] private Button _resetStageConfirmationNoButton;
 
     [Header("Gameplay UI")]
     [SerializeField] private GameObject _gameplayUIContainer;
@@ -95,6 +99,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleMainMenuUIContainer(false);
         ToggleStageSelectionUIContainer(false);
         ToggleGameplayUIContainer(false);
+        ToggleStartContinueStageButton(false);
+        ToggleResetStageStageButton(false);
+        ToggleStageSelectionConfirmationContainer(false);
     }
 
     private void OnEnable()
@@ -108,6 +115,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _buyLevelXpButton.onClick.AddListener(OnBuyLevelXpButtonClicked);
         _startContinueStageButton.onClick.AddListener(OnStartContinueStageButtonClicked);
         _resetStageButton.onClick.AddListener(OnResetStageButtonClicked);
+        _resetStageConfirmationYesButton.onClick.AddListener(OnResetStageConfirmationYesButtonClicked);
+        _resetStageConfirmationNoButton.onClick.AddListener(OnResetStageConfirmationNoButtonClicked);
     }
 
     private void OnDisable()
@@ -121,6 +130,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _buyLevelXpButton.onClick.RemoveListener(OnBuyLevelXpButtonClicked);
         _startContinueStageButton.onClick.RemoveListener(OnStartContinueStageButtonClicked);
         _resetStageButton.onClick.RemoveListener(OnResetStageButtonClicked);
+        _resetStageConfirmationYesButton.onClick.RemoveListener(OnResetStageConfirmationYesButtonClicked);
+        _resetStageConfirmationNoButton.onClick.RemoveListener(OnResetStageConfirmationNoButtonClicked);
     }
 
     public void OnDestroy()
@@ -472,7 +483,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnResetStageButtonClicked()
     {
-        //Logic to Reset a Stage
+        SetMessageForResetStageConfirmation();
+        ToggleStageSelectionConfirmationContainer(true);
     }
 
     private void OnSelectedStageChanged_UI(object[] parameters)
@@ -486,6 +498,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
             else
                 stage.SetStageCardUISelectedHighlight(false);
         }
+
+        ToggleStartContinueStageButton(true);
+        ToggleResetStageStageButton(true);
     }
 
     public void ToggleMainMenuUIContainer(bool value)
@@ -530,5 +545,35 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnStageStarted_UI(object[] parameters)
     {
         UpdateXpExchangeCostUI((int)parameters[6]);
+    }
+
+    private void ToggleStartContinueStageButton(bool value)
+    {
+        _startContinueStageButton.interactable = value;
+    }
+
+    private void ToggleResetStageStageButton(bool value)
+    {
+        _resetStageButton.interactable = value;
+    }
+
+    private void ToggleStageSelectionConfirmationContainer(bool value)
+    {
+        _stageSelectionConfirmationContainer.SetActive(value);
+    }
+
+    private void SetMessageForResetStageConfirmation()
+    {
+        _resetStageConfirmationMessageText.text = "Are you sure you want to reset Stage " + (_selectedStage + 1).ToString() + " ?";
+    }
+
+    private void OnResetStageConfirmationYesButtonClicked()
+    {
+        ToggleStageSelectionConfirmationContainer(false);
+    }
+
+    private void OnResetStageConfirmationNoButtonClicked()
+    {
+        ToggleStageSelectionConfirmationContainer(false);
     }
 }
