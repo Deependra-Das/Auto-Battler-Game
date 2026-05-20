@@ -465,7 +465,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
             StageData stageData = stageObj.GetStageData(index);
             GameObject stageButton = Instantiate(_stageSelectionCardUIPrefab, _stageSelectionContent);
             StageSelectionCardUIView stageSelectionCardUIViewObj = stageButton.GetComponent<StageSelectionCardUIView>();
-            stageSelectionCardUIViewObj.Initialize(index, stageData);
+            stageSelectionCardUIViewObj.Initialize(index, stageData.stageName, stageData.roundDataList.Count);
             _stageSelectionUICardList.Add(stageSelectionCardUIViewObj);
         }
     }
@@ -533,6 +533,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 break;
 
             case SceneNameEnum.StageSelectionScene:
+                SetStageData();
                 ToggleStageSelectionUIContainer(true);
                 break;
 
@@ -575,5 +576,24 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnResetStageConfirmationNoButtonClicked()
     {
         ToggleStageSelectionConfirmationContainer(false);
+    }
+
+    private void SetStageData()
+    {
+        StageSnapshotService stageSnapshotService = GameManager.Instance.Get<StageSnapshotService>();
+
+        foreach(StageSelectionCardUIView cardObj in _stageSelectionUICardList)
+        {
+            RoundSnapshotData data = stageSnapshotService.GetStageSnapshot(cardObj.StageIndex);
+
+            if (data != null)
+            {
+                cardObj.SetStageRoundData(data.roundIndex+1);
+            }
+            else
+            {
+                cardObj.SetStageRoundData(0);
+            }
+        }
     }
 }

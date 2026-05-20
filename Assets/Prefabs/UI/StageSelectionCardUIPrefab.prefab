@@ -108,6 +108,7 @@ MonoBehaviour:
   _selectedHighlight: {fileID: 8820202116533286967}
   _stageNameText: {fileID: 4090399580457743408}
   _numberOfRoundsText: {fileID: 3646213974384386406}
+  _stageClearedImage: {fileID: 6599834708318625143}
   _stageButton: {fileID: 8836394755981154592}
 --- !u!1 &1011593911070524856
 GameObject:
@@ -339,7 +340,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 2
+  m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -662,7 +663,7 @@ GameObject:
   - component: {fileID: 1338997523698271439}
   - component: {fileID: 6599834708318625143}
   m_Layer: 5
-  m_Name: Image
+  m_Name: StageClearedImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

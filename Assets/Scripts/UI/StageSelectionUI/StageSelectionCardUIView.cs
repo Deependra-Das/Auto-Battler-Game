@@ -10,10 +10,13 @@ public class StageSelectionCardUIView : MonoBehaviour
     [SerializeField] private GameObject _selectedHighlight;
     [SerializeField] private TMP_Text _stageNameText;
     [SerializeField] private TMP_Text _numberOfRoundsText;
+    [SerializeField] private Image _stageClearedImage;
     [SerializeField] private Button _stageButton;
 
     private void OnEnable() => SubscribeToEvents();
     private void OnDisable() => UnsubscribeToEvents();
+
+    private int _numberOfRounds = 0; 
 
     private void Awake()
     {
@@ -30,10 +33,11 @@ public class StageSelectionCardUIView : MonoBehaviour
         _stageButton.onClick.RemoveListener(OnStageButtonClicked);
     }
 
-    public void Initialize(int stageIndex, StageData stageData)
+    public void Initialize(int stageIndex, string stageName, int numberOfRounds)
     {
         StageIndex = stageIndex;
-        _numberOfRoundsText.text = stageData.roundDataList.Count.ToString();
+        _stageNameText.text = stageName;
+        _numberOfRounds = numberOfRounds;
     }
 
     private void OnStageButtonClicked()
@@ -44,5 +48,11 @@ public class StageSelectionCardUIView : MonoBehaviour
     public void SetStageCardUISelectedHighlight(bool value)
     {
         _selectedHighlight.SetActive(value);
+    }
+
+    public void SetStageRoundData(int roundsCleared)
+    {
+        _numberOfRoundsText.text = roundsCleared.ToString() + " / " + _numberOfRounds.ToString();
+        _stageClearedImage.gameObject.SetActive((roundsCleared == _numberOfRounds));
     }
 }
