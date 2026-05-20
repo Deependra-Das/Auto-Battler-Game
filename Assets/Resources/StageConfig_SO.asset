@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: StageConfig_SO
   m_EditorClassIdentifier: Assembly-CSharp::StageConfigScriptableObjectScript
   stageConfigDataList:
-  - xpExchangeCost: 1
+  - stageName: Stage 1
+    xpExchangeCost: 1
     xpExchangeValue: 1
     shopRefreshCost: 1
     initialCurrency: 15
@@ -47,7 +48,8 @@ MonoBehaviour:
       - enemyID: 124
         enemyLevel: 1
         enemySpawnTileIndex: 0
-  - xpExchangeCost: 1
+  - stageName: Stage 2
+    xpExchangeCost: 1
     xpExchangeValue: 1
     shopRefreshCost: 1
     initialCurrency: 10
@@ -81,7 +83,8 @@ MonoBehaviour:
       - enemyID: 124
         enemyLevel: 1
         enemySpawnTileIndex: 0
-  - xpExchangeCost: 1
+  - stageName: Stage 3
+    xpExchangeCost: 1
     xpExchangeValue: 1
     shopRefreshCost: 1
     initialCurrency: 10
