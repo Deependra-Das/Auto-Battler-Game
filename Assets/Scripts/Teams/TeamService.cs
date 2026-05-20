@@ -1,4 +1,5 @@
 using AutoBattler.Event;
+using AutoBattler.Main;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,20 +61,29 @@ public class TeamService
         return true;
     }
 
-    public void RemoveUnitFromTeam(UnitData unit, TeamEnum team)
+    public bool RemoveUnitFromTeam(UnitData unitData, TeamEnum team)
     {
-        _teams[team].Remove(unit);
+        if (!_teams[team].Contains(unitData)) return false;
+
+        _teams[team].Remove(unitData);
+        return true;
     }
 
-    public void RemoveUnitFromField(BaseUnit unit, TeamEnum team)
+    public bool RemoveUnitFromField(BaseUnit unit, TeamEnum team)
     {
+        if (!_fieldUnits[team].Contains(unit)) return false;
+
         _fieldUnits[team].Remove(unit);
         RemoveUnitCount(unit, team);
+        return true;
     }
 
-    public void RemoveUnitFromInventory(UnitData unit, TeamEnum team)
+    public bool RemoveUnitFromInventory(UnitData unitData, TeamEnum team)
     {
-        _inventoryUnits[team].Remove(unit);
+        if (!_inventoryUnits[team].Contains(unitData)) return false;
+
+        _inventoryUnits[team].Remove(unitData);
+        return true;
     }
 
     public IReadOnlyList<UnitData> GetTeamUnits(TeamEnum team) => _teams[team].AsReadOnly();
@@ -101,6 +111,17 @@ public class TeamService
         RemoveUnitCount(unit, team);
         _inventoryUnits[team].Add(unit.UnitData);
         return true;
+    }
+
+    public void AddAllTeamUnitsToInventory(TeamEnum team)
+    {
+        InventoryService inventoryService = GameManager.Instance.Get<InventoryService>();
+
+        foreach (UnitData unitData in _teams[team])
+        {
+            _inventoryUnits[team].Add(unitData);
+            inventoryService.AddUnit(unitData);
+        }
     }
 
     public int GetTeamCapacity(TeamEnum team) => _teamCapacities[team];

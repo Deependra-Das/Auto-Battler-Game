@@ -210,9 +210,9 @@ public class GameplayManager : MonoBehaviour
         {
             case TeamEnum.Team1:
             {
-                bool stageCleared = _stageServiceObj.OnRoundWin(TeamEnum.Team1);
+                bool roundCleared = _stageServiceObj.OnRoundWin(TeamEnum.Team1);
 
-                if (stageCleared)
+                if (roundCleared)
                 {
                     yield return StartCoroutine(HandleStageCleared());
                 }
@@ -315,10 +315,11 @@ public class GameplayManager : MonoBehaviour
                 continue;
 
             unit.ReleaseCurrentNode();
-            _teamServiceObj.MoveToInventory(unit, TeamEnum.Team1);
-            _inventoryServiceObj.AddUnit(unit.UnitData);
+            _teamServiceObj.RemoveUnitFromField(unit, TeamEnum.Team1);
             Destroy(unit.gameObject);
         }
+
+        _teamServiceObj.AddAllTeamUnitsToInventory(TeamEnum.Team1);
     }
 
     private void CleanupTeam2()

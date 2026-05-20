@@ -137,8 +137,6 @@ public class StageService
     {
         SaveStageProgress(result);
 
-        CurrentRoundIndex++;
-
         if (CurrentRoundIndex >= GetRoundCount())
         {
             EventBusManager.Instance.Raise(EventNameEnum.StageCleared, CurrentStageIndex);
@@ -146,6 +144,7 @@ public class StageService
             return true;
         }
 
+        CurrentRoundIndex++;
         StartRound();
 
         return false;
