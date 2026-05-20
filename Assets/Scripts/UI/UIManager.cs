@@ -533,7 +533,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 break;
 
             case SceneNameEnum.StageSelectionScene:
-                SetStageData();
+                UpdateStageSelectionRoundData();
                 ToggleStageSelectionUIContainer(true);
                 break;
 
@@ -570,6 +570,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnResetStageConfirmationYesButtonClicked()
     {
+        GameManager.Instance.Get<StageSnapshotService>().DeleteStageSnapshot(_selectedStage);
+        UpdateStageSelectionRoundData();
         ToggleStageSelectionConfirmationContainer(false);
     }
 
@@ -578,7 +580,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleStageSelectionConfirmationContainer(false);
     }
 
-    private void SetStageData()
+    private void UpdateStageSelectionRoundData()
     {
         StageSnapshotService stageSnapshotService = GameManager.Instance.Get<StageSnapshotService>();
 
