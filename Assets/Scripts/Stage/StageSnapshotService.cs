@@ -1,7 +1,7 @@
 using AutoBattler.Main;
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StageSnapshotService
@@ -11,7 +11,8 @@ public class StageSnapshotService
     private const string SAVE_FILE_NAME = "stage_snapshot_data.json";
     private const string SAVE_FOLDER = "SaveData";
 
-    private string SavePath => System.IO.Path.Combine(Application.persistentDataPath, SAVE_FOLDER, SAVE_FILE_NAME);
+    private string SavePath =>
+        System.IO.Path.Combine(Application.persistentDataPath, SAVE_FOLDER, SAVE_FILE_NAME);
 
     public StageSnapshotService()
     {
@@ -28,8 +29,6 @@ public class StageSnapshotService
         {
             System.IO.Directory.CreateDirectory(directory);
         }
-
-        Debug.Log(directory);
     }
 
     private void EnsureFileExists()
@@ -40,12 +39,10 @@ public class StageSnapshotService
             {
                 var initialData = new StageSnapshotData
                 {
-                    stageSnapshotList = new List<RoundSnapshotData>()
+                    stageSnapshotList = new List<StageSnapshotEntry>()
                 };
 
                 Write(initialData);
-
-                Debug.Log("Stage snapshot file created at: " + SavePath);
             }
         }
         catch (Exception ex)
@@ -56,16 +53,44 @@ public class StageSnapshotService
 
     public void SaveStageSnapshotData()
     {
-        RoundSnapshotData data = _roundSnapshotDataObj.GetLastSavedRoundSnapshotData();
-
         try
         {
-            StageSnapshotData snapShotData = LoadStageSnapShotData() ?? new StageSnapshotData();
-            snapShotData.stageSnapshotList ??= new List<RoundSnapshotData>();
-            snapShotData.stageSnapshotList.RemoveAll(s => s.stageIndex == data.stageIndex);
-            snapShotData.stageSnapshotList.Add(data);
+            RoundSnapshotData data = _roundSnapshotDataObj.GetLastSavedRoundSnapshotData();
 
-            Write(snapShotData);
+            StageSnapshotData snapshotData = LoadStageSnapShotData() ?? new StageSnapshotData();
+
+            snapshotData.stageSnapshotList ??= new List<StageSnapshotEntry>();
+
+            StageSnapshotEntry stageEntry = snapshotData.stageSnapshotList.Find(s => s.stageIndex == data.stageIndex);
+
+            if (stageEntry == null)
+            {
+                stageEntry = new StageSnapshotEntry
+                {
+                    stageIndex = data.stageIndex
+                };
+
+                snapshotData.stageSnapshotList.Add(stageEntry);
+            }
+
+            switch (data.result)
+            {
+                case RoundResultEnum.Win:
+                    stageEntry.winCount++;
+                    break;
+
+                case RoundResultEnum.Draw:
+                    stageEntry.drawCount++;
+                    break;
+
+                case RoundResultEnum.Lose:
+                    stageEntry.loseCount++;
+                    break;
+            }
+
+            stageEntry.latestRoundSnapshot = data;
+
+            Write(snapshotData);
 
             Debug.Log($"Snapshot saved: Stage {data.stageIndex}, Round {data.roundIndex}");
         }
@@ -97,7 +122,6 @@ public class StageSnapshotService
         EnsureDirectoryExists();
 
         string json = JsonUtility.ToJson(data, true);
-
         string tempPath = SavePath + ".tmp";
 
         File.WriteAllText(tempPath, json);
@@ -110,36 +134,37 @@ public class StageSnapshotService
         File.Move(tempPath, SavePath);
     }
 
-    public RoundSnapshotData GetStageSnapshot(int stageIndex)
+    public StageSnapshotEntry GetStageSnapshot(int stageIndex)
     {
-        var stageSnapShotData = LoadStageSnapShotData();
+        var data = LoadStageSnapShotData();
 
-        if (stageSnapShotData == null)
+        if (data == null)
             return null;
 
-        return stageSnapShotData.stageSnapshotList.Find(s => s.stageIndex == stageIndex);
+        return data.stageSnapshotList.Find(s => s.stageIndex == stageIndex);
     }
 
     public bool HasStageSnapshot(int stageIndex)
     {
-        var stageSnapShotData = LoadStageSnapShotData();
+        var data = LoadStageSnapShotData();
 
-        if (stageSnapShotData == null)
+        if (data == null)
             return false;
 
-        return stageSnapShotData.stageSnapshotList.Exists(s => s.stageIndex == stageIndex);
+        return data.stageSnapshotList
+            .Exists(s => s.stageIndex == stageIndex);
     }
 
     public void DeleteStageSnapshot(int stageIndex)
     {
-        var stageSnapShotData = LoadStageSnapShotData();
+        var data = LoadStageSnapShotData();
 
-        if (stageSnapShotData == null)
+        if (data == null)
             return;
 
-        stageSnapShotData.stageSnapshotList.RemoveAll(s => s.stageIndex == stageIndex);
+        data.stageSnapshotList.RemoveAll(s => s.stageIndex == stageIndex);
 
-        Write(stageSnapShotData);
+        Write(data);
     }
 
     public void DeleteStageSnapshotDataFile()
@@ -148,6 +173,7 @@ public class StageSnapshotService
         {
             File.Delete(SavePath);
         }
+
         EnsureFileExists();
     }
 }

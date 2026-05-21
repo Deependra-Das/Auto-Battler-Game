@@ -5,5 +5,5 @@ using UnityEngine;
 [Serializable]
 public class StageSnapshotData
 {
-    public List<RoundSnapshotData> stageSnapshotList = new();
+    public List<StageSnapshotEntry> stageSnapshotList = new();
 }
