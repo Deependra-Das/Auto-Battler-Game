@@ -30,12 +30,14 @@ public class PlayerLevelService
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.BuyLevelXP, OnBuyLevelXP_PlayerLevel);
         EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStarted_PlayerLevel);
+        EventBusManager.Instance.Subscribe(EventNameEnum.RoundOver, OnRoundOver_PlayerLevel);
     }
 
     void UnsubscribeToEvents()
     {
         EventBusManager.Instance.Unsubscribe(EventNameEnum.BuyLevelXP, OnBuyLevelXP_PlayerLevel);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStarted_PlayerLevel);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundOver, OnRoundOver_PlayerLevel);
     }
 
     public int MaxLevel => _config.playerProgressionDataList.Count;
@@ -152,5 +154,15 @@ public class PlayerLevelService
         _xpExchangeCost = (int)parameters[6];
         _xpExchangeValue = (int)parameters[7];
         EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level, MaxUnitsAllowedOnField, CurrentXP, GetXPToNextLevel());
+    }
+
+    private void OnRoundOver_PlayerLevel(object[] parameters)
+    {
+        RoundResultEnum result = (RoundResultEnum)parameters[0];
+
+        if(result == RoundResultEnum.Lose)
+        {
+            LoseLife();
+        }
     }
 }

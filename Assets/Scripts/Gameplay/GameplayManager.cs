@@ -196,76 +196,96 @@ public class GameplayManager : MonoBehaviour
 
     private IEnumerator HandleRoundEnd(TeamEnum winnerTeam)
     {
+        _isRoundEnding = true;
+
         UpdateGameplayState(GameplayStateEnum.RoundOver);
 
         yield return new WaitForSeconds(1.5f);
 
-        UpdateGameplayState(GameplayStateEnum.Cleanup);
-
-        CleanupRound();
-
-        yield return new WaitForSeconds(0.5f);
+        bool stageFailed = false;
 
         switch (winnerTeam)
         {
             case TeamEnum.Team1:
-            {
-                bool roundCleared = _stageServiceObj.OnRoundWin(TeamEnum.Team1);
-
-                if (roundCleared)
-                {
-                    yield return StartCoroutine(HandleStageCleared());
-                }
-                else
-                {
-                    PrepareCurrentRound();
-                }
-
+                _stageServiceObj.OnRoundWin(TeamEnum.Team1);
                 break;
-            }
 
             case TeamEnum.Team2:
-            {
-                bool stageFailed = _stageServiceObj.OnRoundLose(TeamEnum.Team1);
+                _stageServiceObj.OnRoundLose(TeamEnum.Team1);
 
-                if (stageFailed)
+                if (_playerLevelServiceObj.IsPlayerDead())
                 {
-                    yield return StartCoroutine(HandleStageFailed());
-                }
-                else
-                {
-                    PrepareCurrentRound();
+                    stageFailed = true;
                 }
 
                 break;
-            }
 
             case TeamEnum.None:
-            {
-                bool stageAdvanced = _stageServiceObj.OnRoundDraw();
-
-                if (!stageAdvanced)
-                {
-                    PrepareCurrentRound();
-                }
+                _stageServiceObj.OnRoundDraw();
                 break;
-            }
         }
 
+        UpdateGameplayState(GameplayStateEnum.Cleanup);
+
+        if (stageFailed)
+        {
+            CleanupStage();
+            yield return StartCoroutine(HandleStageFailed());
+
+            _isRoundEnding = false;
+            yield break;
+        }
+
+        bool stageOver = _stageServiceObj.TryAdvanceRound();
+
+        if (stageOver)
+        {
+            CleanupStage();
+
+            bool cleared = _stageServiceObj.CheckStageCleared();
+
+            if (cleared)
+            {
+                yield return StartCoroutine(HandleStageClearedFull());
+            }
+            else
+            {
+                yield return StartCoroutine(HandleStageClearedPartial());
+            }
+
+            _isRoundEnding = false;
+            yield break;
+        }
+
+        CleanupRound(true);
+
+        yield return new WaitForSeconds(0.5f);
+        PrepareCurrentRound();
         _isRoundEnding = false;
     }
 
-    private IEnumerator HandleStageCleared()
+    private IEnumerator HandleStageClearedFull()
     {
         UpdateGameplayState(GameplayStateEnum.StageOver);
 
-        Debug.Log("Stage Cleared");
+        Debug.Log("Stage Cleared Full");
+
+        yield return new WaitForSeconds(2f);
+    }
+
+    private IEnumerator HandleStageClearedPartial()
+    {
+        UpdateGameplayState(GameplayStateEnum.StageOver);
+
+        Debug.Log("Stage Cleared Partial");
 
         yield return new WaitForSeconds(2f);
     }
 
     private IEnumerator HandleStageFailed()
     {
+        EventBusManager.Instance.Raise(EventNameEnum.StageFailed, _stageServiceObj.CurrentStageIndex);
+
         UpdateGameplayState(GameplayStateEnum.StageOver);
 
         Debug.Log("Stage Failed");
@@ -288,24 +308,23 @@ public class GameplayManager : MonoBehaviour
         //UpdateGameplayState(GameplayStateEnum.Preparation);
     }
 
-    private void CleanupRound()
+    private void CleanupRound(bool restorePlayerInventory = true)
     {
-        CleanupUnits();
-        CleanupRuntimeGameplayData();
+        CleanupUnits(restorePlayerInventory);
     }
 
     private void CleanupStage()
     {
-        CleanupRound();
+        CleanupRound(false);
     }
 
-    private void CleanupUnits()
+    private void CleanupUnits(bool restorePlayerInventory)
     {
-        CleanupTeam1();
+        CleanupTeam1(restorePlayerInventory);
         CleanupTeam2();
     }
 
-    private void CleanupTeam1()
+    private void CleanupTeam1(bool restorePlayerInventory)
     {
         List<BaseUnit> fieldUnits = new (_teamServiceObj.GetFieldUnits(TeamEnum.Team1));
 
@@ -319,7 +338,10 @@ public class GameplayManager : MonoBehaviour
             Destroy(unit.gameObject);
         }
 
-        _teamServiceObj.AddAllTeamUnitsToInventory(TeamEnum.Team1);
+        if (restorePlayerInventory)
+        {
+            _teamServiceObj.AddAllTeamUnitsToInventory(TeamEnum.Team1);
+        }
     }
 
     private void CleanupTeam2()
@@ -342,10 +364,6 @@ public class GameplayManager : MonoBehaviour
         {
             _teamServiceObj.RemoveUnitFromTeam(unitData, TeamEnum.Team2);
         }
-    }
-
-    private void CleanupRuntimeGameplayData()
-    {
     }
 
     private void OnDrawGizmos()

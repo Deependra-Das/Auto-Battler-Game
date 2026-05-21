@@ -36,7 +36,7 @@ public class CurrencyService
 
     private void OnRoundOverAddCurrency(object[] parameters)
     {
-        AddCurrency((int)parameters[1]);
+        AddCurrency((int)parameters[2]);
     }
 
     public bool CanAfford(int amount)

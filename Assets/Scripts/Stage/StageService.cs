@@ -14,6 +14,9 @@ public class StageService
     public int XpExchangeCost { get; private set; }
     public int XpExchangeValue { get; private set; }
     public int ShopRefreshCost { get; private set; }
+    public int CurrentStageWinCount { get; private set; }
+    public int CurrentStageDrawCount { get; private set; }
+    public int CurrentStageLoseCount { get; private set; }
 
     private int initialPlayerXP = 0;
 
@@ -30,11 +33,27 @@ public class StageService
         if (saveData != null)
         {
             ResumeStageFromSave(saveData);
+            LoadStageStats(saveData);
         }
         else
         {
             StartStage(stageIndex);
+            LoadStageStats(stageIndex);
         }
+    }
+
+    private void LoadStageStats(int stageIndex)
+    {
+        CurrentStageWinCount = 0;
+        CurrentStageDrawCount = 0;
+        CurrentStageLoseCount = 0;
+    }
+
+    private void LoadStageStats(StageSnapshotEntry saveData)
+    {
+        CurrentStageWinCount = saveData.winCount;
+        CurrentStageDrawCount = saveData.drawCount;
+        CurrentStageLoseCount = saveData.loseCount;
     }
 
     public void StartStage(int stageIndex)
@@ -61,17 +80,17 @@ public class StageService
         RaiseRoundStartedEvent();
     }
 
-    public void ResumeStageFromSave(RoundSnapshotData saveData)
+    public void ResumeStageFromSave(StageSnapshotEntry saveData)
     {
-        CurrentStageIndex = saveData.stageIndex;
-        CurrentRoundIndex = saveData.roundIndex + 1;
+        CurrentStageIndex = saveData.latestRoundSnapshot.stageIndex;
+        CurrentRoundIndex = saveData.latestRoundSnapshot.roundIndex + 1;
 
         ApplyStageConfig();
 
         Debug.Log($"Resuming Stage {CurrentStageIndex}, Round {CurrentRoundIndex}");
 
-        RestorePlayerInventory(saveData);
-        RaiseStageStartedAfterRestoreEvent(saveData);
+        RestorePlayerInventory(saveData.latestRoundSnapshot);
+        RaiseStageStartedAfterRestoreEvent(saveData.latestRoundSnapshot);
 
         StartRound();
     }
@@ -104,49 +123,46 @@ public class StageService
         }
     }
 
-    public bool OnRoundWin(TeamEnum winnerTeam)
+    public void OnRoundWin(TeamEnum winnerTeam)
     {
         int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].winXPCurrency;
-        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, winnerTeam, currencyReward);     
-        return AdvanceRound(RoundResultEnum.Win);
+        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, RoundResultEnum.Win, winnerTeam, currencyReward);
+
+        SaveStageProgress(RoundResultEnum.Win);
     }
 
-    public bool OnRoundLose(TeamEnum loserTeam)
+    public void OnRoundLose(TeamEnum loserTeam)
     {
         int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].lossXPCurrency;
-        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, loserTeam, currencyReward);
+        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, RoundResultEnum.Lose, loserTeam, currencyReward);
 
-        if (GameManager.Instance.Get<PlayerLevelService>().IsPlayerDead())
+        SaveStageProgress(RoundResultEnum.Lose);
+    }
+
+    public void OnRoundDraw()
+    {
+        int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].lossXPCurrency;
+        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, RoundResultEnum.Draw, TeamEnum.None, currencyReward);
+
+        SaveStageProgress(RoundResultEnum.Draw);
+    }
+
+    public bool CheckStageCleared()
+    {
+        return (CurrentStageWinCount + CurrentStageDrawCount) == GetRoundCount();
+    }
+
+    public bool TryAdvanceRound()
+    {
+        int nextIndex = CurrentRoundIndex + 1;
+
+        if (nextIndex >= GetRoundCount())
         {
-            EventBusManager.Instance.Raise( EventNameEnum.StageFailed, CurrentStageIndex);
+            EventBusManager.Instance.Raise(EventNameEnum.StageOver, CurrentStageIndex);
             return true;
         }
 
-        return AdvanceRound(RoundResultEnum.Lose);
-    }
-
-    public bool OnRoundDraw()
-    {
-        int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].lossXPCurrency;
-        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, TeamEnum.None, currencyReward);
-
-        return AdvanceRound(RoundResultEnum.Draw);
-    }
-
-    private bool AdvanceRound(RoundResultEnum result)
-    {
-        SaveStageProgress(result);
-
-        if (CurrentRoundIndex >= GetRoundCount())
-        {
-            EventBusManager.Instance.Raise(EventNameEnum.StageCleared, CurrentStageIndex);
-
-            return true;
-        }
-
-        CurrentRoundIndex++;
-        StartRound();
-
+        CurrentRoundIndex = nextIndex;
         return false;
     }
 
@@ -189,7 +205,14 @@ public class StageService
 
     public RoundData GetCurrentRoundData()
     {
-        return GetCurrentStageData().roundDataList[CurrentRoundIndex];
+        var stage = GetCurrentStageData();
+
+        if (CurrentRoundIndex < 0 || CurrentRoundIndex >= stage.roundDataList.Count)
+        {
+            return null;
+        }
+
+        return stage.roundDataList[CurrentRoundIndex];
     }
 
     public int GetRoundCount()

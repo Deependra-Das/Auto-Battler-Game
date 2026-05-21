@@ -586,11 +586,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         foreach(StageSelectionCardUIView cardObj in _stageSelectionUICardList)
         {
-            RoundSnapshotData data = stageSnapshotService.GetStageSnapshot(cardObj.StageIndex);
+            StageSnapshotEntry data = stageSnapshotService.GetStageSnapshot(cardObj.StageIndex);
 
             if (data != null)
             {
-                cardObj.SetStageRoundData(data.roundIndex+1);
+                cardObj.SetStageRoundData(data.latestRoundSnapshot.roundIndex+1);
             }
             else
             {
