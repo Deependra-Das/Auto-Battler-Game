@@ -23,6 +23,8 @@ namespace AutoBattler.Event
         LevelChanged,
         SceneLoaded,
         SelectedStageChanged,
-        RoundOverSaveSnapshot
+        RoundOverSaveSnapshot,
+        GameplayPaused,
+        GameplayResumed,
     }
 }
