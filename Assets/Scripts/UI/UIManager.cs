@@ -28,9 +28,16 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     [Header("Gameplay UI")]
     [SerializeField] private GameObject _gameplayUIContainer;
-    [SerializeField] private Button _playButton;
+    [SerializeField] private Button _enterCombatButton;
     [SerializeField] private Button _shopToggleButton;
     [SerializeField] private TMP_Text _balanceCurrencyText;
+    [SerializeField] private Button _pausePlayGameplayButton;
+
+    [Header("--Gameplay Paused UI")]
+    [SerializeField] private GameObject _gameplayPausedContainer;
+    [SerializeField] private Button _resumeGameplayButton;
+    [SerializeField] private Button _restartRoundGameplayButton;
+    [SerializeField] private Button _backGamePlayOverButton;
 
     [Header("--Shop UI")]
     [SerializeField] private GameObject _shopPanel;
@@ -102,12 +109,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleStartContinueStageButton(false);
         ToggleResetStageStageButton(false);
         ToggleStageSelectionConfirmationContainer(false);
+        ToggleGameplayPausedContainer(false);
     }
 
     private void OnEnable()
     {
         _chooseStageButton.onClick.AddListener(OnChooseStageButtonClicked);
-        _playButton.onClick.AddListener(OnPlayButtonClicked);
+        _enterCombatButton.onClick.AddListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
         _team1ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
@@ -117,12 +125,14 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _resetStageButton.onClick.AddListener(OnResetStageButtonClicked);
         _resetStageConfirmationYesButton.onClick.AddListener(OnResetStageConfirmationYesButtonClicked);
         _resetStageConfirmationNoButton.onClick.AddListener(OnResetStageConfirmationNoButtonClicked);
+        _pausePlayGameplayButton.onClick.AddListener(OnPausePlayGameplayToggleChanged);
+        _resumeGameplayButton.onClick.AddListener(OnResumeGameplayButtonClicked);
     }
 
     private void OnDisable()
     {
         _chooseStageButton.onClick.RemoveListener(OnChooseStageButtonClicked);
-        _playButton.onClick.RemoveListener(OnPlayButtonClicked);
+        _enterCombatButton.onClick.RemoveListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
         _team1ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
@@ -132,6 +142,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _resetStageButton.onClick.RemoveListener(OnResetStageButtonClicked);
         _resetStageConfirmationYesButton.onClick.RemoveListener(OnResetStageConfirmationYesButtonClicked);
         _resetStageConfirmationNoButton.onClick.RemoveListener(OnResetStageConfirmationNoButtonClicked);
+        _pausePlayGameplayButton.onClick.RemoveListener(OnPausePlayGameplayToggleChanged);
+        _resumeGameplayButton.onClick.RemoveListener(OnResumeGameplayButtonClicked);
     }
 
     public void OnDestroy()
@@ -148,6 +160,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Subscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStarted_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.SelectedStageChanged, OnSelectedStageChanged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.GameplayPaused, OnGameplayPaused_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.GameplayResumed, OnGameplayResumed_UI);
     }
 
     private void UnsubscribeToEvents()
@@ -159,6 +173,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Unsubscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStarted_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.SelectedStageChanged, OnSelectedStageChanged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.GameplayPaused, OnGameplayPaused_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.GameplayResumed, OnGameplayResumed_UI);
     }
 
     public void InitializeGameplayUI()
@@ -264,7 +280,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         shopServiceObj.RefreshShop();
     }
 
-    private void OnPlayButtonClicked()
+    private void OnEnterCombatButtonClicked()
     {
         GameplayManager.Instance.UpdateGameplayState(GameplayStateEnum.Combat);
     }
@@ -597,5 +613,30 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 cardObj.SetStageRoundData(0);
             }
         }
+    }
+
+    private void OnPausePlayGameplayToggleChanged()
+    {
+        GameplayManager.Instance.PauseGameplay();
+    }
+
+    private void OnGameplayResumed_UI(object[] parameters)
+    {
+        ToggleGameplayPausedContainer(false);
+    }
+
+    private void OnGameplayPaused_UI(object[] parameters)
+    {
+        ToggleGameplayPausedContainer(true);
+    }
+
+    private void ToggleGameplayPausedContainer(bool value)
+    {
+        _gameplayPausedContainer.SetActive(value);
+    }
+
+    private void OnResumeGameplayButtonClicked()
+    {
+        GameplayManager.Instance.ResumeGameplay();
     }
 }
