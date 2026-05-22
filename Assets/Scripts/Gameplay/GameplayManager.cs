@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameplayManager : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class GameplayManager : MonoBehaviour
     public int toIndex = 0;
 
     private bool _isRoundEnding = false;
+    private bool _isGameplayPaused = false;
 
     public GameplayStateEnum CurrentGameplayState { get; private set; }
 
@@ -70,6 +72,14 @@ public class GameplayManager : MonoBehaviour
         _unitServiceObj = GameManager.Instance.Get<UnitService>();
         _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
         _shopServiceObj = GameManager.Instance.Get<ShopService>();
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            TogglePause();
+        }
     }
 
     public void InitializeStageForGameplay(int stageIndex)
@@ -410,5 +420,39 @@ public class GameplayManager : MonoBehaviour
         CurrentGameplayState = newState;
 
         EventBusManager.Instance.Raise(EventNameEnum.GameplayStateChanged, CurrentGameplayState);
+    }
+
+    public void TogglePause()
+    {
+        if (_isGameplayPaused)
+        {
+            ResumeGameplay();
+        }
+        else
+        {
+            PauseGameplay();
+        }
+    }
+    public void PauseGameplay()
+    {
+        if (_isGameplayPaused) return;
+
+        _isGameplayPaused = true;
+
+        Time.timeScale = 0f;
+
+        EventBusManager.Instance.Raise(EventNameEnum.GameplayPaused);
+    }
+
+    public void ResumeGameplay()
+    {
+        if (!_isGameplayPaused)
+            return;
+
+        _isGameplayPaused = false;
+
+        Time.timeScale = 1f;
+
+        EventBusManager.Instance.Raise(EventNameEnum.GameplayResumed);
     }
 }
