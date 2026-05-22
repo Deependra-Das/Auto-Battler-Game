@@ -168,13 +168,13 @@ public class StageService
 
     private void SaveStageProgress(RoundResultEnum roundResult)
     {
-        RaiseRoundOverSaveSnapshotEvent();
+        RaiseRoundOverSaveSnapshotEvent(roundResult);
         GameManager.Instance.Get<StageSnapshotService>().SaveStageSnapshotData();
     }
 
-    private void RaiseRoundOverSaveSnapshotEvent()
+    private void RaiseRoundOverSaveSnapshotEvent(RoundResultEnum roundResult)
     {
-        EventBusManager.Instance.Raise(EventNameEnum.RoundOverSaveSnapshot, CurrentStageIndex, CurrentRoundIndex, RoundResultEnum.InProgress);
+        EventBusManager.Instance.Raise(EventNameEnum.RoundOverSaveSnapshot, CurrentStageIndex, CurrentRoundIndex, roundResult);
     }
 
     private void RaiseStageStartedEvent()

@@ -590,7 +590,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
             if (data != null)
             {
-                cardObj.SetStageRoundData(data.latestRoundSnapshot.roundIndex+1);
+                cardObj.SetStageRoundData(data.winCount+data.drawCount);
             }
             else
             {

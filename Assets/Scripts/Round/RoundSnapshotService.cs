@@ -66,7 +66,7 @@ public class RoundSnapshotService
 
         _currentSaveState.result = roundResult;
 
-        PrintRoundSnapshotData();
+        //PrintRoundSnapshotData();
     }
 
     public RoundSnapshotData GetLastSavedRoundSnapshotData()

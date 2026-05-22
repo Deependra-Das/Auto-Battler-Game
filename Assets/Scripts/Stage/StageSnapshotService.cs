@@ -89,9 +89,7 @@ public class StageSnapshotService
             }
 
             stageEntry.latestRoundSnapshot = data;
-
             Write(snapshotData);
-
             Debug.Log($"Snapshot saved: Stage {data.stageIndex}, Round {data.roundIndex}");
         }
         catch (Exception ex)
