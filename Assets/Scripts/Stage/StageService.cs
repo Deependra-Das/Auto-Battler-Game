@@ -229,4 +229,28 @@ public class StageService
     {
         return _stageConfigDataList[index];
     }
+
+    public void Reset()
+    {
+        CurrentStageIndex = 0;
+        CurrentRoundIndex = 0;
+
+        XpExchangeCost = 0;
+        XpExchangeValue = 0;
+        ShopRefreshCost = 0;
+
+        CurrentStageWinCount = 0;
+        CurrentStageDrawCount = 0;
+        CurrentStageLoseCount = 0;
+
+        initialPlayerXP = 0;
+    }
+
+    public void Dispose()
+    {
+        Reset();
+
+        _stageConfigDataList = null;
+        _stageSnapshotServiceObj = null;
+    }
 }
