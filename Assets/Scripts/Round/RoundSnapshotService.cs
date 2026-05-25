@@ -18,11 +18,6 @@ public class RoundSnapshotService
         SubscribeToEvents();
     }
 
-    ~RoundSnapshotService()
-    {
-        UnsubscribeToEvents();
-    }
-
     void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.RoundStarted, OnRoundStartSaveSnapshot);
@@ -87,5 +82,21 @@ public class RoundSnapshotService
             $"Round Result     : {_currentSaveState.result}\n" +
             $"Inventory Count  : {(_currentSaveState.playerInventoryUnits != null ? _currentSaveState.playerInventoryUnits.Count : 0)}"
         );
+    }
+
+    public void Reset()
+    {
+        _currentSaveState = new RoundSnapshotData();
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeToEvents();
+
+        Reset();
+
+        _playerLevelServiceObj = null;
+        _currencyServiceObj = null;
+        _teamServiceObj = null;
     }
 }
