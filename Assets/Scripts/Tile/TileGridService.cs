@@ -43,6 +43,19 @@ public class TileGridService
         }
     }
 
+    public void Reset()
+    {
+        foreach (Tile tile in _spawnedTileList)
+        {
+            if (tile != null)
+            {
+                GameObject.Destroy(tile.gameObject);
+            }
+        }
+
+        _spawnedTileList.Clear();
+    }
+
     public List<Tile> GetSpawnedTilesList()
     {
         if(_spawnedTileList != null) return _spawnedTileList;
