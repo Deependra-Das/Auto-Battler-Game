@@ -18,9 +18,11 @@ public class BuffService
         }
     }
 
-    ~BuffService() 
+    public void Dispose() 
     {
         UnsubscribeToEvents();
+        _buffData.Clear();
+        _appliedBuffs.Clear();
     }
 
     void SubscribeToEvents()
@@ -162,5 +164,10 @@ public class BuffService
                 index = i;
         }
         return index;
+    }
+
+    public void Reset()
+    {
+        _appliedBuffs.Clear();
     }
 }
