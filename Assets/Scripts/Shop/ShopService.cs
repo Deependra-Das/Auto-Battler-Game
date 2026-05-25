@@ -22,11 +22,6 @@ public class ShopService
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
     }
 
-    ~ShopService()
-    {
-        UnsubscribeToEvents();
-    }
-
     void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStarted_Shop);
@@ -40,6 +35,7 @@ public class ShopService
     public void GenerateShopUnits()
     {
         _currentUnitsInShop.Clear();
+        UIManager.Instance.RemoveAllShopUnitCards();
 
         for (int i = 0; i < SHOP_SIZE; i++)
         {
@@ -49,6 +45,8 @@ public class ShopService
 
     void AddRandomUnitInShop()
     {
+        if (_currentUnitsInShop.Count >= SHOP_SIZE) return;
+
         UnitData randomUnit = _allUnits[Random.Range(0, _allUnits.Count)];
         _currentUnitsInShop.Add(randomUnit);
 
@@ -96,5 +94,27 @@ public class ShopService
     {
         _shopRefreshCost = (int)parameters[8];
         UIManager.Instance.UpdateRefreshCostUI(_shopRefreshCost);
+    }
+
+    public void Reset()
+    {
+        _currentUnitsInShop.Clear();
+        _shopRefreshCost = 0;
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeToEvents();
+
+        Reset();
+
+        if (_allUnits != null)
+        {
+            _allUnits.Clear();
+            _allUnits = null;
+        }
+        _currencyServiceObj = null;
+        _inventoryServiceObj = null;
+        _teamServiceObj = null;
     }
 }
