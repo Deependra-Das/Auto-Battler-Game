@@ -26,5 +26,11 @@ public class UnitService
         Debug.LogWarning($"Unit ID {unitId} not found in database.");
         return false;
     }
+
+    public void Dispose()
+    {
+        _unitDatabase.Clear();
+        _unitDatabase = null;
+    }
 }
 
