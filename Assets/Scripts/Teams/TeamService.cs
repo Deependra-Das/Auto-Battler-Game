@@ -37,11 +37,6 @@ public class TeamService
         }
     }
 
-    ~TeamService()
-    {
-        UnsubscribeToEvents();
-    }
-
     void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.LevelChanged, OnLevelChanged_Team);
@@ -203,5 +198,44 @@ public class TeamService
            unitLevel = u.unitLevel
 
        }).ToList();
+    }
+
+    public void ClearTeam(TeamEnum team)
+    {
+        foreach (UnitData unitData in _teams[team])
+        {
+            RemoveUnitFromTeam(unitData, team);
+        }
+    }
+
+    public void Reset()
+    {
+        foreach (TeamEnum team in Enum.GetValues(typeof(TeamEnum)))
+        {
+            _teams[team].Clear();
+            _inventoryUnits[team].Clear();
+            _fieldUnits[team].Clear();
+
+            _teamCapacities[team] = 0;
+            _fieldCapacities[team] = 0;
+        }
+
+        InitializeTypeAndFactionCounts();
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeToEvents();
+
+        Reset();
+
+        _teams.Clear();
+        _inventoryUnits.Clear();
+        _fieldUnits.Clear();
+
+        _teamCapacities = null;
+
+        _typeCount.Clear();
+        _factionCount.Clear();
     }
 }
