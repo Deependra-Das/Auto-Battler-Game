@@ -162,6 +162,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Subscribe(EventNameEnum.SelectedStageChanged, OnSelectedStageChanged_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.GameplayPaused, OnGameplayPaused_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.GameplayResumed, OnGameplayResumed_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.RoundStarted, OnRoundStarted);
+        EventBusManager.Instance.Subscribe(EventNameEnum.RoundOver, OnRoundOver);
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageOver, OnStageOver);
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageFailed, OnStageFailed);
     }
 
     private void UnsubscribeToEvents()
@@ -175,6 +179,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Unsubscribe(EventNameEnum.SelectedStageChanged, OnSelectedStageChanged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.GameplayPaused, OnGameplayPaused_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.GameplayResumed, OnGameplayResumed_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundStarted, OnRoundStarted);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundOver, OnRoundOver);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageOver, OnStageOver);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageFailed, OnStageFailed);
     }
 
     public void InitializeGameplayUI()
@@ -647,5 +655,42 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnResumeGameplayButtonClicked()
     {
         GameplayManager.Instance.ResumeGameplay();
+    }
+
+    private void OnRoundStarted(object[] args)
+    {
+        int stageIndex = (int)args[0];
+        int roundIndex = (int)args[1];
+
+        Debug.Log($"Stage {stageIndex + 1} - Round {roundIndex + 1}");
+    }
+
+    private void OnRoundOver(object[] args)
+    {
+        RoundResultEnum result = (RoundResultEnum)args[0];
+
+        switch (result)
+        {
+            case RoundResultEnum.Win:
+                Debug.Log("Round Won!");
+                break;
+            case RoundResultEnum.Lose:
+                Debug.Log("Round Lost!");
+                break;
+            case RoundResultEnum.Draw:
+                Debug.Log("Round Draw!");
+                break;
+        }
+    }
+
+    private void OnStageOver(object[] args)
+    {
+        int stageIndex = (int)args[0];
+        Debug.Log($"Stage {stageIndex + 1} Completed!");
+    }
+
+    private void OnStageFailed(object[] args)
+    {
+        Debug.Log("Stage Failed!");
     }
 }
