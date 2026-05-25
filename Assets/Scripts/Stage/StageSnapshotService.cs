@@ -174,4 +174,9 @@ public class StageSnapshotService
 
         EnsureFileExists();
     }
+
+    public void Dispose()
+    {
+        _roundSnapshotDataObj = null;
+    }
 }
