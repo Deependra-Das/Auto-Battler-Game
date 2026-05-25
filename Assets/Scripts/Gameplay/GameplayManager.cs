@@ -8,6 +8,12 @@ using UnityEngine.InputSystem;
 
 public class GameplayManager : MonoBehaviour
 {
+    [SerializeField] private float _roundEndCheckDelay = 1f;
+    [SerializeField] private float _roundEndDelay = 1.5f;
+    [SerializeField] private float _stageTransitionDelay = 0.5f;
+    [SerializeField] private float _stageResultDelay = 2f;
+    [SerializeField] private float _sceneChangeDelay = 5f;
+
     public static GameplayManager Instance;
 
     protected PathFindingGraph graph;
@@ -188,7 +194,7 @@ public class GameplayManager : MonoBehaviour
 
         _isRoundEnding = true;
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(_roundEndCheckDelay);
 
         bool team1HasNoUnits = TeamHasNoUnits(TeamEnum.Team1);
         bool team2HasNoUnits = TeamHasNoUnits(TeamEnum.Team2);
@@ -233,7 +239,7 @@ public class GameplayManager : MonoBehaviour
 
         UpdateGameplayState(GameplayStateEnum.RoundOver);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(_roundEndDelay);
 
         bool stageFailed = false;
 
@@ -292,7 +298,7 @@ public class GameplayManager : MonoBehaviour
 
         CleanupRound(true);
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(_stageTransitionDelay);
         PrepareCurrentRound();
         _isRoundEnding = false;
     }
@@ -303,7 +309,7 @@ public class GameplayManager : MonoBehaviour
 
         Debug.Log("Stage Cleared Full");
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(_stageResultDelay);
     }
 
     private IEnumerator HandleStageClearedPartial()
@@ -312,7 +318,7 @@ public class GameplayManager : MonoBehaviour
 
         Debug.Log("Stage Cleared Partial");
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(_stageResultDelay);
     }
 
     private IEnumerator HandleStageFailed()
@@ -323,7 +329,7 @@ public class GameplayManager : MonoBehaviour
 
         Debug.Log("Stage Failed");
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(_stageResultDelay);
     }
 
     private IEnumerator RestartRoundRoutine()
