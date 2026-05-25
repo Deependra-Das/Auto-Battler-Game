@@ -19,9 +19,9 @@ public class PlayerLevelService
     public PlayerLevelService(PlayerLevelConfigScriptableObjectScript config)
     {
         SubscribeToEvents();
-        Reset();
         _currencyService = GameManager.Instance.Get<CurrencyService>();
         _config = config;
+        Reset();
     }
 
     void SubscribeToEvents()

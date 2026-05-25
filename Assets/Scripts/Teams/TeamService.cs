@@ -202,7 +202,9 @@ public class TeamService
 
     public void ClearTeam(TeamEnum team)
     {
-        foreach (UnitData unitData in _teams[team])
+        List<UnitData> copy = new List<UnitData>(_teams[team]);
+
+        foreach (UnitData unitData in copy)
         {
             RemoveUnitFromTeam(unitData, team);
         }

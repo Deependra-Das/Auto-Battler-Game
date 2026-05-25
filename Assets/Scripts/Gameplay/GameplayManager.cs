@@ -69,7 +69,6 @@ public class GameplayManager : MonoBehaviour
     public void InitializeGameplay()
     {
         ResolveServices();
-
         UIManager.Instance.InitializeGameplayUI();
         InventoryDropZoneManager.Instance.Initialize();
 
@@ -99,7 +98,6 @@ public class GameplayManager : MonoBehaviour
 
     public void InitializeStageForGameplay(int stageIndex)
     {
-        CleanupStage();
         _stageServiceObj.InitializeStage(stageIndex);
         PrepareCurrentRound();
     }
@@ -147,11 +145,10 @@ public class GameplayManager : MonoBehaviour
     private void InstantiateTeam2Units()
     {
         int team2FieldCapacity = _teamServiceObj.GetFieldCapacity(TeamEnum.Team2);
-
         IReadOnlyList<UnitData> team2Units = _teamServiceObj.GetTeamUnits(TeamEnum.Team2);
-        for (int i = 0; i < team2FieldCapacity; i++)
+
+        foreach (UnitData unitData in _teamServiceObj.GetTeamUnits(TeamEnum.Team2))
         {
-            UnitData unitData = team2Units[i];
             BaseUnit newUnit = Instantiate(unitData.unitPrefab);
             newUnit.Initialize(unitData, TeamEnum.Team2, _graphServiceObj.GetUnOccupiedNode(TeamEnum.Team2));
             _teamServiceObj.MoveToField(newUnit, TeamEnum.Team2);
@@ -192,11 +189,16 @@ public class GameplayManager : MonoBehaviour
         _isRoundEnding = true;
 
         yield return new WaitForSeconds(1f);
+
         bool team1HasNoUnits = TeamHasNoUnits(TeamEnum.Team1);
         bool team2HasNoUnits = TeamHasNoUnits(TeamEnum.Team2);
 
         if (!team1HasNoUnits && !team2HasNoUnits)
+        {
+            _isRoundEnding = false;
+            _roundCheckRoutine = null;
             yield break;
+        }
 
         TeamEnum winnerTeam = TeamEnum.None;
 
