@@ -6,10 +6,12 @@ public class PlayerLevelService
 {
     private CurrencyService _currencyService;
     private PlayerLevelConfigScriptableObjectScript _config;
+    private int _defaultLevel = 1;
+    private int _defaultLives = 3;
 
-    public int Level { get; private set; } = 1;
-    public int Lives { get; private set; } = 3;
-    public int CurrentXP { get; private set; } = 0;
+    public int Level { get; private set; }
+    public int Lives { get; private set; }
+    public int CurrentXP { get; private set; }
 
     private int _xpExchangeCost = 0;
     private int _xpExchangeValue = 0;
@@ -17,13 +19,9 @@ public class PlayerLevelService
     public PlayerLevelService(PlayerLevelConfigScriptableObjectScript config)
     {
         SubscribeToEvents();
+        Reset();
         _currencyService = GameManager.Instance.Get<CurrencyService>();
         _config = config;
-    }
-
-    ~PlayerLevelService()
-    {
-        UnsubscribeToEvents();
     }
 
     void SubscribeToEvents()
@@ -164,5 +162,27 @@ public class PlayerLevelService
         {
             LoseLife();
         }
+    }
+
+    public void Reset()
+    {
+        Level = _defaultLevel;
+        Lives = _defaultLives;
+        CurrentXP = 0;
+
+        _xpExchangeCost = 0;
+        _xpExchangeValue = 0;
+
+        EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level, MaxUnitsAllowedOnField, CurrentXP, GetXPToNextLevel());
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeToEvents();
+
+        Reset();
+
+        _currencyService = null;
+        _config = null;
     }
 }
