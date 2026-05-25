@@ -77,4 +77,12 @@ public class GraphService
     {
         return graph.GetNeighbours(destination);
     }
+
+    public void Reset()
+    {
+        graph = null;
+        tileList.Clear();
+        _startPositionForTeam?.Clear();
+        _startPositionForTeam = null;
+    }
 }
