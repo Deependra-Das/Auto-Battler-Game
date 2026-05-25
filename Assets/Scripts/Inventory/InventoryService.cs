@@ -35,6 +35,7 @@ public class InventoryService
     public void Reset()
     {
         _currentUnitsInInventory.Clear();
+        UIManager.Instance.RemoveAllInventoryUnitCard();
         SetMaxInventorySize(0);
     }
 

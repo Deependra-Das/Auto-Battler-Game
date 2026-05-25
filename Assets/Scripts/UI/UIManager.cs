@@ -227,6 +227,15 @@ public class UIManager : GenericMonoSingleton<UIManager>
         }
     }
 
+    public void RemoveAllInventoryUnitCard()
+    {
+        foreach (var card in _inventoryUnitCardList)
+        {
+            Destroy(card.gameObject);
+        }
+        _inventoryUnitCardList.Clear();
+    }
+
     public void RefreshInventoryOrder()
     {
         _inventoryUnitCardList.Clear();
