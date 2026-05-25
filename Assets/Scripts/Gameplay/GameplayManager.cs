@@ -20,7 +20,8 @@ public class GameplayManager : MonoBehaviour
     private UnitService _unitServiceObj;
     private PlayerLevelService _playerLevelServiceObj;
     private ShopService _shopServiceObj;
-    private StageSnapshotService _stageSnapshotServiceObj;
+    private RoundSnapshotService _roundSnapshotServiceObj;
+    private CurrencyService _currencyServiceObj;
 
     public int fromIndex = 0;
     public int toIndex = 0;
@@ -28,28 +29,49 @@ public class GameplayManager : MonoBehaviour
     private bool _isRoundEnding = false;
     private bool _isGameplayPaused = false;
 
+    private Coroutine _roundCheckRoutine;
+
     public GameplayStateEnum CurrentGameplayState { get; private set; }
 
-    protected void Awake()
+    private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            InitializeGameplay();
-        }
-        else
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
+            return;
         }
+
+        Instance = this;
+
+        InitializeGameplay();
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            TogglePause();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance != this)
+            return;
+
+        CleanupStage();
+
+        StopAllCoroutines();
+
+        Instance = null;
     }
 
     public void InitializeGameplay()
     {
+        ResolveServices();
+
         UIManager.Instance.InitializeGameplayUI();
         InventoryDropZoneManager.Instance.Initialize();
-
-        ResolveServices();
 
         _tileGridServiceObj.CreateTileMap();
         _graphServiceObj.Initialize(_tileGridServiceObj.GetSpawnedTilesList());
@@ -67,19 +89,12 @@ public class GameplayManager : MonoBehaviour
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
         _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
         _buffServiceObj = GameManager.Instance.Get<BuffService>();
-        _stageSnapshotServiceObj = GameManager.Instance.Get<StageSnapshotService>();
+        _roundSnapshotServiceObj = GameManager.Instance.Get<RoundSnapshotService>();
         _stageServiceObj = GameManager.Instance.Get<StageService>();
         _unitServiceObj = GameManager.Instance.Get<UnitService>();
         _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
         _shopServiceObj = GameManager.Instance.Get<ShopService>();
-    }
-
-    private void Update()
-    {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            TogglePause();
-        }
+        _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
     }
 
     public void InitializeStageForGameplay(int stageIndex)
@@ -158,9 +173,15 @@ public class GameplayManager : MonoBehaviour
 
     public void MarkUnitDead(BaseUnit unit)
     {
+        if (unit == null) return;
+
+        unit.ReleaseCurrentNode();
         _teamServiceObj.RemoveUnitFromField(unit, unit.Team);
         Destroy(unit.gameObject);
-        StartCoroutine(CheckRoundEnd());
+
+        if (_roundCheckRoutine != null) return;
+
+        _roundCheckRoutine = StartCoroutine(CheckRoundEnd());
     }
 
     private IEnumerator CheckRoundEnd()
@@ -168,14 +189,14 @@ public class GameplayManager : MonoBehaviour
         if (_isRoundEnding)
             yield break;
 
+        _isRoundEnding = true;
+
         yield return new WaitForSeconds(1f);
         bool team1HasNoUnits = TeamHasNoUnits(TeamEnum.Team1);
         bool team2HasNoUnits = TeamHasNoUnits(TeamEnum.Team2);
 
         if (!team1HasNoUnits && !team2HasNoUnits)
             yield break;
-
-        _isRoundEnding = true;
 
         TeamEnum winnerTeam = TeamEnum.None;
 
@@ -325,7 +346,24 @@ public class GameplayManager : MonoBehaviour
 
     private void CleanupStage()
     {
+        _isRoundEnding = false;
+        _isGameplayPaused = false;
+        Time.timeScale = 1f;
+
         CleanupRound(false);
+
+        _tileGridServiceObj.Reset();
+        _graphServiceObj.Reset();
+        _roundSnapshotServiceObj.Reset();
+        _stageServiceObj.Reset();
+        _inventoryServiceObj.Reset();
+        _teamServiceObj.Reset();
+        _buffServiceObj.Reset();
+        _playerLevelServiceObj.Reset();
+        _shopServiceObj.Reset();
+        _currencyServiceObj.Reset();
+
+        UpdateGameplayState(GameplayStateEnum.Preparation);
     }
 
     private void CleanupUnits(bool restorePlayerInventory)
@@ -340,17 +378,16 @@ public class GameplayManager : MonoBehaviour
 
         foreach (BaseUnit unit in fieldUnits)
         {
-            if (unit == null)
-                continue;
-
-            unit.ReleaseCurrentNode();
-            _teamServiceObj.RemoveUnitFromField(unit, TeamEnum.Team1);
-            Destroy(unit.gameObject);
+            DespawnUnit(unit);
         }
 
         if (restorePlayerInventory)
         {
             _teamServiceObj.AddAllTeamUnitsToInventory(TeamEnum.Team1);
+        }
+        else
+        {
+            _teamServiceObj.ClearTeam(TeamEnum.Team1);
         }
     }
 
@@ -360,21 +397,22 @@ public class GameplayManager : MonoBehaviour
 
         foreach (BaseUnit unit in fieldUnits)
         {
-            if (unit == null)
-                continue;
-
-            unit.ReleaseCurrentNode();
-            _teamServiceObj.RemoveUnitFromField(unit, TeamEnum.Team2);
-            Destroy(unit.gameObject);
+            DespawnUnit(unit);
         }
 
-        List<UnitData> teamUnits = new(_teamServiceObj.GetTeamUnits(TeamEnum.Team2));
-
-        foreach (UnitData unitData in teamUnits)
-        {
-            _teamServiceObj.RemoveUnitFromTeam(unitData, TeamEnum.Team2);
-        }
+        _teamServiceObj.ClearTeam(TeamEnum.Team2);
     }
+
+    private void DespawnUnit(BaseUnit unit)
+    {
+        if (unit == null)
+            return;
+
+        unit.ReleaseCurrentNode();
+        _teamServiceObj.RemoveUnitFromField(unit, unit.Team);
+        Destroy(unit.gameObject);    
+    }
+
 
     private void OnDrawGizmos()
     {

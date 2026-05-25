@@ -241,7 +241,6 @@ public class BaseUnit : MonoBehaviour
     IEnumerator WaitForDeathAnimationCoroutine()
     {
         yield return new WaitForSeconds(1f);
-        currentNode.SetOccupied(false);
         GameplayManager.Instance.MarkUnitDead(this);
     }
 
