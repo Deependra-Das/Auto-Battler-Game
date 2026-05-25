@@ -12,11 +12,6 @@ public class CurrencyService
         Balance = 0;
     }
 
-    ~CurrencyService()
-    {
-        UnsubscribeToEvents();
-    }
-
     void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStartedSetInitialCurrency);
@@ -74,5 +69,17 @@ public class CurrencyService
     private void NotifyBalanceChanged()
     {
         UIManager.Instance.UpdateCurrenyUI(Balance);
+    }
+
+    public void Reset()
+    {
+        Balance = 0;
+        NotifyBalanceChanged();
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeToEvents();
+        Reset();
     }
 }
