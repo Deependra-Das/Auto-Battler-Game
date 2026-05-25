@@ -36,8 +36,24 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [Header("--Gameplay Paused UI")]
     [SerializeField] private GameObject _gameplayPausedContainer;
     [SerializeField] private Button _resumeGameplayButton;
-    [SerializeField] private Button _restartRoundGameplayButton;
-    [SerializeField] private Button _backGamePlayOverButton;
+    [SerializeField] private Button _restartRoundGameplayPausedButton;
+    [SerializeField] private Button _backToStageSelectGameplayPausedButton;
+
+    [Header("--Gameplay Start Notification UI")]
+    [SerializeField] private GameObject _gameplayStartNotificationContainer;
+    [SerializeField] private TMP_Text _stageStartNotificationText;
+    [SerializeField] private TMP_Text _roundStartNotificationText;
+
+    [Header("--Gameplay Over Notification UI")]
+    [SerializeField] private GameObject _gameplayOverNotificationContainer;
+    [SerializeField] private TMP_Text _gameplayOverStatusMessageText;
+    [SerializeField] private TMP_Text _stageOverNotificationText;
+    [SerializeField] private TMP_Text _roundOverNotificationText;
+    [SerializeField] private GameObject _gameplayOverRewardsContainer;
+    [SerializeField] private TMP_Text _rewardsQuantityText;
+    [SerializeField] private Button _nextRoundGameplayOverButton;
+    [SerializeField] private Button _restartRoundGameplayOverButton;
+    [SerializeField] private Button _backToStageSelectGameplayOverButton;
 
     [Header("--Shop UI")]
     [SerializeField] private GameObject _shopPanel;
@@ -692,5 +708,55 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnStageFailed(object[] args)
     {
         Debug.Log("Stage Failed!");
+    }
+
+    private void ToggleGameplayStartNoticationContainer(bool value)
+    {
+        _gameplayStartNotificationContainer.SetActive(value);
+    }
+
+    private void ToggleGameplayOverNoticationContainer(bool value)
+    {
+        _gameplayOverNotificationContainer.SetActive(value);
+    }
+
+    private void ToggleGameplayOverRewardsContainer(bool value)
+    {
+        _gameplayOverRewardsContainer.SetActive(value);
+    }
+
+    private void ToggleGameplayOverNextRoundButton(bool value)
+    {
+        _nextRoundGameplayOverButton.gameObject.SetActive(value);
+    }
+
+    private void SetGameplayStartStageText(int value)
+    {
+        _stageStartNotificationText.text = value.ToString();
+    }
+
+    private void SetGameplayStartRoundText(int value)
+    {
+        _roundStartNotificationText.text = value.ToString();
+    }
+
+    private void SetGameplayOverStageText(int value)
+    {
+        _stageOverNotificationText.text = value.ToString();
+    }
+
+    private void SetGameplayOverRoundText(int value)
+    {
+        _roundOverNotificationText.text = value.ToString();
+    }
+
+    private void SetGameplayOverStatusMessageText(string value)
+    {
+        _gameplayOverStatusMessageText.text = value.ToString();
+    }
+
+    private void SetRewardsQuantityText(int value)
+    {
+        _rewardsQuantityText.text = value.ToString();
     }
 }
