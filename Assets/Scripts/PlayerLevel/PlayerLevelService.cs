@@ -156,7 +156,7 @@ public class PlayerLevelService
 
     private void OnRoundOver_PlayerLevel(object[] parameters)
     {
-        RoundResultEnum result = (RoundResultEnum)parameters[0];
+        RoundResultEnum result = (RoundResultEnum)parameters[2];
 
         if(result == RoundResultEnum.Lose)
         {

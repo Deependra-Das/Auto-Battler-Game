@@ -681,16 +681,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
         GameplayManager.Instance.ResumeGameplay();
     }
 
-    private void OnRoundStarted(object[] args)
+    private void OnRoundStarted(object[] parameters)
     {
-        int stageIndex = (int)args[0];
-        int roundIndex = (int)args[1];
+        int stageIndex = (int)parameters[0];
+        int roundIndex = (int)parameters[1];
 
         SetGameplayStartStageText(stageIndex + 1);
         SetGameplayStartRoundText(roundIndex + 1);
-
-        SetGameplayOverStageText(stageIndex + 1);
-        SetGameplayOverRoundText(roundIndex + 1);
 
         StartCoroutine(HandleRoundStartNotificationRoutine());
     }
@@ -705,8 +702,14 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnRoundOver(object[] parameters)
     {
-        RoundResultEnum result = (RoundResultEnum)parameters[0];
-        int rewardQuantity = (int)parameters[2];
+        int stageIndex = (int)parameters[0];
+        int roundIndex = (int)parameters[1];
+
+        SetGameplayOverStageText(stageIndex + 1);
+        SetGameplayOverRoundText(roundIndex + 1);
+
+        RoundResultEnum result = (RoundResultEnum)parameters[2];
+        int rewardQuantity = (int)parameters[3];
 
         string statusMessageText = string.Empty;
 
