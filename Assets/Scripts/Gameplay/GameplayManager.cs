@@ -480,20 +480,52 @@ public class GameplayManager : MonoBehaviour
 
     public void OnPlayerChooseRestartRound()
     {
-        if (!_waitingForRoundDecision) return;
+        if (!_waitingForRoundDecision && !_waitingForStageDecision) return;
+
+        RestartCurrentRound();
+        _stageServiceObj.RestartCurrentRound();
+        PrepareCurrentRound();
+    }
+
+    public void OnRestartRoundFromPauseMenu()
+    {
+        if (CurrentGameplayState != GameplayStateEnum.Combat && CurrentGameplayState != GameplayStateEnum.Preparation)
+        {
+            return;
+        }
+
+        if (_isGameplayPaused)
+        {
+            RestartCurrentRound();
+
+            _isGameplayPaused = false;
+            Time.timeScale = 1f;
+            EventBusManager.Instance.Raise(EventNameEnum.GameplayResumed);
+
+            _stageServiceObj.RestartCurrentRound();
+            PrepareCurrentRound();
+        }
+    }
+
+    private void RestartCurrentRound()
+    {
+        if (_roundCheckRoutine != null)
+        {
+            StopCoroutine(_roundCheckRoutine);
+            _roundCheckRoutine = null;
+        }
 
         _waitingForRoundDecision = false;
         _waitingForStageDecision = false;
+        _pendingStageCleanup = false;
 
         CleanupRound(false);
         CleanupBeforeRestartRound();
 
         _isRoundEnding = false;
         _roundCheckRoutine = null;
-
-        _stageServiceObj.RestartCurrentRound();
-        PrepareCurrentRound();
     }
+
 
     public void OnPlayerLeaveStage()
     {
