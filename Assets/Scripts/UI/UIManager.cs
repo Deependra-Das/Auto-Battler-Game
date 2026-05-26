@@ -45,12 +45,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private TMP_Text _roundStartNotificationText;
 
     [Header("--Gameplay Over Notification UI")]
-    [SerializeField] private GameObject _gameplayOverNotificationContainer;
-    [SerializeField] private TMP_Text _gameplayOverStatusMessageText;
-    [SerializeField] private TMP_Text _stageOverNotificationText;
-    [SerializeField] private TMP_Text _roundOverNotificationText;
+    [SerializeField] private TMP_Text _stageInfoGameplayOverText;
+    [SerializeField] private TMP_Text _roundInfoGameplayOverText;
     [SerializeField] private GameObject _gameplayOverRewardsContainer;
     [SerializeField] private TMP_Text _rewardsQuantityText;
+    [SerializeField] private GameObject _stageOverStatusMessageContainer;
+    [SerializeField] private TMP_Text _stageOverStatusMessageText;
+    [SerializeField] private TMP_Text _stageOverSubText;
     [SerializeField] private Button _nextRoundGameplayOverButton;
     [SerializeField] private Button _restartRoundGameplayOverButton;
     [SerializeField] private Button _backToStageSelectGameplayOverButton;
@@ -190,7 +191,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Subscribe(EventNameEnum.GameplayResumed, OnGameplayResumed_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.RoundStarted, OnRoundStarted);
         EventBusManager.Instance.Subscribe(EventNameEnum.RoundOver, OnRoundOver);
-        EventBusManager.Instance.Subscribe(EventNameEnum.StageOver, OnStageOver);
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageClearedFull, OnStageClearedFull);
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageClearedPartial, OnStageClearedPartial);
         EventBusManager.Instance.Subscribe(EventNameEnum.StageFailed, OnStageFailed);
     }
 
@@ -207,7 +209,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Unsubscribe(EventNameEnum.GameplayResumed, OnGameplayResumed_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundStarted, OnRoundStarted);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundOver, OnRoundOver);
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageOver, OnStageOver);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageClearedFull, OnStageClearedFull);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageClearedPartial, OnStageClearedPartial);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.StageFailed, OnStageFailed);
     }
 
@@ -693,8 +696,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         int stageIndex = (int)parameters[0];
         int roundIndex = (int)parameters[1];
 
-        SetGameplayStartStageText(stageIndex + 1);
-        SetGameplayStartRoundText(roundIndex + 1);
+        SetStageStartNotificationText(stageIndex + 1);
+        SetRoundStartNotificationText(roundIndex + 1);
 
         StartCoroutine(HandleRoundStartNotificationRoutine());
     }
@@ -711,41 +714,58 @@ public class UIManager : GenericMonoSingleton<UIManager>
         int stageIndex = (int)parameters[0];
         int roundIndex = (int)parameters[1];
 
-        SetGameplayOverStageText(stageIndex + 1);
-        SetGameplayOverRoundText(roundIndex + 1);
+        SetStageInfoGameplayOverText(stageIndex + 1);
 
         RoundResultEnum result = (RoundResultEnum)parameters[2];
         int rewardQuantity = (int)parameters[3];
 
-        string statusMessageText = string.Empty;
+        string roundInfoStatusMessage = "Round "+(roundIndex + 1).ToString();
 
         switch (result)
         {
             case RoundResultEnum.Win:
-                statusMessageText = "Round Won!";
+                roundInfoStatusMessage += " Won!";
                 break;
             case RoundResultEnum.Lose:
-                statusMessageText = "Round Lost!";
+                roundInfoStatusMessage += " Lost!";
                 break;
             case RoundResultEnum.Draw:
-                statusMessageText = "Round Draw!";
+                roundInfoStatusMessage += " Draw!";
                 break;
         }
 
         SetRewardsQuantityText(rewardQuantity);
-        SetGameplayOverStatusMessageText(statusMessageText);
+        SetRoundInfoGameplayOverText(roundInfoStatusMessage);
         ToggleGameplayOverNoticationContainer(true);
+        ToggleGameplayOverRewardsContainer(true);
+        ToggleGameplayOverNextRoundButton(true);
     }
 
-    private void OnStageOver(object[] parameters)
+    private void OnStageClearedFull(object[] parameters)
     {
-        int stageIndex = (int)parameters[0];
-        Debug.Log($"Stage {stageIndex + 1} Completed!");
+        string statusMessage = "- Stage Successfully Completed -";
+        SetStageOverStatusMessageText(statusMessage);
+        SetStageOverSubText("All Rounds Cleared.");
+        ToggleGameplayOverRewardsContainer(false);
+        ToggleGameplayOverNextRoundButton(false);
+    }
+
+    private void OnStageClearedPartial(object[] parameters)
+    {
+        string statusMessage = "- Stage Progress Recorded -";
+        SetStageOverStatusMessageText(statusMessage);
+        SetStageOverSubText("Clear all Rounds to Complete the Stage.");
+        ToggleGameplayOverRewardsContainer(false);
+        ToggleGameplayOverNextRoundButton(false);
     }
 
     private void OnStageFailed(object[] parameters)
     {
-        Debug.Log("Stage Failed!");
+        string statusMessage = "- Stage Attempt Failed -";
+        SetStageOverStatusMessageText(statusMessage);
+        SetStageOverSubText("You ran out of lives before clearing all rounds. Please Try again.");
+        ToggleGameplayOverRewardsContainer(false);
+        ToggleGameplayOverNextRoundButton(false);
     }
 
     private void ToggleGameplayStartNoticationContainer(bool value)
@@ -755,7 +775,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void ToggleGameplayOverNoticationContainer(bool value)
     {
-        _gameplayOverNotificationContainer.SetActive(value);
+        _stageOverStatusMessageContainer.SetActive(value);
     }
 
     private void ToggleGameplayOverRewardsContainer(bool value)
@@ -768,29 +788,34 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _nextRoundGameplayOverButton.gameObject.SetActive(value);
     }
 
-    private void SetGameplayStartStageText(int value)
+    private void SetStageStartNotificationText(int value)
     {
         _stageStartNotificationText.text = "Stage " + value.ToString();
     }
 
-    private void SetGameplayStartRoundText(int value)
+    private void SetRoundStartNotificationText(int value)
     {
         _roundStartNotificationText.text = "Round " + value.ToString();
     }
 
-    private void SetGameplayOverStageText(int value)
+    private void SetStageInfoGameplayOverText(int value)
     {
-        _stageOverNotificationText.text = "Stage " + value.ToString();
+        _stageInfoGameplayOverText.text = "Stage " + value.ToString();
     }
 
-    private void SetGameplayOverRoundText(int value)
+    private void SetRoundInfoGameplayOverText(string value)
     {
-        _roundOverNotificationText.text = "Round " + value.ToString();
+        _roundInfoGameplayOverText.text = "Round " + value.ToString();
     }
 
-    private void SetGameplayOverStatusMessageText(string value)
+    private void SetStageOverStatusMessageText(string value)
     {
-        _gameplayOverStatusMessageText.text = value.ToString();
+        _stageOverStatusMessageText.text = value.ToString();
+    }
+
+    private void SetStageOverSubText(string value)
+    {
+        _stageOverSubText.text = value.ToString();
     }
 
     private void SetRewardsQuantityText(int value)

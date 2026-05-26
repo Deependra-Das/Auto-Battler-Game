@@ -87,14 +87,9 @@ public class StageService
     {
         int nextIndex = CurrentRoundIndex + 1;
 
-        if (nextIndex >= GetRoundCount())
-        {
-            EventBusManager.Instance.Raise(EventNameEnum.StageOver, CurrentStageIndex);
-            return;
-        }
+        if (nextIndex >= GetRoundCount()) return;
 
         CurrentRoundIndex = nextIndex;
-
         RaiseRoundStartedEvent();
     }
 

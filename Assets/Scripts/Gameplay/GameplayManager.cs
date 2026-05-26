@@ -280,8 +280,6 @@ public class GameplayManager : MonoBehaviour
 
         if (stageOver)
         {
-            EventBusManager.Instance.Raise(EventNameEnum.StageOver, _stageServiceObj.CurrentStageIndex);
-
             _waitingForStageDecision = true;
             _pendingStageCleanup = true;
 
@@ -307,30 +305,22 @@ public class GameplayManager : MonoBehaviour
     private IEnumerator HandleStageClearedFull()
     {
         UpdateGameplayState(GameplayStateEnum.StageOver);
-
-        Debug.Log("Stage Cleared Full");
-
         yield return new WaitForSeconds(_stageResultDelay);
+        EventBusManager.Instance.Raise(EventNameEnum.StageClearedFull, _stageServiceObj.CurrentStageIndex);
     }
 
     private IEnumerator HandleStageClearedPartial()
     {
         UpdateGameplayState(GameplayStateEnum.StageOver);
-
-        Debug.Log("Stage Cleared Partial");
-
         yield return new WaitForSeconds(_stageResultDelay);
+        EventBusManager.Instance.Raise(EventNameEnum.StageClearedPartial, _stageServiceObj.CurrentStageIndex);
     }
 
     private IEnumerator HandleStageFailed()
     {
-        EventBusManager.Instance.Raise(EventNameEnum.StageFailed, _stageServiceObj.CurrentStageIndex);
-
         UpdateGameplayState(GameplayStateEnum.StageOver);
-
-        Debug.Log("Stage Failed");
-
         yield return new WaitForSeconds(_stageResultDelay);
+        EventBusManager.Instance.Raise(EventNameEnum.StageFailed, _stageServiceObj.CurrentStageIndex);
     }
 
     private void CleanupRound(bool restorePlayerInventory = true)
