@@ -55,7 +55,7 @@ public class StageSnapshotService
     {
         try
         {
-            RoundSnapshotData data = _roundSnapshotDataObj.GetLastSavedRoundSnapshotData();
+            RoundSnapshotData data = _roundSnapshotDataObj.GetRoundEndSnapshot();
 
             StageSnapshotData snapshotData = LoadStageSnapShotData() ?? new StageSnapshotData();
 
