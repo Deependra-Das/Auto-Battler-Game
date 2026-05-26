@@ -91,6 +91,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private float _roatationForLevelXPBar = 45f;
     [SerializeField] private float _xpLerpSpeed = 8f;
 
+    [Header("Delay Values UI")]
+    [SerializeField] private float _roundStartUIDisplayDuration = 3f;
+
     private float _displayedXP;
     private float _targetXP;
     private Coroutine _xpRoutine;
@@ -143,6 +146,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _resetStageConfirmationNoButton.onClick.AddListener(OnResetStageConfirmationNoButtonClicked);
         _pausePlayGameplayButton.onClick.AddListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.AddListener(OnResumeGameplayButtonClicked);
+        _nextRoundGameplayOverButton.onClick.AddListener(OnNextRoundButtonGameplayOverClicked);
+        _restartRoundGameplayOverButton.onClick.AddListener(OnRestartRoundGameplayOverClicked);
+        //_backToStageSelectGameplayOverButton.onClick.AddListener();
     }
 
     private void OnDisable()
@@ -160,6 +166,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _resetStageConfirmationNoButton.onClick.RemoveListener(OnResetStageConfirmationNoButtonClicked);
         _pausePlayGameplayButton.onClick.RemoveListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.RemoveListener(OnResumeGameplayButtonClicked);
+        _nextRoundGameplayOverButton.onClick.RemoveListener(OnNextRoundButtonGameplayOverClicked);
+        _restartRoundGameplayOverButton.onClick.RemoveListener(OnRestartRoundGameplayOverClicked);
     }
 
     public void OnDestroy()
@@ -678,34 +686,55 @@ public class UIManager : GenericMonoSingleton<UIManager>
         int stageIndex = (int)args[0];
         int roundIndex = (int)args[1];
 
-        Debug.Log($"Stage {stageIndex + 1} - Round {roundIndex + 1}");
+        SetGameplayStartStageText(stageIndex + 1);
+        SetGameplayStartRoundText(roundIndex + 1);
+
+        SetGameplayOverStageText(stageIndex + 1);
+        SetGameplayOverRoundText(roundIndex + 1);
+
+        StartCoroutine(HandleRoundStartNotificationRoutine());
     }
 
-    private void OnRoundOver(object[] args)
+    private IEnumerator HandleRoundStartNotificationRoutine()
     {
-        RoundResultEnum result = (RoundResultEnum)args[0];
+        ToggleGameplayStartNoticationContainer(true);
+        yield return new WaitForSeconds(_roundStartUIDisplayDuration);
+        ToggleGameplayStartNoticationContainer(false);
+    }
+
+
+    private void OnRoundOver(object[] parameters)
+    {
+        RoundResultEnum result = (RoundResultEnum)parameters[0];
+        int rewardQuantity = (int)parameters[2];
+
+        string statusMessageText = string.Empty;
 
         switch (result)
         {
             case RoundResultEnum.Win:
-                Debug.Log("Round Won!");
+                statusMessageText = "Round Won!";
                 break;
             case RoundResultEnum.Lose:
-                Debug.Log("Round Lost!");
+                statusMessageText = "Round Lost!";
                 break;
             case RoundResultEnum.Draw:
-                Debug.Log("Round Draw!");
+                statusMessageText = "Round Draw!";
                 break;
         }
+
+        SetRewardsQuantityText(rewardQuantity);
+        SetGameplayOverStatusMessageText(statusMessageText);
+        ToggleGameplayOverNoticationContainer(true);
     }
 
-    private void OnStageOver(object[] args)
+    private void OnStageOver(object[] parameters)
     {
-        int stageIndex = (int)args[0];
+        int stageIndex = (int)parameters[0];
         Debug.Log($"Stage {stageIndex + 1} Completed!");
     }
 
-    private void OnStageFailed(object[] args)
+    private void OnStageFailed(object[] parameters)
     {
         Debug.Log("Stage Failed!");
     }
@@ -732,22 +761,22 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void SetGameplayStartStageText(int value)
     {
-        _stageStartNotificationText.text = value.ToString();
+        _stageStartNotificationText.text = "Stage " + value.ToString();
     }
 
     private void SetGameplayStartRoundText(int value)
     {
-        _roundStartNotificationText.text = value.ToString();
+        _roundStartNotificationText.text = "Round " + value.ToString();
     }
 
     private void SetGameplayOverStageText(int value)
     {
-        _stageOverNotificationText.text = value.ToString();
+        _stageOverNotificationText.text = "Stage " + value.ToString();
     }
 
     private void SetGameplayOverRoundText(int value)
     {
-        _roundOverNotificationText.text = value.ToString();
+        _roundOverNotificationText.text = "Round " + value.ToString();
     }
 
     private void SetGameplayOverStatusMessageText(string value)
@@ -758,5 +787,17 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void SetRewardsQuantityText(int value)
     {
         _rewardsQuantityText.text = value.ToString();
+    }
+
+    public void OnNextRoundButtonGameplayOverClicked()
+    {
+        ToggleGameplayOverNoticationContainer(false);
+        GameplayManager.Instance.OnPlayerChooseNextRound();
+    }
+
+    public void OnRestartRoundGameplayOverClicked()
+    {
+        ToggleGameplayOverNoticationContainer(false);
+        GameplayManager.Instance.OnPlayerChooseRestartRound();
     }
 }
