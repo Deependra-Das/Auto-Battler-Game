@@ -80,6 +80,21 @@ public class StageService
         RaiseRoundStartedEvent();
     }
 
+    public void TryAdvanceRound()
+    {
+        int nextIndex = CurrentRoundIndex + 1;
+
+        if (nextIndex >= GetRoundCount())
+        {
+            EventBusManager.Instance.Raise(EventNameEnum.StageOver, CurrentStageIndex);
+            return;
+        }
+
+        CurrentRoundIndex = nextIndex;
+
+        RaiseRoundStartedEvent();
+    }
+
     public void ResumeStageFromSave(StageSnapshotEntry saveData)
     {
         CurrentStageIndex = saveData.latestRoundSnapshot.stageIndex;
@@ -152,18 +167,9 @@ public class StageService
         return (CurrentStageWinCount + CurrentStageDrawCount) == GetRoundCount();
     }
 
-    public bool TryAdvanceRound()
+    public bool IsStageOver()
     {
-        int nextIndex = CurrentRoundIndex + 1;
-
-        if (nextIndex >= GetRoundCount())
-        {
-            EventBusManager.Instance.Raise(EventNameEnum.StageOver, CurrentStageIndex);
-            return true;
-        }
-
-        CurrentRoundIndex = nextIndex;
-        return false;
+        return CurrentRoundIndex + 1 >= GetRoundCount();
     }
 
     private void SaveStageProgress(RoundResultEnum roundResult)
