@@ -27,6 +27,7 @@ public class GameplayManager : MonoBehaviour
     private PlayerLevelService _playerLevelServiceObj;
     private ShopService _shopServiceObj;
     private RoundSnapshotService _roundSnapshotServiceObj;
+    private StageSnapshotService _stageSnapshotServiceObj;
     private CurrencyService _currencyServiceObj;
 
     public int fromIndex = 0;
@@ -35,6 +36,8 @@ public class GameplayManager : MonoBehaviour
     private bool _isRoundEnding = false;
     private bool _isGameplayPaused = false;
     private bool _waitingForRoundDecision = false;
+    private bool _waitingForStageDecision = false;
+    private bool _pendingStageCleanup = false;
     private Coroutine _roundCheckRoutine;
 
     public GameplayStateEnum CurrentGameplayState { get; private set; }
@@ -95,6 +98,7 @@ public class GameplayManager : MonoBehaviour
         _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
         _buffServiceObj = GameManager.Instance.Get<BuffService>();
         _roundSnapshotServiceObj = GameManager.Instance.Get<RoundSnapshotService>();
+        _stageSnapshotServiceObj = GameManager.Instance.Get<StageSnapshotService>();
         _stageServiceObj = GameManager.Instance.Get<StageService>();
         _unitServiceObj = GameManager.Instance.Get<UnitService>();
         _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
@@ -266,10 +270,9 @@ public class GameplayManager : MonoBehaviour
 
         if (stageFailed)
         {
-            CleanupStage();
+            _waitingForStageDecision = true;
+            _pendingStageCleanup = true;
             yield return StartCoroutine(HandleStageFailed());
-
-            _isRoundEnding = false;
             yield break;
         }
 
@@ -279,7 +282,8 @@ public class GameplayManager : MonoBehaviour
         {
             EventBusManager.Instance.Raise(EventNameEnum.StageOver, _stageServiceObj.CurrentStageIndex);
 
-            CleanupStage();
+            _waitingForStageDecision = true;
+            _pendingStageCleanup = true;
 
             bool cleared = _stageServiceObj.CheckStageCleared();
 
@@ -292,15 +296,12 @@ public class GameplayManager : MonoBehaviour
                 yield return StartCoroutine(HandleStageClearedPartial());
             }
 
-            _isRoundEnding = false;
             yield break;
         }
 
-        CleanupRound(true);
         _waitingForRoundDecision = true;
 
         yield return new WaitForSeconds(_stageTransitionDelay);
-        _isRoundEnding = false;
     }
 
     private IEnumerator HandleStageClearedFull()
@@ -332,19 +333,9 @@ public class GameplayManager : MonoBehaviour
         yield return new WaitForSeconds(_stageResultDelay);
     }
 
-    private IEnumerator RestartRoundRoutine()
+    private void CleanupBeforeRestartRound()
     {
-        //UpdateGameplayState(GameplayStateEnum.Cleanup);
-
-        //CleanupRound();
-
-        yield return new WaitForSeconds(0.5f);
-
-        //_roundSaveStateService.RestoreSaveState();
-
-        //PrepareCurrentRound();
-
-        //UpdateGameplayState(GameplayStateEnum.Preparation);
+        _teamServiceObj.ClearTeam(TeamEnum.Team1);
     }
 
     private void CleanupRound(bool restorePlayerInventory = true)
@@ -421,43 +412,6 @@ public class GameplayManager : MonoBehaviour
         Destroy(unit.gameObject);    
     }
 
-
-    private void OnDrawGizmos()
-    {
-        if (graph == null) return;
-
-        var PathList = graph.Paths;
-
-        if (PathList == null) return;
-
-        foreach (Path path in PathList)
-        {
-            Debug.DrawLine(path.source.position, path.destination.position, Color.black, 100);
-        }
-
-        var NodesList = graph.Nodes;
-
-        if (NodesList == null) return;
-
-        foreach (Node node in NodesList)
-        {
-            Gizmos.color = node.IsOccupied ? Color.red : Color.green;
-            Gizmos.DrawSphere(node.position, 0.1f);
-        }
-
-        if (fromIndex >= NodesList.Count || toIndex >= NodesList.Count) return;
-
-        List<Node> pathList = graph.GetShortestPath(NodesList[fromIndex], NodesList[toIndex]);
-
-        if (pathList.Count > 1)
-        {
-            for (int i = 1; i < pathList.Count; i++)
-            {
-                Debug.DrawLine(pathList[i - 1].position, pathList[i].position, Color.red, 1);
-            }
-        }
-    }
-
     public void UpdateGameplayState(GameplayStateEnum newState)
     {
         if (CurrentGameplayState == newState)
@@ -503,11 +457,21 @@ public class GameplayManager : MonoBehaviour
         EventBusManager.Instance.Raise(EventNameEnum.GameplayResumed);
     }
 
+    private void CommitRound()
+    {
+        _stageSnapshotServiceObj.SaveStageSnapshotData();
+    }
+
     public void OnPlayerChooseNextRound()
     {
         if (!_waitingForRoundDecision) return;
 
         _waitingForRoundDecision = false;
+
+        CommitRound();
+        CleanupRound(true);
+        _isRoundEnding = false;
+        _roundCheckRoutine = null;
 
         _stageServiceObj.TryAdvanceRound();
 
@@ -519,9 +483,65 @@ public class GameplayManager : MonoBehaviour
         if (!_waitingForRoundDecision) return;
 
         _waitingForRoundDecision = false;
+        _waitingForStageDecision = false;
+
+        CleanupRound(false);
+        CleanupBeforeRestartRound();
+
+        _isRoundEnding = false;
+        _roundCheckRoutine = null;
 
         _stageServiceObj.RestartCurrentRound();
-
         PrepareCurrentRound();
+    }
+
+    public void OnPlayerLeaveStage()
+    {
+        if (!_waitingForStageDecision) return;
+
+        _waitingForStageDecision = false;
+        CommitRound();
+
+        if (_pendingStageCleanup)
+        {
+            CleanupStage();
+            _pendingStageCleanup = false;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (graph == null) return;
+
+        var PathList = graph.Paths;
+
+        if (PathList == null) return;
+
+        foreach (Path path in PathList)
+        {
+            Debug.DrawLine(path.source.position, path.destination.position, Color.black, 100);
+        }
+
+        var NodesList = graph.Nodes;
+
+        if (NodesList == null) return;
+
+        foreach (Node node in NodesList)
+        {
+            Gizmos.color = node.IsOccupied ? Color.red : Color.green;
+            Gizmos.DrawSphere(node.position, 0.1f);
+        }
+
+        if (fromIndex >= NodesList.Count || toIndex >= NodesList.Count) return;
+
+        List<Node> pathList = graph.GetShortestPath(NodesList[fromIndex], NodesList[toIndex]);
+
+        if (pathList.Count > 1)
+        {
+            for (int i = 1; i < pathList.Count; i++)
+            {
+                Debug.DrawLine(pathList[i - 1].position, pathList[i].position, Color.red, 1);
+            }
+        }
     }
 }

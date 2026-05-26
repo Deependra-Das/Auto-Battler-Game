@@ -76,8 +76,11 @@ public class StageService
 
     public void RestartCurrentRound()
     {
+        RoundSnapshotData latestRoundSnapshot = GameManager.Instance.Get<RoundSnapshotService>().GetRoundStartSnapshot();
+        RestorePlayerInventory(latestRoundSnapshot);
+        RaiseStageStartedAfterRestoreEvent(latestRoundSnapshot);
         Debug.Log($"Restarting Round {CurrentRoundIndex} of Stage {CurrentStageIndex}");
-        RaiseRoundStartedEvent();
+        StartRound();
     }
 
     public void TryAdvanceRound()
@@ -141,25 +144,19 @@ public class StageService
     public void OnRoundWin(TeamEnum winnerTeam)
     {
         int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].winXPCurrency;
-        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, RoundResultEnum.Win, winnerTeam, currencyReward);
-
-        SaveStageProgress(RoundResultEnum.Win);
+        RaiseRoundOverEvent(RoundResultEnum.Win, currencyReward);
     }
 
     public void OnRoundLose(TeamEnum loserTeam)
     {
         int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].lossXPCurrency;
-        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, RoundResultEnum.Lose, loserTeam, currencyReward);
-
-        SaveStageProgress(RoundResultEnum.Lose);
+        RaiseRoundOverEvent(RoundResultEnum.Lose, currencyReward);
     }
 
     public void OnRoundDraw()
     {
         int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].lossXPCurrency;
-        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, RoundResultEnum.Draw, TeamEnum.None, currencyReward);
-
-        SaveStageProgress(RoundResultEnum.Draw);
+        RaiseRoundOverEvent(RoundResultEnum.Draw, currencyReward);
     }
 
     public bool CheckStageCleared()
@@ -172,15 +169,9 @@ public class StageService
         return CurrentRoundIndex + 1 >= GetRoundCount();
     }
 
-    private void SaveStageProgress(RoundResultEnum roundResult)
+    private void RaiseRoundOverEvent(RoundResultEnum roundResult, int currencyReward)
     {
-        RaiseRoundOverSaveSnapshotEvent(roundResult);
-        GameManager.Instance.Get<StageSnapshotService>().SaveStageSnapshotData();
-    }
-
-    private void RaiseRoundOverSaveSnapshotEvent(RoundResultEnum roundResult)
-    {
-        EventBusManager.Instance.Raise(EventNameEnum.RoundOverSaveSnapshot, CurrentStageIndex, CurrentRoundIndex, roundResult);
+        EventBusManager.Instance.Raise(EventNameEnum.RoundOver, CurrentStageIndex, CurrentRoundIndex, roundResult, currencyReward);
     }
 
     private void RaiseStageStartedEvent()
