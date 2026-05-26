@@ -109,7 +109,6 @@ public class StageService
 
         RestorePlayerInventory(saveData.latestRoundSnapshot);
         RaiseStageStartedAfterRestoreEvent(saveData.latestRoundSnapshot);
-
         StartRound();
     }
 

@@ -588,8 +588,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2060264577}
   m_HandleRect: {fileID: 2060264576}
   m_Direction: 2
-  m_Value: -0.000007629406
-  m_Size: 0.9285715
+  m_Value: 0
+  m_Size: 0.92856795
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5383,7 +5383,7 @@ MonoBehaviour:
   _pausePlayGameplayButton: {fileID: 2001740927}
   _gameplayPausedContainer: {fileID: 1038920522}
   _resumeGameplayButton: {fileID: 888890751}
-  _restartRoundGameplayPausedButton: {fileID: 1225274994}
+  _restartRoundPauseMenuButton: {fileID: 1225274994}
   _backToStageSelectGameplayPausedButton: {fileID: 1951226509}
   _gameplayStartNotificationContainer: {fileID: 1016546090}
   _stageStartNotificationText: {fileID: 299267107}
@@ -5423,6 +5423,7 @@ MonoBehaviour:
   _maxFillAmount: 0.75
   _roatationForLevelXPBar: 45
   _xpLerpSpeed: 8
+  _roundStartUIDisplayDuration: 3
 --- !u!114 &620615830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15345,7 +15346,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 40.00025}
+  m_AnchoredPosition: {x: 0, y: 39.999996}
   m_SizeDelta: {x: 0, y: 560}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2012293679
@@ -15755,8 +15756,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1364537090}
   m_HandleRect: {fileID: 1364537089}
   m_Direction: 2
-  m_Value: -0.000007629406
-  m_Size: 0.9285715
+  m_Value: 0
+  m_Size: 0.92856795
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -16273,7 +16274,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 40.00025}
+  m_AnchoredPosition: {x: 0, y: 39.999996}
   m_SizeDelta: {x: 0, y: 560}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2093632306

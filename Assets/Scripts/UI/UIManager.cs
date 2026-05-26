@@ -36,7 +36,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [Header("--Gameplay Paused UI")]
     [SerializeField] private GameObject _gameplayPausedContainer;
     [SerializeField] private Button _resumeGameplayButton;
-    [SerializeField] private Button _restartRoundGameplayPausedButton;
+    [SerializeField] private Button _restartRoundPauseMenuButton;
     [SerializeField] private Button _backToStageSelectGameplayPausedButton;
 
     [Header("--Gameplay Start Notification UI")]
@@ -146,6 +146,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _resetStageConfirmationNoButton.onClick.AddListener(OnResetStageConfirmationNoButtonClicked);
         _pausePlayGameplayButton.onClick.AddListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.AddListener(OnResumeGameplayButtonClicked);
+        _restartRoundPauseMenuButton.onClick.AddListener(OnRestartRoundPauseMenuButtonClicked);
         _nextRoundGameplayOverButton.onClick.AddListener(OnNextRoundButtonGameplayOverClicked);
         _restartRoundGameplayOverButton.onClick.AddListener(OnRestartRoundGameplayOverClicked);
         //_backToStageSelectGameplayOverButton.onClick.AddListener();
@@ -166,6 +167,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _resetStageConfirmationNoButton.onClick.RemoveListener(OnResetStageConfirmationNoButtonClicked);
         _pausePlayGameplayButton.onClick.RemoveListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.RemoveListener(OnResumeGameplayButtonClicked);
+        _restartRoundPauseMenuButton.onClick.RemoveListener(OnRestartRoundPauseMenuButtonClicked);
         _nextRoundGameplayOverButton.onClick.RemoveListener(OnNextRoundButtonGameplayOverClicked);
         _restartRoundGameplayOverButton.onClick.RemoveListener(OnRestartRoundGameplayOverClicked);
     }
@@ -681,6 +683,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
         GameplayManager.Instance.ResumeGameplay();
     }
 
+    private void OnRestartRoundPauseMenuButtonClicked()
+    {
+        GameplayManager.Instance.OnRestartRoundFromPauseMenu();
+    }
+
     private void OnRoundStarted(object[] parameters)
     {
         int stageIndex = (int)parameters[0];
@@ -698,7 +705,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
         yield return new WaitForSeconds(_roundStartUIDisplayDuration);
         ToggleGameplayStartNoticationContainer(false);
     }
-
 
     private void OnRoundOver(object[] parameters)
     {

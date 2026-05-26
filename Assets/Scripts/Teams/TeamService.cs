@@ -202,12 +202,10 @@ public class TeamService
 
     public void ClearTeam(TeamEnum team)
     {
-        List<UnitData> copy = new List<UnitData>(_teams[team]);
-
-        foreach (UnitData unitData in copy)
-        {
-            RemoveUnitFromTeam(unitData, team);
-        }
+        _fieldUnits[team].Clear();
+        _inventoryUnits[team].Clear();
+        _teams[team].Clear();
+        _fieldCapacities[team] = 0;
     }
 
     public void Reset()
@@ -217,8 +215,6 @@ public class TeamService
             _teams[team].Clear();
             _inventoryUnits[team].Clear();
             _fieldUnits[team].Clear();
-
-            _teamCapacities[team] = 0;
             _fieldCapacities[team] = 0;
         }
 

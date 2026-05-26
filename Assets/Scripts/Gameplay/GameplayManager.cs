@@ -333,11 +333,6 @@ public class GameplayManager : MonoBehaviour
         yield return new WaitForSeconds(_stageResultDelay);
     }
 
-    private void CleanupBeforeRestartRound()
-    {
-        _teamServiceObj.ClearTeam(TeamEnum.Team1);
-    }
-
     private void CleanupRound(bool restorePlayerInventory = true)
     {
         CleanupUnits(restorePlayerInventory);
@@ -386,6 +381,7 @@ public class GameplayManager : MonoBehaviour
         }
         else
         {
+            _inventoryServiceObj.Reset();
             _teamServiceObj.ClearTeam(TeamEnum.Team1);
         }
     }
@@ -520,7 +516,6 @@ public class GameplayManager : MonoBehaviour
         _pendingStageCleanup = false;
 
         CleanupRound(false);
-        CleanupBeforeRestartRound();
 
         _isRoundEnding = false;
         _roundCheckRoutine = null;
