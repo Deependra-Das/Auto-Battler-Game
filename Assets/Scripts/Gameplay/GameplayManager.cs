@@ -34,7 +34,7 @@ public class GameplayManager : MonoBehaviour
 
     private bool _isRoundEnding = false;
     private bool _isGameplayPaused = false;
-
+    private bool _waitingForRoundDecision = false;
     private Coroutine _roundCheckRoutine;
 
     public GameplayStateEnum CurrentGameplayState { get; private set; }
@@ -194,38 +194,36 @@ public class GameplayManager : MonoBehaviour
 
         _isRoundEnding = true;
 
-        yield return new WaitForSeconds(_roundEndCheckDelay);
+        yield return null;
 
         bool team1HasNoUnits = TeamHasNoUnits(TeamEnum.Team1);
         bool team2HasNoUnits = TeamHasNoUnits(TeamEnum.Team2);
 
-        if (!team1HasNoUnits && !team2HasNoUnits)
+        TeamEnum winnerTeam = TeamEnum.None;
+
+        if (team1HasNoUnits && team2HasNoUnits)
+        {
+            winnerTeam = TeamEnum.None;
+        }
+        else if (team1HasNoUnits)
+        {
+            winnerTeam = TeamEnum.Team2;
+        }
+        else if (team2HasNoUnits)
+        {
+            winnerTeam = TeamEnum.Team1;
+        }
+        else
         {
             _isRoundEnding = false;
             _roundCheckRoutine = null;
             yield break;
         }
 
-        TeamEnum winnerTeam = TeamEnum.None;
-
-        if (team1HasNoUnits && !team2HasNoUnits)
-        {
-            winnerTeam = TeamEnum.Team2;
-        }
-        else if (team2HasNoUnits && !team1HasNoUnits)
-        {
-            winnerTeam = TeamEnum.Team1;
-        }
-        else if (team1HasNoUnits && team2HasNoUnits)
-        {
-            winnerTeam = TeamEnum.None;
-        }
-        else
-        {
-            yield break;
-        }
-
         yield return StartCoroutine(HandleRoundEnd(winnerTeam));
+
+        _isRoundEnding = false;
+        _roundCheckRoutine = null;
     }
 
     private bool TeamHasNoUnits(TeamEnum team)
@@ -275,10 +273,12 @@ public class GameplayManager : MonoBehaviour
             yield break;
         }
 
-        bool stageOver = _stageServiceObj.TryAdvanceRound();
+        bool stageOver = _stageServiceObj.IsStageOver();
 
         if (stageOver)
         {
+            EventBusManager.Instance.Raise(EventNameEnum.StageOver, _stageServiceObj.CurrentStageIndex);
+
             CleanupStage();
 
             bool cleared = _stageServiceObj.CheckStageCleared();
@@ -297,9 +297,9 @@ public class GameplayManager : MonoBehaviour
         }
 
         CleanupRound(true);
+        _waitingForRoundDecision = true;
 
         yield return new WaitForSeconds(_stageTransitionDelay);
-        PrepareCurrentRound();
         _isRoundEnding = false;
     }
 
@@ -479,6 +479,7 @@ public class GameplayManager : MonoBehaviour
             PauseGameplay();
         }
     }
+
     public void PauseGameplay()
     {
         if (_isGameplayPaused) return;
@@ -500,5 +501,27 @@ public class GameplayManager : MonoBehaviour
         Time.timeScale = 1f;
 
         EventBusManager.Instance.Raise(EventNameEnum.GameplayResumed);
+    }
+
+    public void OnPlayerChooseNextRound()
+    {
+        if (!_waitingForRoundDecision) return;
+
+        _waitingForRoundDecision = false;
+
+        _stageServiceObj.TryAdvanceRound();
+
+        PrepareCurrentRound();
+    }
+
+    public void OnPlayerChooseRestartRound()
+    {
+        if (!_waitingForRoundDecision) return;
+
+        _waitingForRoundDecision = false;
+
+        _stageServiceObj.RestartCurrentRound();
+
+        PrepareCurrentRound();
     }
 }
