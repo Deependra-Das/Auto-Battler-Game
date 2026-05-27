@@ -45,11 +45,12 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private TMP_Text _roundStartNotificationText;
 
     [Header("--Gameplay Over Notification UI")]
+    [SerializeField] private GameObject _gameplayOverNotificationContainer;
     [SerializeField] private TMP_Text _stageInfoGameplayOverText;
     [SerializeField] private TMP_Text _roundInfoGameplayOverText;
     [SerializeField] private GameObject _gameplayOverRewardsContainer;
     [SerializeField] private TMP_Text _rewardsQuantityText;
-    [SerializeField] private GameObject _stageOverStatusMessageContainer;
+    [SerializeField] private GameObject _stageOverStatusContainer;
     [SerializeField] private TMP_Text _stageOverStatusMessageText;
     [SerializeField] private TMP_Text _stageOverSubText;
     [SerializeField] private Button _nextRoundGameplayOverButton;
@@ -736,9 +737,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         SetRewardsQuantityText(rewardQuantity);
         SetRoundInfoGameplayOverText(roundInfoStatusMessage);
-        ToggleGameplayOverNoticationContainer(true);
         ToggleGameplayOverRewardsContainer(true);
         ToggleGameplayOverNextRoundButton(true);
+        ToggleStageOverStatusContainer(false);
+        ToggleGameplayOverNoticationContainer(true);
     }
 
     private void OnStageClearedFull(object[] parameters)
@@ -748,6 +750,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         SetStageOverSubText("All Rounds Cleared.");
         ToggleGameplayOverRewardsContainer(false);
         ToggleGameplayOverNextRoundButton(false);
+        ToggleStageOverStatusContainer(true);
     }
 
     private void OnStageClearedPartial(object[] parameters)
@@ -757,6 +760,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         SetStageOverSubText("Clear all Rounds to Complete the Stage.");
         ToggleGameplayOverRewardsContainer(false);
         ToggleGameplayOverNextRoundButton(false);
+        ToggleStageOverStatusContainer(true);
     }
 
     private void OnStageFailed(object[] parameters)
@@ -766,6 +770,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         SetStageOverSubText("You ran out of lives before clearing all rounds. Please Try again.");
         ToggleGameplayOverRewardsContainer(false);
         ToggleGameplayOverNextRoundButton(false);
+        ToggleStageOverStatusContainer(true);
     }
 
     private void ToggleGameplayStartNoticationContainer(bool value)
@@ -775,12 +780,17 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void ToggleGameplayOverNoticationContainer(bool value)
     {
-        _stageOverStatusMessageContainer.SetActive(value);
+        _gameplayOverNotificationContainer.SetActive(value);
     }
 
     private void ToggleGameplayOverRewardsContainer(bool value)
     {
         _gameplayOverRewardsContainer.SetActive(value);
+    }
+
+    private void ToggleStageOverStatusContainer(bool value)
+    {
+        _stageOverStatusContainer.SetActive(value);
     }
 
     private void ToggleGameplayOverNextRoundButton(bool value)
