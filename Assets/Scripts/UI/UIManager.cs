@@ -32,6 +32,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Button _shopToggleButton;
     [SerializeField] private TMP_Text _balanceCurrencyText;
     [SerializeField] private Button _pausePlayGameplayButton;
+    [SerializeField] private TMP_Text _roundInfoGameplayUIText;
+    [SerializeField] private TMP_Text _stageInfoGameplayUIText;
 
     [Header("--Gameplay Paused UI")]
     [SerializeField] private GameObject _gameplayPausedContainer;
@@ -703,6 +705,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         SetStageStartNotificationText(stageIndex + 1);
         SetRoundStartNotificationText(roundIndex + 1);
 
+        SetStageInfoGameplayUIText(stageIndex + 1);
+        SetRoundInfoGameplayUIText(roundIndex + 1);
+
         StartCoroutine(HandleRoundStartNotificationRoutine());
     }
 
@@ -818,7 +823,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void SetRoundInfoGameplayOverText(string value)
     {
-        _roundInfoGameplayOverText.text = "Round " + value.ToString();
+        _roundInfoGameplayOverText.text = value.ToString();
     }
 
     private void SetStageOverStatusMessageText(string value)
@@ -858,5 +863,15 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         ToggleGameplayPausedContainer(false);
         GameplayManager.Instance.OnPlayerLeaveStageFromPauseMenu();
+    }
+
+    private void SetStageInfoGameplayUIText(int value)
+    {
+        _stageInfoGameplayUIText.text = value.ToString();
+    }
+
+    private void SetRoundInfoGameplayUIText(int value)
+    {
+        _roundInfoGameplayUIText.text = "Round "+ value.ToString();
     }
 }
