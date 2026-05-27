@@ -9,11 +9,8 @@ using UnityEngine.SceneManagement;
 
 public class GameplayManager : MonoBehaviour
 {
-    [SerializeField] private float _roundEndCheckDelay = 1f;
     [SerializeField] private float _roundEndDelay = 1.5f;
-    [SerializeField] private float _stageTransitionDelay = 0.5f;
-    [SerializeField] private float _stageResultDelay = 2f;
-    [SerializeField] private float _sceneChangeDelay = 5f;
+
 
     public static GameplayManager Instance;
 
@@ -37,11 +34,9 @@ public class GameplayManager : MonoBehaviour
     private readonly HashSet<BaseUnit> _pendingDeadUnits = new();
     private readonly List<BaseUnit> _pendingDestroy = new();
 
-    private bool _isRoundEnding = false;
     private bool _isGameplayPaused = false;
     private bool _waitingForRoundDecision = false;
     private bool _waitingForStageDecision = false;
-    private bool _pendingStageCleanup = false;
     private Coroutine _roundCheckRoutine;
 
     public GameplayStateEnum CurrentGameplayState { get; private set; }
@@ -265,8 +260,6 @@ public class GameplayManager : MonoBehaviour
 
     private IEnumerator HandleRoundEnd(TeamEnum winnerTeam)
     {
-        _isRoundEnding = true;
-
         UpdateGameplayState(GameplayStateEnum.RoundOver);
 
         yield return new WaitForSeconds(_roundEndDelay);
@@ -299,7 +292,6 @@ public class GameplayManager : MonoBehaviour
         if (stageFailed)
         {
             _waitingForStageDecision = true;
-            _pendingStageCleanup = true;
             yield return StartCoroutine(HandleStageFailed());
             yield break;
         }
@@ -309,8 +301,6 @@ public class GameplayManager : MonoBehaviour
         if (stageOver)
         {
             _waitingForStageDecision = true;
-            _pendingStageCleanup = true;
-
             bool cleared = _stageServiceObj.CheckStageCleared();
 
             if (cleared)
@@ -357,7 +347,6 @@ public class GameplayManager : MonoBehaviour
 
     private void CleanupStage()
     {
-        _isRoundEnding = false;
         _isGameplayPaused = false;
         Time.timeScale = 1f;
 
@@ -493,9 +482,8 @@ public class GameplayManager : MonoBehaviour
 
         CommitRound();
         CleanupRound(true);
-        _isRoundEnding = false;
-        _roundCheckRoutine = null;
 
+        _roundCheckRoutine = null;
         _stageServiceObj.TryAdvanceRound();
 
         PrepareCurrentRound();
@@ -540,11 +528,8 @@ public class GameplayManager : MonoBehaviour
 
         _waitingForRoundDecision = false;
         _waitingForStageDecision = false;
-        _pendingStageCleanup = false;
 
         CleanupRound(false);
-
-        _isRoundEnding = false;
         _roundCheckRoutine = null;
     }
 
@@ -572,7 +557,6 @@ public class GameplayManager : MonoBehaviour
             CommitRound();
         }
 
-        _isRoundEnding = false;
         _isGameplayPaused = false;
         Time.timeScale = 1f;
 
@@ -585,7 +569,6 @@ public class GameplayManager : MonoBehaviour
     {
         _waitingForRoundDecision = false;
         _waitingForStageDecision = false;
-        _pendingStageCleanup = false;
 
         if (_roundCheckRoutine != null)
         {
