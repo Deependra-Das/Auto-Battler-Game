@@ -352,6 +352,7 @@ public class GameplayManager : MonoBehaviour
     private void CleanupRound(bool restorePlayerInventory = true)
     {
         CleanupUnits(restorePlayerInventory);
+        CleanupNodeOccupancy();
     }
 
     private void CleanupStage()
@@ -422,6 +423,11 @@ public class GameplayManager : MonoBehaviour
         unit.ReleaseCurrentNode();
         _teamServiceObj.RemoveUnitFromField(unit, unit.Team);
         Destroy(unit.gameObject);    
+    }
+
+    private void CleanupNodeOccupancy()
+    {
+        _graphServiceObj.ClearGraphNodeOccupancy();
     }
 
     public void UpdateGameplayState(GameplayStateEnum newState)

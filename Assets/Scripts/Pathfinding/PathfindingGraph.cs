@@ -118,4 +118,12 @@ public class PathFindingGraph
 
         return path;
     }
+
+    public void ClearAllNodeOccupancy()
+    {
+        foreach (Node node in _nodeList)
+        {
+            node.SetOccupied(false);
+        }
+    }
 }

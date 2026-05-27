@@ -78,6 +78,11 @@ public class GraphService
         return graph.GetNeighbours(destination);
     }
 
+    public void ClearGraphNodeOccupancy()
+    {
+        graph?.ClearAllNodeOccupancy();
+    }
+
     public void Reset()
     {
         graph = null;
