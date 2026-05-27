@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameplayManager : MonoBehaviour
 {
@@ -447,6 +448,11 @@ public class GameplayManager : MonoBehaviour
 
     public void PauseGameplay()
     {
+        if (CurrentGameplayState != GameplayStateEnum.Combat && CurrentGameplayState != GameplayStateEnum.Preparation)
+        {
+            return;
+        }
+
         if (_isGameplayPaused) return;
 
         _isGameplayPaused = true;
@@ -536,18 +542,49 @@ public class GameplayManager : MonoBehaviour
         _roundCheckRoutine = null;
     }
 
-
-    public void OnPlayerLeaveStage()
+    public void OnPlayerLeaveStageGameplayOver()
     {
-        if (!_waitingForStageDecision) return;
+        ExitToStageSelection(true);
+    }
 
-        _waitingForStageDecision = false;
-        CommitRound();
-
-        if (_pendingStageCleanup)
+    public void OnPlayerLeaveStageFromPauseMenu()
+    {
+        if (CurrentGameplayState != GameplayStateEnum.Combat && CurrentGameplayState != GameplayStateEnum.Preparation)
         {
-            CleanupStage();
-            _pendingStageCleanup = false;
+            return;
+        }
+
+        ExitToStageSelection(false);
+    }
+
+    private void ExitToStageSelection(bool commit)
+    {
+        StopProcessesBeforeExit();
+
+        if (commit)
+        {
+            CommitRound();
+        }
+
+        _isRoundEnding = false;
+        _isGameplayPaused = false;
+        Time.timeScale = 1f;
+
+        CleanupStage();
+
+        SceneLoader.Instance.LoadScene(SceneNameEnum.StageSelectionScene);
+    }
+
+    private void StopProcessesBeforeExit()
+    {
+        _waitingForRoundDecision = false;
+        _waitingForStageDecision = false;
+        _pendingStageCleanup = false;
+
+        if (_roundCheckRoutine != null)
+        {
+            StopCoroutine(_roundCheckRoutine);
+            _roundCheckRoutine = null;
         }
     }
 

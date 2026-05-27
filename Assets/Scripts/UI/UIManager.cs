@@ -149,9 +149,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _pausePlayGameplayButton.onClick.AddListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.AddListener(OnResumeGameplayButtonClicked);
         _restartRoundPauseMenuButton.onClick.AddListener(OnRestartRoundPauseMenuButtonClicked);
-        _nextRoundGameplayOverButton.onClick.AddListener(OnNextRoundButtonGameplayOverClicked);
-        _restartRoundGameplayOverButton.onClick.AddListener(OnRestartRoundGameplayOverClicked);
-        //_backToStageSelectGameplayOverButton.onClick.AddListener();
+        _nextRoundGameplayOverButton.onClick.AddListener(OnNextRoundButtonGameplayOverButtonClicked);
+        _restartRoundGameplayOverButton.onClick.AddListener(OnRestartRoundGameplayOverButtonClicked);
+        _backToStageSelectGameplayOverButton.onClick.AddListener(OnBackToStageSelectionGameplayOverButtonClicked);
     }
 
     private void OnDisable()
@@ -170,8 +170,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _pausePlayGameplayButton.onClick.RemoveListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.RemoveListener(OnResumeGameplayButtonClicked);
         _restartRoundPauseMenuButton.onClick.RemoveListener(OnRestartRoundPauseMenuButtonClicked);
-        _nextRoundGameplayOverButton.onClick.RemoveListener(OnNextRoundButtonGameplayOverClicked);
-        _restartRoundGameplayOverButton.onClick.RemoveListener(OnRestartRoundGameplayOverClicked);
+        _nextRoundGameplayOverButton.onClick.RemoveListener(OnNextRoundButtonGameplayOverButtonClicked);
+        _restartRoundGameplayOverButton.onClick.RemoveListener(OnRestartRoundGameplayOverButtonClicked);
+        _backToStageSelectGameplayOverButton.onClick.RemoveListener(OnBackToStageSelectionGameplayOverButtonClicked);
     }
 
     public void OnDestroy()
@@ -833,15 +834,21 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _rewardsQuantityText.text = value.ToString();
     }
 
-    public void OnNextRoundButtonGameplayOverClicked()
+    private void OnNextRoundButtonGameplayOverButtonClicked()
     {
         ToggleGameplayOverNoticationContainer(false);
         GameplayManager.Instance.OnPlayerChooseNextRound();
     }
 
-    public void OnRestartRoundGameplayOverClicked()
+    private void OnRestartRoundGameplayOverButtonClicked()
     {
         ToggleGameplayOverNoticationContainer(false);
         GameplayManager.Instance.OnPlayerChooseRestartRound();
+    }
+
+    private void OnBackToStageSelectionGameplayOverButtonClicked()
+    {
+        ToggleGameplayOverNoticationContainer(false);
+        GameplayManager.Instance.OnPlayerLeaveStageGameplayOver();
     }
 }
