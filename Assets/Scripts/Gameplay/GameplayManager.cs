@@ -33,6 +33,9 @@ public class GameplayManager : MonoBehaviour
     public int fromIndex = 0;
     public int toIndex = 0;
 
+    private readonly HashSet<BaseUnit> _pendingDeadUnits = new();
+    private readonly List<BaseUnit> _pendingDestroy = new();
+
     private bool _isRoundEnding = false;
     private bool _isGameplayPaused = false;
     private bool _waitingForRoundDecision = false;
@@ -182,23 +185,49 @@ public class GameplayManager : MonoBehaviour
     {
         if (unit == null) return;
 
-        unit.ReleaseCurrentNode();
-        _teamServiceObj.RemoveUnitFromField(unit, unit.Team);
-        Destroy(unit.gameObject);
+        if (_pendingDeadUnits.Contains(unit))
+            return;
 
-        if (_roundCheckRoutine != null) return;
+        _pendingDeadUnits.Add(unit);
 
-        _roundCheckRoutine = StartCoroutine(CheckRoundEnd());
+        if (_roundCheckRoutine == null)
+        {
+            _roundCheckRoutine = StartCoroutine(CheckRoundEnd());
+        }
+    }
+
+    private void ResolvePendingDeaths()
+    {
+        foreach (BaseUnit unit in _pendingDeadUnits)
+        {
+            if (unit == null)
+                continue;
+
+            unit.ReleaseCurrentNode();
+
+            _teamServiceObj.RemoveUnitFromField(unit, unit.Team);
+
+            _pendingDestroy.Add(unit);
+        }
+
+        _pendingDeadUnits.Clear();
+
+        foreach (BaseUnit unit in _pendingDestroy)
+        {
+            if (unit != null)
+                Destroy(unit.gameObject);
+        }
+
+        _pendingDestroy.Clear();
     }
 
     private IEnumerator CheckRoundEnd()
     {
-        if (_isRoundEnding)
-            yield break;
-
-        _isRoundEnding = true;
-
         yield return null;
+        yield return null;
+
+
+        ResolvePendingDeaths();
 
         bool team1HasNoUnits = TeamHasNoUnits(TeamEnum.Team1);
         bool team2HasNoUnits = TeamHasNoUnits(TeamEnum.Team2);
@@ -219,14 +248,12 @@ public class GameplayManager : MonoBehaviour
         }
         else
         {
-            _isRoundEnding = false;
             _roundCheckRoutine = null;
             yield break;
         }
 
         yield return StartCoroutine(HandleRoundEnd(winnerTeam));
 
-        _isRoundEnding = false;
         _roundCheckRoutine = null;
     }
 
@@ -298,28 +325,26 @@ public class GameplayManager : MonoBehaviour
         }
 
         _waitingForRoundDecision = true;
-
-        yield return new WaitForSeconds(_stageTransitionDelay);
     }
 
     private IEnumerator HandleStageClearedFull()
     {
         UpdateGameplayState(GameplayStateEnum.StageOver);
-        yield return new WaitForSeconds(_stageResultDelay);
+        yield return null;
         EventBusManager.Instance.Raise(EventNameEnum.StageClearedFull, _stageServiceObj.CurrentStageIndex);
     }
 
     private IEnumerator HandleStageClearedPartial()
     {
         UpdateGameplayState(GameplayStateEnum.StageOver);
-        yield return new WaitForSeconds(_stageResultDelay);
+        yield return null;
         EventBusManager.Instance.Raise(EventNameEnum.StageClearedPartial, _stageServiceObj.CurrentStageIndex);
     }
 
     private IEnumerator HandleStageFailed()
     {
         UpdateGameplayState(GameplayStateEnum.StageOver);
-        yield return new WaitForSeconds(_stageResultDelay);
+        yield return null;
         EventBusManager.Instance.Raise(EventNameEnum.StageFailed, _stageServiceObj.CurrentStageIndex);
     }
 
