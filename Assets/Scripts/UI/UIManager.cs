@@ -152,6 +152,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _nextRoundGameplayOverButton.onClick.AddListener(OnNextRoundButtonGameplayOverButtonClicked);
         _restartRoundGameplayOverButton.onClick.AddListener(OnRestartRoundGameplayOverButtonClicked);
         _backToStageSelectGameplayOverButton.onClick.AddListener(OnBackToStageSelectionGameplayOverButtonClicked);
+        _backToStageSelectGameplayPausedButton.onClick.AddListener(OnBackToStagePauseMenuButtonClicked);
     }
 
     private void OnDisable()
@@ -173,6 +174,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _nextRoundGameplayOverButton.onClick.RemoveListener(OnNextRoundButtonGameplayOverButtonClicked);
         _restartRoundGameplayOverButton.onClick.RemoveListener(OnRestartRoundGameplayOverButtonClicked);
         _backToStageSelectGameplayOverButton.onClick.RemoveListener(OnBackToStageSelectionGameplayOverButtonClicked);
+        _backToStageSelectGameplayPausedButton.onClick.RemoveListener(OnBackToStagePauseMenuButtonClicked);
     }
 
     public void OnDestroy()
@@ -850,5 +852,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         ToggleGameplayOverNoticationContainer(false);
         GameplayManager.Instance.OnPlayerLeaveStageGameplayOver();
+    }
+
+    private void OnBackToStagePauseMenuButtonClicked()
+    {
+        ToggleGameplayPausedContainer(false);
+        GameplayManager.Instance.OnPlayerLeaveStageFromPauseMenu();
     }
 }
