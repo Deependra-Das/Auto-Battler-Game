@@ -73,21 +73,8 @@ public class StageSnapshotService
                 snapshotData.stageSnapshotList.Add(stageEntry);
             }
 
-            switch (data.result)
-            {
-                case RoundResultEnum.Win:
-                    stageEntry.winCount++;
-                    break;
-
-                case RoundResultEnum.Draw:
-                    stageEntry.drawCount++;
-                    break;
-
-                case RoundResultEnum.Lose:
-                    stageEntry.loseCount++;
-                    break;
-            }
-
+            SetRoundResult(stageEntry, data.roundIndex, data.result);
+            RecalculateCounts(stageEntry);
             stageEntry.latestRoundSnapshot = data;
             Write(snapshotData);
             Debug.Log($"Snapshot saved: Stage {data.stageIndex}, Round {data.roundIndex}");
@@ -95,6 +82,43 @@ public class StageSnapshotService
         catch (Exception ex)
         {
             Debug.LogError($"Snapshot saving failed: {ex}");
+        }
+    }
+
+    private void SetRoundResult(StageSnapshotEntry stageEntry, int roundIndex, RoundResultEnum result)
+    {
+        stageEntry.roundResults ??= new List<RoundResultEnum>();
+
+        while (stageEntry.roundResults.Count <= roundIndex)
+        {
+            stageEntry.roundResults.Add(RoundResultEnum.None);
+        }
+
+        stageEntry.roundResults[roundIndex] = result;
+    }
+
+    private void RecalculateCounts(StageSnapshotEntry entry)
+    {
+        entry.winCount = 0;
+        entry.drawCount = 0;
+        entry.loseCount = 0;
+
+        foreach (var result in entry.roundResults)
+        {
+            switch (result)
+            {
+                case RoundResultEnum.Win:
+                    entry.winCount++;
+                    break;
+
+                case RoundResultEnum.Draw:
+                    entry.drawCount++;
+                    break;
+
+                case RoundResultEnum.Lose:
+                    entry.loseCount++;
+                    break;
+            }
         }
     }
 

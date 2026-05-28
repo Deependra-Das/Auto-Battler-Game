@@ -613,9 +613,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         StageSnapshotEntry entry = GameManager.Instance.Get<StageSnapshotService>().GetStageSnapshot(_selectedStage);
 
-        if (entry == null || entry.latestRoundSnapshot.roundIndex < roundCount-1)
+        if (entry == null || entry.latestRoundSnapshot.roundIndex < roundCount - 1)
         {
             ToggleStartContinueStageButton(true);
+        }
+        else
+        {
+            ToggleStartContinueStageButton(false);
         }
 
         ToggleResetStageStageButton(true);
@@ -692,6 +696,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         GameManager.Instance.Get<StageSnapshotService>().DeleteStageSnapshot(_selectedStage);
         UpdateStageSelectionRoundData();
+        ToggleStartContinueStageButton(true);
         ToggleStageSelectionConfirmationContainer(false);
     }
 
