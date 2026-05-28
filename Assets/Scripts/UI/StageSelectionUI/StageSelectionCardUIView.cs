@@ -61,4 +61,9 @@ public class StageSelectionCardUIView : MonoBehaviour
         _numberOfRoundsText.text = roundsCleared.ToString() + " / " + NumberOfRounds.ToString();
         _stageClearedImage.gameObject.SetActive((roundsCleared == NumberOfRounds));
     }
+
+    public void InvokeClick()
+    {
+        _stageButton.onClick.Invoke();
+    }
 }

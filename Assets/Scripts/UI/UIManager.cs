@@ -4,7 +4,6 @@ using AutoBattler.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -126,7 +125,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
     public void Initialize()
     {
         SubscribeToEvents();
-        CreateStageSelectionButton();
         SetupLevelXPBarUI();
         ToggleDiscardPanelVisibility(false);
         HandleTeamBuffTabSwitch(true, 1);
@@ -527,7 +525,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _xpText.text = currentXP.ToString() + "/" + requiredXPToNextLevel.ToString();
     }
 
-    private void CreateStageSelectionButton()
+    private void CreateStageSelectionButtons()
     {
         StageService stageObj = GameManager.Instance.Get<StageService>();
         int totalStages = stageObj.GetStageCount();
@@ -540,6 +538,37 @@ public class UIManager : GenericMonoSingleton<UIManager>
             stageSelectionCardUIViewObj.Initialize(index, stageData);
             _stageSelectionUICardList.Add(stageSelectionCardUIViewObj);
         }
+
+        StartCoroutine(SelectFirstStage());
+    }
+
+    private IEnumerator SelectFirstStage()
+    {
+        yield return null;
+
+        if (_stageSelectionUICardList.Count > 0)
+        {
+            _stageSelectionUICardList[0].InvokeClick();
+        }
+    }
+
+
+    private void ClearStageSelectionButtons()
+    {
+        if (_stageSelectionUICardList == null || _stageSelectionUICardList.Count == 0)
+        {
+            return;
+        }
+
+        foreach (StageSelectionCardUIView card in _stageSelectionUICardList)
+        {
+            if (card != null)
+            {
+                Destroy(card.gameObject);
+            }
+        }
+
+        _stageSelectionUICardList.Clear();
     }
 
     private void OnChooseStageButtonClicked()
@@ -614,6 +643,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleMainMenuUIContainer(false);
         ToggleStageSelectionUIContainer(false);
         ToggleGameplayUIContainer(false);
+        ClearStageSelectionButtons();
 
         switch (sceneLoaded)
         {
@@ -622,6 +652,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 break;
 
             case SceneNameEnum.StageSelectionScene:
+                CreateStageSelectionButtons();
                 UpdateStageSelectionRoundData();
                 ToggleStageSelectionUIContainer(true);
                 break;
@@ -685,7 +716,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
             {
                 cardObj.SetStageRoundData(0);
             }
-        }
+        }    
     }
 
     private void OnPausePlayGameplayToggleChanged()
@@ -928,6 +959,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
             _recommendedElementList[index].elementNameText.text = recommendedElements[index].ToString();
         }
     }
+
     private Color GetElementColor(UnitElementEnum element)
     {
         return element switch
