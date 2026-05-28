@@ -10,5 +10,7 @@ public class StageData
     public int initialCurrency;
     public int initialPlayerLevel;
     public int maxPlayerLives;
+    public StageDifficultyEnum stageDifficulty;
+    public List<UnitElementEnum> recommendedElements;
     public List<RoundData> roundDataList;
 }

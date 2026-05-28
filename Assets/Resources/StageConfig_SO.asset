@@ -20,6 +20,8 @@ MonoBehaviour:
     initialCurrency: 15
     initialPlayerLevel: 1
     maxPlayerLives: 3
+    stageDifficulty: 0
+    recommendedElements: 0200000003000000
     roundDataList:
     - winXPCurrency: 8
       lossXPCurrency: 6
@@ -30,45 +32,47 @@ MonoBehaviour:
     - winXPCurrency: 9
       lossXPCurrency: 7
       enemiyList:
-      - enemyID: 121
+      - enemyID: 101
         enemyLevel: 1
         enemySpawnTileIndex: 0
-      - enemyID: 121
+      - enemyID: 102
         enemyLevel: 1
         enemySpawnTileIndex: 0
     - winXPCurrency: 10
       lossXPCurrency: 8
       enemiyList:
-      - enemyID: 111
+      - enemyID: 101
         enemyLevel: 1
         enemySpawnTileIndex: 0
-      - enemyID: 123
+      - enemyID: 102
         enemyLevel: 1
         enemySpawnTileIndex: 0
-      - enemyID: 124
+      - enemyID: 104
         enemyLevel: 1
         enemySpawnTileIndex: 0
   - stageName: Stage 2
     xpExchangeCost: 1
     xpExchangeValue: 1
     shopRefreshCost: 1
-    initialCurrency: 10
+    initialCurrency: 15
     initialPlayerLevel: 1
     maxPlayerLives: 3
+    stageDifficulty: 1
+    recommendedElements: 0100000002000000
     roundDataList:
     - winXPCurrency: 10
       lossXPCurrency: 8
       enemiyList:
-      - enemyID: 111
+      - enemyID: 114
         enemyLevel: 1
         enemySpawnTileIndex: 0
     - winXPCurrency: 12
       lossXPCurrency: 10
       enemiyList:
-      - enemyID: 121
+      - enemyID: 111
         enemyLevel: 1
         enemySpawnTileIndex: 0
-      - enemyID: 121
+      - enemyID: 112
         enemyLevel: 1
         enemySpawnTileIndex: 0
     - winXPCurrency: 14
@@ -77,24 +81,26 @@ MonoBehaviour:
       - enemyID: 111
         enemyLevel: 1
         enemySpawnTileIndex: 0
-      - enemyID: 123
+      - enemyID: 112
         enemyLevel: 1
         enemySpawnTileIndex: 0
-      - enemyID: 124
+      - enemyID: 114
         enemyLevel: 1
         enemySpawnTileIndex: 0
   - stageName: Stage 3
     xpExchangeCost: 1
     xpExchangeValue: 1
     shopRefreshCost: 1
-    initialCurrency: 10
+    initialCurrency: 15
     initialPlayerLevel: 1
     maxPlayerLives: 3
+    stageDifficulty: 2
+    recommendedElements: 0100000003000000
     roundDataList:
     - winXPCurrency: 10
       lossXPCurrency: 8
       enemiyList:
-      - enemyID: 111
+      - enemyID: 124
         enemyLevel: 1
         enemySpawnTileIndex: 0
     - winXPCurrency: 12
@@ -109,10 +115,10 @@ MonoBehaviour:
     - winXPCurrency: 14
       lossXPCurrency: 12
       enemiyList:
-      - enemyID: 111
+      - enemyID: 121
         enemyLevel: 1
         enemySpawnTileIndex: 0
-      - enemyID: 123
+      - enemyID: 121
         enemyLevel: 1
         enemySpawnTileIndex: 0
       - enemyID: 124
@@ -121,36 +127,36 @@ MonoBehaviour:
     - winXPCurrency: 16
       lossXPCurrency: 14
       enemiyList:
-      - enemyID: 111
+      - enemyID: 121
         enemyLevel: 1
         enemySpawnTileIndex: 0
-      - enemyID: 123
+      - enemyID: 121
         enemyLevel: 1
         enemySpawnTileIndex: 0
-      - enemyID: 124
+      - enemyID: 122
         enemyLevel: 1
         enemySpawnTileIndex: 0
-      - enemyID: 124
+      - enemyID: 122
         enemyLevel: 1
         enemySpawnTileIndex: 0
     - winXPCurrency: 18
       lossXPCurrency: 16
       enemiyList:
-      - enemyID: 111
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 121
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 122
+        enemyLevel: 1
+        enemySpawnTileIndex: 0
+      - enemyID: 122
         enemyLevel: 1
         enemySpawnTileIndex: 0
       - enemyID: 123
         enemyLevel: 1
         enemySpawnTileIndex: 0
       - enemyID: 124
-        enemyLevel: 1
-        enemySpawnTileIndex: 0
-      - enemyID: 124
-        enemyLevel: 1
-        enemySpawnTileIndex: 0
-      - enemyID: 112
-        enemyLevel: 1
-        enemySpawnTileIndex: 0
-      - enemyID: 122
         enemyLevel: 1
         enemySpawnTileIndex: 0
