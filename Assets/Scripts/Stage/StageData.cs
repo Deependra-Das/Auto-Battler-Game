@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 [System.Serializable]
 public class StageData
@@ -11,6 +12,7 @@ public class StageData
     public int initialPlayerLevel;
     public int maxPlayerLives;
     public StageDifficultyEnum stageDifficulty;
+    [Range(1, 3)] public int recommendedLevel;
     public List<UnitElementEnum> recommendedElements;
     public List<RoundData> roundDataList;
 }
