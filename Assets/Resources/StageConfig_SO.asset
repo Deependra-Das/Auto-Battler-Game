@@ -20,8 +20,9 @@ MonoBehaviour:
     initialCurrency: 15
     initialPlayerLevel: 1
     maxPlayerLives: 3
-    stageDifficulty: 0
-    recommendedElements: 0200000003000000
+    stageDifficulty: 1
+    recommendedLevel: 1
+    recommendedElements: 0300000002000000
     roundDataList:
     - winXPCurrency: 8
       lossXPCurrency: 6
@@ -57,7 +58,8 @@ MonoBehaviour:
     initialCurrency: 15
     initialPlayerLevel: 1
     maxPlayerLives: 3
-    stageDifficulty: 1
+    stageDifficulty: 2
+    recommendedLevel: 1
     recommendedElements: 0100000002000000
     roundDataList:
     - winXPCurrency: 10
@@ -94,7 +96,8 @@ MonoBehaviour:
     initialCurrency: 15
     initialPlayerLevel: 1
     maxPlayerLives: 3
-    stageDifficulty: 2
+    stageDifficulty: 3
+    recommendedLevel: 1
     recommendedElements: 0100000003000000
     roundDataList:
     - winXPCurrency: 10

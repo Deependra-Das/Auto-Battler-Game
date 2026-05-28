@@ -588,8 +588,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2060264577}
   m_HandleRect: {fileID: 2060264576}
   m_Direction: 2
-  m_Value: -0.000024414063
-  m_Size: 0.9285714
+  m_Value: -0.000022888218
+  m_Size: 0.9285715
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -781,7 +781,7 @@ GameObject:
   - component: {fileID: 34447071}
   - component: {fileID: 34447070}
   m_Layer: 5
-  m_Name: DifficultyIconBakcground (4)
+  m_Name: DifficultyIconBakcground_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2313,7 +2313,7 @@ GameObject:
   - component: {fileID: 235333639}
   - component: {fileID: 235333638}
   m_Layer: 5
-  m_Name: DifficultyIcon
+  m_Name: DifficultyIcon_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3527,7 +3527,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.078431375, g: 0.078431375, b: 0.078431375, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4158,7 +4158,7 @@ GameObject:
   - component: {fileID: 403497545}
   - component: {fileID: 403497544}
   m_Layer: 5
-  m_Name: DifficultyIconBakcground
+  m_Name: DifficultyIconBakcground_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4234,7 +4234,7 @@ GameObject:
   - component: {fileID: 437620908}
   - component: {fileID: 437620907}
   m_Layer: 5
-  m_Name: RecommendedElementIcon
+  m_Name: RecommendedElementIcon_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4442,12 +4442,12 @@ GameObject:
   - component: {fileID: 468105894}
   - component: {fileID: 468105893}
   m_Layer: 5
-  m_Name: DifficultyIcon
+  m_Name: DifficultyIcon_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &468105892
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5417,7 +5417,7 @@ GameObject:
   - component: {fileID: 580464703}
   - component: {fileID: 580464702}
   m_Layer: 5
-  m_Name: DifficultyIconBakcground (3)
+  m_Name: DifficultyIconBakcground_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5685,12 +5685,12 @@ GameObject:
   - component: {fileID: 601742306}
   - component: {fileID: 601742305}
   m_Layer: 5
-  m_Name: DifficultyIcon
+  m_Name: DifficultyIcon_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &601742304
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5792,6 +5792,18 @@ MonoBehaviour:
   _resetStageConfirmationMessageText: {fileID: 524347896}
   _resetStageConfirmationYesButton: {fileID: 2066048736}
   _resetStageConfirmationNoButton: {fileID: 597160238}
+  _recommendedLevelText: {fileID: 1288591111}
+  _recommendedElementList:
+  - elementIconImage: {fileID: 1658882334}
+    elementNameText: {fileID: 1085726731}
+  - elementIconImage: {fileID: 437620907}
+    elementNameText: {fileID: 2089767639}
+  _difficultyImageList:
+  - {fileID: 1942427495}
+  - {fileID: 601742305}
+  - {fileID: 468105893}
+  - {fileID: 1362163999}
+  - {fileID: 235333638}
   _gameplayUIContainer: {fileID: 117397676}
   _enterCombatButton: {fileID: 809395096}
   _shopToggleButton: {fileID: 287041312}
@@ -9143,7 +9155,7 @@ GameObject:
   - component: {fileID: 1085726732}
   - component: {fileID: 1085726731}
   m_Layer: 5
-  m_Name: RecommendedElementText
+  m_Name: RecommendedElementText_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9165,8 +9177,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 92, y: -12}
-  m_SizeDelta: {x: 120, y: 16}
+  m_AnchoredPosition: {x: 72, y: -12}
+  m_SizeDelta: {x: 80, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1085726731
 MonoBehaviour:
@@ -9188,7 +9200,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Element Name
+  m_text: Element
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10134,7 +10146,7 @@ GameObject:
   - component: {fileID: 1210980171}
   - component: {fileID: 1210980170}
   m_Layer: 5
-  m_Name: DifficultyIconBakcground (1)
+  m_Name: DifficultyIconBakcground_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10558,7 +10570,7 @@ GameObject:
   - component: {fileID: 1284018998}
   - component: {fileID: 1284018999}
   m_Layer: 5
-  m_Name: RecommendedElementCard (1)
+  m_Name: RecommendedElementCard_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10582,8 +10594,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 240, y: -12}
-  m_SizeDelta: {x: 160, y: 24}
+  m_AnchoredPosition: {x: 180, y: -12}
+  m_SizeDelta: {x: 120, y: 24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1284018999
 MonoBehaviour:
@@ -11423,7 +11435,7 @@ GameObject:
   - component: {fileID: 1362164000}
   - component: {fileID: 1362163999}
   m_Layer: 5
-  m_Name: DifficultyIcon
+  m_Name: DifficultyIcon_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13385,7 +13397,7 @@ GameObject:
   - component: {fileID: 1658882335}
   - component: {fileID: 1658882334}
   m_Layer: 5
-  m_Name: RecommendedElementIcon
+  m_Name: RecommendedElementIcon_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14348,7 +14360,7 @@ GameObject:
   - component: {fileID: 1820083132}
   - component: {fileID: 1820083133}
   m_Layer: 5
-  m_Name: RecommendedElementCard
+  m_Name: RecommendedElementCard_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14372,8 +14384,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 80, y: -12}
-  m_SizeDelta: {x: 160, y: 24}
+  m_AnchoredPosition: {x: 60, y: -12}
+  m_SizeDelta: {x: 120, y: 24}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1820083133
 MonoBehaviour:
@@ -15088,12 +15100,12 @@ GameObject:
   - component: {fileID: 1942427496}
   - component: {fileID: 1942427495}
   m_Layer: 5
-  m_Name: DifficultyIcon
+  m_Name: DifficultyIcon_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1942427494
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15347,7 +15359,7 @@ GameObject:
   - component: {fileID: 1970486400}
   - component: {fileID: 1970486399}
   m_Layer: 5
-  m_Name: DifficultyIconBakcground (2)
+  m_Name: DifficultyIconBakcground_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15712,7 +15724,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 40.000965}
+  m_AnchoredPosition: {x: 0, y: 40.00085}
   m_SizeDelta: {x: 0, y: 560}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2012293679
@@ -16197,8 +16209,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1364537090}
   m_HandleRect: {fileID: 1364537089}
   m_Direction: 2
-  m_Value: -0.000024414063
-  m_Size: 0.9285714
+  m_Value: -0.000022888218
+  m_Size: 0.9285715
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -16558,7 +16570,7 @@ GameObject:
   - component: {fileID: 2089767640}
   - component: {fileID: 2089767639}
   m_Layer: 5
-  m_Name: RecommendedElementText
+  m_Name: RecommendedElementText_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16580,8 +16592,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 92, y: -12}
-  m_SizeDelta: {x: 120, y: 16}
+  m_AnchoredPosition: {x: 72, y: -12}
+  m_SizeDelta: {x: 80, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2089767639
 MonoBehaviour:
@@ -16603,7 +16615,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Element Name
+  m_text: Element
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -16715,7 +16727,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 40.000965}
+  m_AnchoredPosition: {x: 0, y: 40.00085}
   m_SizeDelta: {x: 0, y: 560}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2093632306

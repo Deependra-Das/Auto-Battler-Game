@@ -4,6 +4,7 @@ using AutoBattler.Utilities;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,6 +26,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private TMP_Text _resetStageConfirmationMessageText;
     [SerializeField] private Button _resetStageConfirmationYesButton;
     [SerializeField] private Button _resetStageConfirmationNoButton;
+    [SerializeField] private TMP_Text _recommendedLevelText;
+    [SerializeField] private List<RecommendedElementCard> _recommendedElementList;
+    [SerializeField] private List<Image> _difficultyImageList;
 
     [Header("Gameplay UI")]
     [SerializeField] private GameObject _gameplayUIContainer;
@@ -533,7 +537,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
             StageData stageData = stageObj.GetStageData(index);
             GameObject stageButton = Instantiate(_stageSelectionCardUIPrefab, _stageSelectionContent);
             StageSelectionCardUIView stageSelectionCardUIViewObj = stageButton.GetComponent<StageSelectionCardUIView>();
-            stageSelectionCardUIViewObj.Initialize(index, stageData.stageName, stageData.roundDataList.Count);
+            stageSelectionCardUIViewObj.Initialize(index, stageData);
             _stageSelectionUICardList.Add(stageSelectionCardUIViewObj);
         }
     }
@@ -558,16 +562,33 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnSelectedStageChanged_UI(object[] parameters)
     {
         _selectedStage = (int)parameters[0];
+        int roundCount = 0;
 
         foreach (var stage in _stageSelectionUICardList)
         {
             if (stage.StageIndex == _selectedStage)
+            {
+                roundCount = stage.NumberOfRounds;
+
+                SetStageRecommendedLevelOnSelectionUI(stage.RecommendedLevel);
+                SetStageRecommendedElementsOnSelectionUI(stage);
+                SetStageDifficultyOnSelectionUI(stage.StageDifficulty);
+
                 stage.SetStageCardUISelectedHighlight(true);
+            }
             else
+            {
                 stage.SetStageCardUISelectedHighlight(false);
+            }
         }
 
-        ToggleStartContinueStageButton(true);
+        StageSnapshotEntry entry = GameManager.Instance.Get<StageSnapshotService>().GetStageSnapshot(_selectedStage);
+
+        if (entry == null || entry.latestRoundSnapshot.roundIndex < roundCount-1)
+        {
+            ToggleStartContinueStageButton(true);
+        }
+
         ToggleResetStageStageButton(true);
     }
 
@@ -873,5 +894,48 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void SetRoundInfoGameplayUIText(int value)
     {
         _roundInfoGameplayUIText.text = "Round "+ value.ToString();
+    }
+
+    private void SetStageDifficultyOnSelectionUI(StageDifficultyEnum difficultyEnumValue)
+    {
+        int difficulty = (int)difficultyEnumValue;
+
+        for (int index = 0; index < _difficultyImageList.Count; index++ )
+        { 
+            if (index < difficulty)
+            {
+                _difficultyImageList[index].gameObject.SetActive(true);
+            }
+            else
+            {
+                _difficultyImageList[index].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void SetStageRecommendedLevelOnSelectionUI(int value)
+    {
+        _recommendedLevelText.text = value.ToString();
+    }
+
+    private void SetStageRecommendedElementsOnSelectionUI(StageSelectionCardUIView stage)
+    {
+        List<UnitElementEnum> recommendedElements = stage.RecommendedElements;
+
+        for (int index = 0; index < recommendedElements.Count; index++)
+        {
+            _recommendedElementList[index].elementIconImage.color = GetElementColor(recommendedElements[index]);
+            _recommendedElementList[index].elementNameText.text = recommendedElements[index].ToString();
+        }
+    }
+    private Color GetElementColor(UnitElementEnum element)
+    {
+        return element switch
+        {
+            UnitElementEnum.Fire => new Color(1f, 0.78f, 0.72f),
+            UnitElementEnum.Thunder => new Color(0.65f, 0.9f, 1f),
+            UnitElementEnum.Nature => new Color(0.78f, 1f, 0.65f),
+            _ => new Color(0.95f, 0.95f, 0.95f)
+        };
     }
 }

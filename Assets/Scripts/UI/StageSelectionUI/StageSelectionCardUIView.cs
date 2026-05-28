@@ -1,4 +1,5 @@
 using AutoBattler.Event;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +7,10 @@ using UnityEngine.UI;
 public class StageSelectionCardUIView : MonoBehaviour
 {
     public int StageIndex { get; private set; }
+    public int NumberOfRounds { get; private set; }
+    public int RecommendedLevel { get; private set; }
+    public StageDifficultyEnum StageDifficulty { get; private set; }
+    public List<UnitElementEnum> RecommendedElements { get; private set; }
 
     [SerializeField] private GameObject _selectedHighlight;
     [SerializeField] private TMP_Text _stageNameText;
@@ -15,8 +20,6 @@ public class StageSelectionCardUIView : MonoBehaviour
 
     private void OnEnable() => SubscribeToEvents();
     private void OnDisable() => UnsubscribeToEvents();
-
-    private int _numberOfRounds = 0; 
 
     private void Awake()
     {
@@ -33,11 +36,14 @@ public class StageSelectionCardUIView : MonoBehaviour
         _stageButton.onClick.RemoveListener(OnStageButtonClicked);
     }
 
-    public void Initialize(int stageIndex, string stageName, int numberOfRounds)
+    public void Initialize(int index, StageData stageData)
     {
-        StageIndex = stageIndex;
-        _stageNameText.text = stageName;
-        _numberOfRounds = numberOfRounds;
+        StageIndex = index;
+        _stageNameText.text = stageData.stageName;
+        NumberOfRounds = stageData.roundDataList.Count;
+        RecommendedLevel = stageData.recommendedLevel;
+        StageDifficulty = stageData.stageDifficulty;
+        RecommendedElements = stageData.recommendedElements;
     }
 
     private void OnStageButtonClicked()
@@ -52,7 +58,7 @@ public class StageSelectionCardUIView : MonoBehaviour
 
     public void SetStageRoundData(int roundsCleared)
     {
-        _numberOfRoundsText.text = roundsCleared.ToString() + " / " + _numberOfRounds.ToString();
-        _stageClearedImage.gameObject.SetActive((roundsCleared == _numberOfRounds));
+        _numberOfRoundsText.text = roundsCleared.ToString() + " / " + NumberOfRounds.ToString();
+        _stageClearedImage.gameObject.SetActive((roundsCleared == NumberOfRounds));
     }
 }
