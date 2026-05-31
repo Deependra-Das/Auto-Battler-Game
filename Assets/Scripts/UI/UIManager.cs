@@ -715,11 +715,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
             if (data != null)
             {
-                cardObj.SetStageRoundData(data.winCount+data.drawCount);
+                cardObj.SetStageRoundData(data.roundResults, (data.winCount+data.drawCount), data.latestRoundSnapshot.roundIndex);
             }
             else
             {
-                cardObj.SetStageRoundData(0);
+                cardObj.SetStageRoundData(null, 0, -1);
             }
         }    
     }
