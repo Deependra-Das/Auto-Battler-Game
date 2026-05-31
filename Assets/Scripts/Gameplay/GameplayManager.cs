@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
+
 
 public class GameplayManager : MonoBehaviour
 {
@@ -381,13 +381,21 @@ public class GameplayManager : MonoBehaviour
             DespawnUnit(unit);
         }
 
+        List<UnitData> inventoryUnits = new(_teamServiceObj.GetInventoryUnits(TeamEnum.Team1));
+
+        foreach (UnitData unitData in inventoryUnits)
+        {
+            _teamServiceObj.RemoveUnitFromInventory(unitData, TeamEnum.Team1);
+        }
+
+        _inventoryServiceObj.Reset();
+
         if (restorePlayerInventory)
         {
             _teamServiceObj.AddAllTeamUnitsToInventory(TeamEnum.Team1);
         }
         else
         {
-            _inventoryServiceObj.Reset();
             _teamServiceObj.ClearTeam(TeamEnum.Team1);
         }
     }
@@ -479,11 +487,9 @@ public class GameplayManager : MonoBehaviour
         if (!_waitingForRoundDecision) return;
 
         _waitingForRoundDecision = false;
-
+        _roundCheckRoutine = null;
         CommitRound();
         CleanupRound(true);
-
-        _roundCheckRoutine = null;
         _stageServiceObj.TryAdvanceRound();
 
         PrepareCurrentRound();
