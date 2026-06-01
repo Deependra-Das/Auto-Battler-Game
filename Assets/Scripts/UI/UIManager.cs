@@ -37,6 +37,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Button _pausePlayGameplayButton;
     [SerializeField] private TMP_Text _roundInfoGameplayUIText;
     [SerializeField] private TMP_Text _stageInfoGameplayUIText;
+    [SerializeField] private GameObject _bottomControlPanel;
 
     [Header("--Gameplay Paused UI")]
     [SerializeField] private GameObject _gameplayPausedContainer;
@@ -70,7 +71,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private ShopUnitCard _shopUnitCard;
 
     [Header("--Inventory UI")]
-    [SerializeField] private GameObject _inventoryPanel;
     [SerializeField] private Transform _inventoryUnitCardContainer;
     [SerializeField] private InventoryUnitCard _inventorytUnitCard;
 
@@ -202,6 +202,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Subscribe(EventNameEnum.StageClearedFull, OnStageClearedFull);
         EventBusManager.Instance.Subscribe(EventNameEnum.StageClearedPartial, OnStageClearedPartial);
         EventBusManager.Instance.Subscribe(EventNameEnum.StageFailed, OnStageFailed);
+        EventBusManager.Instance.Subscribe(EventNameEnum.GameplayStateChanged, OnGameplayStateChanged);
     }
 
     private void UnsubscribeToEvents()
@@ -220,6 +221,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Unsubscribe(EventNameEnum.StageClearedFull, OnStageClearedFull);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.StageClearedPartial, OnStageClearedPartial);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.StageFailed, OnStageFailed);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.GameplayStateChanged, OnGameplayStateChanged);
     }
 
     public void InitializeGameplayUI()
@@ -974,5 +976,37 @@ public class UIManager : GenericMonoSingleton<UIManager>
             UnitElementEnum.Nature => new Color(0.78f, 1f, 0.65f),
             _ => new Color(0.95f, 0.95f, 0.95f)
         };
+    }
+
+    private void OnGameplayStateChanged(object[] parameters)
+    {
+        GameplayStateEnum currentGameplayState = (GameplayStateEnum)parameters[0];
+
+        if (currentGameplayState == GameplayStateEnum.Preparation)
+        {
+            ToggleEnterCombatButtonVisibility(true);
+            ToggleGameplayBottomControlPanel(true);
+        }
+        else if (currentGameplayState == GameplayStateEnum.Combat)
+        {
+            HideShopPanel();
+            ToggleEnterCombatButtonVisibility(false);
+            ToggleGameplayBottomControlPanel(false);
+        }
+    }
+
+    private void ToggleEnterCombatButtonVisibility(bool value)
+    {
+        _enterCombatButton.gameObject.SetActive(value);
+    }
+
+    private void ToggleGameplayBottomControlPanel(bool value)
+    {
+        _bottomControlPanel.gameObject.SetActive(value);
+    }
+
+    private void HideShopPanel()
+    {
+        _shopPanel.gameObject.SetActive(false);
     }
 }

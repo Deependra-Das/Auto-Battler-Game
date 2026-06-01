@@ -588,8 +588,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2060264577}
   m_HandleRect: {fileID: 2060264576}
   m_Direction: 2
-  m_Value: -0.000013732931
-  m_Size: 0.9285715
+  m_Value: -0.0000030517579
+  m_Size: 0.9285714
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5811,6 +5811,7 @@ MonoBehaviour:
   _pausePlayGameplayButton: {fileID: 2001740927}
   _roundInfoGameplayUIText: {fileID: 1316279422}
   _stageInfoGameplayUIText: {fileID: 912085859}
+  _bottomControlPanel: {fileID: 1220765109}
   _gameplayPausedContainer: {fileID: 1038920522}
   _resumeGameplayButton: {fileID: 888890751}
   _restartRoundPauseMenuButton: {fileID: 1225274994}
@@ -5834,7 +5835,6 @@ MonoBehaviour:
   _refreshShopButton: {fileID: 1490154947}
   _shopUnitCardContainer: {fileID: 1117230492}
   _shopUnitCard: {fileID: -3570950631372336357, guid: 6baa808f57bded748be4ab21f64ea126, type: 3}
-  _inventoryPanel: {fileID: 339706706}
   _inventoryUnitCardContainer: {fileID: 2018275196}
   _inventorytUnitCard: {fileID: -3820523665162992874, guid: 82e43d3b50c2f9248aac65d1f7ef2d06, type: 3}
   _discardUnitPanel: {fileID: 1450257742}
@@ -9289,7 +9289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1098182925}
   m_Layer: 5
-  m_Name: TopBar
+  m_Name: TopControlPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10295,7 +10295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1220765110}
   m_Layer: 5
-  m_Name: BottomBar
+  m_Name: BottomControlPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15724,7 +15724,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 40.000477}
+  m_AnchoredPosition: {x: 0, y: 40.000095}
   m_SizeDelta: {x: 0, y: 560}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2012293679
@@ -16209,8 +16209,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1364537090}
   m_HandleRect: {fileID: 1364537089}
   m_Direction: 2
-  m_Value: -0.000013732931
-  m_Size: 0.9285715
+  m_Value: -0.0000030517579
+  m_Size: 0.9285714
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -16727,7 +16727,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 40.000477}
+  m_AnchoredPosition: {x: 0, y: 40.000095}
   m_SizeDelta: {x: 0, y: 560}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2093632306
