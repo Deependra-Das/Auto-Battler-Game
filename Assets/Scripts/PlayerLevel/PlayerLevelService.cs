@@ -72,7 +72,7 @@ public class PlayerLevelService
 
         if (CurrentXP > 0)
         {
-            EventBusManager.Instance.Raise(EventNameEnum.XPChanged, GetXPProgressNormalized(), CurrentXP, GetXPToNextLevel());
+            RaiseXPChangedEvent();
         }
 
         return true;
@@ -102,7 +102,7 @@ public class PlayerLevelService
         if (leveledUp)
         {
             int index = Level - 1;
-            EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level, MaxUnitsAllowedOnField, CurrentXP, GetXPToNextLevel());
+            RaiseLevelChangedEvent();
         }
     }
 
@@ -151,7 +151,13 @@ public class PlayerLevelService
         SetLives((int)parameters[5]);
         _xpExchangeCost = (int)parameters[6];
         _xpExchangeValue = (int)parameters[7];
-        EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level, MaxUnitsAllowedOnField, CurrentXP, GetXPToNextLevel());
+
+        if (CurrentXP > 0)
+        {
+            RaiseXPChangedEvent();
+        }
+
+        RaiseLevelChangedEvent();
     }
 
     private void OnRoundOver_PlayerLevel(object[] parameters)
@@ -173,6 +179,16 @@ public class PlayerLevelService
         _xpExchangeCost = 0;
         _xpExchangeValue = 0;
 
+        RaiseLevelChangedEvent();
+    }
+
+    private void RaiseXPChangedEvent()
+    {
+        EventBusManager.Instance.Raise(EventNameEnum.XPChanged, GetXPProgressNormalized(), CurrentXP, GetXPToNextLevel());
+    }
+
+    private void RaiseLevelChangedEvent()
+    {
         EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level, MaxUnitsAllowedOnField, CurrentXP, GetXPToNextLevel());
     }
 
