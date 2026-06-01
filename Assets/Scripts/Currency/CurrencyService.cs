@@ -12,25 +12,26 @@ public class CurrencyService
         Balance = 0;
     }
 
-    ~CurrencyService()
-    {
-        UnsubscribeToEvents();
-    }
-
     void SubscribeToEvents()
     {
-        EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStartedSetInitialiCurrency);
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStartedSetInitialCurrency);
+        EventBusManager.Instance.Subscribe(EventNameEnum.RoundOver, OnRoundOverAddCurrency);
     }
 
     void UnsubscribeToEvents()
     {
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStartedSetInitialiCurrency);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStartedSetInitialCurrency);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundOver, OnRoundOverAddCurrency);
     }
 
-    private void OnStageStartedSetInitialiCurrency(object[] parameters)
+    private void OnStageStartedSetInitialCurrency(object[] parameters)
     {
-        Balance = (int)parameters[2];
-        NotifyBalanceChanged();
+        SetCurrency((int)parameters[9]);
+    }
+
+    private void OnRoundOverAddCurrency(object[] parameters)
+    {
+        AddCurrency((int)parameters[3]);
     }
 
     public bool CanAfford(int amount)
@@ -59,7 +60,7 @@ public class CurrencyService
         NotifyBalanceChanged();
     }
 
-    public void SetCurrency(int amount)
+    private void SetCurrency(int amount)
     {
         Balance = amount;
         NotifyBalanceChanged();
@@ -68,5 +69,17 @@ public class CurrencyService
     private void NotifyBalanceChanged()
     {
         UIManager.Instance.UpdateCurrenyUI(Balance);
+    }
+
+    public void Reset()
+    {
+        Balance = 0;
+        NotifyBalanceChanged();
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeToEvents();
+        Reset();
     }
 }

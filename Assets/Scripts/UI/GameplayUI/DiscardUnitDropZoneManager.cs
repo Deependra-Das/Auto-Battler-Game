@@ -10,6 +10,7 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
     [SerializeField] private Color _highlightColor;
 
     private TeamService _teamServiceObj;
+    private InventoryService _inventoryServiceObj;
     private bool _isDiscardHighlightActive = false;
 
     private void Awake()
@@ -36,6 +37,7 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
 
         int refundAmount = 0;
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
+        _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
 
         if (gameObject.TryGetComponent<BaseUnit>(out BaseUnit baseUnit))
         {
@@ -44,7 +46,8 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
             if (dragHandler != null)
                 dragHandler.MarkDroppedOnDiscardUnitZone();
 
-            _teamServiceObj.RemoveUnitFromField(baseUnit, baseUnit.Team);
+            _teamServiceObj.RemoveUnitFromField(baseUnit, baseUnit.Team, true);
+            _teamServiceObj.RemoveUnitFromTeam(baseUnit.UnitData, baseUnit.Team);
             Destroy(baseUnit.gameObject);
         }
         else if (gameObject.TryGetComponent<InventoryUnitCard>(out InventoryUnitCard inventoryUnitCard))
@@ -52,8 +55,10 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
             refundAmount = inventoryUnitCard.UnitData.unitCost;
             inventoryUnitCard.MarkDroppedOnDiscardUnitZone();
 
-            UIManager.Instance.RemoveInventoryUnitCard(inventoryUnitCard);
             _teamServiceObj.RemoveUnitFromInventory(inventoryUnitCard.UnitData, TeamEnum.Team1);
+            _teamServiceObj.RemoveUnitFromTeam(inventoryUnitCard.UnitData, TeamEnum.Team1);
+            _inventoryServiceObj.RemoveUnit(inventoryUnitCard.UnitData);
+
             Destroy(inventoryUnitCard.gameObject);
         }
 

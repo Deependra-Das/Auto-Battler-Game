@@ -9,20 +9,17 @@ public class ShopService
     private List<UnitData> _currentUnitsInShop = new List<UnitData>();
     private const int SHOP_SIZE = 4;
     private int _shopRefreshCost = 0;
-    CurrencyService currencyServiceObj;
-    InventoryService inventoryServiceObj;
+    private CurrencyService _currencyServiceObj;
+    private InventoryService _inventoryServiceObj;
+    private TeamService _teamServiceObj;
 
     public ShopService(UnitScriptableObject unit_SO)
     {
         SubscribeToEvents();
         _allUnits = new List<UnitData>(unit_SO.unitDataList);
-        currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
-        inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
-    }
-
-    ~ShopService()
-    {
-        UnsubscribeToEvents();
+        _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
+        _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
+        _teamServiceObj = GameManager.Instance.Get<TeamService>();
     }
 
     void SubscribeToEvents()
@@ -38,6 +35,7 @@ public class ShopService
     public void GenerateShopUnits()
     {
         _currentUnitsInShop.Clear();
+        UIManager.Instance.RemoveAllShopUnitCards();
 
         for (int i = 0; i < SHOP_SIZE; i++)
         {
@@ -47,6 +45,8 @@ public class ShopService
 
     void AddRandomUnitInShop()
     {
+        if (_currentUnitsInShop.Count >= SHOP_SIZE) return;
+
         UnitData randomUnit = _allUnits[Random.Range(0, _allUnits.Count)];
         _currentUnitsInShop.Add(randomUnit);
 
@@ -57,19 +57,20 @@ public class ShopService
     {    
         int cost = card.unitData.unitCost;
 
-        if (inventoryServiceObj.CurrentInventorySize >= inventoryServiceObj.MaxInventorySize)
+        if (_inventoryServiceObj.CurrentInventorySize >= _inventoryServiceObj.MaxInventorySize)
         {
             Debug.Log("Inventory Full!");
             return;
         }
 
-        if (!currencyServiceObj.SpendCurrency(cost))
+        if (!_currencyServiceObj.SpendCurrency(cost))
         {
             Debug.Log("Not enough Currency!");
             return;
         }
 
-        inventoryServiceObj.AddUnit(card.unitData);
+        _teamServiceObj.AddUnitToTeam(card.unitData, TeamEnum.Team1);
+        _inventoryServiceObj.AddUnit(card.unitData);
         _currentUnitsInShop.Remove(card.unitData);
         UIManager.Instance.RemoveShopUnitCard(card);
         AddRandomUnitInShop();
@@ -77,7 +78,7 @@ public class ShopService
 
     public void RefreshShop()
     {
-        if (!currencyServiceObj.SpendCurrency(_shopRefreshCost))
+        if (!_currencyServiceObj.SpendCurrency(_shopRefreshCost))
         {
             Debug.Log("Not enough Currency!");
             return;
@@ -91,7 +92,30 @@ public class ShopService
 
     private void OnStageStarted_Shop(object[] parameters)
     {
-        _shopRefreshCost = (int)parameters[7];
+        _shopRefreshCost = (int)parameters[8];
         UIManager.Instance.UpdateRefreshCostUI(_shopRefreshCost);
+    }
+
+    public void Reset()
+    {
+        _currentUnitsInShop.Clear();
+        UIManager.Instance.RemoveAllShopUnitCards();
+        _shopRefreshCost = 0;
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeToEvents();
+
+        Reset();
+
+        if (_allUnits != null)
+        {
+            _allUnits.Clear();
+            _allUnits = null;
+        }
+        _currencyServiceObj = null;
+        _inventoryServiceObj = null;
+        _teamServiceObj = null;
     }
 }

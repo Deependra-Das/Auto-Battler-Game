@@ -9,6 +9,11 @@ namespace AutoBattler.Event
     {
         private readonly Dictionary<string, UnityEvent<object[]>> _eventDictionary = new Dictionary<string, UnityEvent<object[]>>();
 
+        protected override void Awake()
+        {
+            base.Awake();
+        }
+
         public void Subscribe(EventNameEnum eventName, UnityAction<object[]> listener)
         {
             string eventKey = eventName.ToString().ToUpper();

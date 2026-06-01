@@ -6,32 +6,80 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class UIManager : GenericMonoSingleton<UIManager>
 {
     [SerializeField] private Canvas _uiCanvas;
-    [SerializeField] private Button _playButton;
+
+    [Header("MainMenu UI")]
+    [SerializeField] private GameObject _mainMenuUIContainer;
+    [SerializeField] private Button _chooseStageButton;
+
+    [Header("StageSelection UI")]
+    [SerializeField] private GameObject _stageSelectionUIContainer;
+    [SerializeField] private GameObject _stageSelectionCardUIPrefab;
+    [SerializeField] private Transform _stageSelectionContent;
+    [SerializeField] private Button _startContinueStageButton;
+    [SerializeField] private Button _resetStageButton;
+    [SerializeField] private GameObject _stageSelectionConfirmationContainer;
+    [SerializeField] private TMP_Text _resetStageConfirmationMessageText;
+    [SerializeField] private Button _resetStageConfirmationYesButton;
+    [SerializeField] private Button _resetStageConfirmationNoButton;
+    [SerializeField] private TMP_Text _recommendedLevelText;
+    [SerializeField] private List<RecommendedElementCard> _recommendedElementList;
+    [SerializeField] private List<Image> _difficultyImageList;
+
+    [Header("Gameplay UI")]
     [SerializeField] private GameObject _gameplayUIContainer;
+    [SerializeField] private Button _enterCombatButton;
     [SerializeField] private Button _shopToggleButton;
     [SerializeField] private TMP_Text _balanceCurrencyText;
+    [SerializeField] private Button _pausePlayGameplayButton;
+    [SerializeField] private TMP_Text _roundInfoGameplayUIText;
+    [SerializeField] private TMP_Text _stageInfoGameplayUIText;
+    [SerializeField] private GameObject _bottomControlPanel;
 
-    [Header("Shop UI")]
+    [Header("--Gameplay Paused UI")]
+    [SerializeField] private GameObject _gameplayPausedContainer;
+    [SerializeField] private Button _resumeGameplayButton;
+    [SerializeField] private Button _restartRoundPauseMenuButton;
+    [SerializeField] private Button _backToStageSelectGameplayPausedButton;
+
+    [Header("--Gameplay Start Notification UI")]
+    [SerializeField] private GameObject _gameplayStartNotificationContainer;
+    [SerializeField] private TMP_Text _stageStartNotificationText;
+    [SerializeField] private TMP_Text _roundStartNotificationText;
+
+    [Header("--Gameplay Over Notification UI")]
+    [SerializeField] private GameObject _gameplayOverNotificationContainer;
+    [SerializeField] private TMP_Text _stageInfoGameplayOverText;
+    [SerializeField] private TMP_Text _roundInfoGameplayOverText;
+    [SerializeField] private GameObject _gameplayOverRewardsContainer;
+    [SerializeField] private TMP_Text _rewardsQuantityText;
+    [SerializeField] private GameObject _stageOverStatusContainer;
+    [SerializeField] private TMP_Text _stageOverStatusMessageText;
+    [SerializeField] private TMP_Text _stageOverSubText;
+    [SerializeField] private Button _nextRoundGameplayOverButton;
+    [SerializeField] private Button _restartRoundGameplayOverButton;
+    [SerializeField] private Button _backToStageSelectGameplayOverButton;
+
+    [Header("--Shop UI")]
     [SerializeField] private GameObject _shopPanel;
     [SerializeField] private TMP_Text _refreshCostText;
     [SerializeField] private Button _refreshShopButton;
     [SerializeField] private Transform _shopUnitCardContainer;
     [SerializeField] private ShopUnitCard _shopUnitCard;
 
-    [Header("Inventory UI")]
-    [SerializeField] private GameObject _inventoryPanel;
+    [Header("--Inventory UI")]
     [SerializeField] private Transform _inventoryUnitCardContainer;
     [SerializeField] private InventoryUnitCard _inventorytUnitCard;
 
-    [Header("Discard UI")]
+    [Header("--Discard UI")]
     [SerializeField] private GameObject _discardUnitPanel;
     [SerializeField] private TMP_Text _refundText;
 
-    [Header("Buff UI")]
+    [Header("--Buff UI")]
     [SerializeField] private GameObject _buffTeam1ToggleContent;
     [SerializeField] private GameObject _buffTeam2ToggleContent;
     [SerializeField] private Transform _buffTeam1Container;
@@ -40,7 +88,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Toggle _team2ToggleButton;
     [SerializeField] private BuffDetailsUICard _buffBlockUICardPrefab;
 
-    [Header("Level XP UI")]
+    [Header("--Level XP UI")]
     [SerializeField] private TMP_Text _currentLevelText;
     [SerializeField] private TMP_Text _xpText;
     [SerializeField] private TMP_Text _xpExchangeCostText;
@@ -48,17 +96,22 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Image _levelXpBarfillImage;
     [SerializeField] private Button _buyLevelXpButton;
     [SerializeField] private float _maxFillAmount = 0.75f;
-    [SerializeField] private float _roatationForLevelXPBar =45f;
+    [SerializeField] private float _roatationForLevelXPBar = 45f;
     [SerializeField] private float _xpLerpSpeed = 8f;
+
+    [Header("Delay Values UI")]
+    [SerializeField] private float _roundStartUIDisplayDuration = 3f;
+
     private float _displayedXP;
     private float _targetXP;
     private Coroutine _xpRoutine;
-
+    private int _selectedStage = -1;
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
     private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam1UICardDictionary = new();
     private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam2UICardDictionary = new();
+    private List<StageSelectionCardUIView> _stageSelectionUICardList = new();    
 
     public Canvas UICanvas => _uiCanvas;
 
@@ -68,40 +121,108 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         base.Awake();
         CanvasRect = _uiCanvas.GetComponent<RectTransform>();
+    }
+
+    public void Initialize()
+    {
+        SubscribeToEvents();
         SetupLevelXPBarUI();
         ToggleDiscardPanelVisibility(false);
         HandleTeamBuffTabSwitch(true, 1);
+        ToggleMainMenuUIContainer(false);
+        ToggleStageSelectionUIContainer(false);
+        ToggleGameplayUIContainer(false);
+        ToggleStartContinueStageButton(false);
+        ToggleResetStageStageButton(false);
+        ToggleStageSelectionConfirmationContainer(false);
+        ToggleGameplayPausedContainer(false);
     }
 
-    private void OnEnable() => SubscribeToEvents();
-    private void OnDisable() => UnsubscribeToEvents();
-
-    void SubscribeToEvents()
+    private void OnEnable()
     {
-        _playButton.onClick.AddListener(OnPlayButtonClicked); 
+        _chooseStageButton.onClick.AddListener(OnChooseStageButtonClicked);
+        _enterCombatButton.onClick.AddListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
-        EventBusManager.Instance.Subscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
-        EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
         _team1ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
         _buyLevelXpButton.onClick.AddListener(OnBuyLevelXpButtonClicked);
-        EventBusManager.Instance.Subscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
-        EventBusManager.Instance.Subscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
+        _startContinueStageButton.onClick.AddListener(OnStartContinueStageButtonClicked);
+        _resetStageButton.onClick.AddListener(OnResetStageButtonClicked);
+        _resetStageConfirmationYesButton.onClick.AddListener(OnResetStageConfirmationYesButtonClicked);
+        _resetStageConfirmationNoButton.onClick.AddListener(OnResetStageConfirmationNoButtonClicked);
+        _pausePlayGameplayButton.onClick.AddListener(OnPausePlayGameplayToggleChanged);
+        _resumeGameplayButton.onClick.AddListener(OnResumeGameplayButtonClicked);
+        _restartRoundPauseMenuButton.onClick.AddListener(OnRestartRoundPauseMenuButtonClicked);
+        _nextRoundGameplayOverButton.onClick.AddListener(OnNextRoundButtonGameplayOverButtonClicked);
+        _restartRoundGameplayOverButton.onClick.AddListener(OnRestartRoundGameplayOverButtonClicked);
+        _backToStageSelectGameplayOverButton.onClick.AddListener(OnBackToStageSelectionGameplayOverButtonClicked);
+        _backToStageSelectGameplayPausedButton.onClick.AddListener(OnBackToStagePauseMenuButtonClicked);
     }
 
-    void UnsubscribeToEvents()
+    private void OnDisable()
     {
-        _playButton.onClick.RemoveListener(OnPlayButtonClicked);
+        _chooseStageButton.onClick.RemoveListener(OnChooseStageButtonClicked);
+        _enterCombatButton.onClick.RemoveListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
         _team1ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
         _buyLevelXpButton.onClick.RemoveListener(OnBuyLevelXpButtonClicked);
+        _startContinueStageButton.onClick.RemoveListener(OnStartContinueStageButtonClicked);
+        _resetStageButton.onClick.RemoveListener(OnResetStageButtonClicked);
+        _resetStageConfirmationYesButton.onClick.RemoveListener(OnResetStageConfirmationYesButtonClicked);
+        _resetStageConfirmationNoButton.onClick.RemoveListener(OnResetStageConfirmationNoButtonClicked);
+        _pausePlayGameplayButton.onClick.RemoveListener(OnPausePlayGameplayToggleChanged);
+        _resumeGameplayButton.onClick.RemoveListener(OnResumeGameplayButtonClicked);
+        _restartRoundPauseMenuButton.onClick.RemoveListener(OnRestartRoundPauseMenuButtonClicked);
+        _nextRoundGameplayOverButton.onClick.RemoveListener(OnNextRoundButtonGameplayOverButtonClicked);
+        _restartRoundGameplayOverButton.onClick.RemoveListener(OnRestartRoundGameplayOverButtonClicked);
+        _backToStageSelectGameplayOverButton.onClick.RemoveListener(OnBackToStageSelectionGameplayOverButtonClicked);
+        _backToStageSelectGameplayPausedButton.onClick.RemoveListener(OnBackToStagePauseMenuButtonClicked);
+    }
+
+    public void OnDestroy()
+    {
+        UnsubscribeToEvents();
+    }
+
+    private void SubscribeToEvents()
+    {
+        EventBusManager.Instance.Subscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStarted_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.SelectedStageChanged, OnSelectedStageChanged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.GameplayPaused, OnGameplayPaused_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.GameplayResumed, OnGameplayResumed_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.RoundStarted, OnRoundStarted);
+        EventBusManager.Instance.Subscribe(EventNameEnum.RoundOver, OnRoundOver);
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageClearedFull, OnStageClearedFull);
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageClearedPartial, OnStageClearedPartial);
+        EventBusManager.Instance.Subscribe(EventNameEnum.StageFailed, OnStageFailed);
+        EventBusManager.Instance.Subscribe(EventNameEnum.GameplayStateChanged, OnGameplayStateChanged);
+    }
+
+    private void UnsubscribeToEvents()
+    {
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStarted_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.SelectedStageChanged, OnSelectedStageChanged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.GameplayPaused, OnGameplayPaused_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.GameplayResumed, OnGameplayResumed_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundStarted, OnRoundStarted);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundOver, OnRoundOver);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageClearedFull, OnStageClearedFull);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageClearedPartial, OnStageClearedPartial);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.StageFailed, OnStageFailed);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.GameplayStateChanged, OnGameplayStateChanged);
     }
 
     public void InitializeGameplayUI()
@@ -152,6 +273,15 @@ public class UIManager : GenericMonoSingleton<UIManager>
             _inventoryUnitCardList.Remove(cardToRemove);
             Destroy(cardToRemove.gameObject);
         }
+    }
+
+    public void RemoveAllInventoryUnitCard()
+    {
+        foreach (var card in _inventoryUnitCardList)
+        {
+            Destroy(card.gameObject);
+        }
+        _inventoryUnitCardList.Clear();
     }
 
     public void RefreshInventoryOrder()
@@ -207,7 +337,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         shopServiceObj.RefreshShop();
     }
 
-    private void OnPlayButtonClicked()
+    private void OnEnterCombatButtonClicked()
     {
         GameplayManager.Instance.UpdateGameplayState(GameplayStateEnum.Combat);
     }
@@ -264,9 +394,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _buffTeam2UICardDictionary.Clear();
     }
 
-    public void UpdateBuffParticipantCount(BuffNameEnum buffName, int participants, TeamEnum team)
+    public void UpdateBuffParticipantCountUI(BuffNameEnum buffName, int participants, TeamEnum team)
     {
-        switch(team)
+        switch (team)
         {
             case TeamEnum.Team1:
                 _buffTeam1UICardDictionary[buffName].ActivateParticipantBlock(participants);
@@ -277,11 +407,25 @@ public class UIManager : GenericMonoSingleton<UIManager>
         }
     }
 
+    public void ResetBuffParticipantCountUI(TeamEnum team)
+    {
+        switch (team)
+        {
+            case TeamEnum.Team1:
+                _buffTeam1UICardDictionary.Values.ToList().ForEach(card => card.DeactivateParticipantBlock());
+                break;
+            case TeamEnum.Team2:
+                _buffTeam2UICardDictionary.Values.ToList().ForEach(card => card.DeactivateParticipantBlock());
+                break;
+        }
+    }
+
     void HandleTeamBuffTabSwitch(bool isOn, int tabIndex)
     {
         if (isOn)
         {
-            if (tabIndex == 1)            {
+            if (tabIndex == 1)
+            {
                 _team2ToggleButton.isOn = false;
                 _buffTeam1ToggleContent.SetActive(true);
                 _buffTeam2ToggleContent.SetActive(false);
@@ -330,16 +474,20 @@ public class UIManager : GenericMonoSingleton<UIManager>
         int currentXP = (int)parameters[2];
         int requiredXPToNextLevel = (int)parameters[3];
 
-        _targetXP = 1f;
+        if (level > 1)
+        {     
+            _targetXP = 1f;
 
-        if (_xpRoutine != null)
-        {
-            StopCoroutine(_xpRoutine);
+            if (_xpRoutine != null)
+            {
+                StopCoroutine(_xpRoutine);
+            }
+
+            _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
+
+            StartCoroutine(LevelUpReset());
         }
 
-        _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
-
-        StartCoroutine(LevelUpReset());
         UpdateLevelText(level);
         UpdateXPText(currentXP, requiredXPToNextLevel);
     }
@@ -391,5 +539,487 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void UpdateXPText(int currentXP, int requiredXPToNextLevel)
     {
         _xpText.text = currentXP.ToString() + "/" + requiredXPToNextLevel.ToString();
+    }
+
+    private void CreateStageSelectionButtons()
+    {
+        StageService stageObj = GameManager.Instance.Get<StageService>();
+        int totalStages = stageObj.GetStageCount();
+
+        for (int index = 0; index < totalStages; index++)
+        {
+            StageData stageData = stageObj.GetStageData(index);
+            GameObject stageButton = Instantiate(_stageSelectionCardUIPrefab, _stageSelectionContent);
+            StageSelectionCardUIView stageSelectionCardUIViewObj = stageButton.GetComponent<StageSelectionCardUIView>();
+            stageSelectionCardUIViewObj.Initialize(index, stageData);
+            _stageSelectionUICardList.Add(stageSelectionCardUIViewObj);
+        }
+
+        StartCoroutine(SelectFirstStage());
+    }
+
+    private IEnumerator SelectFirstStage()
+    {
+        yield return null;
+
+        if (_stageSelectionUICardList.Count > 0)
+        {
+            _stageSelectionUICardList[0].InvokeClick();
+        }
+    }
+
+    private void ClearStageSelectionButtons()
+    {
+        if (_stageSelectionUICardList == null || _stageSelectionUICardList.Count == 0)
+        {
+            return;
+        }
+
+        foreach (StageSelectionCardUIView card in _stageSelectionUICardList)
+        {
+            if (card != null)
+            {
+                Destroy(card.gameObject);
+            }
+        }
+
+        _stageSelectionUICardList.Clear();
+    }
+
+    private void OnChooseStageButtonClicked()
+    {
+        SceneLoader.Instance.LoadScene(SceneNameEnum.StageSelectionScene);
+    }
+
+    private void OnStartContinueStageButtonClicked()
+    {
+        GameData.selectedStage = _selectedStage;
+        SceneLoader.Instance.LoadScene(SceneNameEnum.GameplayScene);
+    }
+
+    private void OnResetStageButtonClicked()
+    {
+        SetMessageForResetStageConfirmation();
+        ToggleStageSelectionConfirmationContainer(true);
+    }
+
+    private void OnSelectedStageChanged_UI(object[] parameters)
+    {
+        _selectedStage = (int)parameters[0];
+        int roundCount = 0;
+
+        foreach (var stage in _stageSelectionUICardList)
+        {
+            if (stage.StageIndex == _selectedStage)
+            {
+                roundCount = stage.NumberOfRounds;
+
+                SetStageRecommendedLevelOnSelectionUI(stage.RecommendedLevel);
+                SetStageRecommendedElementsOnSelectionUI(stage);
+                SetStageDifficultyOnSelectionUI(stage.StageDifficulty);
+
+                stage.SetStageCardUISelectedHighlight(true);
+            }
+            else
+            {
+                stage.SetStageCardUISelectedHighlight(false);
+            }
+        }
+
+        StageSnapshotEntry entry = GameManager.Instance.Get<StageSnapshotService>().GetStageSnapshot(_selectedStage);
+
+        if (entry == null || entry.latestRoundSnapshot.roundIndex < roundCount - 1)
+        {
+            ToggleStartContinueStageButton(true);
+        }
+        else
+        {
+            ToggleStartContinueStageButton(false);
+        }
+
+        ToggleResetStageStageButton(true);
+    }
+
+    public void ToggleMainMenuUIContainer(bool value)
+    {
+        _mainMenuUIContainer.SetActive(value);
+    }
+
+    public void ToggleStageSelectionUIContainer(bool value)
+    {
+        _stageSelectionUIContainer.SetActive(value);
+    }
+
+    public void ToggleGameplayUIContainer(bool value)
+    {
+        _gameplayUIContainer.SetActive(value);
+    }
+
+    private void OnSceneLoaded_UI(object[] parameters)
+    {
+        SceneNameEnum sceneLoaded = (SceneNameEnum)parameters[0];
+
+        ToggleMainMenuUIContainer(false);
+        ToggleStageSelectionUIContainer(false);
+        ToggleGameplayUIContainer(false);
+        ClearStageSelectionButtons();
+
+        switch (sceneLoaded)
+        {
+            case SceneNameEnum.MainMenuScene:
+                ToggleMainMenuUIContainer(true);
+                break;
+
+            case SceneNameEnum.StageSelectionScene:
+                CreateStageSelectionButtons();
+                UpdateStageSelectionRoundData();
+                ToggleStageSelectionUIContainer(true);
+                break;
+
+            case SceneNameEnum.GameplayScene:
+                ToggleGameplayUIContainer(true);
+                break;
+        }
+    }
+
+    private void OnStageStarted_UI(object[] parameters)
+    {
+        UpdateXpExchangeCostUI((int)parameters[6]);
+    }
+
+    private void ToggleStartContinueStageButton(bool value)
+    {
+        _startContinueStageButton.interactable = value;
+    }
+
+    private void ToggleResetStageStageButton(bool value)
+    {
+        _resetStageButton.interactable = value;
+    }
+
+    private void ToggleStageSelectionConfirmationContainer(bool value)
+    {
+        _stageSelectionConfirmationContainer.SetActive(value);
+    }
+
+    private void SetMessageForResetStageConfirmation()
+    {
+        _resetStageConfirmationMessageText.text = "Are you sure you want to reset Stage " + (_selectedStage + 1).ToString() + " ?";
+    }
+
+    private void OnResetStageConfirmationYesButtonClicked()
+    {
+        GameManager.Instance.Get<StageSnapshotService>().DeleteStageSnapshot(_selectedStage);
+        UpdateStageSelectionRoundData();
+        ToggleStartContinueStageButton(true);
+        ToggleStageSelectionConfirmationContainer(false);
+    }
+
+    private void OnResetStageConfirmationNoButtonClicked()
+    {
+        ToggleStageSelectionConfirmationContainer(false);
+    }
+
+    private void UpdateStageSelectionRoundData()
+    {
+        StageSnapshotService stageSnapshotService = GameManager.Instance.Get<StageSnapshotService>();
+
+        foreach(StageSelectionCardUIView cardObj in _stageSelectionUICardList)
+        {
+            StageSnapshotEntry data = stageSnapshotService.GetStageSnapshot(cardObj.StageIndex);
+
+            if (data != null)
+            {
+                cardObj.SetStageRoundData(data.roundResults, (data.winCount+data.drawCount), data.latestRoundSnapshot.roundIndex);
+            }
+            else
+            {
+                cardObj.SetStageRoundData(null, 0, -1);
+            }
+        }    
+    }
+
+    private void OnPausePlayGameplayToggleChanged()
+    {
+        GameplayManager.Instance.PauseGameplay();
+    }
+
+    private void OnGameplayResumed_UI(object[] parameters)
+    {
+        ToggleGameplayPausedContainer(false);
+    }
+
+    private void OnGameplayPaused_UI(object[] parameters)
+    {
+        ToggleGameplayPausedContainer(true);
+    }
+
+    private void ToggleGameplayPausedContainer(bool value)
+    {
+        _gameplayPausedContainer.SetActive(value);
+    }
+
+    private void OnResumeGameplayButtonClicked()
+    {
+        GameplayManager.Instance.ResumeGameplay();
+    }
+
+    private void OnRestartRoundPauseMenuButtonClicked()
+    {
+        GameplayManager.Instance.OnRestartRoundFromPauseMenu();
+    }
+
+    private void OnRoundStarted(object[] parameters)
+    {
+        int stageIndex = (int)parameters[0];
+        int roundIndex = (int)parameters[1];
+
+        SetStageStartNotificationText(stageIndex + 1);
+        SetRoundStartNotificationText(roundIndex + 1);
+
+        SetStageInfoGameplayUIText(stageIndex + 1);
+        SetRoundInfoGameplayUIText(roundIndex + 1);
+
+        StartCoroutine(HandleRoundStartNotificationRoutine());
+    }
+
+    private IEnumerator HandleRoundStartNotificationRoutine()
+    {
+        ToggleGameplayStartNoticationContainer(true);
+        yield return new WaitForSeconds(_roundStartUIDisplayDuration);
+        ToggleGameplayStartNoticationContainer(false);
+    }
+
+    private void OnRoundOver(object[] parameters)
+    {
+        int stageIndex = (int)parameters[0];
+        int roundIndex = (int)parameters[1];
+
+        SetStageInfoGameplayOverText(stageIndex + 1);
+
+        RoundResultEnum result = (RoundResultEnum)parameters[2];
+        int rewardQuantity = (int)parameters[3];
+
+        string roundInfoStatusMessage = "Round "+(roundIndex + 1).ToString();
+
+        switch (result)
+        {
+            case RoundResultEnum.Win:
+                roundInfoStatusMessage += " Won!";
+                break;
+            case RoundResultEnum.Lose:
+                roundInfoStatusMessage += " Lost!";
+                break;
+            case RoundResultEnum.Draw:
+                roundInfoStatusMessage += " Draw!";
+                break;
+        }
+
+        SetRewardsQuantityText(rewardQuantity);
+        SetRoundInfoGameplayOverText(roundInfoStatusMessage);
+        ToggleGameplayOverRewardsContainer(true);
+        ToggleGameplayOverNextRoundButton(true);
+        ToggleStageOverStatusContainer(false);
+        ToggleGameplayOverNoticationContainer(true);
+    }
+
+    private void OnStageClearedFull(object[] parameters)
+    {
+        string statusMessage = "- Stage Successfully Completed -";
+        SetStageOverStatusMessageText(statusMessage);
+        SetStageOverSubText("All Rounds Cleared.");
+        ToggleGameplayOverRewardsContainer(false);
+        ToggleGameplayOverNextRoundButton(false);
+        ToggleStageOverStatusContainer(true);
+    }
+
+    private void OnStageClearedPartial(object[] parameters)
+    {
+        string statusMessage = "- Stage Progress Recorded -";
+        SetStageOverStatusMessageText(statusMessage);
+        SetStageOverSubText("Clear all Rounds to Complete the Stage.");
+        ToggleGameplayOverRewardsContainer(false);
+        ToggleGameplayOverNextRoundButton(false);
+        ToggleStageOverStatusContainer(true);
+    }
+
+    private void OnStageFailed(object[] parameters)
+    {
+        string statusMessage = "- Stage Attempt Failed -";
+        SetStageOverStatusMessageText(statusMessage);
+        SetStageOverSubText("You ran out of lives before clearing all rounds. Please Try again.");
+        ToggleGameplayOverRewardsContainer(false);
+        ToggleGameplayOverNextRoundButton(false);
+        ToggleStageOverStatusContainer(true);
+    }
+
+    private void ToggleGameplayStartNoticationContainer(bool value)
+    {
+        _gameplayStartNotificationContainer.SetActive(value);
+    }
+
+    private void ToggleGameplayOverNoticationContainer(bool value)
+    {
+        _gameplayOverNotificationContainer.SetActive(value);
+    }
+
+    private void ToggleGameplayOverRewardsContainer(bool value)
+    {
+        _gameplayOverRewardsContainer.SetActive(value);
+    }
+
+    private void ToggleStageOverStatusContainer(bool value)
+    {
+        _stageOverStatusContainer.SetActive(value);
+    }
+
+    private void ToggleGameplayOverNextRoundButton(bool value)
+    {
+        _nextRoundGameplayOverButton.gameObject.SetActive(value);
+    }
+
+    private void SetStageStartNotificationText(int value)
+    {
+        _stageStartNotificationText.text = "Stage " + value.ToString();
+    }
+
+    private void SetRoundStartNotificationText(int value)
+    {
+        _roundStartNotificationText.text = "Round " + value.ToString();
+    }
+
+    private void SetStageInfoGameplayOverText(int value)
+    {
+        _stageInfoGameplayOverText.text = "Stage " + value.ToString();
+    }
+
+    private void SetRoundInfoGameplayOverText(string value)
+    {
+        _roundInfoGameplayOverText.text = value.ToString();
+    }
+
+    private void SetStageOverStatusMessageText(string value)
+    {
+        _stageOverStatusMessageText.text = value.ToString();
+    }
+
+    private void SetStageOverSubText(string value)
+    {
+        _stageOverSubText.text = value.ToString();
+    }
+
+    private void SetRewardsQuantityText(int value)
+    {
+        _rewardsQuantityText.text = value.ToString();
+    }
+
+    private void OnNextRoundButtonGameplayOverButtonClicked()
+    {
+        ToggleGameplayOverNoticationContainer(false);
+        GameplayManager.Instance.OnPlayerChooseNextRound();
+    }
+
+    private void OnRestartRoundGameplayOverButtonClicked()
+    {
+        ToggleGameplayOverNoticationContainer(false);
+        GameplayManager.Instance.OnPlayerChooseRestartRound();
+    }
+
+    private void OnBackToStageSelectionGameplayOverButtonClicked()
+    {
+        ToggleGameplayOverNoticationContainer(false);
+        GameplayManager.Instance.OnPlayerLeaveStageGameplayOver();
+    }
+
+    private void OnBackToStagePauseMenuButtonClicked()
+    {
+        ToggleGameplayPausedContainer(false);
+        GameplayManager.Instance.OnPlayerLeaveStageFromPauseMenu();
+    }
+
+    private void SetStageInfoGameplayUIText(int value)
+    {
+        _stageInfoGameplayUIText.text = value.ToString();
+    }
+
+    private void SetRoundInfoGameplayUIText(int value)
+    {
+        _roundInfoGameplayUIText.text = "Round "+ value.ToString();
+    }
+
+    private void SetStageDifficultyOnSelectionUI(StageDifficultyEnum difficultyEnumValue)
+    {
+        int difficulty = (int)difficultyEnumValue;
+
+        for (int index = 0; index < _difficultyImageList.Count; index++ )
+        { 
+            if (index < difficulty)
+            {
+                _difficultyImageList[index].gameObject.SetActive(true);
+            }
+            else
+            {
+                _difficultyImageList[index].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void SetStageRecommendedLevelOnSelectionUI(int value)
+    {
+        _recommendedLevelText.text = value.ToString();
+    }
+
+    private void SetStageRecommendedElementsOnSelectionUI(StageSelectionCardUIView stage)
+    {
+        List<UnitElementEnum> recommendedElements = stage.RecommendedElements;
+
+        for (int index = 0; index < recommendedElements.Count; index++)
+        {
+            _recommendedElementList[index].elementIconImage.color = GetElementColor(recommendedElements[index]);
+            _recommendedElementList[index].elementNameText.text = recommendedElements[index].ToString();
+        }
+    }
+
+    private Color GetElementColor(UnitElementEnum element)
+    {
+        return element switch
+        {
+            UnitElementEnum.Fire => new Color(1f, 0.78f, 0.72f),
+            UnitElementEnum.Thunder => new Color(0.65f, 0.9f, 1f),
+            UnitElementEnum.Nature => new Color(0.78f, 1f, 0.65f),
+            _ => new Color(0.95f, 0.95f, 0.95f)
+        };
+    }
+
+    private void OnGameplayStateChanged(object[] parameters)
+    {
+        GameplayStateEnum currentGameplayState = (GameplayStateEnum)parameters[0];
+
+        if (currentGameplayState == GameplayStateEnum.Preparation)
+        {
+            ToggleEnterCombatButtonVisibility(true);
+            ToggleGameplayBottomControlPanel(true);
+        }
+        else if (currentGameplayState == GameplayStateEnum.Combat)
+        {
+            HideShopPanel();
+            ToggleEnterCombatButtonVisibility(false);
+            ToggleGameplayBottomControlPanel(false);
+        }
+    }
+
+    private void ToggleEnterCombatButtonVisibility(bool value)
+    {
+        _enterCombatButton.gameObject.SetActive(value);
+    }
+
+    private void ToggleGameplayBottomControlPanel(bool value)
+    {
+        _bottomControlPanel.gameObject.SetActive(value);
+    }
+
+    private void HideShopPanel()
+    {
+        _shopPanel.gameObject.SetActive(false);
     }
 }

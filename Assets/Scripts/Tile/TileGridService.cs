@@ -18,11 +18,9 @@ public class TileGridService
         _mapHeight = tile_SO.mapHeight;
         _tileOffset_X = tile_SO.tileOffset_X;
         _tileOffset_Y = tile_SO.tileOffset_Y;
-
-        CreateTileMap();
     }
 
-    private void CreateTileMap()
+    public void CreateTileMap()
     {
         float totalWidth = _mapWidth * _tileOffset_X;
         float totalHeight = _mapHeight * _tileOffset_Y;
@@ -43,6 +41,19 @@ public class TileGridService
                 _spawnedTileList.Add(tile);
             }
         }
+    }
+
+    public void Reset()
+    {
+        foreach (Tile tile in _spawnedTileList)
+        {
+            if (tile != null)
+            {
+                GameObject.Destroy(tile.gameObject);
+            }
+        }
+
+        _spawnedTileList.Clear();
     }
 
     public List<Tile> GetSpawnedTilesList()

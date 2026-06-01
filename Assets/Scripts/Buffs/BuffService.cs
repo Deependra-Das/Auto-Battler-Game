@@ -1,6 +1,7 @@
 using AutoBattler.Event;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BuffService
@@ -18,9 +19,11 @@ public class BuffService
         }
     }
 
-    ~BuffService() 
+    public void Dispose() 
     {
         UnsubscribeToEvents();
+        _buffData.Clear();
+        _appliedBuffs.Clear();
     }
 
     void SubscribeToEvents()
@@ -47,11 +50,6 @@ public class BuffService
                 UIManager.Instance.AddBuffDetailUICard(buffs.Value, team);
             }
         }
-    }
-
-    public void ResetBuffs()
-    {
-        _appliedBuffs.Clear();
     }
 
     private void OnUnitAddedOnField_Buff(object[] parameters)
@@ -91,7 +89,7 @@ public class BuffService
 
         TeamBuffData teamBuff = CalculateTeamBuff(team);
 
-        UIManager.Instance.UpdateBuffParticipantCount(buff, newCount, team);
+        UIManager.Instance.UpdateBuffParticipantCountUI(buff, newCount, team);
         EventBusManager.Instance.Raise(EventNameEnum.TeamBuffUpdated, team, teamBuff);        
     }
 
@@ -162,5 +160,19 @@ public class BuffService
                 index = i;
         }
         return index;
+    }
+
+    public void RemoveAllAppliedBuffs(TeamEnum team)
+    {
+        if (!_appliedBuffs.ContainsKey(team))
+            return;
+
+        _appliedBuffs[team].Keys.ToList().ForEach(key => _appliedBuffs[team][key] = 0);
+    }
+
+    public void Reset()
+    {
+        UIManager.Instance.RemoveAllBuffDetailUICards();
+        _appliedBuffs.Clear();
     }
 }

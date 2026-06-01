@@ -1,4 +1,5 @@
 using AutoBattler.Event;
+using AutoBattler.Main;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,10 +36,6 @@ public class TeamService
             InitializeTypeAndFactionCounts();
         }
     }
-    ~TeamService()
-    {
-        UnsubscribeToEvents();
-    }
 
     void SubscribeToEvents()
     {
@@ -59,22 +56,34 @@ public class TeamService
         return true;
     }
 
-    public bool RemoveUnitFromTeam(UnitData unit, TeamEnum team)
+    public bool RemoveUnitFromTeam(UnitData unitData, TeamEnum team)
     {
-        return _teams[team].Remove(unit);
+        if (!_teams[team].Contains(unitData)) return false;
+
+        _teams[team].Remove(unitData);
+        return true;
     }
 
-    public bool RemoveUnitFromField(BaseUnit unit, TeamEnum team)
+    public bool RemoveUnitFromField(BaseUnit unit, TeamEnum team, bool cleanup)
     {
+        if (!_fieldUnits[team].Contains(unit)) return false;
+
         _fieldUnits[team].Remove(unit);
-        RemoveUnitCount(unit, team);
-        return RemoveUnitFromTeam(unit.UnitData, team);
+
+        if (cleanup)
+        {
+            RemoveUnitCount(unit, team);
+        }
+
+        return true;
     }
 
-    public bool RemoveUnitFromInventory(UnitData unit, TeamEnum team)
+    public bool RemoveUnitFromInventory(UnitData unitData, TeamEnum team)
     {
-        _inventoryUnits[team].Remove(unit);
-        return RemoveUnitFromTeam(unit, team);
+        if (!_inventoryUnits[team].Contains(unitData)) return false;
+
+        _inventoryUnits[team].Remove(unitData);
+        return true;
     }
 
     public IReadOnlyList<UnitData> GetTeamUnits(TeamEnum team) => _teams[team].AsReadOnly();
@@ -104,22 +113,27 @@ public class TeamService
         return true;
     }
 
-    public void ResetFieldUnits(TeamEnum team)
+    public void AddAllTeamUnitsToInventory(TeamEnum team)
     {
-        var units = _fieldUnits[team].ToList();
-        foreach (var unit in units)
+        InventoryService inventoryService = GameManager.Instance.Get<InventoryService>();
+
+        foreach (UnitData unitData in _teams[team])
         {
-            MoveToInventory(unit, team);
+            _inventoryUnits[team].Add(unitData);
+            inventoryService.AddUnit(unitData);
         }
     }
 
     public int GetTeamCapacity(TeamEnum team) => _teamCapacities[team];
+
     public int GetFieldCapacity(TeamEnum team) => _fieldCapacities[team];
 
     public void SetTeamCapacity(TeamEnum team, int capacity) => _teamCapacities[team] = capacity;
+
     public void SetFieldCapacity(TeamEnum team, int capacity) => _fieldCapacities[team] = capacity;
 
     public int GetTeamUnitsCount(TeamEnum team) => _teams[team].Count;
+
     public int GetFieldUnitsCount(TeamEnum team) => _fieldUnits[team].Count;
 
     public bool CanAddUnitToField(TeamEnum team)
@@ -178,5 +192,71 @@ public class TeamService
     {
         int newFieldCapacity = (int)parameters[1];
         SetFieldCapacity(TeamEnum.Team1, newFieldCapacity);
+    }
+
+    public List<UnitSnapshotData> GetTeamUnitSnapshot(TeamEnum team)
+    {
+        return _teams[team]
+       .Select(u => new UnitSnapshotData
+       {
+           unitID = u.unitID,
+           unitLevel = u.unitLevel
+
+       }).ToList();
+    }
+
+    public void ClearTeam(TeamEnum team)
+    {
+        _fieldUnits[team].Clear();
+        _inventoryUnits[team].Clear();
+        _teams[team].Clear();
+        _fieldCapacities[team] = 0;     
+    }
+
+    public void ClearTypeCount(TeamEnum team)
+    {
+        foreach (var value in _typeCount[team].Keys.ToList())
+        {
+            _typeCount[team][value] = 0;
+        }
+    }
+
+    public void ClearFactionCount(TeamEnum team)
+    {
+        foreach (var value in _factionCount[team].Keys.ToList())
+        {
+            _factionCount[team][value] = 0;
+        }
+    }
+
+    public void Reset()
+    {
+        foreach (TeamEnum team in Enum.GetValues(typeof(TeamEnum)))
+        {
+            _teams[team].Clear();
+            _inventoryUnits[team].Clear();
+            _fieldUnits[team].Clear();
+            _fieldCapacities[team] = 0;
+            _typeCount[team].Clear();
+            _factionCount[team].Clear();
+        }     
+
+        InitializeTypeAndFactionCounts();
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeToEvents();
+
+        Reset();
+
+        _teams.Clear();
+        _inventoryUnits.Clear();
+        _fieldUnits.Clear();
+
+        _teamCapacities = null;
+
+        _typeCount.Clear();
+        _factionCount.Clear();
     }
 }

@@ -1,7 +1,4 @@
-using AutoBattler.Event;
-using AutoBattler.Main;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class InventoryService
 {
@@ -14,7 +11,6 @@ public class InventoryService
     public void AddUnit(UnitData unitData)
     {
         _currentUnitsInInventory.Add(unitData);
-        GameManager.Instance.Get<TeamService>().AddUnitToTeam(unitData, TeamEnum.Team1);
         UIManager.Instance.AddInventoryUnitCard(unitData);
     }
 
@@ -28,11 +24,6 @@ public class InventoryService
         MaxInventorySize = newSize;
     }
 
-    public void DeployUnit(InventoryUnitCard card, Node node)
-    {
-        GameplayManager.Instance.InstantiateUnit(card.UnitData, node, TeamEnum.Team1);
-    }
-
     public void ReorderUnits(List<UnitData> newOrder)
     {
         _currentUnitsInInventory.Clear();
@@ -41,18 +32,15 @@ public class InventoryService
 
     public bool CanAddUnit => _currentUnitsInInventory.Count < MaxInventorySize;
 
-    public List<UnitData> GetInventoryUnits()
-    {
-        return new List<UnitData>(_currentUnitsInInventory);
-    }
-
-    public void Restore(List<UnitData> snapshot)
+    public void Reset()
     {
         _currentUnitsInInventory.Clear();
+        UIManager.Instance.RemoveAllInventoryUnitCard();
+    }
 
-        foreach (var unit in snapshot)
-        {
-            AddUnit(unit);
-        }
+    public void Dispose()
+    {
+        Reset();
+        _currentUnitsInInventory = null;
     }
 }

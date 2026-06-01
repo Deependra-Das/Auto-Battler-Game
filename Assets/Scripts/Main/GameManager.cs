@@ -13,15 +13,17 @@ namespace AutoBattler.Main
         [SerializeField] private StageConfigScriptableObjectScript _stageConfig_SO;
         [SerializeField] private PlayerLevelConfigScriptableObjectScript _playerLevelConfig_SO;
 
+        public int currentStageIndexSelected = -1;
+
         protected override void Awake()
         {
             base.Awake();
-            RegisterServices();
         }
 
         private void Start()
         {
-            GameplayManager.Instance.Initialize(_unit_SO);
+            RegisterServices();
+            UIManager.Instance.Initialize();
         }
 
         private void OnDestroy()
@@ -35,12 +37,15 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new GraphService());
             ServiceLocator.Register(new TeamService());
             ServiceLocator.Register(new RangedAbilityService(_rangedAbilities_SO));
-            ServiceLocator.Register(new StageService(_stageConfig_SO));
             ServiceLocator.Register(new CurrencyService());
             ServiceLocator.Register(new PlayerLevelService(_playerLevelConfig_SO));
+            ServiceLocator.Register(new UnitService(_unit_SO));
             ServiceLocator.Register(new InventoryService());
             ServiceLocator.Register(new ShopService(_unit_SO));
             ServiceLocator.Register(new BuffService(_buff_SO));
+            ServiceLocator.Register(new RoundSnapshotService());
+            ServiceLocator.Register(new StageSnapshotService());
+            ServiceLocator.Register(new StageService(_stageConfig_SO));
         }
 
         private void DeregisterServices()
@@ -49,11 +54,15 @@ namespace AutoBattler.Main
             ServiceLocator.Unregister<GraphService>();
             ServiceLocator.Unregister<TeamService>();
             ServiceLocator.Unregister<RangedAbilityService>();
-            ServiceLocator.Unregister<ShopService>();
-            ServiceLocator.Unregister<InventoryService>();
-            ServiceLocator.Unregister<PlayerLevelService>();
+            ServiceLocator.Unregister<StageService>();
             ServiceLocator.Unregister<CurrencyService>();
+            ServiceLocator.Unregister<PlayerLevelService>();
+            ServiceLocator.Unregister<UnitService>();
+            ServiceLocator.Unregister<InventoryService>();
+            ServiceLocator.Unregister<ShopService>();
             ServiceLocator.Unregister<BuffService>();
+            ServiceLocator.Unregister<RoundSnapshotService>();
+            ServiceLocator.Unregister<StageSnapshotService>();
         }
 
         public T Get<T>()

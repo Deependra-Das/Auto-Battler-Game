@@ -6,10 +6,12 @@ public class PlayerLevelService
 {
     private CurrencyService _currencyService;
     private PlayerLevelConfigScriptableObjectScript _config;
+    private int _defaultLevel = 1;
+    private int _defaultLives = 3;
 
-    public int Level { get; private set; } = 1;
-    public int Lives { get; private set; } = 3;
-    public int CurrentXP { get; private set; } = 0;
+    public int Level { get; private set; }
+    public int Lives { get; private set; }
+    public int CurrentXP { get; private set; }
 
     private int _xpExchangeCost = 0;
     private int _xpExchangeValue = 0;
@@ -19,23 +21,21 @@ public class PlayerLevelService
         SubscribeToEvents();
         _currencyService = GameManager.Instance.Get<CurrencyService>();
         _config = config;
-    }
-
-    ~PlayerLevelService()
-    {
-        UnsubscribeToEvents();
+        Reset();
     }
 
     void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.BuyLevelXP, OnBuyLevelXP_PlayerLevel);
         EventBusManager.Instance.Subscribe(EventNameEnum.StageStarted, OnStageStarted_PlayerLevel);
+        EventBusManager.Instance.Subscribe(EventNameEnum.RoundOver, OnRoundOver_PlayerLevel);
     }
 
     void UnsubscribeToEvents()
     {
         EventBusManager.Instance.Unsubscribe(EventNameEnum.BuyLevelXP, OnBuyLevelXP_PlayerLevel);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.StageStarted, OnStageStarted_PlayerLevel);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.RoundOver, OnRoundOver_PlayerLevel);
     }
 
     public int MaxLevel => _config.playerProgressionDataList.Count;
@@ -72,7 +72,7 @@ public class PlayerLevelService
 
         if (CurrentXP > 0)
         {
-            EventBusManager.Instance.Raise(EventNameEnum.XPChanged, GetXPProgressNormalized(), CurrentXP, GetXPToNextLevel());
+            RaiseXPChangedEvent();
         }
 
         return true;
@@ -102,7 +102,7 @@ public class PlayerLevelService
         if (leveledUp)
         {
             int index = Level - 1;
-            EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level, MaxUnitsAllowedOnField, CurrentXP, GetXPToNextLevel());
+            RaiseLevelChangedEvent();
         }
     }
 
@@ -124,21 +124,19 @@ public class PlayerLevelService
         return Lives <= 0;
     }
 
-    public void SetLevel(int level)
+    private void SetLevel(int level)
     {
         Level = level;
     }
 
-    public void SetXP(int xp)
+    private void SetCurrentXP(int xp)
     {
         CurrentXP = xp;
     }
 
-    public void Reset()
+    private void SetLives(int lives)
     {
-        Level = 1;
-        Lives = 3;
-        CurrentXP = 0;
+        Lives = lives;
     }
 
     private void OnBuyLevelXP_PlayerLevel(object[] parameters)
@@ -148,8 +146,59 @@ public class PlayerLevelService
 
     private void OnStageStarted_PlayerLevel(object[] parameters)
     {
-        _xpExchangeCost = (int)parameters[5];
-        _xpExchangeValue = (int)parameters[6];
-        UIManager.Instance.UpdateXpExchangeCostUI(_xpExchangeCost);
+        SetLevel((int)parameters[3]);
+        SetCurrentXP((int)parameters[4]);
+        SetLives((int)parameters[5]);
+        _xpExchangeCost = (int)parameters[6];
+        _xpExchangeValue = (int)parameters[7];
+
+        if (CurrentXP > 0)
+        {
+            RaiseXPChangedEvent();
+        }
+
+        RaiseLevelChangedEvent();
+    }
+
+    private void OnRoundOver_PlayerLevel(object[] parameters)
+    {
+        RoundResultEnum result = (RoundResultEnum)parameters[2];
+
+        if(result == RoundResultEnum.Lose)
+        {
+            LoseLife();
+        }
+    }
+
+    public void Reset()
+    {
+        Level = _defaultLevel;
+        Lives = _defaultLives;
+        CurrentXP = 0;
+
+        _xpExchangeCost = 0;
+        _xpExchangeValue = 0;
+
+        RaiseLevelChangedEvent();
+    }
+
+    private void RaiseXPChangedEvent()
+    {
+        EventBusManager.Instance.Raise(EventNameEnum.XPChanged, GetXPProgressNormalized(), CurrentXP, GetXPToNextLevel());
+    }
+
+    private void RaiseLevelChangedEvent()
+    {
+        EventBusManager.Instance.Raise(EventNameEnum.LevelChanged, Level, MaxUnitsAllowedOnField, CurrentXP, GetXPToNextLevel());
+    }
+
+    public void Dispose()
+    {
+        UnsubscribeToEvents();
+
+        Reset();
+
+        _currencyService = null;
+        _config = null;
     }
 }

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoundSaveStateData
+[Serializable]
+public class RoundSnapshotData
 {
     public int stageIndex;
     public int roundIndex;
@@ -9,8 +11,9 @@ public class RoundSaveStateData
     public int playerLevel;
     public int playerXP;
     public int playerCurrency;
+    public int playerLives;
 
-    public List<UnitData> playerInventoryUnits;
+    public List<UnitSnapshotData> playerInventoryUnits;
 
     public RoundResultEnum result;
 }

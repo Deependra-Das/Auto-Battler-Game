@@ -234,15 +234,15 @@ public class BaseUnit : MonoBehaviour
         {
             isDead = true;
             animator.SetBool("IsDead", true);
-            StartCoroutine(WaitForDeathAnimationCoroutine());
+            GameplayManager.Instance.MarkUnitDead(this);
+            StartCoroutine(DeathCoroutine());
         }
     }
 
-    IEnumerator WaitForDeathAnimationCoroutine()
+    IEnumerator DeathCoroutine()
     {
         yield return new WaitForSeconds(1f);
-        currentNode.SetOccupied(false);
-        GameplayManager.Instance.MarkUnitDead(this);
+        gameObject.SetActive(false);
     }
 
     public void UpdateHealthBar(float currentHealthValue)
@@ -310,7 +310,7 @@ public class BaseUnit : MonoBehaviour
         }
     }
 
-    public void TemporarilyReleaseNode()
+    public void ReleaseCurrentNode()
     {
         if (currentNode != null)
             currentNode.SetOccupied(false);

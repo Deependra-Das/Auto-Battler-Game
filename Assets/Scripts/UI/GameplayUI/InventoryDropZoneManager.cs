@@ -14,18 +14,39 @@ public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
     private TeamService _teamServiceObj;
     private bool _isInventoryHighlightActive = false;
 
-    private void Awake()
-    {
-        _highlightInventoryPanel.gameObject.SetActive(false);
-    }
-    private void OnEnable() => SubscribeToEvents();
-    private void OnDisable() => UnsubscribeToEvents();
+    public static InventoryDropZoneManager Instance;
 
-    void SubscribeToEvents()
+    protected void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        if (_highlightInventoryPanel != null)
+            _highlightInventoryPanel.gameObject.SetActive(false);
+    }
+
+    public void Initialize()
+    {
+        _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
+        _teamServiceObj = GameManager.Instance.Get<TeamService>();
+        SubscribeToEvents();
+    }
+
+    private void OnDestroy()
+    {
+        UnsubscribeToEvents();
+    }
+
+    private void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.HighlightInventoryPanel, OnInteractInventorySetHighlight);
     }
-    void UnsubscribeToEvents()
+    private void UnsubscribeToEvents()
     {
         EventBusManager.Instance.Unsubscribe(EventNameEnum.HighlightInventoryPanel, OnInteractInventorySetHighlight);
     }
@@ -35,17 +56,14 @@ public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
         BaseUnit unit = eventData.pointerDrag?.GetComponent<BaseUnit>();
         if (unit == null) return;
 
-        _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
         if (!_inventoryServiceObj.CanAddUnit) return;
 
         UnitDragHandler dragHandler = eventData.pointerDrag.GetComponent<UnitDragHandler>();
         if (dragHandler != null)
             dragHandler.MarkDroppedOnInventoryZone();
 
-        _inventoryServiceObj.AddUnit(unit.UnitData);
-
-        _teamServiceObj = GameManager.Instance.Get<TeamService>();
         _teamServiceObj.MoveToInventory(unit, unit.Team);
+        _inventoryServiceObj.AddUnit(unit.UnitData);
         Destroy(unit.gameObject);
     }
 
@@ -59,7 +77,6 @@ public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
             return;
         }
 
-        _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
         bool canAdd = _inventoryServiceObj.CanAddUnit;
 
         _highlightInventoryPanel.gameObject.SetActive(true);

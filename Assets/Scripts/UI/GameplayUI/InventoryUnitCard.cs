@@ -25,11 +25,9 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private DiscardUnitDropZoneManager _highlightdiscardUnitPanel;
     private bool _droppedOnDiscardUnitZone;
     private Image _dragSprite;
-    private InventoryService _inventoryService;
 
     private void Awake()
     {
-        _inventoryService = GameManager.Instance.Get<InventoryService>();
         _canvasGroup = gameObject.AddComponent<CanvasGroup>();
         _layoutElement = GetComponent<LayoutElement>() ?? gameObject.AddComponent<LayoutElement>();
         _cardContainer = transform.parent as RectTransform;
@@ -232,8 +230,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (tile == null || tile.Node == null || tile.Node.IsOccupied)
             return false;
 
-        _inventoryService.DeployUnit(this, tile.Node);
-        UIManager.Instance.RemoveInventoryUnitCard(this);
+        GameplayManager.Instance.DeployUnit(this, tile.Node, TeamEnum.Team1);
         return true;
     }
 

@@ -46,7 +46,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         isDragging = true;
 
         _originalNode = _unit.CurrentNode;
-        _unit.TemporarilyReleaseNode();
+        _unit.ReleaseCurrentNode();
 
         _unitCollider.enabled = false;
 

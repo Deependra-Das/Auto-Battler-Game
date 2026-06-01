@@ -13,16 +13,15 @@ MonoBehaviour:
   m_Name: PlayerLevelConfig_SO
   m_EditorClassIdentifier: Assembly-CSharp::PlayerLevelConfigScriptableObjectScript
   playerProgressionDataList:
-  - xpRequiredToNextLevel: 0
-    maxUnitsAllowed: 1
   - xpRequiredToNextLevel: 5
-    maxUnitsAllowed: 2
+    maxUnitsAllowed: 1
   - xpRequiredToNextLevel: 10
-    maxUnitsAllowed: 3
+    maxUnitsAllowed: 2
   - xpRequiredToNextLevel: 15
-    maxUnitsAllowed: 4
+    maxUnitsAllowed: 3
   - xpRequiredToNextLevel: 20
+    maxUnitsAllowed: 4
+  - xpRequiredToNextLevel: 25
     maxUnitsAllowed: 5
   - xpRequiredToNextLevel: 0
     maxUnitsAllowed: 6
-  xpPerCoin: 1
