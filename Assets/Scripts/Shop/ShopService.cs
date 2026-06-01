@@ -99,6 +99,7 @@ public class ShopService
     public void Reset()
     {
         _currentUnitsInShop.Clear();
+        UIManager.Instance.RemoveAllShopUnitCards();
         _shopRefreshCost = 0;
     }
 
