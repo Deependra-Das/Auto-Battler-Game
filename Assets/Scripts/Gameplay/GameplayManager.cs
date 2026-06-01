@@ -508,6 +508,7 @@ public class GameplayManager : MonoBehaviour
     {
         if (!_waitingForRoundDecision && !_waitingForStageDecision) return;
 
+        _stageServiceObj.ReduceCurrentRoundResulCounttOnRestart(_roundSnapshotServiceObj.GetRoundEndSnapshot().result);
         RestartCurrentRound();
         _stageServiceObj.RestartCurrentRound();
         PrepareCurrentRound();

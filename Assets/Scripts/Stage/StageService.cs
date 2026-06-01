@@ -32,13 +32,13 @@ public class StageService
 
         if (saveData != null)
         {
-            ResumeStageFromSave(saveData);
             LoadStageStats(saveData);
+            ResumeStageFromSave(saveData);
         }
         else
         {
-            StartStage(stageIndex);
             LoadStageStats(stageIndex);
+            StartStage(stageIndex);            
         }
     }
 
@@ -137,20 +137,41 @@ public class StageService
 
     public void OnRoundWin(TeamEnum winnerTeam)
     {
+        CurrentStageWinCount++;
         int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].winXPCurrency;
         RaiseRoundOverEvent(RoundResultEnum.Win, currencyReward);
     }
 
     public void OnRoundLose(TeamEnum loserTeam)
     {
+        CurrentStageLoseCount++;
         int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].lossXPCurrency;
         RaiseRoundOverEvent(RoundResultEnum.Lose, currencyReward);
     }
 
     public void OnRoundDraw()
     {
+        CurrentStageDrawCount++;
         int currencyReward = _stageConfigDataList[CurrentStageIndex].roundDataList[CurrentRoundIndex].lossXPCurrency;
         RaiseRoundOverEvent(RoundResultEnum.Draw, currencyReward);
+    }
+
+    public void ReduceCurrentRoundResulCounttOnRestart(RoundResultEnum result)
+    {
+        switch (result)
+        {
+            case RoundResultEnum.Win:
+                CurrentStageWinCount--;
+                break;
+
+            case RoundResultEnum.Lose:
+                CurrentStageLoseCount--;
+                break;
+
+            case RoundResultEnum.Draw:
+                CurrentStageDrawCount--;
+                break;
+        }
     }
 
     public bool CheckStageCleared()

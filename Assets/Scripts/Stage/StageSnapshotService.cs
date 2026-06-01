@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class StageSnapshotService
 {
-    private RoundSnapshotService _roundSnapshotDataObj;
+    private RoundSnapshotService _roundSnapshotServiceObj;
 
     private const string SAVE_FILE_NAME = "stage_snapshot_data.json";
     private const string SAVE_FOLDER = "SaveData";
@@ -16,7 +16,7 @@ public class StageSnapshotService
 
     public StageSnapshotService()
     {
-        _roundSnapshotDataObj = GameManager.Instance.Get<RoundSnapshotService>();
+        _roundSnapshotServiceObj = GameManager.Instance.Get<RoundSnapshotService>();
         EnsureDirectoryExists();
         EnsureFileExists();
     }
@@ -55,7 +55,7 @@ public class StageSnapshotService
     {
         try
         {
-            RoundSnapshotData data = _roundSnapshotDataObj.GetRoundEndSnapshot();
+            RoundSnapshotData data = _roundSnapshotServiceObj.GetRoundEndSnapshot();
 
             StageSnapshotData snapshotData = LoadStageSnapShotData() ?? new StageSnapshotData();
 
@@ -201,6 +201,6 @@ public class StageSnapshotService
 
     public void Dispose()
     {
-        _roundSnapshotDataObj = null;
+        _roundSnapshotServiceObj = null;
     }
 }
