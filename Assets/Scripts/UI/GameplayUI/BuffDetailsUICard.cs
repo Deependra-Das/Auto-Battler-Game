@@ -49,7 +49,7 @@ public class BuffDetailsUICard : MonoBehaviour
         }
     }
 
-    private void DeactivateParticipantBlock()
+    public void DeactivateParticipantBlock()
     {
         if (_activatedParticipantBlock >= 0 && _activatedParticipantBlock < _buffParticipantsBlockImageList.Count)
         {

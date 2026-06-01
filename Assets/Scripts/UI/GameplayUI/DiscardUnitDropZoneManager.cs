@@ -46,7 +46,7 @@ public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
             if (dragHandler != null)
                 dragHandler.MarkDroppedOnDiscardUnitZone();
 
-            _teamServiceObj.RemoveUnitFromField(baseUnit, baseUnit.Team);
+            _teamServiceObj.RemoveUnitFromField(baseUnit, baseUnit.Team, true);
             _teamServiceObj.RemoveUnitFromTeam(baseUnit.UnitData, baseUnit.Team);
             Destroy(baseUnit.gameObject);
         }

@@ -201,7 +201,7 @@ public class GameplayManager : MonoBehaviour
 
             unit.ReleaseCurrentNode();
 
-            _teamServiceObj.RemoveUnitFromField(unit, unit.Team);
+            _teamServiceObj.RemoveUnitFromField(unit, unit.Team, false);
 
             _pendingDestroy.Add(unit);
         }
@@ -398,6 +398,11 @@ public class GameplayManager : MonoBehaviour
         {
             _teamServiceObj.ClearTeam(TeamEnum.Team1);
         }
+
+        _teamServiceObj.ClearTypeCount(TeamEnum.Team1);
+        _teamServiceObj.ClearFactionCount(TeamEnum.Team1);
+        _buffServiceObj.RemoveAllAppliedBuffs(TeamEnum.Team1);
+        UIManager.Instance.ResetBuffParticipantCountUI(TeamEnum.Team1);
     }
 
     private void CleanupTeam2()
@@ -410,6 +415,10 @@ public class GameplayManager : MonoBehaviour
         }
 
         _teamServiceObj.ClearTeam(TeamEnum.Team2);
+        _teamServiceObj.ClearTypeCount(TeamEnum.Team1);
+        _teamServiceObj.ClearFactionCount(TeamEnum.Team1);
+        _buffServiceObj.RemoveAllAppliedBuffs(TeamEnum.Team2);
+        UIManager.Instance.ResetBuffParticipantCountUI(TeamEnum.Team2);
     }
 
     private void DespawnUnit(BaseUnit unit)
@@ -418,7 +427,7 @@ public class GameplayManager : MonoBehaviour
             return;
 
         unit.ReleaseCurrentNode();
-        _teamServiceObj.RemoveUnitFromField(unit, unit.Team);
+        _teamServiceObj.RemoveUnitFromField(unit, unit.Team, true);
         Destroy(unit.gameObject);    
     }
 

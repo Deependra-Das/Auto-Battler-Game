@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class UIManager : GenericMonoSingleton<UIManager>
 {
@@ -393,7 +394,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _buffTeam2UICardDictionary.Clear();
     }
 
-    public void UpdateBuffParticipantCount(BuffNameEnum buffName, int participants, TeamEnum team)
+    public void UpdateBuffParticipantCountUI(BuffNameEnum buffName, int participants, TeamEnum team)
     {
         switch (team)
         {
@@ -402,6 +403,19 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 break;
             case TeamEnum.Team2:
                 _buffTeam2UICardDictionary[buffName].ActivateParticipantBlock(participants);
+                break;
+        }
+    }
+
+    public void ResetBuffParticipantCountUI(TeamEnum team)
+    {
+        switch (team)
+        {
+            case TeamEnum.Team1:
+                _buffTeam1UICardDictionary.Values.ToList().ForEach(card => card.DeactivateParticipantBlock());
+                break;
+            case TeamEnum.Team2:
+                _buffTeam2UICardDictionary.Values.ToList().ForEach(card => card.DeactivateParticipantBlock());
                 break;
         }
     }
@@ -553,7 +567,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
             _stageSelectionUICardList[0].InvokeClick();
         }
     }
-
 
     private void ClearStageSelectionButtons()
     {

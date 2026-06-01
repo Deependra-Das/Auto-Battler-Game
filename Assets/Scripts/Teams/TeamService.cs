@@ -64,12 +64,17 @@ public class TeamService
         return true;
     }
 
-    public bool RemoveUnitFromField(BaseUnit unit, TeamEnum team)
+    public bool RemoveUnitFromField(BaseUnit unit, TeamEnum team, bool cleanup)
     {
         if (!_fieldUnits[team].Contains(unit)) return false;
 
         _fieldUnits[team].Remove(unit);
-        RemoveUnitCount(unit, team);
+
+        if (cleanup)
+        {
+            RemoveUnitCount(unit, team);
+        }
+
         return true;
     }
 
@@ -205,7 +210,23 @@ public class TeamService
         _fieldUnits[team].Clear();
         _inventoryUnits[team].Clear();
         _teams[team].Clear();
-        _fieldCapacities[team] = 0;
+        _fieldCapacities[team] = 0;     
+    }
+
+    public void ClearTypeCount(TeamEnum team)
+    {
+        foreach (var value in _typeCount[team].Keys.ToList())
+        {
+            _typeCount[team][value] = 0;
+        }
+    }
+
+    public void ClearFactionCount(TeamEnum team)
+    {
+        foreach (var value in _factionCount[team].Keys.ToList())
+        {
+            _factionCount[team][value] = 0;
+        }
     }
 
     public void Reset()
@@ -216,7 +237,9 @@ public class TeamService
             _inventoryUnits[team].Clear();
             _fieldUnits[team].Clear();
             _fieldCapacities[team] = 0;
-        }
+            _typeCount[team].Clear();
+            _factionCount[team].Clear();
+        }     
 
         InitializeTypeAndFactionCounts();
     }
