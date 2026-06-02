@@ -31,7 +31,7 @@ public class RangedSupportUnit : BaseUnit
 
         foreach (BaseUnit unit in teammates)
         {
-            unit.Heal(baseHealing);
+            unit.Heal(unitData.baseHealing);
         }
     }
 }

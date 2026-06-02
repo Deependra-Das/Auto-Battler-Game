@@ -19,64 +19,152 @@ MonoBehaviour:
     unitName: Michael
     unitFaction: 0
     unitType: 0
-    unitLevel: 0
+    unitLevel: 1
+    unitElement: 1
     unitCost: 5
+    baseDamage: 8
+    baseHealth: 70
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.65
+    baseMovementSpeed: 1
+    baseRange: 1
+    delayBeforeRangedAttack: 0
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
   - unitID: 102
     unitPrefab: {fileID: -1251695100462667638, guid: ba7ab46a162d63f4c89ebc244c1e0a28, type: 3}
     unitIcon: {fileID: 1001853020, guid: 78c22cb21167b5f4ca9186d6a14d92dc, type: 3}
     unitName: Gabriel
     unitFaction: 0
     unitType: 2
-    unitLevel: 0
+    unitLevel: 1
+    unitElement: 1
     unitCost: 5
+    baseDamage: 5
+    baseHealth: 55
+    baseShield: 25
+    baseHealing: 0
+    baseAttackSpeed: 0.4
+    baseMovementSpeed: 1
+    baseRange: 1
+    delayBeforeRangedAttack: 0
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
   - unitID: 103
     unitPrefab: {fileID: -8795649597047712193, guid: 5dfd34d238ea8534bbb01e455e8cdc91, type: 3}
     unitIcon: {fileID: 790496568, guid: 894d701e06960094a8ffee743e4f6f93, type: 3}
     unitName: Raphael
     unitFaction: 0
     unitType: 1
-    unitLevel: 0
+    unitLevel: 1
+    unitElement: 1
     unitCost: 5
+    baseDamage: 6
+    baseHealth: 50
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.8
+    baseMovementSpeed: 1
+    baseRange: 3
+    delayBeforeRangedAttack: 1
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
   - unitID: 104
     unitPrefab: {fileID: -2209156698936974914, guid: b8f89c186008fb347bf5767733d0071f, type: 3}
     unitIcon: {fileID: 1345224006, guid: e02f90bd308d92a4cb906d41812f26ae, type: 3}
     unitName: Uriel
     unitFaction: 0
     unitType: 3
-    unitLevel: 0
+    unitLevel: 1
+    unitElement: 1
     unitCost: 5
+    baseDamage: 3
+    baseHealth: 80
+    baseShield: 0
+    baseHealing: 1
+    baseAttackSpeed: 0.5
+    baseMovementSpeed: 1
+    baseRange: 5
+    delayBeforeRangedAttack: 1
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
   - unitID: 111
     unitPrefab: {fileID: -6902306450138930433, guid: 632336a2bc941b04d91718005cb0fcf0, type: 3}
     unitIcon: {fileID: -4343815220072114579, guid: 84152564c903f454bb098433a2ddb6e2, type: 3}
     unitName: Xenos
     unitFaction: 1
     unitType: 0
-    unitLevel: 0
+    unitLevel: 1
+    unitElement: 3
     unitCost: 5
+    baseDamage: 8
+    baseHealth: 70
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.65
+    baseMovementSpeed: 1
+    baseRange: 1
+    delayBeforeRangedAttack: 0
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
   - unitID: 112
     unitPrefab: {fileID: -8653463163959054984, guid: 5dc13c8833dbccb4f840f62063d0ae83, type: 3}
     unitIcon: {fileID: 5267402234816793484, guid: 8befd0a79752b1144ba01631f15cae44, type: 3}
     unitName: Nikos
     unitFaction: 1
     unitType: 2
-    unitLevel: 0
+    unitLevel: 1
+    unitElement: 3
     unitCost: 5
+    baseDamage: 5
+    baseHealth: 55
+    baseShield: 25
+    baseHealing: 0
+    baseAttackSpeed: 0.4
+    baseMovementSpeed: 1
+    baseRange: 1
+    delayBeforeRangedAttack: 0
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
   - unitID: 113
     unitPrefab: {fileID: 1556450604000695653, guid: 32a7312e57dab7e4b98895fe85c2ba54, type: 3}
     unitIcon: {fileID: 2786025090814906546, guid: 4a4f9b371ba5fff4198d5de6b44a37ef, type: 3}
     unitName: Doros
     unitFaction: 1
     unitType: 1
-    unitLevel: 0
+    unitLevel: 1
+    unitElement: 3
     unitCost: 5
+    baseDamage: 6
+    baseHealth: 50
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.8
+    baseMovementSpeed: 1
+    baseRange: 3
+    delayBeforeRangedAttack: 1
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
   - unitID: 114
     unitPrefab: {fileID: 6942306304810124459, guid: d1c60a64b8b3b8c43bac56c9890e77f2, type: 3}
     unitIcon: {fileID: 8804136043111226768, guid: 3e4fb1de7b585a34886d8db2273ade44, type: 3}
     unitName: Vulcan
     unitFaction: 1
     unitType: 3
-    unitLevel: 0
+    unitLevel: 1
+    unitElement: 3
     unitCost: 5
+    baseDamage: 3
+    baseHealth: 80
+    baseShield: 0
+    baseHealing: 1
+    baseAttackSpeed: 0.5
+    baseMovementSpeed: 1
+    baseRange: 5
+    delayBeforeRangedAttack: 1
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
   - unitID: 121
     unitPrefab: {fileID: -6260095563541404708, guid: 6a56b4fe37286d648b08178c1ae7864c, type: 3}
     unitIcon: {fileID: -1896043947, guid: 957559c7da87ab148a51d2ea5060cd70, type: 3}
@@ -84,7 +172,18 @@ MonoBehaviour:
     unitFaction: 2
     unitType: 0
     unitLevel: 0
+    unitElement: 2
     unitCost: 5
+    baseDamage: 8
+    baseHealth: 70
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.65
+    baseMovementSpeed: 1
+    baseRange: 1
+    delayBeforeRangedAttack: 0
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
   - unitID: 122
     unitPrefab: {fileID: 7886757113014607428, guid: ef303ae4da8168742a2401fa9d8702e5, type: 3}
     unitIcon: {fileID: -5259514187705045419, guid: a6bfec389189c3c40ae22eabec81c943, type: 3}
@@ -92,15 +191,37 @@ MonoBehaviour:
     unitFaction: 2
     unitType: 2
     unitLevel: 0
+    unitElement: 2
     unitCost: 5
+    baseDamage: 5
+    baseHealth: 55
+    baseShield: 25
+    baseHealing: 0
+    baseAttackSpeed: 0.4
+    baseMovementSpeed: 1
+    baseRange: 1
+    delayBeforeRangedAttack: 0
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
   - unitID: 123
     unitPrefab: {fileID: 8636628523063946614, guid: 4f9c45fcbbb4678428c126954913ceab, type: 3}
     unitIcon: {fileID: 3791042181826488500, guid: c916b3176dc090e46950da4c1f8c9e2b, type: 3}
     unitName: Sigrid
     unitFaction: 2
     unitType: 1
-    unitLevel: 0
+    unitLevel: 1
+    unitElement: 2
     unitCost: 5
+    baseDamage: 6
+    baseHealth: 50
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.8
+    baseMovementSpeed: 1
+    baseRange: 3
+    delayBeforeRangedAttack: 1
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
   - unitID: 124
     unitPrefab: {fileID: -2026209505828979296, guid: 6df4c9a969374be44b402be99cc2fc78, type: 3}
     unitIcon: {fileID: 2477030900967564349, guid: a3f7f9770d6088d4faa37d08a43f7471, type: 3}
@@ -108,4 +229,15 @@ MonoBehaviour:
     unitFaction: 2
     unitType: 3
     unitLevel: 0
+    unitElement: 2
     unitCost: 5
+    baseDamage: 3
+    baseHealth: 80
+    baseShield: 0
+    baseHealing: 1
+    baseAttackSpeed: 0.5
+    baseMovementSpeed: 1
+    baseRange: 5
+    delayBeforeRangedAttack: 1
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30

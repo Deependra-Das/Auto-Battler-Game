@@ -11,5 +11,17 @@ public struct UnitData
     public UnitFactionEnum unitFaction;
     public UnitTypeEnum unitType;
     [Range(1,3)] public int unitLevel;
+    public UnitElementEnum unitElement;
     public int unitCost;
+
+    public int baseDamage;
+    public int baseHealth;
+    public int baseShield;
+    public int baseHealing;
+    public float baseAttackSpeed;
+    public float baseMovementSpeed;
+    [Range(1, 5)] public int baseRange;
+    public float delayBeforeRangedAttack;
+    public float baseElementalDamageScalingFactor;
+    public float teamShieldScalingFactor;
 }

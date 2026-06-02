@@ -18,7 +18,7 @@ public class Spartan_MeleeTankUnit : MeleeTankUnit
     private void PerformWarAxeAttack()
     {
         animator.SetTrigger("Attack");
-        currentTarget.TakeDamage(baseDamage, unitElement);
+        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
         StartCoroutine(AttackCoolDownWaitCoroutine());
     }
 

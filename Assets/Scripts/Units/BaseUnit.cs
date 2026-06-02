@@ -11,28 +11,13 @@ public class BaseUnit : MonoBehaviour
 {
     [SerializeField] protected SpriteRenderer spriteRenderer;
     [SerializeField] protected Animator animator;
-    [SerializeField] protected string characterName;
-    [SerializeField] protected UnitTypeEnum unitType;
-    [SerializeField] protected UnitFactionEnum unitFaction;
-    [SerializeField] protected UnitElementEnum unitElement;
-    [SerializeField] protected int baseDamage = 1;
-    [SerializeField] protected int baseHealth = 5;
-    [SerializeField] protected int baseShield = 0;
-    [SerializeField] protected int baseHealing = 0;
-    [SerializeField] protected float baseAttackSpeed = 1f;
-    [SerializeField] protected float baseElementalDamageScalingFactor = 0.5f;
-    [SerializeField] protected float teamShieldScalingFactor = 30f;
-    [SerializeField] [Range(1, 5)] protected int baseRange = 1;
-    [SerializeField] protected float baseMovementSpeed = 1f;
-
     [SerializeField] protected Transform unitUIContainer;
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider shieldBar;
     [SerializeField] private Image shieldFillImage;
-    [SerializeField] protected float delayBeforeRangedAttack = 0f;
 
-    protected Collider2D unitCollider;
     protected UnitData unitData;
+    protected Collider2D unitCollider;
 
     protected int totalDamage;
     protected int totalHealth;
@@ -50,7 +35,7 @@ public class BaseUnit : MonoBehaviour
     protected BaseUnit currentTarget = null;
     protected Node currentNode;
 
-    protected bool isTargetInRange => currentTarget != null && Vector3.Distance(this.transform.position, currentTarget.transform.position) <= baseRange;
+    protected bool isTargetInRange => currentTarget != null && Vector3.Distance(this.transform.position, currentTarget.transform.position) <= unitData.baseRange;
     protected bool isMoving;
     protected Node destination;
 
@@ -61,9 +46,9 @@ public class BaseUnit : MonoBehaviour
 
     public bool IsDead => isDead;
     public UnitData UnitData => unitData;
-    public string CharacterName => characterName;
-    public UnitFactionEnum UnitFaction => unitFaction;
-    public UnitTypeEnum UnitType => unitType;
+    public string UnitName => unitData.unitName;
+    public UnitFactionEnum UnitFaction => unitData.unitFaction;
+    public UnitTypeEnum UnitType => unitData.unitType;
     public TeamEnum Team => team;
     public Node CurrentNode => currentNode;
     protected bool HasEnemy => currentTarget != null;
@@ -95,14 +80,12 @@ public class BaseUnit : MonoBehaviour
     {
         this.unitData = unitData;
         this.team = team;
-        unitType = unitData.unitType;
-        unitFaction = unitData.unitFaction;
         this.currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
-        totalHealth = baseHealth;
-        totalShield = baseShield;
-        shieldFillImage.color = GetShieldColor(unitElement);
+        totalHealth = unitData.baseHealth;
+        totalShield = unitData.baseShield;
+        shieldFillImage.color = GetShieldColor(unitData.unitElement);
         ResetVitals();
     }
 
@@ -194,7 +177,7 @@ public class BaseUnit : MonoBehaviour
 
         animator.SetBool("IsWalking", true);
 
-        this.transform.position += dirNormalized * baseMovementSpeed * Time.deltaTime;
+        this.transform.position += dirNormalized * unitData.baseMovementSpeed * Time.deltaTime;
         return false;
     }
 
@@ -352,12 +335,12 @@ public class BaseUnit : MonoBehaviour
     private void ApplyTeamBuffs()
     {
         float attackBonusContribution = currentTeamBuffData.attackBonus;
-        float elementBonusContribution = GetElementBonus() * baseElementalDamageScalingFactor;
+        float elementBonusContribution = GetElementBonus() * unitData.baseElementalDamageScalingFactor;
 
-        totalDamage = Mathf.RoundToInt(baseDamage * (1 + attackBonusContribution + elementBonusContribution));
-        totalShield = baseShield + Mathf.RoundToInt(currentTeamBuffData.shieldBonus * teamShieldScalingFactor);
-        totalHealth = Mathf.RoundToInt(baseHealth * (1 + currentTeamBuffData.hpBonus));
-        totalAttackSpeed = baseAttackSpeed * (1 + currentTeamBuffData.attackSpeedBonus);
+        totalDamage = Mathf.RoundToInt(unitData.baseDamage * (1 + attackBonusContribution + elementBonusContribution));
+        totalShield = unitData.baseShield + Mathf.RoundToInt(currentTeamBuffData.shieldBonus * unitData.teamShieldScalingFactor);
+        totalHealth = Mathf.RoundToInt(unitData.baseHealth * (1 + currentTeamBuffData.hpBonus));
+        totalAttackSpeed = unitData.baseAttackSpeed * (1 + currentTeamBuffData.attackSpeedBonus);
 
         totalAttackCoolDown = 1f / Mathf.Max(0.01f, totalAttackSpeed);
 
@@ -366,7 +349,7 @@ public class BaseUnit : MonoBehaviour
 
     private float GetElementBonus()
     {
-        return unitElement switch
+        return unitData.unitElement switch
         {
             UnitElementEnum.Fire => currentTeamBuffData.fireDamageBonus,
             UnitElementEnum.Thunder => currentTeamBuffData.thunderDamageBonus,
@@ -377,7 +360,7 @@ public class BaseUnit : MonoBehaviour
 
     private float GetShieldDepletionMultiplier(UnitElementEnum attackElement)
     {
-        return attackElement == unitElement ? 0.5f : 1f;
+        return attackElement == unitData.unitElement ? 0.5f : 1f;
     }
 
     private Color GetShieldColor(UnitElementEnum element)
