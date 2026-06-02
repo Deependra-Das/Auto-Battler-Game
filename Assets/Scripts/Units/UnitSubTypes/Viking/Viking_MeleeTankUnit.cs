@@ -18,7 +18,11 @@ public class Viking_MeleeTankUnit : BaseUnit
     private void PerformWarAxeAttack()
     {
         animator.SetTrigger("Attack");
-        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
         StartCoroutine(AttackCoolDownWaitCoroutine());
+    }
+
+    private void VikingAxeCleave()
+    {
+        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
     }
 }
