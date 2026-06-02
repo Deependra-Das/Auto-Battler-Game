@@ -21,4 +21,9 @@ public class Spartan_MeleeAttackerUnit : BaseUnit
         currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
         StartCoroutine(AttackCoolDownWaitCoroutine());
     }
+
+    private void SpartanSwordSlash()
+    {
+        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
+    }
 }

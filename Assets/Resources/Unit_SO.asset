@@ -91,7 +91,7 @@ MonoBehaviour:
     teamShieldScalingFactor: 30
   - unitID: 111
     unitPrefab: {fileID: -6902306450138930433, guid: 632336a2bc941b04d91718005cb0fcf0, type: 3}
-    unitIcon: {fileID: -4343815220072114579, guid: 84152564c903f454bb098433a2ddb6e2, type: 3}
+    unitIcon: {fileID: -206191039, guid: 6c42f13f5634a6b4bb42c1dcdcd08b30, type: 3}
     unitName: Xenos
     unitFaction: 1
     unitType: 0
