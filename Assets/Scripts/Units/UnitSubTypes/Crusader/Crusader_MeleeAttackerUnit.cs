@@ -18,7 +18,11 @@ public class Crusader_MeleeAttackerUnit : BaseUnit
     private void PerformSwordAttack()
     {
         animator.SetTrigger("Attack");
-        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
         StartCoroutine(AttackCoolDownWaitCoroutine());
+    }
+
+    private void CrusaderSwordSlash()
+    {
+        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
     }
 }

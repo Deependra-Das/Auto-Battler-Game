@@ -12,13 +12,17 @@ public class Crusader_MeleeTankUnit : BaseUnit
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
 
-        PerformWarAxeAttack();
+        PerformAxeAttack();
     }
 
-    private void PerformWarAxeAttack()
+    private void PerformAxeAttack()
     {
         animator.SetTrigger("Attack");
-        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
         StartCoroutine(AttackCoolDownWaitCoroutine());
+    }
+
+    private void CrusaderAxeCleave()
+    {
+        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
     }
 }
