@@ -18,7 +18,11 @@ public class Viking_MeleeAttackerUnit : BaseUnit
     private void PerformSwordAttack()
     {
         animator.SetTrigger("Attack");
-        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
         StartCoroutine(AttackCoolDownWaitCoroutine());
+    }
+
+    private void VikingSpearAxeSlash()
+    {
+        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
     }
 }
