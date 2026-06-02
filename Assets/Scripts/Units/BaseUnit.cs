@@ -101,21 +101,61 @@ public class BaseUnit : MonoBehaviour
         UpdateShieldBar(currentShield);
     }
 
-    protected void FindTarget()
+    private void Update()
+    {
+        if (!isActive) return;
+
+        CombatLoop();
+    }
+
+    private void CombatLoop()
+    {
+        HandleTargeting();
+        HandleMovement();
+        HandleAttack();
+    }
+
+    protected virtual void HandleTargeting()
+    {
+        if (!HasEnemy)
+            FindTarget();
+    }
+
+    protected virtual void HandleMovement()
+    {
+        if (currentTarget == null) return;
+
+        if (!isTargetInRange || isMoving)
+        {
+            GetInRange();
+        }
+    }
+
+    protected virtual void HandleAttack()
+    {
+        if (!canAttack) return;
+        if (!isTargetInRange || isMoving) return;
+
+        Attack();
+    }
+
+    protected virtual void FindTarget()
     {
         var allEnemies = GameplayManager.Instance.GetOpponentTeamUnits(team);
         float minDistance = Mathf.Infinity;
-        BaseUnit enemyUnit = null;
+        BaseUnit bestTargetEnemyUnit = null;
+
         foreach (BaseUnit enemy in allEnemies)
         {
-            if (Vector3.Distance(enemy.transform.position, this.transform.position) <= minDistance)
+         float dist = Vector3.Distance(transform.position, enemy.transform.position);
+            if (dist < minDistance)
             {
-                minDistance = Vector3.Distance(enemy.transform.position, this.transform.position);
-                enemyUnit = enemy;
+                minDistance = dist;
+                bestTargetEnemyUnit = enemy;
             }
         }
 
-        currentTarget = enemyUnit;
+        currentTarget = bestTargetEnemyUnit;
     }
 
     protected void GetInRange()
@@ -129,6 +169,7 @@ public class BaseUnit : MonoBehaviour
             destination = null;
             List<Node> availableNodes = graphService.GetNodesCloseTo(currentTarget.CurrentNode);
             availableNodes = availableNodes.OrderBy(x => Vector3.Distance(x.position, this.transform.position)).ToList();
+
             for (int i = 0; i < availableNodes.Count; i++)
             {
                 if (!availableNodes[i].IsOccupied)
@@ -181,14 +222,18 @@ public class BaseUnit : MonoBehaviour
         return false;
     }
 
-    public void SetCurrentNode(Node node)
-    {
-        currentNode = node;
-    }
-
     protected virtual void Attack()
     {
         Debug.Log("Base::Attack");
+    }
+
+    protected IEnumerator AttackCoolDownWaitCoroutine()
+    {
+        canAttack = false;
+        yield return null;
+        animator.ResetTrigger("Attack");
+        yield return new WaitForSeconds(totalAttackCoolDown);
+        canAttack = true;
     }
 
     public void TakeDamage(int amount, UnitElementEnum incomingElement)
@@ -226,6 +271,10 @@ public class BaseUnit : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         gameObject.SetActive(false);
+    }
+    public void SetCurrentNode(Node node)
+    {
+        currentNode = node;
     }
 
     public void UpdateHealthBar(float currentHealthValue)

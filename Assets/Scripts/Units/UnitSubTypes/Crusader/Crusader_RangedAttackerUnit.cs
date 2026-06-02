@@ -2,7 +2,7 @@ using AutoBattler.Main;
 using System.Collections;
 using UnityEngine;
 
-public class Crusader_RangedAttackerUnit : RangedAttackerUnit
+public class Crusader_RangedAttackerUnit : BaseUnit
 {
     protected override void Attack()
     {
@@ -27,14 +27,5 @@ public class Crusader_RangedAttackerUnit : RangedAttackerUnit
     private void ShootArrow()
     {
         GameManager.Instance.Get<RangedAbilityService>().SpawnArrow(this, currentTarget, totalDamage, unitData.unitElement);
-    }
-
-    IEnumerator AttackCoolDownWaitCoroutine()
-    {
-        canAttack = false;
-        yield return null;
-        animator.ResetTrigger("Attack");
-        yield return new WaitForSeconds(totalAttackCoolDown);
-        canAttack = true;
-    }
+    } 
 }

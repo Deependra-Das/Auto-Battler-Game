@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Viking_MeleeAttackerUnit : MeleeAttackerUnit
+public class Viking_MeleeAttackerUnit : BaseUnit
 {
     protected override void Attack()
     {
@@ -20,14 +20,5 @@ public class Viking_MeleeAttackerUnit : MeleeAttackerUnit
         animator.SetTrigger("Attack");
         currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
         StartCoroutine(AttackCoolDownWaitCoroutine());
-    }
-
-    IEnumerator AttackCoolDownWaitCoroutine()
-    {
-        canAttack = false;
-        yield return null;
-        animator.ResetTrigger("Attack");
-        yield return new WaitForSeconds(totalAttackCoolDown);
-        canAttack = true;
     }
 }

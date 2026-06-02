@@ -2,7 +2,7 @@ using AutoBattler.Main;
 using System.Collections;
 using UnityEngine;
 
-public class Viking_RangedSupportUnit : RangedSupportUnit
+public class Viking_RangedSupportUnit : BaseUnit
 {
     [SerializeField] protected float lifetime = 1f;
     [SerializeField] protected float damageDelay = 0.2f;
@@ -26,12 +26,13 @@ public class Viking_RangedSupportUnit : RangedSupportUnit
         HealAllTeammates();
     }
 
-    IEnumerator AttackCoolDownWaitCoroutine()
+    protected void HealAllTeammates()
     {
-        canAttack = false;
-        yield return null;
-        animator.ResetTrigger("Attack");
-        yield return new WaitForSeconds(totalAttackCoolDown);
-        canAttack = true;
+        var teammates = GameManager.Instance.Get<TeamService>().GetFieldUnits(Team);
+
+        foreach (BaseUnit unit in teammates)
+        {
+            unit.Heal(unitData.baseHealing);
+        }
     }
 }
