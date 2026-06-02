@@ -21,7 +21,7 @@ public class GameplayManager : MonoBehaviour
     private InventoryService _inventoryServiceObj;
     private BuffService _buffServiceObj;
     private StageService _stageServiceObj;
-    private UnitService _unitServiceObj;
+    private UnitDataService _unitServiceObj;
     private PlayerLevelService _playerLevelServiceObj;
     private ShopService _shopServiceObj;
     private RoundSnapshotService _roundSnapshotServiceObj;
@@ -99,7 +99,7 @@ public class GameplayManager : MonoBehaviour
         _roundSnapshotServiceObj = GameManager.Instance.Get<RoundSnapshotService>();
         _stageSnapshotServiceObj = GameManager.Instance.Get<StageSnapshotService>();
         _stageServiceObj = GameManager.Instance.Get<StageService>();
-        _unitServiceObj = GameManager.Instance.Get<UnitService>();
+        _unitServiceObj = GameManager.Instance.Get<UnitDataService>();
         _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
         _shopServiceObj = GameManager.Instance.Get<ShopService>();
         _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
@@ -139,7 +139,7 @@ public class GameplayManager : MonoBehaviour
         {
             RoundEnemyData enemy = enemiesForRound[i];
 
-            if (_unitServiceObj.TryGetUnitById(enemy.enemyID, out UnitData enemyUnitData))
+            if (_unitServiceObj.TryGetUnitDataById(enemy.enemyID, out UnitData enemyUnitData))
             {
                 enemyUnitData.unitLevel = enemy.enemyLevel;
                 _teamServiceObj.AddUnitToTeam(enemyUnitData, TeamEnum.Team2);

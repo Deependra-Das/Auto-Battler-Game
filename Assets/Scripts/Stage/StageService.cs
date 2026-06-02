@@ -124,12 +124,12 @@ public class StageService
     private void RestorePlayerInventory(RoundSnapshotData saveData)
     {
         TeamService teamServiceObj = GameManager.Instance.Get<TeamService>();
-        UnitService unitServiceObj = GameManager.Instance.Get<UnitService>();
+        UnitDataService unitServiceObj = GameManager.Instance.Get<UnitDataService>();
         InventoryService inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
 
         foreach (UnitSnapshotData unit in saveData.playerInventoryUnits)
         {
-            unitServiceObj.TryGetUnitById(unit.unitID, out UnitData unitData);
+            unitServiceObj.TryGetUnitDataById(unit.unitID, out UnitData unitData);
             teamServiceObj.AddUnitToTeam(unitData, TeamEnum.Team1);
             inventoryServiceObj.AddUnit(unitData);
         }

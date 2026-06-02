@@ -39,9 +39,9 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new RangedAbilityService(_rangedAbilities_SO));
             ServiceLocator.Register(new CurrencyService());
             ServiceLocator.Register(new PlayerLevelService(_playerLevelConfig_SO));
-            ServiceLocator.Register(new UnitService(_unit_SO));
+            ServiceLocator.Register(new UnitDataService(_unit_SO));
             ServiceLocator.Register(new InventoryService());
-            ServiceLocator.Register(new ShopService(_unit_SO));
+            ServiceLocator.Register(new ShopService());
             ServiceLocator.Register(new BuffService(_buff_SO));
             ServiceLocator.Register(new RoundSnapshotService());
             ServiceLocator.Register(new StageSnapshotService());
@@ -57,7 +57,7 @@ namespace AutoBattler.Main
             ServiceLocator.Unregister<StageService>();
             ServiceLocator.Unregister<CurrencyService>();
             ServiceLocator.Unregister<PlayerLevelService>();
-            ServiceLocator.Unregister<UnitService>();
+            ServiceLocator.Unregister<UnitDataService>();
             ServiceLocator.Unregister<InventoryService>();
             ServiceLocator.Unregister<ShopService>();
             ServiceLocator.Unregister<BuffService>();
