@@ -24,7 +24,7 @@ public class Crusader_RangedAttackerUnit : BaseUnit
         StartCoroutine(AttackCoolDownWaitCoroutine());
     }
 
-    private void ShootArrow()
+    private void CrusaderArrowShot()
     {
         GameManager.Instance.Get<RangedAbilityService>().SpawnArrow(this, currentTarget, totalDamage, unitData.unitElement);
     } 

@@ -11,16 +11,16 @@ public class Crusader_RangedSupportUnit : BaseUnit
     {
         if (!canAttack) return;
 
-        PerformManaAttack();
+        PerformElementalBurstAttack();
     }
 
-    private void PerformManaAttack()
+    private void PerformElementalBurstAttack()
     {
         animator.SetTrigger("Attack");
         StartCoroutine(AttackCoolDownWaitCoroutine());
     }
 
-    private void ManaBurst()
+    private void CrusaderElementalBurst()
     {
         GameManager.Instance.Get<RangedAbilityService>().SpawnManaBurst(this, currentTarget, totalDamage, unitData.unitElement, lifetime, damageDelay);
         HealAllTeammates();
