@@ -5,21 +5,23 @@ using UnityEngine;
 
 public class ShopService
 {
-    private List<UnitData> _allUnits;
     private List<UnitData> _currentUnitsInShop = new List<UnitData>();
     private const int SHOP_SIZE = 4;
     private int _shopRefreshCost = 0;
     private CurrencyService _currencyServiceObj;
     private InventoryService _inventoryServiceObj;
     private TeamService _teamServiceObj;
+    private UnitDataService _unitDataServiceObj;
+    private int _unitDatabaseSizeSize;
 
-    public ShopService(UnitScriptableObject unit_SO)
+    public ShopService()
     {
         SubscribeToEvents();
-        _allUnits = new List<UnitData>(unit_SO.unitDataList);
         _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
         _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
+        _unitDataServiceObj = GameManager.Instance.Get<UnitDataService>();
+        _unitDatabaseSizeSize = _unitDataServiceObj.GetUnitDatabaseSize();
     }
 
     void SubscribeToEvents()
@@ -47,10 +49,13 @@ public class ShopService
     {
         if (_currentUnitsInShop.Count >= SHOP_SIZE) return;
 
-        UnitData randomUnit = _allUnits[Random.Range(0, _allUnits.Count)];
-        _currentUnitsInShop.Add(randomUnit);
+        int randomIndex = Random.Range(0, _unitDataServiceObj.GetUnitDatabaseSize());
 
-        UIManager.Instance.AddShopUnitCard(randomUnit);
+        if (_unitDataServiceObj.TryGetUnitDataByIndex(randomIndex, out UnitData randomUnit))
+        {
+            _currentUnitsInShop.Add(randomUnit);
+            UIManager.Instance.AddShopUnitCard(randomUnit);
+        }
     }
 
     public void BuyUnit(ShopUnitCard card)
@@ -109,11 +114,6 @@ public class ShopService
 
         Reset();
 
-        if (_allUnits != null)
-        {
-            _allUnits.Clear();
-            _allUnits = null;
-        }
         _currencyServiceObj = null;
         _inventoryServiceObj = null;
         _teamServiceObj = null;
