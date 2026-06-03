@@ -1,6 +1,5 @@
 using AutoBattler.Main;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,13 +11,14 @@ public class ShopUnitCard : MonoBehaviour
     [SerializeField] private Image _unitType;
     [SerializeField] private TMP_Text _unitName;
     [SerializeField] private TMP_Text _unitCost;
-    [SerializeField] private Image _unitLevel;
+    [SerializeField] private TMP_Text _unitLevel;
 
     public UnitData unitData;
+    private bool _isInitialized;
 
-    private void OnEnable() => SubscribeToEvents();
+    private void Awake() => SubscribeToEvents();
 
-    private void OnDisable() => UnsubscribeToEvents();
+    private void OnDestroy() => UnsubscribeToEvents();
    
     private void SubscribeToEvents()
     {
@@ -32,7 +32,9 @@ public class ShopUnitCard : MonoBehaviour
 
     public void Initialize(UnitData unitData)
     {
+        _isInitialized = true;
         this.unitData = unitData;
+        _btnShopUnitCard.interactable = true;
         SetupCardData();
     }
 
@@ -46,5 +48,17 @@ public class ShopUnitCard : MonoBehaviour
     private void OnShopUnitCardClicked()
     {
         GameManager.Instance.Get<ShopService>().BuyUnit(this);
+    }
+
+    public void Reset()
+    {
+        _isInitialized = false;
+        _unitIcon.sprite = null;
+        _unitFaction.sprite = null;
+        _unitType.sprite = null;
+        _unitName.text = string.Empty;
+        _unitCost.text = string.Empty;
+        _unitLevel.text = string.Empty;
+        _btnShopUnitCard.interactable = false;
     }
 }

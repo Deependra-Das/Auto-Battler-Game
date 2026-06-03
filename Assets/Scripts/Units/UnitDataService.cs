@@ -53,7 +53,7 @@ public class UnitDataService
         _unitDatabase = null;
     }
 
-    public int GetUnitDatabaseSize()
+    public int GetDatabaseEntryCount()
     {
         return _unitDatabase.Count;
     }

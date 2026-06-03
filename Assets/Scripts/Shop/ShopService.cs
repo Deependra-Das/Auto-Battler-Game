@@ -12,7 +12,7 @@ public class ShopService
     private InventoryService _inventoryServiceObj;
     private TeamService _teamServiceObj;
     private UnitDataService _unitDataServiceObj;
-    private int _unitDatabaseSizeSize;
+    private int _unitDatabaseCount;
 
     public ShopService()
     {
@@ -21,7 +21,7 @@ public class ShopService
         _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
         _unitDataServiceObj = GameManager.Instance.Get<UnitDataService>();
-        _unitDatabaseSizeSize = _unitDataServiceObj.GetUnitDatabaseSize();
+        _unitDatabaseCount = _unitDataServiceObj.GetDatabaseEntryCount();
     }
 
     void SubscribeToEvents()
@@ -49,7 +49,7 @@ public class ShopService
     {
         if (_currentUnitsInShop.Count >= SHOP_SIZE) return;
 
-        int randomIndex = Random.Range(0, _unitDataServiceObj.GetUnitDatabaseSize());
+        int randomIndex = Random.Range(0, _unitDatabaseCount);
 
         if (_unitDataServiceObj.TryGetUnitDataByIndex(randomIndex, out UnitData randomUnit))
         {

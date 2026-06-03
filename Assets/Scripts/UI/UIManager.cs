@@ -68,8 +68,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private GameObject _shopPanel;
     [SerializeField] private TMP_Text _refreshCostText;
     [SerializeField] private Button _refreshShopButton;
-    [SerializeField] private Transform _shopUnitCardContainer;
     [SerializeField] private ShopUnitCard _shopUnitCard;
+    [SerializeField] private Transform _shopUnitCardActiveContainer;
+    [SerializeField] private Transform _shopUnitCardPoolContainer;
+    [SerializeField] private int _shopUnitCardPoolSize = 8;
 
     [Header("--Inventory UI")]
     [SerializeField] private Transform _inventoryUnitCardContainer;
@@ -111,7 +113,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private List<InventoryUnitCard> _inventoryUnitCardList;
     private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam1UICardDictionary = new();
     private Dictionary<BuffNameEnum, BuffDetailsUICard> _buffTeam2UICardDictionary = new();
-    private List<StageSelectionCardUIView> _stageSelectionUICardList = new();    
+    private List<StageSelectionCardUIView> _stageSelectionUICardList = new();
+
+    private ShopUnitCardPool _shopCardPoolObj;
 
     public Canvas UICanvas => _uiCanvas;
 
@@ -121,6 +125,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         base.Awake();
         CanvasRect = _uiCanvas.GetComponent<RectTransform>();
+        _shopCardPoolObj = new ShopUnitCardPool( _shopUnitCard, _shopUnitCardActiveContainer, _shopUnitCardPoolContainer, _shopUnitCardPoolSize);
     }
 
     public void Initialize()
@@ -232,29 +237,29 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _buffTeam1UICardDictionary = new Dictionary<BuffNameEnum, BuffDetailsUICard>();
         _buffTeam2UICardDictionary = new Dictionary<BuffNameEnum, BuffDetailsUICard>();
         _shopPanel.SetActive(false);
+
     }
 
     public void AddShopUnitCard(UnitData unitData)
     {
-        ShopUnitCard newShopUnitCard = Instantiate(_shopUnitCard, _shopUnitCardContainer);
-        newShopUnitCard.Initialize(unitData);
-        _shopUnitCardList.Add(newShopUnitCard);
+        ShopUnitCard shopUnitCard = _shopCardPoolObj.Get();
+        shopUnitCard.Initialize(unitData);
+        _shopUnitCardList.Add(shopUnitCard);
     }
 
     public void RemoveShopUnitCard(ShopUnitCard cardToRemove)
     {
-        if (_shopUnitCardList.Contains(cardToRemove))
+        if (_shopUnitCardList.Remove(cardToRemove))
         {
-            _shopUnitCardList.Remove(cardToRemove);
-            Destroy(cardToRemove.gameObject);
+            _shopCardPoolObj.Release(cardToRemove);
         }
     }
 
     public void RemoveAllShopUnitCards()
     {
-        foreach (var card in _shopUnitCardList)
+        for (int index = _shopUnitCardList.Count - 1; index >= 0; index--)
         {
-            Destroy(card.gameObject);
+            RemoveShopUnitCard(_shopUnitCardList[index]);
         }
         _shopUnitCardList.Clear();
     }
