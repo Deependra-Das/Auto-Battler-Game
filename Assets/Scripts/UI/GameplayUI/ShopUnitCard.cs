@@ -13,7 +13,7 @@ public class ShopUnitCard : MonoBehaviour
     [SerializeField] private TMP_Text _unitCost;
     [SerializeField] private TMP_Text _unitLevel;
 
-    public UnitData unitData;
+    public UnitData UnitData { get; private set; }
     private bool _isInitialized;
 
     private void Awake() => SubscribeToEvents();
@@ -33,16 +33,16 @@ public class ShopUnitCard : MonoBehaviour
     public void Initialize(UnitData unitData)
     {
         _isInitialized = true;
-        this.unitData = unitData;
+        UnitData = unitData;
         _btnShopUnitCard.interactable = true;
         SetupCardData();
     }
 
     private void SetupCardData()
     {
-        _unitIcon.sprite = unitData.unitIcon;
-        _unitName.text = unitData.unitName.ToString();
-        _unitCost.text = unitData.unitCost.ToString();
+        _unitIcon.sprite = UnitData.unitIcon;
+        _unitName.text = UnitData.unitName.ToString();
+        _unitCost.text = UnitData.unitCost.ToString();
     }
 
     private void OnShopUnitCardClicked()
@@ -52,6 +52,7 @@ public class ShopUnitCard : MonoBehaviour
 
     public void Reset()
     {
+        UnitData = default;
         _isInitialized = false;
         _unitIcon.sprite = null;
         _unitFaction.sprite = null;

@@ -60,7 +60,7 @@ public class ShopService
 
     public void BuyUnit(ShopUnitCard card)
     {    
-        int cost = card.unitData.unitCost;
+        int cost = card.UnitData.unitCost;
 
         if (_inventoryServiceObj.CurrentInventorySize >= _inventoryServiceObj.MaxInventorySize)
         {
@@ -74,9 +74,9 @@ public class ShopService
             return;
         }
 
-        _teamServiceObj.AddUnitToTeam(card.unitData, TeamEnum.Team1);
-        _inventoryServiceObj.AddUnit(card.unitData);
-        _currentUnitsInShop.Remove(card.unitData);
+        _teamServiceObj.AddUnitToTeam(card.UnitData, TeamEnum.Team1);
+        _inventoryServiceObj.AddUnit(card.UnitData);
+        _currentUnitsInShop.Remove(card.UnitData);
         UIManager.Instance.RemoveShopUnitCard(card);
         AddRandomUnitInShop();
     }
