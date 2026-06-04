@@ -6,12 +6,12 @@ public class UnitDataService
 {
     private Dictionary<int, UnitData> _unitDatabase = new Dictionary<int, UnitData>();
 
-    public UnitDataService(UnitScriptableObject unit_SO)
+    public UnitDataService(UnitDataScriptableObjectScript unit_SO)
     {
         BuildUnitDatabase(unit_SO);
     }
 
-    private void BuildUnitDatabase(UnitScriptableObject unit_SO)
+    private void BuildUnitDatabase(UnitDataScriptableObjectScript unit_SO)
     {
         _unitDatabase = unit_SO.unitDataList.ToDictionary(unit => unit.unitID, unit => unit);
     }

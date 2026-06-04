@@ -7,7 +7,7 @@ namespace AutoBattler.Main
     public class GameManager : GenericMonoSingleton<GameManager>
     {
         [SerializeField] private TileScriptableObjectScript _tile_SO;
-        [SerializeField] private UnitScriptableObject _unit_SO;
+        [SerializeField] private UnitDataScriptableObjectScript _unit_SO;
         [SerializeField] private RangedAbilitiesScriptableObjectScript _rangedAbilities_SO;
         [SerializeField] private BuffScriptableObjectScript _buff_SO;
         [SerializeField] private StageConfigScriptableObjectScript _stageConfig_SO;
