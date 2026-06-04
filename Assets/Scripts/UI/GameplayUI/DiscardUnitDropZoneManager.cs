@@ -4,78 +4,75 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DiscardUnitDropZoneManager : MonoBehaviour, IDropHandler
+public class DiscardUnitDropZoneManager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    [SerializeField] private Image _highlightDiscardUnitPanel;
-    [SerializeField] private Color _highlightColor;
+    [SerializeField] private Image _highlightDiscardImage;
 
     private TeamService _teamServiceObj;
     private InventoryService _inventoryServiceObj;
-    private bool _isDiscardHighlightActive = false;
+    private CurrencyService _currencyServiceObj;
 
     private void Awake()
     {
-        _highlightDiscardUnitPanel.gameObject.SetActive(false);
-    }
-
-    private void OnEnable() => SubscribeToEvents();
-    private void OnDisable() => UnsubscribeToEvents();
-
-    void SubscribeToEvents()
-    {
-        EventBusManager.Instance.Subscribe(EventNameEnum.HighlightDiscardPanel, OnInteractDiscardPanelSetHighlight);
-    }
-    void UnsubscribeToEvents()
-    {
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.HighlightDiscardPanel, OnInteractDiscardPanelSetHighlight);
-    }
-
-    public void OnDrop(PointerEventData eventData)
-    {
-        var gameObject = eventData.pointerDrag.gameObject;
-        if (!gameObject) return;
-
-        int refundAmount = 0;
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
         _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
-
-        if (gameObject.TryGetComponent<BaseUnit>(out BaseUnit baseUnit))
-        {
-            refundAmount = baseUnit.UnitData.unitCost;
-            UnitDragHandler dragHandler = eventData.pointerDrag.GetComponent<UnitDragHandler>();
-            if (dragHandler != null)
-                dragHandler.MarkDroppedOnDiscardUnitZone();
-
-            _teamServiceObj.RemoveUnitFromField(baseUnit, baseUnit.Team, true);
-            _teamServiceObj.RemoveUnitFromTeam(baseUnit.UnitData, baseUnit.Team);
-            Destroy(baseUnit.gameObject);
-        }
-        else if (gameObject.TryGetComponent<InventoryUnitCard>(out InventoryUnitCard inventoryUnitCard))
-        {
-            refundAmount = inventoryUnitCard.UnitData.unitCost;
-            inventoryUnitCard.MarkDroppedOnDiscardUnitZone();
-
-            _teamServiceObj.RemoveUnitFromInventory(inventoryUnitCard.UnitData, TeamEnum.Team1);
-            _teamServiceObj.RemoveUnitFromTeam(inventoryUnitCard.UnitData, TeamEnum.Team1);
-            _inventoryServiceObj.RemoveUnit(inventoryUnitCard.UnitData);
-
-            Destroy(inventoryUnitCard.gameObject);
-        }
-
-        GameManager.Instance.Get<CurrencyService>().AddCurrency(refundAmount);
+        _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
+        SetHighlight(false);
     }
 
-    private void OnInteractDiscardPanelSetHighlight(object[] parameters)
+    private void OnDestroy()
     {
-        _isDiscardHighlightActive = (bool)parameters[0];
+        _teamServiceObj = null;
+        _inventoryServiceObj = null;
+        _currencyServiceObj = null;
+    }
 
-        if (!_isDiscardHighlightActive)
-        {
-            _highlightDiscardUnitPanel.gameObject.SetActive(false);
+    public void HandleUnitDrop(GameObject dragged)
+    {
+        if (!dragged.TryGetComponent(out BaseUnit baseUnit))
             return;
-        }
 
-        _highlightDiscardUnitPanel.gameObject.SetActive(true);
-        _highlightDiscardUnitPanel.color = _highlightColor;
+        int refundAmount = baseUnit.UnitData.unitCost;
+
+        if (dragged.TryGetComponent<UnitDragHandler>(out var dragHandler))
+            dragHandler.MarkDroppedOnDiscardUnitZone();
+
+        _teamServiceObj.RemoveUnitFromField(baseUnit, baseUnit.Team, true);
+        _teamServiceObj.RemoveUnitFromTeam(baseUnit.UnitData, baseUnit.Team);
+
+        HandleRefund(refundAmount);
+        Destroy(baseUnit.gameObject);
+    }
+
+    public void HandleInventoryDrop(InventoryUnitCard inventoryUnitCard)
+    {
+        int refundAmount = inventoryUnitCard.UnitData.unitCost;
+        _teamServiceObj.RemoveUnitFromInventory(inventoryUnitCard.UnitData, TeamEnum.Team1);
+        _teamServiceObj.RemoveUnitFromTeam(inventoryUnitCard.UnitData, TeamEnum.Team1);
+        _inventoryServiceObj.RemoveUnit(inventoryUnitCard);
+        EventBusManager.Instance.Raise(EventNameEnum.InventoryUnitCardDiscarded);
+        HandleRefund(refundAmount);
+        SetHighlight(false);
+    }
+
+    private void HandleRefund(int refundAmount)
+    {
+        _currencyServiceObj.AddCurrency(refundAmount);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        SetHighlight(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        SetHighlight(false);
+    }
+
+    private void SetHighlight(bool state)
+    {
+        if (_highlightDiscardImage != null)
+            _highlightDiscardImage.enabled = state;
     }
 }
