@@ -68,18 +68,19 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private GameObject _shopPanel;
     [SerializeField] private TMP_Text _refreshCostText;
     [SerializeField] private Button _refreshShopButton;
-    [SerializeField] private ShopUnitCard _shopUnitCard;
+    [SerializeField] private ShopUnitCard _shopUnitCardPrefab;
     [SerializeField] private Transform _shopUnitCardActiveContainer;
     [SerializeField] private Transform _shopUnitCardPoolContainer;
     [SerializeField] private int _shopUnitCardPoolSize = 8;
 
     [Header("--Inventory UI")]
-    [SerializeField] private Transform _inventoryUnitCardContainer;
-    [SerializeField] private InventoryUnitCard _inventorytUnitCard;
+    [SerializeField] private InventoryUnitCard _inventoryUnitCardPrefab;
+    [SerializeField] private Transform _inventoryUnitCardActiveContainer;
+    [SerializeField] private Transform _inventoryUnitCardPoolContainer;
+    [SerializeField] private int _inventoryUnitCardPoolSize = 8;
 
     [Header("--Discard UI")]
-    [SerializeField] private GameObject _discardUnitPanel;
-    [SerializeField] private TMP_Text _refundText;
+    [SerializeField] private DiscardUnitDropZoneManager _discardUnitDropZonePrefab;
 
     [Header("--Buff UI")]
     [SerializeField] private GameObject _buffTeam1ToggleContent;
@@ -116,6 +117,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private List<StageSelectionCardUIView> _stageSelectionUICardList = new();
 
     private ShopUnitCardPool _shopCardPoolObj;
+    private InventoryUnitCardPool _inventoryCardPoolObj;
+    private DiscardUnitDropZoneManager _discardUnitDropZoneManagerObj;
 
     public Canvas UICanvas => _uiCanvas;
 
@@ -125,14 +128,14 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         base.Awake();
         CanvasRect = _uiCanvas.GetComponent<RectTransform>();
-        _shopCardPoolObj = new ShopUnitCardPool( _shopUnitCard, _shopUnitCardActiveContainer, _shopUnitCardPoolContainer, _shopUnitCardPoolSize);
+        _shopCardPoolObj = new ShopUnitCardPool( _shopUnitCardPrefab, _shopUnitCardActiveContainer, _shopUnitCardPoolContainer, _shopUnitCardPoolSize);
+        _inventoryCardPoolObj = new InventoryUnitCardPool(_inventoryUnitCardPrefab, _inventoryUnitCardActiveContainer, _inventoryUnitCardPoolContainer, _inventoryUnitCardPoolSize);
     }
 
     public void Initialize()
     {
         SubscribeToEvents();
         SetupLevelXPBarUI();
-        ToggleDiscardPanelVisibility(false);
         HandleTeamBuffTabSwitch(true, 1);
         ToggleMainMenuUIContainer(false);
         ToggleStageSelectionUIContainer(false);
@@ -195,7 +198,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void SubscribeToEvents()
     {
         EventBusManager.Instance.Subscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
-        EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.ToggleDiscardDropZone, OnToggleDiscardDropZone_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDiscarded, OnInventoryUnitCardDiscarded_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.ReorderInventoryLayout, OnReorderInventoryLayout_UI);        
         EventBusManager.Instance.Subscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
@@ -214,7 +219,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void UnsubscribeToEvents()
     {
         EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDragged, OnInventoryUnitCardDragged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.ToggleDiscardDropZone, OnToggleDiscardDropZone_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDiscarded, OnInventoryUnitCardDiscarded_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.ReorderInventoryLayout, OnReorderInventoryLayout_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.XPChanged, OnXPChanged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.LevelChanged, OnLevelChanged_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.SceneLoaded, OnSceneLoaded_UI);
@@ -237,7 +244,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _buffTeam1UICardDictionary = new Dictionary<BuffNameEnum, BuffDetailsUICard>();
         _buffTeam2UICardDictionary = new Dictionary<BuffNameEnum, BuffDetailsUICard>();
         _shopPanel.SetActive(false);
-
+        CreateDiscardUnitDropZone();
+        ToggleDiscardPanelVisibility(false);
     }
 
     public void AddShopUnitCard(UnitData unitData)
@@ -266,26 +274,26 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     public void AddInventoryUnitCard(UnitData unitData)
     {
-        InventoryUnitCard newInventoryUnitCard = Instantiate(_inventorytUnitCard, _inventoryUnitCardContainer);
-        newInventoryUnitCard.Initialize(unitData, _uiCanvas);
+        InventoryUnitCard newInventoryUnitCard = _inventoryCardPoolObj.Get();
+        newInventoryUnitCard.Initialize(unitData, _uiCanvas, _inventoryUnitCardActiveContainer as RectTransform);
         _inventoryUnitCardList.Add(newInventoryUnitCard);
     }
 
     public void RemoveInventoryUnitCard(InventoryUnitCard cardToRemove)
     {
-        if (_inventoryUnitCardList.Contains(cardToRemove))
+        if (_inventoryUnitCardList.Remove(cardToRemove))
         {
-            _inventoryUnitCardList.Remove(cardToRemove);
-            Destroy(cardToRemove.gameObject);
+            _inventoryCardPoolObj.Release(cardToRemove);
         }
     }
 
     public void RemoveAllInventoryUnitCard()
-    {
-        foreach (var card in _inventoryUnitCardList)
+    {   
+        for (int index = _inventoryUnitCardList.Count - 1; index >= 0; index--)
         {
-            Destroy(card.gameObject);
+            RemoveInventoryUnitCard(_inventoryUnitCardList[index]);
         }
+
         _inventoryUnitCardList.Clear();
     }
 
@@ -295,9 +303,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         List<UnitData> newOrder = new();
 
-        for (int i = 0; i < _inventoryUnitCardContainer.childCount; i++)
+        for (int i = 0; i < _inventoryUnitCardActiveContainer.childCount; i++)
         {
-            InventoryUnitCard card = _inventoryUnitCardContainer.GetChild(i).GetComponent<InventoryUnitCard>();
+            InventoryUnitCard card = _inventoryUnitCardActiveContainer.GetChild(i).GetComponent<InventoryUnitCard>();
 
             if (card == null)
                 continue;
@@ -353,15 +361,51 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleDiscardPanelVisibility(value);
     }
 
-    private void OnInventoryUnitCardDragged_UI(object[] parameters)
+    private void OnToggleDiscardDropZone_UI(object[] parameters)
     {
         bool value = (bool)parameters[0];
         ToggleDiscardPanelVisibility(value);
     }
 
+    private void OnReorderInventoryLayout_UI(object[] parameters)
+    {
+        ReorderInventoryRebuildLayout();
+    }
+
+    private void OnInventoryUnitCardDiscarded_UI(object[] parameters)
+    {
+        StartCoroutine(RefreshInventoryLayoutNextFrame());
+    }
+
+    public void ReorderInventoryRebuildLayout()
+    {
+        RefreshInventoryOrder();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_inventoryUnitCardActiveContainer as RectTransform);
+    }
+
+    private IEnumerator RefreshInventoryLayoutNextFrame()
+    {
+        yield return null;
+        ReorderInventoryRebuildLayout();
+    }
+
+    private void CreateDiscardUnitDropZone()
+    {
+        _discardUnitDropZoneManagerObj = Instantiate(_discardUnitDropZonePrefab, _bottomControlPanel.transform);
+    }
+
+    public void DestroyDiscardUnitDropZone()
+    {
+        if (_discardUnitDropZoneManagerObj != null)
+        {
+            Destroy(_discardUnitDropZoneManagerObj.gameObject);
+            _discardUnitDropZoneManagerObj = null;
+        }
+    }
+
     private void ToggleDiscardPanelVisibility(bool value)
     {
-        _discardUnitPanel.SetActive(value);
+        _discardUnitDropZoneManagerObj.gameObject.SetActive(value);
     }
 
     public void AddBuffDetailUICard(BuffData buffData, TeamEnum team)
