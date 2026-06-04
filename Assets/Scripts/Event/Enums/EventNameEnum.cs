@@ -6,7 +6,9 @@ namespace AutoBattler.Event
     {
         GameplayStateChanged,
         UnitDragged,
-        InventoryUnitCardDragged,
+        ToggleDiscardDropZone,
+        InventoryUnitCardDiscarded,
+        ReorderInventoryLayout,
         HighlightInventoryPanel,
         HighlightDiscardPanel,
         UnitAddedOnField,

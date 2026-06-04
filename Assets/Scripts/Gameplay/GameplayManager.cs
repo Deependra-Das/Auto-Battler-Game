@@ -68,9 +68,8 @@ public class GameplayManager : MonoBehaviour
             return;
 
         CleanupStage();
-
         StopAllCoroutines();
-
+        UIManager.Instance.DestroyDiscardUnitDropZone();
         Instance = null;
     }
 
@@ -125,8 +124,7 @@ public class GameplayManager : MonoBehaviour
         newUnit.Initialize(card.UnitData, team, node);
 
         _teamServiceObj.MoveToField(newUnit, team);
-        _inventoryServiceObj.RemoveUnit(newUnit.UnitData);
-        UIManager.Instance.RemoveInventoryUnitCard(card);
+        _inventoryServiceObj.RemoveUnit(card);
     }
 
     private void PrepareTeam2UnitsForRound()
@@ -161,7 +159,6 @@ public class GameplayManager : MonoBehaviour
             BaseUnit newUnit = Instantiate(unitData.unitPrefab);
             newUnit.Initialize(unitData, TeamEnum.Team2, _graphServiceObj.GetUnOccupiedNode(TeamEnum.Team2));
             _teamServiceObj.MoveToField(newUnit, TeamEnum.Team2);
-            _inventoryServiceObj.RemoveUnit(newUnit.UnitData);
         }
     }
 
