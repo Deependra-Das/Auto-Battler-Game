@@ -5,7 +5,6 @@ using UnityEngine;
 public struct UnitData
 {
     public int unitID;
-    public BaseUnit unitPrefab;
     public Sprite unitIcon;
     public string unitName;
     public UnitFactionEnum unitFaction;
