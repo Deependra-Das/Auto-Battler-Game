@@ -159,6 +159,7 @@ public class BaseUnit : MonoBehaviour
 
     protected virtual void HandleAttack()
     {
+
         if (!canAttack) return;
         if (!isTargetInRange || isMoving) return;
 
@@ -265,6 +266,13 @@ public class BaseUnit : MonoBehaviour
         animator.ResetTrigger("Attack");
         yield return new WaitForSeconds(totalAttackCoolDown);
         canAttack = true;
+    }
+    protected virtual void DealDamage()
+    {
+        if (currentTarget == null || currentTarget.IsDead)
+            return;
+
+        currentTarget.TakeDamage(totalDamage, unitData.unitElement);
     }
 
     public void TakeDamage(int amount, UnitElementEnum incomingElement)
