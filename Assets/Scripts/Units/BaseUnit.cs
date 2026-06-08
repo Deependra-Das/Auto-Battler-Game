@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BaseUnit : MonoBehaviour
@@ -14,7 +13,7 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected Transform unitUIContainer;
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider shieldBar;
-    [SerializeField] private Image shieldFillImage;
+    [SerializeField] protected Image shieldFillImage;
 
     protected UnitData unitData;
     protected Collider2D unitCollider;
@@ -37,12 +36,15 @@ public class BaseUnit : MonoBehaviour
 
     protected bool isTargetInRange => currentTarget != null && Vector3.Distance(this.transform.position, currentTarget.transform.position) <= unitData.baseRange;
     protected bool isMoving;
+    protected bool isAttacking;
     protected Node destination;
 
     protected bool isDead = false;
     protected bool canAttack = true;
     protected bool isActive = false;
     protected TeamEnum team;
+
+    protected Coroutine combatRoutine;
 
     public bool IsDead => isDead;
     public UnitData UnitData => unitData;
@@ -80,16 +82,17 @@ public class BaseUnit : MonoBehaviour
     {
         this.unitData = unitData;
         this.team = team;
-        this.currentNode = spawnNode;
+        currentNode = spawnNode;
         transform.position = currentNode.position;
         currentNode.SetOccupied(true);
         totalHealth = unitData.baseHealth;
         totalShield = unitData.baseShield;
         shieldFillImage.color = GetShieldColor(unitData.unitElement);
         ResetVitals();
+        ApplyTeamBuffs();
     }
 
-    private void ResetVitals()
+    protected void ResetVitals()
     {
         currentHealth = totalHealth;
         currentShield = totalShield;
@@ -101,14 +104,37 @@ public class BaseUnit : MonoBehaviour
         UpdateShieldBar(currentShield);
     }
 
-    private void Update()
+    private void StartCombatLoop()
     {
-        if (!isActive) return;
+        if (combatRoutine != null) return;
 
-        CombatLoop();
+        isActive = true;
+        combatRoutine = StartCoroutine(CombatLoopCoroutine());
     }
 
-    private void CombatLoop()
+    private IEnumerator CombatLoopCoroutine()
+    {
+        while (isActive)
+        {
+            CombatLoop();
+            yield return null;
+        }
+
+        combatRoutine = null;
+    }
+
+    private void StopCombatLoop()
+    {
+        isActive = false;
+
+        if (combatRoutine != null)
+        {
+            StopCoroutine(combatRoutine);
+            combatRoutine = null;
+        }
+    }
+
+    protected void CombatLoop()
     {
         HandleTargeting();
         HandleMovement();
@@ -123,7 +149,7 @@ public class BaseUnit : MonoBehaviour
 
     protected virtual void HandleMovement()
     {
-        if (currentTarget == null) return;
+        if (currentTarget == null || isAttacking) return;
 
         if (!isTargetInRange || isMoving)
         {
@@ -147,7 +173,12 @@ public class BaseUnit : MonoBehaviour
 
         foreach (BaseUnit enemy in allEnemies)
         {
-         float dist = Vector3.Distance(transform.position, enemy.transform.position);
+            if (enemy == null || enemy.IsDead)
+            {
+                continue;
+            }
+
+            float dist = Vector3.Distance(transform.position, enemy.transform.position);
             if (dist < minDistance)
             {
                 minDistance = dist;
@@ -258,11 +289,13 @@ public class BaseUnit : MonoBehaviour
             UpdateHealthBar(currentHealth);
         }
 
-        if (currentHealth <= 0 && !isDead)
+        if (currentHealth <= 0)
         {
             isDead = true;
+            currentTarget = null;
+            destination = null;
+            isMoving = false;
             animator.SetBool("IsDead", true);
-            GameplayManager.Instance.MarkUnitDead(this);
             StartCoroutine(DeathCoroutine());
         }
     }
@@ -270,8 +303,13 @@ public class BaseUnit : MonoBehaviour
     IEnumerator DeathCoroutine()
     {
         yield return new WaitForSeconds(1f);
-        gameObject.SetActive(false);
+
+        if (GameplayManager.Instance != null)
+        {
+            GameplayManager.Instance.MarkUnitDead(this);
+        }
     }
+
     public void SetCurrentNode(Node node)
     {
         currentNode = node;
@@ -325,19 +363,13 @@ public class BaseUnit : MonoBehaviour
         switch (state)
         {
             case GameplayStateEnum.Preparation:
-                isActive = false;
+            case GameplayStateEnum.StageOver:
+            case GameplayStateEnum.RoundOver:
+                StopCombatLoop();
                 break;
 
             case GameplayStateEnum.Combat:
-                isActive = true;
-                break;
-
-            case GameplayStateEnum.StageOver:
-                isActive = false;
-                break;
-
-            case GameplayStateEnum.RoundOver:
-                isActive = false;
+                StartCombatLoop();
                 break;
         }
     }
@@ -370,7 +402,7 @@ public class BaseUnit : MonoBehaviour
         unitUIContainer.gameObject.SetActive(false);
     }
 
-    private void OnTeamBuffUpdated(object[] parameters)
+    protected void OnTeamBuffUpdated(object[] parameters)
     {
         TeamEnum buffForTeam = (TeamEnum)parameters[0];
         TeamBuffData updatedBuffData = (TeamBuffData)parameters[1];
@@ -381,7 +413,7 @@ public class BaseUnit : MonoBehaviour
         ApplyTeamBuffs();
     }
 
-    private void ApplyTeamBuffs()
+    protected void ApplyTeamBuffs()
     {
         float attackBonusContribution = currentTeamBuffData.attackBonus;
         float elementBonusContribution = GetElementBonus() * unitData.baseElementalDamageScalingFactor;
@@ -396,7 +428,7 @@ public class BaseUnit : MonoBehaviour
         ResetVitals();
     }
 
-    private float GetElementBonus()
+    protected float GetElementBonus()
     {
         return unitData.unitElement switch
         {
@@ -407,12 +439,12 @@ public class BaseUnit : MonoBehaviour
         };
     }
 
-    private float GetShieldDepletionMultiplier(UnitElementEnum attackElement)
+    protected float GetShieldDepletionMultiplier(UnitElementEnum attackElement)
     {
         return attackElement == unitData.unitElement ? 0.5f : 1f;
     }
 
-    private Color GetShieldColor(UnitElementEnum element)
+    protected Color GetShieldColor(UnitElementEnum element)
     {
         return element switch
         {
