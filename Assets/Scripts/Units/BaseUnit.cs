@@ -454,4 +454,28 @@ public class BaseUnit : MonoBehaviour
             _ => new Color(0.95f, 0.95f, 0.95f)
         };
     }
+
+    public virtual void Reset()
+    {
+        StopAllCoroutines();
+
+        currentTarget = null;
+        destination = null;
+
+        isDead = false;
+        isMoving = false;
+        isActive = false;
+        canAttack = true;
+
+        currentHealth = 0;
+        currentShield = 0;
+
+        currentNode = null;
+        animator.Rebind();
+        animator.Update(0f);
+
+        animator.SetBool("IsDead", false);
+        animator.SetBool("IsWalking", false);
+        animator.ResetTrigger("Attack");
+    }
 }
