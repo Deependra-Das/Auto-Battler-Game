@@ -5,24 +5,23 @@ public class Spartan_MeleeAttackerUnit : BaseUnit
 {
     protected override void Attack()
     {
-        if (!canAttack) return;
+        if (!canAttack || isAttacking || currentTarget == null) return;
 
         Vector3 direction = (currentTarget.CurrentNode.position - this.transform.position);
         Vector3 dirNormalized = direction.normalized;
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
-
-        PerformSwordAttack();
+        isAttacking = true;
+        StartCoroutine(PerformSpartanSwordSlashCoroutine());
     }
 
-    private void PerformSwordAttack()
+    private IEnumerator PerformSpartanSwordSlashCoroutine()
     {
+        yield return null;
         animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(unitData.attackAnimationDelay);
+        DealDamage();
+        isAttacking = false;
         StartCoroutine(AttackCoolDownWaitCoroutine());
-    }
-
-    private void SpartanSwordSlash()
-    {
-        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
     }
 }
