@@ -5,24 +5,23 @@ public class Spartan_MeleeTankUnit : BaseUnit
 {
     protected override void Attack()
     {
-        if (!canAttack) return;
+        if (!canAttack || isAttacking || currentTarget == null) return;
 
         Vector3 direction = (currentTarget.CurrentNode.position - this.transform.position);
         Vector3 dirNormalized = direction.normalized;
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
-
-        PerformWarAxeAttack();
+        isAttacking = true;
+        StartCoroutine(PerformSpartanPolearmThrustCoroutine());
     }
 
-    private void PerformWarAxeAttack()
+    private IEnumerator PerformSpartanPolearmThrustCoroutine()
     {
+        yield return null;
         animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(unitData.attackAnimationDelay);
+        DealDamage();
+        isAttacking = false;
         StartCoroutine(AttackCoolDownWaitCoroutine());
-    }
-
-    private void SpartanPolearmThrust()
-    {
-        currentTarget.TakeDamage(unitData.baseDamage, unitData.unitElement);
     }
 }
