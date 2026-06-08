@@ -4,26 +4,28 @@ using UnityEngine;
 
 public class Crusader_RangedSupportUnit : BaseUnit
 {
-    [SerializeField] protected float lifetime = 1f;
-    [SerializeField] protected float damageDelay = 0.2f;
-
     protected override void Attack()
     {
-        if (!canAttack) return;
+        if (!canAttack || isAttacking || currentTarget == null) return;
 
-        PerformElementalBurstAttack();
+        Vector3 direction = (currentTarget.CurrentNode.position - this.transform.position);
+        Vector3 dirNormalized = direction.normalized;
+        animator.SetFloat("MoveX", dirNormalized.x);
+        animator.SetFloat("MoveY", dirNormalized.y);
+        SetDirectionFacing(dirNormalized);
+        isAttacking = true;
+        StartCoroutine(PerformCrusaderElementalBurst());
     }
 
-    private void PerformElementalBurstAttack()
+    private IEnumerator PerformCrusaderElementalBurst()
     {
+        yield return null;
         animator.SetTrigger("Attack");
-        StartCoroutine(AttackCoolDownWaitCoroutine());
-    }
-
-    private void CrusaderElementalBurst()
-    {
-        GameManager.Instance.Get<RangedAbilityService>().SpawnManaBurst(this, currentTarget, totalDamage, unitData.unitElement, lifetime, damageDelay);
+        GameManager.Instance.Get<RangedAbilityService>().SpawnElementalBurst(this, currentTarget, totalDamage, unitData.unitElement, UnitData.attackAnimationDelay);
+        yield return new WaitForSeconds(UnitData.attackAnimationDelay);
         HealAllTeammates();
+        StartCoroutine(AttackCoolDownWaitCoroutine());
+        isAttacking = false;
     }
 
     protected void HealAllTeammates()
@@ -32,6 +34,7 @@ public class Crusader_RangedSupportUnit : BaseUnit
 
         foreach (BaseUnit unit in teammates)
         {
+            if (unit == null || unit.IsDead) continue;
             unit.Heal(unitData.baseHealing);
         }
     }
