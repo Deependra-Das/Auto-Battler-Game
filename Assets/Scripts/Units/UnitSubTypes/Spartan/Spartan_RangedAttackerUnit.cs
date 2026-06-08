@@ -6,26 +6,24 @@ public class Spartan_RangedAttackerUnit : BaseUnit
 {
     protected override void Attack()
     {
-        if (!canAttack) return;
+        if (!canAttack || isAttacking || currentTarget == null) return;
 
-        PerformArrowAttack();
-    }
-
-    private void PerformArrowAttack()
-    {
         Vector3 direction = (currentTarget.CurrentNode.position - this.transform.position);
         Vector3 dirNormalized = direction.normalized;
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
-
         SetDirectionFacing(dirNormalized);
-
-        animator.SetTrigger("Attack");
-        StartCoroutine(AttackCoolDownWaitCoroutine());
+        isAttacking = true;
+        StartCoroutine(ShootSpartanArrowCoroutine());
     }
 
-    private void ShootArrow()
+    private IEnumerator ShootSpartanArrowCoroutine()
     {
+        yield return null;
+        animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(UnitData.attackAnimationDelay);
         GameManager.Instance.Get<RangedAbilityService>().SpawnArrow(this, currentTarget, totalDamage, unitData.unitElement);
+        StartCoroutine(AttackCoolDownWaitCoroutine());
+        isAttacking = false;
     }
 }
