@@ -22,7 +22,7 @@ public class Crusader_RangedAttackerUnit : BaseUnit
         yield return null;
         animator.SetTrigger("Attack");
         yield return new WaitForSeconds(UnitData.attackAnimationDelay);
-        GameManager.Instance.Get<RangedAbilityService>().SpawnArrow(this, currentTarget, totalDamage, unitData.unitElement);
+        GameManager.Instance.Get<RangedAbilityService>().SpawnElementalArrow(this, currentTarget, totalDamage, unitData.unitElement);
         StartCoroutine(AttackCoolDownWaitCoroutine());
         isAttacking = false;
     }

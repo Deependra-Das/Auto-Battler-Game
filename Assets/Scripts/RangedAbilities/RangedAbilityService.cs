@@ -2,18 +2,22 @@ using UnityEngine;
 
 public class RangedAbilityService
 {
-    private Arrow _arrowPrefab;
-    private ManaBurst _magicBurstPrefab;
-
-    private float arrowOffset = 0.35f;
+    private ElementalArrow _arrowPrefab;
+    private ElementalBurst _elementalBurstPrefab;
+    private float _elementalBurstLifetime;
+    private float _arrowLifetime;
+    private float _arrowOffset;
 
     public RangedAbilityService(RangedAbilitiesScriptableObjectScript rangedAbilities_SO)
     {
         _arrowPrefab = rangedAbilities_SO.arrowPrefab;
-        _magicBurstPrefab = rangedAbilities_SO.manaBurstPrefab;
+        _elementalBurstPrefab = rangedAbilities_SO.elementalBurstPrefab;
+        _arrowLifetime = rangedAbilities_SO.arrowLifetime;
+        _elementalBurstLifetime = rangedAbilities_SO.elementalBurstLifetime;
+        _arrowOffset = rangedAbilities_SO.arrowOffset;
     }
 
-    public void SpawnArrow(BaseUnit owner, BaseUnit target, int damage, UnitElementEnum attackElement)
+    public void SpawnElementalArrow(BaseUnit owner, BaseUnit target, int damage, UnitElementEnum attackElement)
     {
         if (target == null) return;
 
@@ -22,20 +26,20 @@ public class RangedAbilityService
 
         if (owner.DirectionFacing == UnitFacingDirectionEnum.Left || owner.DirectionFacing == UnitFacingDirectionEnum.Right)
         {
-            spawnPosition += new Vector3(0, arrowOffset, 0);
-            adjustedTargetPosition += new Vector3(0, arrowOffset, 0);
+            spawnPosition += new Vector3(0, _arrowOffset, 0);
+            adjustedTargetPosition += new Vector3(0, _arrowOffset, 0);
         }
 
-        Arrow arrow = GameObject.Instantiate(_arrowPrefab, spawnPosition, Quaternion.identity);
+        ElementalArrow arrow = GameObject.Instantiate(_arrowPrefab, spawnPosition, Quaternion.identity);
 
         Vector3 adjustedDirection = (adjustedTargetPosition - spawnPosition);
-        arrow.Initialize(owner, target, damage, attackElement, adjustedDirection.normalized, adjustedTargetPosition);
+        arrow.Initialize(owner, target, damage, attackElement, adjustedDirection.normalized, adjustedTargetPosition, _arrowLifetime);
     }
 
-    public void SpawnManaBurst(BaseUnit owner, BaseUnit target, int damage, UnitElementEnum attackElement, float lifetime, float damageDelay)
+    public void SpawnElementalBurst(BaseUnit owner, BaseUnit target, int damage, UnitElementEnum attackElement, float damageDelay)
     {
         if (target == null) return;
-        ManaBurst circle = GameObject.Instantiate(_magicBurstPrefab, target.transform.position, Quaternion.identity);
-        circle.Initialize(target, damage, attackElement, lifetime, damageDelay);
+        ElementalBurst circle = GameObject.Instantiate(_elementalBurstPrefab, target.CurrentNode.position, Quaternion.identity);
+        circle.Initialize(target, damage, attackElement, _elementalBurstLifetime);
     }
 }

@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: RangedAbilities_SO
   m_EditorClassIdentifier: Assembly-CSharp::RangedAbilitiesScriptableObjectScript
   arrowPrefab: {fileID: 6893150868743772336, guid: e032d78003cd9964db8d51adc2cbbb22, type: 3}
-  manaBurstPrefab: {fileID: 8106965445191160797, guid: 75afec4c812f390439f30d285269a7ff, type: 3}
+  arrowLifetime: 2
+  arrowOffset: 0.35
+  elementalBurstPrefab: {fileID: 8106965445191160797, guid: 75afec4c812f390439f30d285269a7ff, type: 3}
+  elementalBurstLifetime: 0.5

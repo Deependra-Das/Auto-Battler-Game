@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Arrow : MonoBehaviour
+public class ElementalArrow : MonoBehaviour
 {
     private BaseUnit _ownerUnit;
     private BaseUnit _targetUnit;
@@ -10,8 +10,9 @@ public class Arrow : MonoBehaviour
     private float _hitDistance = 0.15f;
     private Vector3 _adjustedTargetPosition;
     private UnitElementEnum _element;
+    private float _arrowLifetime;
 
-    public void Initialize(BaseUnit ownerUnit, BaseUnit targetUnit, int damage, UnitElementEnum attackElement, Vector3 adjustedDirection, Vector3 adjustedTargetPosition)
+    public void Initialize(BaseUnit ownerUnit, BaseUnit targetUnit, int damage, UnitElementEnum attackElement, Vector3 adjustedDirection, Vector3 adjustedTargetPosition, float arrowLifetime)
     {
         if (targetUnit != null)
         {
@@ -21,6 +22,7 @@ public class Arrow : MonoBehaviour
             _element= attackElement;
             _direction = adjustedDirection;
             _adjustedTargetPosition = adjustedTargetPosition;
+            _arrowLifetime = arrowLifetime;
             RotateTowards(_direction);
         }
     }
