@@ -1,85 +1,69 @@
-using AutoBattler.Event;
 using AutoBattler.Main;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InventoryDropZoneManager : MonoBehaviour, IDropHandler
+public class InventoryDropZoneManager : MonoBehaviour
 {
-    [SerializeField] private Image _highlightInventoryPanel;
-    [SerializeField] private Color _validColor;
-    [SerializeField] private Color _wrongColor;
+    [SerializeField] private Image _highlightValidInventoryImage;
+    [SerializeField] private Image _highlightInvalidInventoryImage;
 
     private InventoryService _inventoryServiceObj;
     private TeamService _teamServiceObj;
-    private bool _isInventoryHighlightActive = false;
-
-    public static InventoryDropZoneManager Instance;
+    private UnitPoolService _unitPoolServiceObj;
 
     protected void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-
-        if (_highlightInventoryPanel != null)
-            _highlightInventoryPanel.gameObject.SetActive(false);
-    }
-
-    public void Initialize()
-    {
         _inventoryServiceObj = GameManager.Instance.Get<InventoryService>();
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
-        SubscribeToEvents();
+        _unitPoolServiceObj = GameManager.Instance.Get<UnitPoolService>();
+
+        HideInventoryHighlight();
     }
 
-    private void OnDestroy()
+    public void HandleUnitDrop(BaseUnit baseUnit)
     {
-        UnsubscribeToEvents();
-    }
-
-    private void SubscribeToEvents()
-    {
-        EventBusManager.Instance.Subscribe(EventNameEnum.HighlightInventoryPanel, OnInteractInventorySetHighlight);
-    }
-    private void UnsubscribeToEvents()
-    {
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.HighlightInventoryPanel, OnInteractInventorySetHighlight);
-    }
-
-    public void OnDrop(PointerEventData eventData)
-    {
-        BaseUnit unit = eventData.pointerDrag?.GetComponent<BaseUnit>();
-        if (unit == null) return;
-
         if (!_inventoryServiceObj.CanAddUnit) return;
 
-        UnitDragHandler dragHandler = eventData.pointerDrag.GetComponent<UnitDragHandler>();
-        if (dragHandler != null)
-            dragHandler.MarkDroppedOnInventoryZone();
-
-        _teamServiceObj.MoveToInventory(unit, unit.Team);
-        _inventoryServiceObj.AddUnit(unit.UnitData);
-        Destroy(unit.gameObject);
+        _teamServiceObj.MoveToInventory(baseUnit, baseUnit.Team);
+        _inventoryServiceObj.AddUnit(baseUnit.UnitData);
+        _unitPoolServiceObj.Release(baseUnit.UnitData.unitID, baseUnit);
     }
 
-    private void OnInteractInventorySetHighlight(object[] parameters)
+    private void ToggleValidHighlight(bool state)
     {
-        _isInventoryHighlightActive = (bool)parameters[0];
+        if (_highlightValidInventoryImage != null)
+            _highlightValidInventoryImage.enabled = state;
+    }
+    private void ToggleInvalidHighlight(bool state)
+    {
+        if (_highlightInvalidInventoryImage != null)
+            _highlightInvalidInventoryImage.enabled = state;
+    }
 
-        if (!_isInventoryHighlightActive)
+    public void ShowInventoryHighlight()
+    {
+        switch(CheckValid())
         {
-            _highlightInventoryPanel.gameObject.SetActive(false);
-            return;
+            case true:
+                ToggleValidHighlight(true);
+                ToggleInvalidHighlight(false);
+                break;
+
+            case false:
+                ToggleValidHighlight(false);
+                ToggleInvalidHighlight(true);
+                break;
         }
+    }
 
-        bool canAdd = _inventoryServiceObj.CanAddUnit;
+    public void HideInventoryHighlight()
+    {
+        ToggleValidHighlight(false);
+        ToggleInvalidHighlight(false);
+    }
 
-        _highlightInventoryPanel.gameObject.SetActive(true);
-        _highlightInventoryPanel.color = canAdd ? _validColor : _wrongColor;
+    private bool CheckValid()
+    {
+        return _inventoryServiceObj.CanAddUnit;
     }
 }
