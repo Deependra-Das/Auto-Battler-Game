@@ -14,6 +14,9 @@ namespace AutoBattler.Main
         [SerializeField] private StageConfigScriptableObjectScript _stageConfig_SO;
         [SerializeField] private PlayerLevelConfigScriptableObjectScript _playerLevelConfig_SO;
 
+        [SerializeField] private Transform _pooledUnitContainer;
+        [SerializeField] private Transform _activeUnitContainer;
+
         public int currentStageIndexSelected = -1;
 
         protected override void Awake()
@@ -35,7 +38,7 @@ namespace AutoBattler.Main
         private void RegisterServices()
         {
             ServiceLocator.Register(new UnitDataService(_unitData_SO));
-            ServiceLocator.Register(new UnitPoolService(_unitPrefab_SO));
+            ServiceLocator.Register(new UnitPoolService(_unitPrefab_SO, _pooledUnitContainer, _activeUnitContainer));
             ServiceLocator.Register(new TileGridService(_tile_SO));
             ServiceLocator.Register(new GraphService());
             ServiceLocator.Register(new TeamService());

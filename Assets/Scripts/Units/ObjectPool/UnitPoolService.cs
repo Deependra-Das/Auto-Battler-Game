@@ -5,12 +5,15 @@ using UnityEngine;
 public class UnitPoolService
 {
     private Transform _pooledUnitContainerTransform;
+    private Transform _activeUnitContainerTransform;
     private readonly Dictionary<int, BaseUnit> _prefabLookup;
     private readonly Dictionary<int, Queue<BaseUnit>> _pooledUnitDictionary = new();
 
-    public UnitPoolService(UnitPrefabScriptableObjectScript unitPrefab_SO)
+    public UnitPoolService(UnitPrefabScriptableObjectScript unitPrefab_SO, Transform pooledUnitContainerTransform, Transform activeUnitContainerTransform)
     {
         _prefabLookup = new Dictionary<int, BaseUnit>();
+        _pooledUnitContainerTransform = pooledUnitContainerTransform;
+        _activeUnitContainerTransform = activeUnitContainerTransform;
         BuildLookup(unitPrefab_SO);
     }
 
@@ -27,6 +30,7 @@ public class UnitPoolService
 
     public BaseUnit Get(int unitID)
     {
+        BaseUnit unit = null;
         if (!_pooledUnitDictionary.TryGetValue(unitID, out Queue<BaseUnit> pooledUnitQueue))
         {
             pooledUnitQueue = new Queue<BaseUnit>();
@@ -35,10 +39,15 @@ public class UnitPoolService
 
         if (pooledUnitQueue.Count > 0)
         {
-            return pooledUnitQueue.Dequeue();
+            unit = pooledUnitQueue.Dequeue();
+        }
+        else
+        {
+            unit = CreateNew(unitID);
         }
 
-        return CreateNew(unitID);
+        unit.transform.SetParent(_activeUnitContainerTransform, false);
+        return unit;
     }
 
     public BaseUnit CreateNew(int unitID)
@@ -50,7 +59,7 @@ public class UnitPoolService
             return null;         
         }
 
-        BaseUnit newUnit = GameObject.Instantiate(prefab, _pooledUnitContainerTransform);
+        BaseUnit newUnit = GameObject.Instantiate(prefab, _activeUnitContainerTransform);
         newUnit.gameObject.SetActive(false);
         return newUnit;
     }
@@ -59,8 +68,10 @@ public class UnitPoolService
     {
         if (unit == null) return;
 
-        //unit.ResetUnit();
+        unit.Reset();
         unit.gameObject.SetActive(false);
+        unit.transform.SetParent(_pooledUnitContainerTransform, false);
+        unit.transform.localPosition = Vector3.zero;
 
         if (!_pooledUnitDictionary.TryGetValue(unitID, out Queue<BaseUnit> pooledUnitQueue))
         {
