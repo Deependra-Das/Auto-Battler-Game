@@ -60,7 +60,7 @@ public class ShopService
 
     public void BuyUnit(ShopUnitCard card)
     {    
-        int cost = card.UnitData.unitCost;
+        int cost = card.UnitData.baseUnitCost;
 
         if (_inventoryServiceObj.CurrentInventorySize >= _inventoryServiceObj.MaxInventorySize)
         {

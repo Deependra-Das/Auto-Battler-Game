@@ -42,7 +42,7 @@ public class ShopUnitCard : MonoBehaviour
     {
         _unitIcon.sprite = UnitData.unitIcon;
         _unitName.text = UnitData.unitName.ToString();
-        _unitCost.text = UnitData.unitCost.ToString();
+        _unitCost.text = UnitData.baseUnitCost.ToString();
     }
 
     private void OnShopUnitCardClicked()

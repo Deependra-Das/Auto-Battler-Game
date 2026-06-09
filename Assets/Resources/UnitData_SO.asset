@@ -75,7 +75,7 @@ MonoBehaviour:
     unitElement: 1
     unitLevel: 1
     baseRange: 5
-    baseUnitCost: 0
+    baseUnitCost: 5
     baseDamage: 3
     baseHealth: 80
     baseShield: 0
