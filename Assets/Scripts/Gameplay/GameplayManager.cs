@@ -28,6 +28,7 @@ public class GameplayManager : MonoBehaviour
     private RoundSnapshotService _roundSnapshotServiceObj;
     private StageSnapshotService _stageSnapshotServiceObj;
     private CurrencyService _currencyServiceObj;
+    private DragVisualPoolService _dragVisualPoolServiceObj;
 
     public int fromIndex = 0;
     public int toIndex = 0;
@@ -71,12 +72,15 @@ public class GameplayManager : MonoBehaviour
         CleanupStage();
         StopAllCoroutines();
         UIManager.Instance.DestroyDiscardUnitDropZone();
+        _dragVisualPoolServiceObj.Dispose();
         Instance = null;
     }
 
     public void InitializeGameplay()
     {
         ResolveServices();
+
+        _dragVisualPoolServiceObj.Initialize(UIManager.Instance.UICanvas, UIManager.Instance.DragVisualPoolContainerRectTransform);
         UIManager.Instance.InitializeGameplayUI();
 
         _tileGridServiceObj.CreateTileMap();
@@ -90,6 +94,7 @@ public class GameplayManager : MonoBehaviour
 
     private void ResolveServices()
     {
+        _dragVisualPoolServiceObj = GameManager.Instance.Get<DragVisualPoolService>();
         _unitPoolServiceObj = GameManager.Instance.Get<UnitPoolService>();
         _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
         _graphServiceObj = GameManager.Instance.Get<GraphService>();

@@ -39,6 +39,7 @@ namespace AutoBattler.Main
         {
             ServiceLocator.Register(new UnitDataService(_unitData_SO));
             ServiceLocator.Register(new UnitPoolService(_unitPrefab_SO, _pooledUnitContainer, _activeUnitContainer));
+            ServiceLocator.Register(new DragVisualPoolService());
             ServiceLocator.Register(new TileGridService(_tile_SO));
             ServiceLocator.Register(new GraphService());
             ServiceLocator.Register(new TeamService());
@@ -57,6 +58,7 @@ namespace AutoBattler.Main
         {
             ServiceLocator.Unregister<UnitDataService>();
             ServiceLocator.Unregister<UnitPoolService>();
+            ServiceLocator.Unregister<DragVisualPoolService>();
             ServiceLocator.Unregister<TileGridService>();
             ServiceLocator.Unregister<GraphService>();
             ServiceLocator.Unregister<TeamService>();
