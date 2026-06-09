@@ -22,6 +22,7 @@ public class GameplayManager : MonoBehaviour
     private BuffService _buffServiceObj;
     private StageService _stageServiceObj;
     private UnitDataService _unitServiceObj;
+    private UnitPoolService _unitPoolServiceObj;
     private PlayerLevelService _playerLevelServiceObj;
     private ShopService _shopServiceObj;
     private RoundSnapshotService _roundSnapshotServiceObj;
@@ -32,7 +33,7 @@ public class GameplayManager : MonoBehaviour
     public int toIndex = 0;
 
     private readonly HashSet<BaseUnit> _pendingDeadUnits = new();
-    private readonly List<BaseUnit> _pendingDestroy = new();
+    private readonly List<BaseUnit> _pendingReleaseUnits = new();
 
     private bool _isGameplayPaused = false;
     private bool _waitingForRoundDecision = false;
@@ -77,7 +78,6 @@ public class GameplayManager : MonoBehaviour
     {
         ResolveServices();
         UIManager.Instance.InitializeGameplayUI();
-        InventoryDropZoneManager.Instance.Initialize();
 
         _tileGridServiceObj.CreateTileMap();
         _graphServiceObj.Initialize(_tileGridServiceObj.GetSpawnedTilesList());
@@ -90,6 +90,7 @@ public class GameplayManager : MonoBehaviour
 
     private void ResolveServices()
     {
+        _unitPoolServiceObj = GameManager.Instance.Get<UnitPoolService>();
         _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
         _graphServiceObj = GameManager.Instance.Get<GraphService>();
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
@@ -120,11 +121,19 @@ public class GameplayManager : MonoBehaviour
 
     public void DeployUnit(InventoryUnitCard card, Node node, TeamEnum team)
     {
-        BaseUnit newUnit = Instantiate(card.UnitData.unitPrefab);
-        newUnit.Initialize(card.UnitData, team, node);
+        BaseUnit newUnit = _unitPoolServiceObj.Get(card.UnitData.unitID);
 
-        _teamServiceObj.MoveToField(newUnit, team);
-        _inventoryServiceObj.RemoveUnit(card);
+        if (newUnit != null)
+        {
+            newUnit.gameObject.SetActive(true);
+            newUnit.Initialize(card.UnitData, team, node);
+            _teamServiceObj.MoveToField(newUnit, team);
+            _inventoryServiceObj.RemoveUnit(card);
+        }
+        else
+        {
+            Debug.LogError($"Unit Deployement Failed for {card.UnitData.unitID}");
+        }
     }
 
     private void PrepareTeam2UnitsForRound()
@@ -156,7 +165,8 @@ public class GameplayManager : MonoBehaviour
 
         foreach (UnitData unitData in _teamServiceObj.GetTeamUnits(TeamEnum.Team2))
         {
-            BaseUnit newUnit = Instantiate(unitData.unitPrefab);
+            BaseUnit newUnit = _unitPoolServiceObj.Get(unitData.unitID);
+            newUnit.gameObject.SetActive(true);
             newUnit.Initialize(unitData, TeamEnum.Team2, _graphServiceObj.GetUnOccupiedNode(TeamEnum.Team2));
             _teamServiceObj.MoveToField(newUnit, TeamEnum.Team2);
         }
@@ -200,18 +210,18 @@ public class GameplayManager : MonoBehaviour
 
             _teamServiceObj.RemoveUnitFromField(unit, unit.Team, false);
 
-            _pendingDestroy.Add(unit);
+            _pendingReleaseUnits.Add(unit);
         }
 
         _pendingDeadUnits.Clear();
 
-        foreach (BaseUnit unit in _pendingDestroy)
+        foreach (BaseUnit unit in _pendingReleaseUnits)
         {
             if (unit != null)
                 Destroy(unit.gameObject);
         }
 
-        _pendingDestroy.Clear();
+        _pendingReleaseUnits.Clear();
     }
 
     private IEnumerator CheckRoundEnd()
@@ -347,6 +357,9 @@ public class GameplayManager : MonoBehaviour
         _isGameplayPaused = false;
         Time.timeScale = 1f;
 
+        _pendingDeadUnits.Clear();
+        _pendingReleaseUnits.Clear();
+
         CleanupRound(false);
 
         _tileGridServiceObj.Reset();
@@ -425,7 +438,7 @@ public class GameplayManager : MonoBehaviour
 
         unit.ReleaseCurrentNode();
         _teamServiceObj.RemoveUnitFromField(unit, unit.Team, true);
-        Destroy(unit.gameObject);    
+        _unitPoolServiceObj.Release(unit.UnitData.unitID, unit);
     }
 
     private void CleanupNodeOccupancy()
@@ -538,6 +551,9 @@ public class GameplayManager : MonoBehaviour
             StopCoroutine(_roundCheckRoutine);
             _roundCheckRoutine = null;
         }
+
+        _pendingDeadUnits.Clear();
+        _pendingReleaseUnits.Clear();
 
         _waitingForRoundDecision = false;
         _waitingForStageDecision = false;
