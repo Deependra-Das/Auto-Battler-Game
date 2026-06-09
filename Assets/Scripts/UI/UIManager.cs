@@ -75,12 +75,14 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     [Header("--Inventory UI")]
     [SerializeField] private InventoryUnitCard _inventoryUnitCardPrefab;
+    [SerializeField] private InventoryDropZoneManager _inventoryDropZonePrefab;
     [SerializeField] private Transform _inventoryUnitCardActiveContainer;
     [SerializeField] private Transform _inventoryUnitCardPoolContainer;
     [SerializeField] private int _inventoryUnitCardPoolSize = 8;
 
     [Header("--Discard UI")]
     [SerializeField] private DiscardUnitDropZoneManager _discardUnitDropZonePrefab;
+    [SerializeField] private Transform _unitPoolContainer;
 
     [Header("--Buff UI")]
     [SerializeField] private GameObject _buffTeam1ToggleContent;
@@ -119,6 +121,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private ShopUnitCardPool _shopCardPoolObj;
     private InventoryUnitCardPool _inventoryCardPoolObj;
     private DiscardUnitDropZoneManager _discardUnitDropZoneManagerObj;
+    private InventoryDropZoneManager _inventoryDropZoneManagerObj;
 
     public Canvas UICanvas => _uiCanvas;
 
@@ -197,7 +200,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void SubscribeToEvents()
     {
-        EventBusManager.Instance.Subscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
+        EventBusManager.Instance.Subscribe(EventNameEnum.ToggleInventoryDropZone, OnToggleInventoryDropZone_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.ToggleDiscardDropZone, OnToggleDiscardDropZone_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.InventoryUnitCardDiscarded, OnInventoryUnitCardDiscarded_UI);
         EventBusManager.Instance.Subscribe(EventNameEnum.ReorderInventoryLayout, OnReorderInventoryLayout_UI);        
@@ -218,7 +221,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void UnsubscribeToEvents()
     {
-        EventBusManager.Instance.Unsubscribe(EventNameEnum.UnitDragged, OnUnitDragged_UI);
+        EventBusManager.Instance.Unsubscribe(EventNameEnum.ToggleInventoryDropZone, OnToggleInventoryDropZone_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.ToggleDiscardDropZone, OnToggleDiscardDropZone_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.InventoryUnitCardDiscarded, OnInventoryUnitCardDiscarded_UI);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.ReorderInventoryLayout, OnReorderInventoryLayout_UI);
@@ -245,7 +248,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _buffTeam2UICardDictionary = new Dictionary<BuffNameEnum, BuffDetailsUICard>();
         _shopPanel.SetActive(false);
         CreateDiscardUnitDropZone();
-        ToggleDiscardPanelVisibility(false);
+        ToggleDiscardDropZoneVisibility(false);
+        CreateInventoryDropZone();
+        ToggleInventoryDropZoneVisibility(false);
     }
 
     public void AddShopUnitCard(UnitData unitData)
@@ -355,16 +360,16 @@ public class UIManager : GenericMonoSingleton<UIManager>
         GameplayManager.Instance.UpdateGameplayState(GameplayStateEnum.Combat);
     }
 
-    private void OnUnitDragged_UI(object[] parameters)
+    private void OnToggleInventoryDropZone_UI(object[] parameters)
     {
         bool value = (bool)parameters[0];
-        ToggleDiscardPanelVisibility(value);
+        ToggleInventoryDropZoneVisibility(value);
     }
 
     private void OnToggleDiscardDropZone_UI(object[] parameters)
     {
         bool value = (bool)parameters[0];
-        ToggleDiscardPanelVisibility(value);
+        ToggleDiscardDropZoneVisibility(value);
     }
 
     private void OnReorderInventoryLayout_UI(object[] parameters)
@@ -403,9 +408,28 @@ public class UIManager : GenericMonoSingleton<UIManager>
         }
     }
 
-    private void ToggleDiscardPanelVisibility(bool value)
+    private void ToggleDiscardDropZoneVisibility(bool value)
     {
         _discardUnitDropZoneManagerObj.gameObject.SetActive(value);
+    }
+
+    private void CreateInventoryDropZone()
+    {
+        _inventoryDropZoneManagerObj = Instantiate(_inventoryDropZonePrefab, _bottomControlPanel.transform);
+    }
+
+    public void DestroyInventoryDropZone()
+    {
+        if (_inventoryDropZoneManagerObj != null)
+        {
+            Destroy(_inventoryDropZonePrefab.gameObject);
+            _inventoryDropZoneManagerObj = null;
+        }
+    }
+
+    private void ToggleInventoryDropZoneVisibility(bool value)
+    {
+        _inventoryDropZoneManagerObj.gameObject.SetActive(value);
     }
 
     public void AddBuffDetailUICard(BuffData buffData, TeamEnum team)
