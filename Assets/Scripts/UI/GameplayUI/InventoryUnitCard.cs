@@ -21,7 +21,8 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     private GameObject _placeholder;
     private Image _dragSprite;
-    private Tile _highlightedTile;
+    private Tile _hoveredTile;
+    private DiscardUnitDropZoneManager _hoveredDiscardDropZone;
     private bool _isOutsideContainer;
     private int _originalSiblingIndex;
 
@@ -74,7 +75,8 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.alpha = 0.85f;
 
-        EventBusManager.Instance.Raise(EventNameEnum.ToggleDiscardDropZone, true);
+        ClearDiscardUnitDropZoneHighlight();
+        RaiseToggleDiscardDropZoneEvent(true);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -89,18 +91,32 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
             HandleReorder();
             CleanupDragSprite();
             ClearHighlightedTile();
+            ClearDiscardUnitDropZoneHighlight();
+            return;
         }
-        else
+        
+        HandleOutsideDrag(eventData);
+
+        Tile tile = TryGetTileUnderPointer(eventData);
+
+        if (tile != null)
         {
-            HandleOutsideDrag(eventData);
-
-            Tile tile = GetTileUnderPointer(eventData);
-
-            if (tile != null)
-            {
-                HighlightTileUnderPointer(tile);
-            }
+            ClearDiscardUnitDropZoneHighlight();
+            HighlightTileUnderPointer(tile);
+            return;
         }
+
+        DiscardUnitDropZoneManager discardZone = TryGetDiscardZoneUnderPointer(eventData);
+
+        if (discardZone != null)
+        {
+            ClearHighlightedTile();
+            HighlightDiscardUnitDropZone(discardZone);
+            return;
+        }
+
+        ClearHighlightedTile();
+        ClearDiscardUnitDropZoneHighlight();
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -108,35 +124,26 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         _canvasGroup.blocksRaycasts = true;
         _canvasGroup.alpha = 1f;
 
-        DiscardUnitDropZoneManager discardUnitDropZone = null;
         bool spawned = false;
-
-        GameObject target = eventData.pointerCurrentRaycast.gameObject;
 
         if (_isOutsideContainer)
         {
-            if (target != null)
+            DiscardUnitDropZoneManager discardZone = TryGetDiscardZoneUnderPointer(eventData);
+
+            if (discardZone != null)
             {
-                discardUnitDropZone = target.GetComponentInParent<DiscardUnitDropZoneManager>();
-
-                if (discardUnitDropZone != null)
-                {
-                    discardUnitDropZone.HandleInventoryDrop(this);
-                    CleanupAfterDrag();
-                    RaiseToggleDiscardDropZoneEvent();
-                    return;
-                }
+                discardZone.HandleInventoryDrop(this);
+                CleanupAfterDrag();
+                RaiseToggleDiscardDropZoneEvent(false);
+                return;
             }
+            
+            Tile tile = TryGetTileUnderPointer(eventData);
 
-            if (discardUnitDropZone == null)
+            if (tile != null)
             {
-                Tile tile = GetTileUnderPointer(eventData);
-
-                if (tile != null)
-                {
-                    spawned = TrySpawnUnitOnTile(tile);
-                }
-            }
+                spawned = TrySpawnUnitOnTile(tile);
+            }  
         }
 
         if (!spawned)
@@ -147,7 +154,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         CleanupAfterDrag();
         RaiseReorderInventoryLayoutEvent();
-        RaiseToggleDiscardDropZoneEvent();
+        RaiseToggleDiscardDropZoneEvent(false);
     }
 
     private void HandleReorder()
@@ -199,7 +206,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
             _dragSprite.transform.position = eventData.position;
     }
 
-    private Tile GetTileUnderPointer(PointerEventData eventData)
+    private Tile TryGetTileUnderPointer(PointerEventData eventData)
     {
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
         Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
@@ -223,6 +230,16 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
     }
 
+    private DiscardUnitDropZoneManager TryGetDiscardZoneUnderPointer(PointerEventData eventData)
+    {
+        var raycastObj = eventData.pointerCurrentRaycast.gameObject;
+
+        if (raycastObj == null)
+            return null;
+
+        return raycastObj.GetComponentInParent<DiscardUnitDropZoneManager>();
+    }
+
     private bool TrySpawnUnitOnTile(Tile tile)
     {
         if (GameplayManager.Instance.CurrentGameplayState != GameplayStateEnum.Preparation) return false;
@@ -243,24 +260,38 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private void HighlightTileUnderPointer(Tile tile)
     {
         if (tile == null) return;
-        if (_highlightedTile == tile) return;
+        if (_hoveredTile == tile) return;
 
         ClearHighlightedTile();
-
-        bool isValid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation &&
-            tile.Node != null && !tile.Node.IsOccupied;
-
-        tile.OnInteractSetHighlight(true, isValid);
-        _highlightedTile = tile;
+        tile.OnInteractShowHighlight();
+        _hoveredTile = tile;
     }
 
     private void ClearHighlightedTile()
     {
-        if (_highlightedTile != null)
+        if (_hoveredTile != null)
         {
-            _highlightedTile.OnInteractSetHighlight(false, false);
-            _highlightedTile = null;
+            _hoveredTile.HideHighlight();
+            _hoveredTile = null;
         }
+    }
+
+    private void HighlightDiscardUnitDropZone(DiscardUnitDropZoneManager discardUnitDropZone)
+    {
+        if (_hoveredDiscardDropZone == discardUnitDropZone) return;
+
+        ClearDiscardUnitDropZoneHighlight();
+
+        _hoveredDiscardDropZone = discardUnitDropZone;
+        _hoveredDiscardDropZone.ShowDiscardDropZoneHighlight();
+    }
+
+    private void ClearDiscardUnitDropZoneHighlight()
+    {
+        if (_hoveredDiscardDropZone == null) return;
+
+        _hoveredDiscardDropZone.HideDiscardDropZoneHighlight();
+        _hoveredDiscardDropZone = null;
     }
 
     private void CleanupDragSprite()
@@ -286,6 +317,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         CleanupPlaceholder();
         CleanupDragSprite();
         ClearHighlightedTile();
+        ClearDiscardUnitDropZoneHighlight();
     }
 
     private void RaiseReorderInventoryLayoutEvent()
@@ -293,9 +325,9 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         EventBusManager.Instance.Raise(EventNameEnum.ReorderInventoryLayout, false);
     }
 
-    private void RaiseToggleDiscardDropZoneEvent()
+    private void RaiseToggleDiscardDropZoneEvent(bool state)
     {
-        EventBusManager.Instance.Raise(EventNameEnum.ToggleDiscardDropZone, false);
+        EventBusManager.Instance.Raise(EventNameEnum.ToggleDiscardDropZone, state);
     }
 
     public void Reset()
