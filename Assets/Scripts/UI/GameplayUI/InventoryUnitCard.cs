@@ -27,6 +27,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private int _originalSiblingIndex;
 
     private TeamService _teamServiceObj;
+    private DragVisualPoolService _dragVisualPoolService;
 
     private void Awake()
     {
@@ -45,6 +46,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void Initialize(UnitData unitData, Canvas canvas, RectTransform cardContainer)
     {
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
+        _dragVisualPoolService = GameManager.Instance.Get<DragVisualPoolService>();
 
         UnitData = unitData;
         _canvas = canvas;
@@ -63,13 +65,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         _originalSiblingIndex = transform.GetSiblingIndex();
         _isOutsideContainer = false;
-        _placeholder = new GameObject("Placeholder");
-        _placeholder.transform.SetParent(_cardContainer);
-        _placeholder.transform.SetSiblingIndex(_originalSiblingIndex);
-
-        LayoutElement placeholderLayout = _placeholder.AddComponent<LayoutElement>();
-        placeholderLayout.preferredWidth = _layoutElement.preferredWidth;
-        placeholderLayout.preferredHeight = _layoutElement.preferredHeight;
+        _placeholder = _dragVisualPoolService.GetPlaceholder(_cardContainer, _originalSiblingIndex, _layoutElement.preferredWidth, _layoutElement.preferredHeight);
 
         transform.SetParent(_canvas.transform);
         _canvasGroup.blocksRaycasts = false;
@@ -191,14 +187,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
             if (_unitIcon != null && _dragSprite == null)
             {
-                GameObject ghostGO = new GameObject("DragSprite", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-                ghostGO.transform.SetParent(_canvas.transform);
-                ghostGO.transform.SetAsLastSibling();
-
-                _dragSprite = ghostGO.GetComponent<Image>();
-                _dragSprite.sprite = _unitIcon.sprite;
-                _dragSprite.SetNativeSize();
-                _dragSprite.raycastTarget = false;
+                _dragSprite = _dragVisualPoolService.GetDragSprite(_unitIcon.sprite);
             }
         }
 
@@ -298,7 +287,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (_dragSprite != null)
         {
-            Destroy(_dragSprite.gameObject);
+            _dragVisualPoolService.ReleaseDragSprite();
             _dragSprite = null;
         }
     }
@@ -307,7 +296,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (_placeholder != null)
         {
-            Destroy(_placeholder);
+            _dragVisualPoolService.ReleasePlaceholder();
             _placeholder = null;
         }
     }

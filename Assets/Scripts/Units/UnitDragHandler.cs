@@ -1,4 +1,5 @@
 using AutoBattler.Event;
+using AutoBattler.Main;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,23 +13,28 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private Canvas _canvas;
     private RectTransform _canvasRect;
 
-    private GameObject _dragSprite;
+    private Image _dragSprite;
     private Vector3 _dragOffset;
     private Tile _hoveredTile;
     private InventoryDropZoneManager _hoveredInventoryDropZone;
     private DiscardUnitDropZoneManager _hoveredDiscardDropZone;
     private Node _originalNode;
     private bool isDragging;
-
+    private DragVisualPoolService _dragVisualPoolService;
+    private RectTransform _dragSpriteRectTransform;
 
     void Awake()
     {
         _unit = GetComponent<BaseUnit>();
-        _unitCollider = GetComponent<Collider2D>();
-        _mainCamera = Camera.main;
+        _unitCollider = GetComponent<Collider2D>();  
+    }
 
+    public void Initialize()
+    {
+        _mainCamera = Camera.main;
         _canvas = UIManager.Instance.UICanvas;
         _canvasRect = UIManager.Instance.CanvasRect;
+        _dragVisualPoolService = GameManager.Instance.Get<DragVisualPoolService>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -175,14 +181,8 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private void CreateDragSprite()
     {
-        _dragSprite = new GameObject("DragUnitSprite");
-        _dragSprite.transform.SetParent(_canvas.transform, false);
-
-        Image spriteImage = _dragSprite.AddComponent<Image>();
-        spriteImage.sprite = GetComponent<SpriteRenderer>().sprite;
-        spriteImage.SetNativeSize();
-        spriteImage.raycastTarget = false;
-
+        _dragSprite = _dragVisualPoolService.GetDragSprite(_unit.UnitData.unitIcon);
+        _dragSpriteRectTransform = _dragVisualPoolService.GetDragSpriteRectTransform();
         _unit.UpdateUnitSpriteVisibility(false);
         _unit.UpdateUnitUIVisibility(false);
     }
@@ -191,13 +191,11 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         if (_dragSprite == null) return;
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            _canvasRect,
-            eventData.position,
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRect, eventData.position, 
             _canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : _canvas.worldCamera,
             out Vector2 localPoint);
 
-        _dragSprite.GetComponent<RectTransform>().localPosition = localPoint;
+        _dragSpriteRectTransform.localPosition = localPoint;
     }
 
     private Node GetNodeUnderPointer(PointerEventData eventData)
@@ -267,8 +265,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private void CleanupAfterDrag()
     {
-        if (_dragSprite != null)
-            Destroy(_dragSprite);
+        CleanupDragSprite();
 
         _unit.UpdateUnitSpriteVisibility(true);
         _unit.UpdateUnitUIVisibility(true);
@@ -278,6 +275,15 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         ClearDiscardUnitDropZoneHighlight();
         RaiseToggleInventoryDropZoneEvent(false);
         RaiseToggleDiscardDropZoneEvent(false);
+    }
+
+    private void CleanupDragSprite()
+    {
+        if (_dragSprite != null)
+        {
+            _dragVisualPoolService.ReleaseDragSprite();
+            _dragSprite = null;
+        }
     }
 
     protected Vector3 ScreenToWorld(Vector2 screenPosition)

@@ -15,6 +15,8 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected Slider shieldBar;
     [SerializeField] protected Image shieldFillImage;
 
+    private UnitDragHandler _unitDragHandler;
+
     protected UnitData unitData;
     protected Collider2D unitCollider;
 
@@ -76,6 +78,7 @@ public class BaseUnit : MonoBehaviour
     protected virtual void Awake()
     {
         unitCollider = GetComponent<Collider2D>();
+        _unitDragHandler = GetComponent<UnitDragHandler>();
     }
 
     public void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
@@ -88,6 +91,7 @@ public class BaseUnit : MonoBehaviour
         totalHealth = unitData.baseHealth;
         totalShield = unitData.baseShield;
         shieldFillImage.color = GetShieldColor(unitData.unitElement);
+        _unitDragHandler.Initialize();
         ResetVitals();
         ApplyTeamBuffs();
     }

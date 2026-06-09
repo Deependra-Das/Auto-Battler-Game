@@ -79,6 +79,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Transform _inventoryUnitCardActiveContainer;
     [SerializeField] private Transform _inventoryUnitCardPoolContainer;
     [SerializeField] private int _inventoryUnitCardPoolSize = 8;
+    [SerializeField] private RectTransform _dragVisualPoolContainerRectTransform;
 
     [Header("--Discard UI")]
     [SerializeField] private DiscardUnitDropZoneManager _discardUnitDropZonePrefab;
@@ -126,6 +127,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
     public Canvas UICanvas => _uiCanvas;
 
     public RectTransform CanvasRect { get; private set; }
+
+    public RectTransform DragVisualPoolContainerRectTransform => _dragVisualPoolContainerRectTransform;
 
     protected override void Awake()
     {
