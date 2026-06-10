@@ -130,7 +130,6 @@ public class GameplayManager : MonoBehaviour
 
         if (newUnit != null)
         {
-            newUnit.gameObject.SetActive(true);
             newUnit.Initialize(card.UnitData, team, node);
             _teamServiceObj.MoveToField(newUnit, team);
             _inventoryServiceObj.RemoveUnit(card);
@@ -171,7 +170,6 @@ public class GameplayManager : MonoBehaviour
         foreach (UnitData unitData in _teamServiceObj.GetTeamUnits(TeamEnum.Team2))
         {
             BaseUnit newUnit = _unitPoolServiceObj.Get(unitData.unitID);
-            newUnit.gameObject.SetActive(true);
             newUnit.Initialize(unitData, TeamEnum.Team2, _graphServiceObj.GetUnOccupiedNode(TeamEnum.Team2));
             _teamServiceObj.MoveToField(newUnit, TeamEnum.Team2);
         }

@@ -47,6 +47,7 @@ public class UnitPoolService
         }
 
         unit.transform.SetParent(_activeUnitContainerTransform, false);
+        unit.gameObject.SetActive(true);
         return unit;
     }
 

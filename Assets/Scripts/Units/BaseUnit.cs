@@ -111,7 +111,7 @@ public class BaseUnit : MonoBehaviour
     private void StartCombatLoop()
     {
         if (combatRoutine != null) return;
-
+     
         isActive = true;
         combatRoutine = StartCoroutine(CombatLoopCoroutine());
     }
@@ -471,6 +471,7 @@ public class BaseUnit : MonoBehaviour
     {
         StopAllCoroutines();
 
+        combatRoutine = null;
         currentTarget = null;
         destination = null;
 
@@ -483,6 +484,8 @@ public class BaseUnit : MonoBehaviour
         currentShield = 0;
 
         currentNode = null;
+        currentTeamBuffData = default;
+
         animator.Rebind();
         animator.Update(0f);
 
