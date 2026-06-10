@@ -266,10 +266,6 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private void CleanupAfterDrag()
     {
         CleanupDragSprite();
-
-        _unit.UpdateUnitSpriteVisibility(true);
-        _unit.UpdateUnitUIVisibility(true);
-
         ClearHighlightedTile();
         ClearInventoryDropZoneHighlight();
         ClearDiscardUnitDropZoneHighlight();
@@ -284,6 +280,8 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             _dragVisualPoolService.ReleaseDragSprite();
             _dragSprite = null;
         }
+        _unit.UpdateUnitSpriteVisibility(true);
+        _unit.UpdateUnitUIVisibility(true);
     }
 
     protected Vector3 ScreenToWorld(Vector2 screenPosition)

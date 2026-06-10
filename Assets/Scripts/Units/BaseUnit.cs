@@ -411,7 +411,7 @@ public class BaseUnit : MonoBehaviour
 
     public void UpdateUnitUIVisibility(bool state)
     {
-        unitUIContainer.gameObject.SetActive(false);
+        unitUIContainer.gameObject.SetActive(state);
     }
 
     protected void OnTeamBuffUpdated(object[] parameters)
