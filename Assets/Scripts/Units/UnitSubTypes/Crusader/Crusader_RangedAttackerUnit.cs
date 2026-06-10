@@ -14,7 +14,8 @@ public class Crusader_RangedAttackerUnit : BaseUnit
         animator.SetFloat("MoveY", dirNormalized.y);
         SetDirectionFacing(dirNormalized);
         isAttacking = true;
-        StartCoroutine(ShootCrusaderArrowCoroutine());
+        attackRoutine = StartCoroutine(ShootCrusaderArrowCoroutine());
+        attackRoutine = null;
     }
 
     private IEnumerator ShootCrusaderArrowCoroutine()
@@ -23,7 +24,8 @@ public class Crusader_RangedAttackerUnit : BaseUnit
         animator.SetTrigger("Attack");
         yield return new WaitForSeconds(UnitData.attackAnimationDelay);
         GameManager.Instance.Get<RangedAbilityService>().SpawnElementalArrow(this, currentTarget, totalDamage, unitData.unitElement);
-        StartCoroutine(AttackCoolDownWaitCoroutine());
         isAttacking = false;
+        cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = null;
     }
 }

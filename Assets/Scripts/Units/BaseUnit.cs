@@ -47,6 +47,9 @@ public class BaseUnit : MonoBehaviour
     protected TeamEnum team;
 
     protected Coroutine combatRoutine;
+    protected Coroutine attackRoutine;
+    protected Coroutine cooldownRoutine;
+    protected Coroutine deathRoutine;
 
     public bool IsDead => isDead;
     public UnitData UnitData => unitData;
@@ -55,9 +58,10 @@ public class BaseUnit : MonoBehaviour
     public UnitTypeEnum UnitType => unitData.unitType;
     public TeamEnum Team => team;
     public Node CurrentNode => currentNode;
-    protected bool HasEnemy => currentTarget != null;
     public UnitFacingDirectionEnum DirectionFacing => directionFacing;
     public bool CanBeDragged => !isActive && !isDead;
+
+    protected GraphService _graphServiceObj;
 
     void OnEnable() => SubscribeToEvents();
 
@@ -83,6 +87,8 @@ public class BaseUnit : MonoBehaviour
 
     public void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
     {
+        _graphServiceObj = GameManager.Instance.Get<GraphService>();
+
         this.unitData = unitData;
         this.team = team;
         currentNode = spawnNode;
@@ -92,6 +98,7 @@ public class BaseUnit : MonoBehaviour
         totalShield = unitData.baseShield;
         shieldFillImage.color = GetShieldColor(unitData.unitElement);
         _unitDragHandler.Initialize();
+
         ResetVitals();
         ApplyTeamBuffs();
     }
@@ -147,8 +154,10 @@ public class BaseUnit : MonoBehaviour
 
     protected virtual void HandleTargeting()
     {
-        if (!HasEnemy)
+        if (currentTarget == null || currentTarget.IsDead)
+        {
             FindTarget();
+        }
     }
 
     protected virtual void HandleMovement()
@@ -184,6 +193,7 @@ public class BaseUnit : MonoBehaviour
             }
 
             float dist = Vector3.Distance(transform.position, enemy.transform.position);
+
             if (dist < minDistance)
             {
                 minDistance = dist;
@@ -196,8 +206,7 @@ public class BaseUnit : MonoBehaviour
 
     protected void GetInRange()
     {
-        if (currentTarget == null)
-            return;
+         if (currentTarget == null) return;
 
         if (!isMoving)
         {
@@ -218,7 +227,7 @@ public class BaseUnit : MonoBehaviour
                 return;
 
             var path = graphService.GetShortestPath(currentNode, destination);
-            if (path == null && path.Count <= 1)
+            if (path == null || path.Count <= 1)
                 return;
 
             if (path[1].IsOccupied)
@@ -271,6 +280,7 @@ public class BaseUnit : MonoBehaviour
         yield return new WaitForSeconds(totalAttackCoolDown);
         canAttack = true;
     }
+
     protected virtual void DealDamage()
     {
         if (currentTarget == null || currentTarget.IsDead)
@@ -308,18 +318,15 @@ public class BaseUnit : MonoBehaviour
             destination = null;
             isMoving = false;
             animator.SetBool("IsDead", true);
-            StartCoroutine(DeathCoroutine());
+            deathRoutine = StartCoroutine(DeathCoroutine());
         }
     }
 
     IEnumerator DeathCoroutine()
     {
         yield return new WaitForSeconds(1f);
-
-        if (GameplayManager.Instance != null)
-        {
-            GameplayManager.Instance.MarkUnitDead(this);
-        }
+        GameplayManager.Instance.MarkUnitDead(this);
+        deathRoutine = null;
     }
 
     public void SetCurrentNode(Node node)
@@ -467,16 +474,46 @@ public class BaseUnit : MonoBehaviour
         };
     }
 
+    private void StopAttackLoop()
+    {
+        if (attackRoutine != null)
+        {
+            StopCoroutine(attackRoutine);
+            attackRoutine = null;
+        }
+    }
+
+    private void StopCoolDownLoop()
+    {
+        if (cooldownRoutine != null)
+        {
+            StopCoroutine(cooldownRoutine);
+            cooldownRoutine = null;
+        }
+    }
+
+    private void StopDeathLoop()
+    {
+        if (deathRoutine != null)
+        {
+            StopCoroutine(deathRoutine);
+            deathRoutine = null;
+        }
+    }
+
     public virtual void Reset()
     {
-        StopAllCoroutines();
+        StopCombatLoop();
+        StopAttackLoop();
+        StopCoolDownLoop();
+        StopDeathLoop();
 
-        combatRoutine = null;
         currentTarget = null;
         destination = null;
 
         isDead = false;
         isMoving = false;
+        isAttacking = false;
         isActive = false;
         canAttack = true;
 

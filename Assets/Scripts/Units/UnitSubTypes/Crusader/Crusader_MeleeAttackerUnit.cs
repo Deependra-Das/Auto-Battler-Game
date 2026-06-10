@@ -12,7 +12,8 @@ public class Crusader_MeleeAttackerUnit : BaseUnit
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
         isAttacking = true;
-        StartCoroutine(PerformCrusaderSwordSlashCoroutine());
+        attackRoutine = StartCoroutine(PerformCrusaderSwordSlashCoroutine());
+        attackRoutine = null;
     }
 
     private IEnumerator PerformCrusaderSwordSlashCoroutine()
@@ -22,6 +23,7 @@ public class Crusader_MeleeAttackerUnit : BaseUnit
         yield return new WaitForSeconds(unitData.attackAnimationDelay);
         DealDamage();
         isAttacking = false;
-        StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = null;
     }
 }

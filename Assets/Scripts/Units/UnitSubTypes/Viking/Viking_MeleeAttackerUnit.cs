@@ -12,7 +12,8 @@ public class Viking_MeleeAttackerUnit : BaseUnit
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
         isAttacking = true;
-        StartCoroutine(PerformVikingSpearAxeSlashCoroutine());
+        attackRoutine = StartCoroutine(PerformVikingSpearAxeSlashCoroutine());
+        attackRoutine = null;
     }
 
     private IEnumerator PerformVikingSpearAxeSlashCoroutine()
@@ -22,6 +23,7 @@ public class Viking_MeleeAttackerUnit : BaseUnit
         yield return new WaitForSeconds(unitData.attackAnimationDelay);
         DealDamage();
         isAttacking = false;
-        StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = null;
     }
 }

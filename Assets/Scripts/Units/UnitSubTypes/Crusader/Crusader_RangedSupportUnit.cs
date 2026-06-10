@@ -14,7 +14,8 @@ public class Crusader_RangedSupportUnit : BaseUnit
         animator.SetFloat("MoveY", dirNormalized.y);
         SetDirectionFacing(dirNormalized);
         isAttacking = true;
-        StartCoroutine(PerformCrusaderElementalBurst());
+        attackRoutine = StartCoroutine(PerformCrusaderElementalBurst());
+        attackRoutine = null;
     }
 
     private IEnumerator PerformCrusaderElementalBurst()
@@ -24,8 +25,9 @@ public class Crusader_RangedSupportUnit : BaseUnit
         GameManager.Instance.Get<RangedAbilityService>().SpawnElementalBurst(this, currentTarget, totalDamage, unitData.unitElement, UnitData.attackAnimationDelay);
         yield return new WaitForSeconds(UnitData.attackAnimationDelay);
         HealAllTeammates();
-        StartCoroutine(AttackCoolDownWaitCoroutine());
         isAttacking = false;
+        cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = null;
     }
 
     protected void HealAllTeammates()

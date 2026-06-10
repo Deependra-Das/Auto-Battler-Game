@@ -12,7 +12,8 @@ public class Spartan_MeleeTankUnit : BaseUnit
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
         isAttacking = true;
-        StartCoroutine(PerformSpartanPolearmThrustCoroutine());
+        attackRoutine = StartCoroutine(PerformSpartanPolearmThrustCoroutine());
+        attackRoutine = null;
     }
 
     private IEnumerator PerformSpartanPolearmThrustCoroutine()
@@ -22,6 +23,7 @@ public class Spartan_MeleeTankUnit : BaseUnit
         yield return new WaitForSeconds(unitData.attackAnimationDelay);
         DealDamage();
         isAttacking = false;
-        StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = null;
     }
 }

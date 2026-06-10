@@ -14,7 +14,8 @@ public class Spartan_RangedSupportUnit : BaseUnit
         animator.SetFloat("MoveY", dirNormalized.y);
         SetDirectionFacing(dirNormalized);
         isAttacking = true;
-        StartCoroutine(PerformSpartanElementalBurst());
+        attackRoutine = StartCoroutine(PerformSpartanElementalBurst());
+        attackRoutine = null;
     }
 
     private IEnumerator PerformSpartanElementalBurst()
@@ -24,8 +25,9 @@ public class Spartan_RangedSupportUnit : BaseUnit
         GameManager.Instance.Get<RangedAbilityService>().SpawnElementalBurst(this, currentTarget, totalDamage, unitData.unitElement, UnitData.attackAnimationDelay);
         yield return new WaitForSeconds(UnitData.attackAnimationDelay);
         HealAllTeammates();
-        StartCoroutine(AttackCoolDownWaitCoroutine());
         isAttacking = false;
+        cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = null;
     }
 
     protected void HealAllTeammates()

@@ -12,7 +12,8 @@ public class Spartan_MeleeAttackerUnit : BaseUnit
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
         isAttacking = true;
-        StartCoroutine(PerformSpartanSwordSlashCoroutine());
+        attackRoutine = StartCoroutine(PerformSpartanSwordSlashCoroutine());
+        attackRoutine = null;
     }
 
     private IEnumerator PerformSpartanSwordSlashCoroutine()
@@ -22,6 +23,7 @@ public class Spartan_MeleeAttackerUnit : BaseUnit
         yield return new WaitForSeconds(unitData.attackAnimationDelay);
         DealDamage();
         isAttacking = false;
-        StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = null;
     }
 }
