@@ -154,7 +154,7 @@ public class BaseUnit : MonoBehaviour
 
     protected virtual void HandleTargeting()
     {
-        if (currentTarget == null || currentTarget.IsDead)
+        if (currentTarget == null)
         {
             FindTarget();
         }

@@ -13,9 +13,11 @@ namespace AutoBattler.Main
         [SerializeField] private BuffScriptableObjectScript _buff_SO;
         [SerializeField] private StageConfigScriptableObjectScript _stageConfig_SO;
         [SerializeField] private PlayerLevelConfigScriptableObjectScript _playerLevelConfig_SO;
+        [SerializeField] private VfxScriptableObjectScript vfx_SO;
 
         [SerializeField] private Transform _pooledUnitContainer;
         [SerializeField] private Transform _activeUnitContainer;
+        [SerializeField] private Transform _pooledVfxContainer;
 
         public int currentStageIndexSelected = -1;
 
@@ -40,6 +42,7 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new UnitDataService(_unitData_SO));
             ServiceLocator.Register(new UnitPoolService(_unitPrefab_SO, _pooledUnitContainer, _activeUnitContainer));
             ServiceLocator.Register(new DragVisualPoolService());
+            ServiceLocator.Register(new VfxPoolService(vfx_SO, _pooledVfxContainer));
             ServiceLocator.Register(new TileGridService(_tile_SO));
             ServiceLocator.Register(new GraphService());
             ServiceLocator.Register(new TeamService());
@@ -59,6 +62,7 @@ namespace AutoBattler.Main
             ServiceLocator.Unregister<UnitDataService>();
             ServiceLocator.Unregister<UnitPoolService>();
             ServiceLocator.Unregister<DragVisualPoolService>();
+            ServiceLocator.Unregister<VfxPoolService>();
             ServiceLocator.Unregister<TileGridService>();
             ServiceLocator.Unregister<GraphService>();
             ServiceLocator.Unregister<TeamService>();

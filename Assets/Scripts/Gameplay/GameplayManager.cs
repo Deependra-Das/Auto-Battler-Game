@@ -29,6 +29,7 @@ public class GameplayManager : MonoBehaviour
     private StageSnapshotService _stageSnapshotServiceObj;
     private CurrencyService _currencyServiceObj;
     private DragVisualPoolService _dragVisualPoolServiceObj;
+    private VfxPoolService _vfxPoolServiceObj;
 
     public int fromIndex = 0;
     public int toIndex = 0;
@@ -95,6 +96,7 @@ public class GameplayManager : MonoBehaviour
     private void ResolveServices()
     {
         _dragVisualPoolServiceObj = GameManager.Instance.Get<DragVisualPoolService>();
+        _vfxPoolServiceObj = GameManager.Instance.Get<VfxPoolService>();
         _unitPoolServiceObj = GameManager.Instance.Get<UnitPoolService>();
         _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
         _graphServiceObj = GameManager.Instance.Get<GraphService>();
@@ -210,7 +212,7 @@ public class GameplayManager : MonoBehaviour
                 continue;
 
             unit.ReleaseCurrentNode();
-
+            _vfxPoolServiceObj.SpawnSmokeEffectVFX(unit.gameObject.transform.position);
             _teamServiceObj.RemoveUnitFromField(unit, unit.Team, false);
 
             _pendingReleaseUnits.Add(unit);
