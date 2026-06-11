@@ -27,6 +27,7 @@ public class VfxPoolService
             smokeEffectVfx = CreateSmokeEffectVFX();
         }
 
+        smokeEffectVfx.transform.SetParent(null, false);
         smokeEffectVfx.transform.position = position;
         smokeEffectVfx.gameObject.SetActive(true);
         smokeEffectVfx.PlaySmokeEffectVfxAnimation(this);
@@ -34,7 +35,7 @@ public class VfxPoolService
 
     private SmokeVfx CreateSmokeEffectVFX()
     {
-        SmokeVfx smokeEffectVfx = Object.Instantiate(_smokeEffectVfxPrefab, _vfxPoolContainerTransform);
+        SmokeVfx smokeEffectVfx = Object.Instantiate(_smokeEffectVfxPrefab);
         smokeEffectVfx.gameObject.SetActive(false);
         return smokeEffectVfx;
     }
@@ -42,6 +43,7 @@ public class VfxPoolService
     public void DespawnSmokeEffectVFX(SmokeVfx smokeEffectVfx)
     {
         smokeEffectVfx.gameObject.SetActive(false);
+        smokeEffectVfx.Reset();
         smokeEffectVfx.transform.SetParent(_vfxPoolContainerTransform, false);
         smokeEffectVfx.transform.localPosition = Vector3.zero;
         _smokeEffectVfxPoolQueue.Enqueue(smokeEffectVfx);

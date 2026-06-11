@@ -4,7 +4,7 @@ using UnityEngine;
 public class SmokeVfx : MonoBehaviour
 {
     [SerializeField] private Animator _animator;
-    [SerializeField] private float _duration = 1.2f;
+    [SerializeField] private float _lifetime = 1f;
 
     private Coroutine _despawnCoroutine;
 
@@ -25,17 +25,24 @@ public class SmokeVfx : MonoBehaviour
 
     IEnumerator DespawnSmokeEffectVfxAfterAnimation(VfxPoolService vFXPoolServiceObj)
     {
-        yield return null;
-        AnimatorStateInfo stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
-        Debug.Log(stateInfo.length);
-        yield return new WaitForSeconds(stateInfo.length);
+        yield return new WaitForSeconds(_lifetime);
         _despawnCoroutine = null;
         vFXPoolServiceObj.DespawnSmokeEffectVFX(this);
     }
 
-    private void OnDisable()
+    public void Reset()
     {
+        if (_despawnCoroutine != null)
+        {
+            StopCoroutine(_despawnCoroutine);
+        }
+
         _despawnCoroutine = null;
         _animator.ResetTrigger("PlaySmoke");
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 }
