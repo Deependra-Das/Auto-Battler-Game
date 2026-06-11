@@ -14,9 +14,10 @@ public class InventoryService
         UIManager.Instance.AddInventoryUnitCard(unitData);
     }
 
-    public void RemoveUnit(UnitData unitData)
+    public void RemoveUnit(InventoryUnitCard inventoryUnitCard)
     {
-        _currentUnitsInInventory.Remove(unitData);
+        _currentUnitsInInventory.Remove(inventoryUnitCard.UnitData);
+        UIManager.Instance.RemoveInventoryUnitCard(inventoryUnitCard);
     }
 
     public void SetMaxInventorySize(int newSize)

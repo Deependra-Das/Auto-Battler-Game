@@ -2,39 +2,39 @@ using AutoBattler.Main;
 using System.Collections;
 using UnityEngine;
 
-public class Crusader_RangedAttackerUnit : RangedAttackerUnit
+public class Crusader_RangedAttackerUnit : BaseUnit
 {
-    protected override void Attack()
-    {
-        if (!canAttack) return;
+    private RangedAbilityPoolService _rangedAbilityPoolService;
 
-        PerformArrowAttack();
+    public override void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
+    {
+        base.Initialize(unitData, team, spawnNode);
+
+        _rangedAbilityPoolService = GameManager.Instance.Get<RangedAbilityPoolService>();
     }
 
-    private void PerformArrowAttack()
+    protected override void Attack()
     {
+        if (!canAttack || isAttacking || currentTarget == null) return;
+
         Vector3 direction = (currentTarget.CurrentNode.position - this.transform.position);
         Vector3 dirNormalized = direction.normalized;
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
-
         SetDirectionFacing(dirNormalized);
-
-        animator.SetTrigger("Attack");
-        StartCoroutine(AttackCoolDownWaitCoroutine());
+        isAttacking = true;
+        attackRoutine = StartCoroutine(ShootCrusaderArrowCoroutine());
+        attackRoutine = null;
     }
 
-    private void ShootArrow()
+    private IEnumerator ShootCrusaderArrowCoroutine()
     {
-        GameManager.Instance.Get<RangedAbilityService>().SpawnArrow(this, currentTarget, totalDamage, unitElement);
-    }
-
-    IEnumerator AttackCoolDownWaitCoroutine()
-    {
-        canAttack = false;
         yield return null;
-        animator.ResetTrigger("Attack");
-        yield return new WaitForSeconds(totalAttackCoolDown);
-        canAttack = true;
+        animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(UnitData.attackAnimationDelay);
+        _rangedAbilityPoolService.SpawnElementalArrow(this, currentTarget, totalDamage, unitData.unitElement);
+        isAttacking = false;
+        cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = null;
     }
 }

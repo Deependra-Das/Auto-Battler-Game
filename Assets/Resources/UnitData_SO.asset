@@ -1,0 +1,231 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 611fa6ba7639548478bd92069bcf70fc, type: 3}
+  m_Name: UnitData_SO
+  m_EditorClassIdentifier: Assembly-CSharp::UnitScriptableObjectScript
+  unitDataList:
+  - unitID: 101
+    unitIcon: {fileID: 339261780, guid: f0c17ea6448c3044886123d9637721f4, type: 3}
+    unitName: Michael
+    unitFaction: 0
+    unitType: 0
+    unitElement: 1
+    unitLevel: 1
+    baseRange: 1
+    baseUnitCost: 5
+    baseDamage: 8
+    baseHealth: 70
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.65
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.25
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
+  - unitID: 102
+    unitIcon: {fileID: 1001853020, guid: 78c22cb21167b5f4ca9186d6a14d92dc, type: 3}
+    unitName: Gabriel
+    unitFaction: 0
+    unitType: 2
+    unitElement: 1
+    unitLevel: 1
+    baseRange: 1
+    baseUnitCost: 5
+    baseDamage: 5
+    baseHealth: 55
+    baseShield: 25
+    baseHealing: 0
+    baseAttackSpeed: 0.4
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.25
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
+  - unitID: 103
+    unitIcon: {fileID: 790496568, guid: 894d701e06960094a8ffee743e4f6f93, type: 3}
+    unitName: Raphael
+    unitFaction: 0
+    unitType: 1
+    unitElement: 1
+    unitLevel: 1
+    baseRange: 3
+    baseUnitCost: 5
+    baseDamage: 6
+    baseHealth: 50
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.8
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.45
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
+  - unitID: 104
+    unitIcon: {fileID: 1345224006, guid: e02f90bd308d92a4cb906d41812f26ae, type: 3}
+    unitName: Uriel
+    unitFaction: 0
+    unitType: 3
+    unitElement: 1
+    unitLevel: 1
+    baseRange: 5
+    baseUnitCost: 5
+    baseDamage: 3
+    baseHealth: 80
+    baseShield: 0
+    baseHealing: 1
+    baseAttackSpeed: 0.5
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.45
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
+  - unitID: 111
+    unitIcon: {fileID: -206191039, guid: 6c42f13f5634a6b4bb42c1dcdcd08b30, type: 3}
+    unitName: Xenos
+    unitFaction: 1
+    unitType: 0
+    unitElement: 3
+    unitLevel: 1
+    baseRange: 1
+    baseUnitCost: 5
+    baseDamage: 8
+    baseHealth: 70
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.65
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.25
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
+  - unitID: 112
+    unitIcon: {fileID: 5267402234816793484, guid: 8befd0a79752b1144ba01631f15cae44, type: 3}
+    unitName: Nikos
+    unitFaction: 1
+    unitType: 2
+    unitElement: 3
+    unitLevel: 1
+    baseRange: 1
+    baseUnitCost: 5
+    baseDamage: 5
+    baseHealth: 55
+    baseShield: 25
+    baseHealing: 0
+    baseAttackSpeed: 0.4
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.25
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
+  - unitID: 113
+    unitIcon: {fileID: 2786025090814906546, guid: 4a4f9b371ba5fff4198d5de6b44a37ef, type: 3}
+    unitName: Doros
+    unitFaction: 1
+    unitType: 1
+    unitElement: 3
+    unitLevel: 1
+    baseRange: 3
+    baseUnitCost: 5
+    baseDamage: 6
+    baseHealth: 50
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.8
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.45
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
+  - unitID: 114
+    unitIcon: {fileID: 8804136043111226768, guid: 3e4fb1de7b585a34886d8db2273ade44, type: 3}
+    unitName: Vulcan
+    unitFaction: 1
+    unitType: 3
+    unitElement: 3
+    unitLevel: 1
+    baseRange: 5
+    baseUnitCost: 5
+    baseDamage: 3
+    baseHealth: 80
+    baseShield: 0
+    baseHealing: 1
+    baseAttackSpeed: 0.5
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.45
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
+  - unitID: 121
+    unitIcon: {fileID: -1896043947, guid: 957559c7da87ab148a51d2ea5060cd70, type: 3}
+    unitName: Bjorn
+    unitFaction: 2
+    unitType: 0
+    unitElement: 2
+    unitLevel: 1
+    baseRange: 1
+    baseUnitCost: 5
+    baseDamage: 8
+    baseHealth: 70
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.65
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.25
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
+  - unitID: 122
+    unitIcon: {fileID: -5259514187705045419, guid: a6bfec389189c3c40ae22eabec81c943, type: 3}
+    unitName: Thrain
+    unitFaction: 2
+    unitType: 2
+    unitElement: 2
+    unitLevel: 1
+    baseRange: 1
+    baseUnitCost: 5
+    baseDamage: 5
+    baseHealth: 55
+    baseShield: 25
+    baseHealing: 0
+    baseAttackSpeed: 0.4
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.25
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
+  - unitID: 123
+    unitIcon: {fileID: 3791042181826488500, guid: c916b3176dc090e46950da4c1f8c9e2b, type: 3}
+    unitName: Sigrid
+    unitFaction: 2
+    unitType: 1
+    unitElement: 2
+    unitLevel: 1
+    baseRange: 3
+    baseUnitCost: 5
+    baseDamage: 6
+    baseHealth: 50
+    baseShield: 0
+    baseHealing: 0
+    baseAttackSpeed: 0.8
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.45
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30
+  - unitID: 124
+    unitIcon: {fileID: 2477030900967564349, guid: a3f7f9770d6088d4faa37d08a43f7471, type: 3}
+    unitName: Freya
+    unitFaction: 2
+    unitType: 3
+    unitElement: 2
+    unitLevel: 1
+    baseRange: 5
+    baseUnitCost: 5
+    baseDamage: 3
+    baseHealth: 80
+    baseShield: 0
+    baseHealing: 1
+    baseAttackSpeed: 0.5
+    baseMovementSpeed: 1
+    attackAnimationDelay: 0.45
+    baseElementalDamageScalingFactor: 0.5
+    teamShieldScalingFactor: 30

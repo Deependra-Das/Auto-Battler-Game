@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : MonoBehaviour
@@ -9,9 +7,22 @@ public class Tile : MonoBehaviour
     [SerializeField] private Color _validColor;
     [SerializeField] private Color _wrongColor;
 
-    public void OnInteractSetHighlight(bool active, bool valid)
+    public void OnInteractShowHighlight()
     {
-        _highlightSprite.gameObject.SetActive(active);
-        _highlightSprite.color = valid ? _validColor : _wrongColor;
+        SetHighlightColor();
+        _highlightSprite.gameObject.SetActive(true);
+    }
+
+    public void HideHighlight()
+    {
+        _highlightSprite.gameObject.SetActive(false);
+    }
+
+    private void SetHighlightColor()
+    {
+        bool isValid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation &&
+        Node != null && !Node.IsOccupied;
+
+        _highlightSprite.color = isValid ? _validColor : _wrongColor;
     }
 }

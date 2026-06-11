@@ -1,33 +1,29 @@
 using System.Collections;
 using UnityEngine;
 
-public class Spartan_MeleeAttackerUnit : MeleeAttackerUnit
+public class Spartan_MeleeAttackerUnit : BaseUnit
 {
     protected override void Attack()
     {
-        if (!canAttack) return;
+        if (!canAttack || isAttacking || currentTarget == null) return;
 
         Vector3 direction = (currentTarget.CurrentNode.position - this.transform.position);
         Vector3 dirNormalized = direction.normalized;
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
-
-        PerformSwordAttack();
+        isAttacking = true;
+        attackRoutine = StartCoroutine(PerformSpartanSwordSlashCoroutine());
+        attackRoutine = null;
     }
 
-    private void PerformSwordAttack()
+    private IEnumerator PerformSpartanSwordSlashCoroutine()
     {
-        animator.SetTrigger("Attack");
-        currentTarget.TakeDamage(baseDamage, unitElement);
-        StartCoroutine(AttackCoolDownWaitCoroutine());
-    }
-
-    IEnumerator AttackCoolDownWaitCoroutine()
-    {
-        canAttack = false;
         yield return null;
-        animator.ResetTrigger("Attack");
-        yield return new WaitForSeconds(totalAttackCoolDown);
-        canAttack = true;
+        animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(unitData.attackAnimationDelay);
+        DealDamage();
+        isAttacking = false;
+        cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = null;
     }
 }

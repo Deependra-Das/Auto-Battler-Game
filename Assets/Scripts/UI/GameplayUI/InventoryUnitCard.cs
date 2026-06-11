@@ -1,5 +1,6 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -9,28 +10,29 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     [SerializeField] private Image _unitIcon;
     [SerializeField] private Image _unitFaction;
     [SerializeField] private Image _unitType;
-    [SerializeField] private Image _unitLevel;
+    [SerializeField] private TMP_Text _unitLevelText;
 
     public UnitData UnitData { get; private set; }
 
     private Canvas _canvas;
     private CanvasGroup _canvasGroup;
     private LayoutElement _layoutElement;
-
     private RectTransform _cardContainer;
+
     private GameObject _placeholder;
-    private Tile _highlightedTile;
+    private Image _dragSprite;
+    private Tile _hoveredTile;
+    private DiscardUnitDropZoneManager _hoveredDiscardDropZone;
     private bool _isOutsideContainer;
     private int _originalSiblingIndex;
-    private DiscardUnitDropZoneManager _highlightdiscardUnitPanel;
-    private bool _droppedOnDiscardUnitZone;
-    private Image _dragSprite;
+
+    private TeamService _teamServiceObj;
+    private DragVisualPoolService _dragVisualPoolService;
 
     private void Awake()
     {
         _canvasGroup = gameObject.AddComponent<CanvasGroup>();
         _layoutElement = GetComponent<LayoutElement>() ?? gameObject.AddComponent<LayoutElement>();
-        _cardContainer = transform.parent as RectTransform;
     }
 
     private void OnDestroy()
@@ -41,31 +43,36 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         CleanupDragSprite();
     }
 
-    public void Initialize(UnitData unitData, Canvas canvas)
+    public void Initialize(UnitData unitData, Canvas canvas, RectTransform cardContainer)
     {
+        _teamServiceObj = GameManager.Instance.Get<TeamService>();
+        _dragVisualPoolService = GameManager.Instance.Get<DragVisualPoolService>();
+
         UnitData = unitData;
-        _unitIcon.sprite = unitData.unitIcon;
         _canvas = canvas;
+        _cardContainer = cardContainer;
+
+        SetupCardData();
+    }
+
+    private void SetupCardData()
+    {
+        _unitIcon.sprite = UnitData.unitIcon;
+        _unitLevelText.text = UnitData.unitLevel.ToString();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         _originalSiblingIndex = transform.GetSiblingIndex();
         _isOutsideContainer = false;
-        _droppedOnDiscardUnitZone = false;
-        _placeholder = new GameObject("Placeholder");
-        _placeholder.transform.SetParent(_cardContainer);
-        _placeholder.transform.SetSiblingIndex(_originalSiblingIndex);
-
-        LayoutElement placeholderLayout = _placeholder.AddComponent<LayoutElement>();
-        placeholderLayout.preferredWidth = _layoutElement.preferredWidth;
-        placeholderLayout.preferredHeight = _layoutElement.preferredHeight;
+        _placeholder = _dragVisualPoolService.GetPlaceholder(_cardContainer, _originalSiblingIndex, _layoutElement.preferredWidth, _layoutElement.preferredHeight);
 
         transform.SetParent(_canvas.transform);
         _canvasGroup.blocksRaycasts = false;
         _canvasGroup.alpha = 0.85f;
 
-        EventBusManager.Instance.Raise(EventNameEnum.InventoryUnitCardDragged, true);
+        ClearDiscardUnitDropZoneHighlight();
+        RaiseToggleDiscardDropZoneEvent(true);
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -73,33 +80,77 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         transform.position = eventData.position;
 
         bool isInsideContainer = RectTransformUtility.RectangleContainsScreenPoint(
-            _cardContainer,
-            eventData.position,
-            eventData.pressEventCamera
-        );
+            _cardContainer, eventData.position, eventData.pressEventCamera);
 
         if (isInsideContainer)
         {
             HandleReorder();
             CleanupDragSprite();
             ClearHighlightedTile();
+            ClearDiscardUnitDropZoneHighlight();
+            return;
         }
-        else
+        
+        HandleOutsideDrag(eventData);
+
+        Tile tile = TryGetTileUnderPointer(eventData);
+
+        if (tile != null)
         {
-            HandleOutsideDrag(eventData);
-            var gameObject = GetTileUnderPointer(eventData);
-
-            if (!gameObject) return;
-
-            if (gameObject.TryGetComponent<Tile>(out Tile tile))
-            {
-                HighlightTileUnderPointer(tile);
-            }
-            else if (gameObject.TryGetComponent<DiscardUnitDropZoneManager>(out DiscardUnitDropZoneManager discardUnitDropZone))
-            {
-                HighlightDiscardUnitDropZone(discardUnitDropZone);
-            }
+            ClearDiscardUnitDropZoneHighlight();
+            HighlightTileUnderPointer(tile);
+            return;
         }
+
+        DiscardUnitDropZoneManager discardZone = TryGetDiscardZoneUnderPointer(eventData);
+
+        if (discardZone != null)
+        {
+            ClearHighlightedTile();
+            HighlightDiscardUnitDropZone(discardZone);
+            return;
+        }
+
+        ClearHighlightedTile();
+        ClearDiscardUnitDropZoneHighlight();
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        _canvasGroup.blocksRaycasts = true;
+        _canvasGroup.alpha = 1f;
+
+        bool spawned = false;
+
+        if (_isOutsideContainer)
+        {
+            DiscardUnitDropZoneManager discardZone = TryGetDiscardZoneUnderPointer(eventData);
+
+            if (discardZone != null)
+            {
+                discardZone.HandleInventoryDrop(this);
+                CleanupAfterDrag();
+                RaiseToggleDiscardDropZoneEvent(false);
+                return;
+            }
+            
+            Tile tile = TryGetTileUnderPointer(eventData);
+
+            if (tile != null)
+            {
+                spawned = TrySpawnUnitOnTile(tile);
+            }  
+        }
+
+        if (!spawned)
+        {
+            transform.SetParent(_cardContainer);
+            transform.SetSiblingIndex(_placeholder.transform.GetSiblingIndex());
+        }
+
+        CleanupAfterDrag();
+        RaiseReorderInventoryLayoutEvent();
+        RaiseToggleDiscardDropZoneEvent(false);
     }
 
     private void HandleReorder()
@@ -136,14 +187,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
             if (_unitIcon != null && _dragSprite == null)
             {
-                GameObject ghostGO = new GameObject("DragSprite", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-                ghostGO.transform.SetParent(_canvas.transform);
-                ghostGO.transform.SetAsLastSibling();
-
-                _dragSprite = ghostGO.GetComponent<Image>();
-                _dragSprite.sprite = _unitIcon.sprite;
-                _dragSprite.SetNativeSize();
-                _dragSprite.raycastTarget = false;
+                _dragSprite = _dragVisualPoolService.GetDragSprite(_unitIcon.sprite);
             }
         }
 
@@ -151,150 +195,136 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
             _dragSprite.transform.position = eventData.position;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    private Tile TryGetTileUnderPointer(PointerEventData eventData)
     {
-        _canvasGroup.blocksRaycasts = true;
-        _canvasGroup.alpha = 1f;
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
+        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
+
+        RaycastHit2D hit = Physics2D.Raycast(worldPos2D, Vector2.zero);
+
+        if (hit.collider == null)
+        {
+            return null;
+        }
+        else
+        {
+            if (hit.collider.gameObject.TryGetComponent<Tile>(out Tile tile))
+            {
+                return tile;
+            }
+            else
+            {
+                return null;
+            }
+        }
+    }
+
+    private DiscardUnitDropZoneManager TryGetDiscardZoneUnderPointer(PointerEventData eventData)
+    {
+        var raycastObj = eventData.pointerCurrentRaycast.gameObject;
+
+        if (raycastObj == null)
+            return null;
+
+        return raycastObj.GetComponentInParent<DiscardUnitDropZoneManager>();
+    }
+
+    private bool TrySpawnUnitOnTile(Tile tile)
+    {
+        if (GameplayManager.Instance.CurrentGameplayState != GameplayStateEnum.Preparation) return false;
+
+        if (!_teamServiceObj.CanAddUnitToField(TeamEnum.Team1)) return false;
+
+        if (tile == null || tile.Node == null || tile.Node.IsOccupied)
+        {
+            return false;
+        }
+        else
+        {
+            GameplayManager.Instance.DeployUnit(this, tile.Node, TeamEnum.Team1);
+            return true;
+        }
+    }
+
+    private void HighlightTileUnderPointer(Tile tile)
+    {
+        if (tile == null) return;
+        if (_hoveredTile == tile) return;
 
         ClearHighlightedTile();
+        tile.OnInteractShowHighlight();
+        _hoveredTile = tile;
+    }
+
+    private void ClearHighlightedTile()
+    {
+        if (_hoveredTile != null)
+        {
+            _hoveredTile.HideHighlight();
+            _hoveredTile = null;
+        }
+    }
+
+    private void HighlightDiscardUnitDropZone(DiscardUnitDropZoneManager discardUnitDropZone)
+    {
+        if (_hoveredDiscardDropZone == discardUnitDropZone) return;
+
         ClearDiscardUnitDropZoneHighlight();
-        bool spawned = false;
 
-        if (_isOutsideContainer && _droppedOnDiscardUnitZone)
-        {
-            if (_placeholder != null)
-            {
-                Destroy(_placeholder);
-                _placeholder = null;
-            }
+        _hoveredDiscardDropZone = discardUnitDropZone;
+        _hoveredDiscardDropZone.ShowDiscardDropZoneHighlight();
+    }
 
-            CleanupAfterDrag();
-            return;
-        }
+    private void ClearDiscardUnitDropZoneHighlight()
+    {
+        if (_hoveredDiscardDropZone == null) return;
 
-        if (_isOutsideContainer)
-        {
-            spawned = TrySpawnUnitOnTile(eventData);
-        }
-
-        if (!spawned)
-        {
-            transform.SetParent(_cardContainer);
-            transform.SetSiblingIndex(_placeholder.transform.GetSiblingIndex());
-        }
-
-        if (_placeholder != null)
-        {
-            Destroy(_placeholder);
-            _placeholder = null;
-        }
-
-        CleanupAfterDrag();
+        _hoveredDiscardDropZone.HideDiscardDropZoneHighlight();
+        _hoveredDiscardDropZone = null;
     }
 
     private void CleanupDragSprite()
     {
         if (_dragSprite != null)
         {
-            Destroy(_dragSprite.gameObject);
+            _dragVisualPoolService.ReleaseDragSprite();
             _dragSprite = null;
+        }
+    }
+
+    private void CleanupPlaceholder()
+    {
+        if (_placeholder != null)
+        {
+            _dragVisualPoolService.ReleasePlaceholder();
+            _placeholder = null;
         }
     }
 
     private void CleanupAfterDrag()
     {
+        CleanupPlaceholder();
         CleanupDragSprite();
         ClearHighlightedTile();
         ClearDiscardUnitDropZoneHighlight();
-        DragCompleted();
-        UIManager.Instance.RefreshInventoryOrder();
-        LayoutRebuilder.ForceRebuildLayoutImmediate(_cardContainer);
     }
 
-    private bool TrySpawnUnitOnTile(PointerEventData eventData)
+    private void RaiseReorderInventoryLayoutEvent()
     {
-        if (GameplayManager.Instance.CurrentGameplayState != GameplayStateEnum.Preparation) return false;
-
-        var teamService = GameManager.Instance.Get<TeamService>();
-
-        if (!teamService.CanAddUnitToField(TeamEnum.Team1)) return false;
-
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
-        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
-
-        RaycastHit2D hit = Physics2D.Raycast(worldPos2D, Vector2.zero);
-        if (hit.collider == null)
-            return false;
-
-        Tile tile = hit.collider.GetComponent<Tile>();
-        if (tile == null || tile.Node == null || tile.Node.IsOccupied)
-            return false;
-
-        GameplayManager.Instance.DeployUnit(this, tile.Node, TeamEnum.Team1);
-        return true;
+        EventBusManager.Instance.Raise(EventNameEnum.ReorderInventoryLayout, false);
     }
 
-    private void HighlightTileUnderPointer(Tile tile)
+    private void RaiseToggleDiscardDropZoneEvent(bool state)
     {
-        if (tile == null) return;
-        if (_highlightedTile == tile) return;
-
-        ClearHighlightedTile();
-
-        bool isValid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation &&
-            tile.Node != null && !tile.Node.IsOccupied;
-
-        tile.OnInteractSetHighlight(true, isValid);
-        _highlightedTile = tile;
+        EventBusManager.Instance.Raise(EventNameEnum.ToggleDiscardDropZone, state);
     }
 
-    private void ClearHighlightedTile()
+    public void Reset()
     {
-        if (_highlightedTile != null)
-        {
-            _highlightedTile.OnInteractSetHighlight(false, false);
-            _highlightedTile = null;
-        }
-    }
-
-    private GameObject GetTileUnderPointer(PointerEventData eventData)
-    {
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
-        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
-
-        RaycastHit2D hit = Physics2D.Raycast(worldPos2D, Vector2.zero);
-        if (hit.collider == null)
-            return null;
-
-        return hit.collider.gameObject;
-    }
-
-    private void HighlightDiscardUnitDropZone(DiscardUnitDropZoneManager discardUnitDropZone)
-    {
-        if (_highlightdiscardUnitPanel == discardUnitDropZone) return;
-
-        ClearDiscardUnitDropZoneHighlight();
-
-        _highlightdiscardUnitPanel = discardUnitDropZone;
-        EventBusManager.Instance.Raise(EventNameEnum.HighlightDiscardPanel, true);
-    }
-
-    private void ClearDiscardUnitDropZoneHighlight()
-    {
-        if (_highlightdiscardUnitPanel == null) return;
-
-        EventBusManager.Instance.Raise(EventNameEnum.HighlightDiscardPanel, false);
-        _highlightdiscardUnitPanel = null;
-    }
-
-    public void MarkDroppedOnDiscardUnitZone()
-    {
-        _droppedOnDiscardUnitZone = true;
-        CleanupAfterDrag();
-    }
-
-    private void DragCompleted()
-    {
-        EventBusManager.Instance.Raise(EventNameEnum.InventoryUnitCardDragged, false);
+        UnitData = default;
+        _unitIcon.sprite = null;
+        _unitFaction.sprite = null;
+        _unitType.sprite = null;
+        _unitLevelText.text = string.Empty;
     }
 }

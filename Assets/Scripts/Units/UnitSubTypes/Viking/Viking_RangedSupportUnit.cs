@@ -2,36 +2,51 @@ using AutoBattler.Main;
 using System.Collections;
 using UnityEngine;
 
-public class Viking_RangedSupportUnit : RangedSupportUnit
+public class Viking_RangedSupportUnit : BaseUnit
 {
-    [SerializeField] protected float lifetime = 1f;
-    [SerializeField] protected float damageDelay = 0.2f;
+    private RangedAbilityPoolService _rangedAbilityPoolService;
+
+    public override void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
+    {
+        base.Initialize(unitData, team, spawnNode);
+
+        _rangedAbilityPoolService = GameManager.Instance.Get<RangedAbilityPoolService>();
+    }
 
     protected override void Attack()
     {
-        if (!canAttack) return;
+        if (!canAttack || isAttacking || currentTarget == null) return;
 
-        PerformManaAttack();
+        Vector3 direction = (currentTarget.CurrentNode.position - this.transform.position);
+        Vector3 dirNormalized = direction.normalized;
+        animator.SetFloat("MoveX", dirNormalized.x);
+        animator.SetFloat("MoveY", dirNormalized.y);
+        SetDirectionFacing(dirNormalized);
+        isAttacking = true;
+        attackRoutine = StartCoroutine(PerformVikingElementalBurst());
+        attackRoutine = null;
     }
 
-    private void PerformManaAttack()
+    private IEnumerator PerformVikingElementalBurst()
     {
-        animator.SetTrigger("Attack");
-        StartCoroutine(AttackCoolDownWaitCoroutine());
-    }
-
-    private void ManaBurst()
-    {
-        GameManager.Instance.Get<RangedAbilityService>().SpawnManaBurst(this, currentTarget, totalDamage, unitElement, lifetime, damageDelay);
-        HealAllTeammates();
-    }
-
-    IEnumerator AttackCoolDownWaitCoroutine()
-    {
-        canAttack = false;
         yield return null;
-        animator.ResetTrigger("Attack");
-        yield return new WaitForSeconds(totalAttackCoolDown);
-        canAttack = true;
+        animator.SetTrigger("Attack");
+        _rangedAbilityPoolService.SpawnElementalBurst(this, currentTarget, totalDamage, unitData.unitElement, UnitData.attackAnimationDelay);
+        yield return new WaitForSeconds(UnitData.attackAnimationDelay);
+        HealAllTeammates();
+        isAttacking = false;
+        cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
+        cooldownRoutine = null;
+    }
+
+    protected void HealAllTeammates()
+    {
+        var teammates = GameManager.Instance.Get<TeamService>().GetFieldUnits(Team);
+
+        foreach (BaseUnit unit in teammates)
+        {
+            if (unit == null || unit.IsDead) continue;
+            unit.Heal(unitData.baseHealing);
+        }
     }
 }

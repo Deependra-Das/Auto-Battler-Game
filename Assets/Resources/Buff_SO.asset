@@ -40,11 +40,11 @@ MonoBehaviour:
     buffImage: {fileID: 0}
     buffParticipantTierList:
     - participants: 2
-      buffValue: 0.25
+      buffValue: 0.1
     - participants: 4
-      buffValue: 0.5
+      buffValue: 0.18
     - participants: 6
-      buffValue: 0.75
+      buffValue: 0.25
     buffDescription: 
   - buffName: 3
     buffType: 0

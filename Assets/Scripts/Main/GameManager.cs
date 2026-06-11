@@ -7,11 +7,18 @@ namespace AutoBattler.Main
     public class GameManager : GenericMonoSingleton<GameManager>
     {
         [SerializeField] private TileScriptableObjectScript _tile_SO;
-        [SerializeField] private UnitScriptableObject _unit_SO;
+        [SerializeField] private UnitDataScriptableObjectScript _unitData_SO;
+        [SerializeField] private UnitPrefabScriptableObjectScript _unitPrefab_SO;
         [SerializeField] private RangedAbilitiesScriptableObjectScript _rangedAbilities_SO;
         [SerializeField] private BuffScriptableObjectScript _buff_SO;
         [SerializeField] private StageConfigScriptableObjectScript _stageConfig_SO;
         [SerializeField] private PlayerLevelConfigScriptableObjectScript _playerLevelConfig_SO;
+        [SerializeField] private VfxScriptableObjectScript vfx_SO;
+
+        [SerializeField] private Transform _pooledUnitContainerTransform;
+        [SerializeField] private Transform _activeUnitContainerTransform;
+        [SerializeField] private Transform _pooledVfxContainerTransform;
+        [SerializeField] private Transform _pooledRangedAbilityContainerTransform;
 
         public int currentStageIndexSelected = -1;
 
@@ -33,15 +40,18 @@ namespace AutoBattler.Main
 
         private void RegisterServices()
         {
+            ServiceLocator.Register(new UnitDataService(_unitData_SO));
+            ServiceLocator.Register(new UnitPoolService(_unitPrefab_SO, _pooledUnitContainerTransform, _activeUnitContainerTransform));
+            ServiceLocator.Register(new DragVisualPoolService());
+            ServiceLocator.Register(new VfxPoolService(vfx_SO, _pooledVfxContainerTransform));
+            ServiceLocator.Register(new RangedAbilityPoolService(_rangedAbilities_SO, _pooledRangedAbilityContainerTransform));
             ServiceLocator.Register(new TileGridService(_tile_SO));
             ServiceLocator.Register(new GraphService());
             ServiceLocator.Register(new TeamService());
-            ServiceLocator.Register(new RangedAbilityService(_rangedAbilities_SO));
             ServiceLocator.Register(new CurrencyService());
             ServiceLocator.Register(new PlayerLevelService(_playerLevelConfig_SO));
-            ServiceLocator.Register(new UnitService(_unit_SO));
             ServiceLocator.Register(new InventoryService());
-            ServiceLocator.Register(new ShopService(_unit_SO));
+            ServiceLocator.Register(new ShopService());
             ServiceLocator.Register(new BuffService(_buff_SO));
             ServiceLocator.Register(new RoundSnapshotService());
             ServiceLocator.Register(new StageSnapshotService());
@@ -50,14 +60,17 @@ namespace AutoBattler.Main
 
         private void DeregisterServices()
         {
+            ServiceLocator.Unregister<UnitDataService>();
+            ServiceLocator.Unregister<UnitPoolService>();
+            ServiceLocator.Unregister<DragVisualPoolService>();
+            ServiceLocator.Unregister<VfxPoolService>();
+            ServiceLocator.Unregister<RangedAbilityPoolService>();
             ServiceLocator.Unregister<TileGridService>();
             ServiceLocator.Unregister<GraphService>();
             ServiceLocator.Unregister<TeamService>();
-            ServiceLocator.Unregister<RangedAbilityService>();
             ServiceLocator.Unregister<StageService>();
             ServiceLocator.Unregister<CurrencyService>();
             ServiceLocator.Unregister<PlayerLevelService>();
-            ServiceLocator.Unregister<UnitService>();
             ServiceLocator.Unregister<InventoryService>();
             ServiceLocator.Unregister<ShopService>();
             ServiceLocator.Unregister<BuffService>();

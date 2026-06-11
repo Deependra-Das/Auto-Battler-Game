@@ -5,10 +5,10 @@ namespace AutoBattler.Event
     public enum EventNameEnum
     {
         GameplayStateChanged,
-        UnitDragged,
-        InventoryUnitCardDragged,
-        HighlightInventoryPanel,
-        HighlightDiscardPanel,
+        ToggleInventoryDropZone,
+        ToggleDiscardDropZone,
+        InventoryUnitCardDiscarded,
+        ReorderInventoryLayout,
         UnitAddedOnField,
         UnitRemovedFromField,
         TeamBuffUpdated,
