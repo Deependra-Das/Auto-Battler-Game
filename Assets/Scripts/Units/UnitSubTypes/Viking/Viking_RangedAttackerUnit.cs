@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class Viking_RangedAttackerUnit : BaseUnit
 {
+    private RangedAbilityPoolService _rangedAbilityPoolService;
+
+    public override void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
+    {
+        base.Initialize(unitData, team, spawnNode);
+
+        _rangedAbilityPoolService = GameManager.Instance.Get<RangedAbilityPoolService>();
+    }
+
     protected override void Attack()
     {
         if (!canAttack || isAttacking || currentTarget == null) return;
@@ -23,7 +32,7 @@ public class Viking_RangedAttackerUnit : BaseUnit
         yield return null;
         animator.SetTrigger("Attack");
         yield return new WaitForSeconds(UnitData.attackAnimationDelay);
-        GameManager.Instance.Get<RangedAbilityService>().SpawnElementalArrow(this, currentTarget, totalDamage, unitData.unitElement);
+        _rangedAbilityPoolService.SpawnElementalArrow(this, currentTarget, totalDamage, unitData.unitElement);
         isAttacking = false;
         cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
         cooldownRoutine = null;

@@ -85,7 +85,7 @@ public class BaseUnit : MonoBehaviour
         _unitDragHandler = GetComponent<UnitDragHandler>();
     }
 
-    public void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
+    public virtual void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
     {
         _graphServiceObj = GameManager.Instance.Get<GraphService>();
 
