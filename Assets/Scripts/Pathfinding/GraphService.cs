@@ -1,93 +1,87 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GraphService
 {
-    protected PathFindingGraph graph;
-    public PathFindingGraph Graph => graph;
+    private PathFindingGraph _graph;
+    public PathFindingGraph Graph => _graph;
 
-    private List<Tile> tileList = new List<Tile>();
+    private Tilemap _tilemap;
 
-    private Dictionary<TeamEnum, int> _startPositionForTeam;
+    private Dictionary<Vector3Int, Node> _cellToNode = new Dictionary<Vector3Int, Node>();
 
-    public void Initialize(List<Tile> spawnedTiles)
+    public void InitializeGraph(Tilemap tilemap)
     {
-        tileList = spawnedTiles;
-        InitializeGraph();
-        _startPositionForTeam = new Dictionary<TeamEnum, int>();
-        _startPositionForTeam.Add(TeamEnum.Team1, 0);
-        _startPositionForTeam.Add(TeamEnum.Team2, graph.Nodes.Count - 1);
-    }
+        _cellToNode.Clear();
 
-    private void InitializeGraph()
-    {
-        graph = new PathFindingGraph();
+        _tilemap = tilemap;
+        _graph = new PathFindingGraph();
 
-        for (int i = 0; i < tileList.Count; i++)
+        for (int x = _tilemap.cellBounds.xMin; x < _tilemap.cellBounds.xMax; x++)
         {
-            Vector3 place = tileList[i].transform.position;
-            Node node = graph.AddNode(place);
-            tileList[i].Node = node;
+            for (int y = _tilemap.cellBounds.yMin; y < _tilemap.cellBounds.yMax; y++)
+            {
+                Vector3Int cell = new Vector3Int(x, y, 0);
+
+                if (_tilemap.HasTile(cell))
+                {
+                    Vector3 worldPosition = _tilemap.GetCellCenterWorld(cell);
+                    Node node = _graph.AddNode(worldPosition);
+                    _cellToNode[cell] = node;
+                }
+            }
         }
 
-        var allNodes = graph.Nodes;
+        var allNodes = _graph.Nodes;
         foreach (Node source in allNodes)
         {
             foreach (Node destination in allNodes)
             {
-                if (Vector3.Distance(source.position, destination.position) < 1f && source != destination)
+                if (Vector3.Distance(source.worldPosition, destination.worldPosition) < 1f && source != destination)
                 {
-                    graph.AddPath(source, destination);
+                    _graph.AddPath(source, destination);
                 }
             }
         }
     }
 
-    public Node GetUnOccupiedNode(TeamEnum team)
-    {
-        int startIndex = _startPositionForTeam[team];
-        int currentIndex = startIndex;
-
-        while (graph.Nodes[currentIndex].IsOccupied)
-        {
-            if(startIndex == 0)
-            {
-                currentIndex++;
-                if (currentIndex == graph.Nodes.Count)
-                    return null;
-            }
-            else
-            {
-                currentIndex--;
-                if (currentIndex == -1)
-                    return null;
-            }
-        }
-
-        return graph.Nodes[currentIndex];
-    }
-
     public List<Node> GetShortestPath(Node source, Node destination)
     {
-        return graph.GetShortestPath(source, destination);
+        return _graph.GetShortestPath(source, destination);
     }
 
     public List<Node> GetNodesCloseTo(Node destination)
     {
-        return graph.GetNeighbours(destination);
+        return _graph.GetNeighbours(destination);
+    }
+
+    public bool GetUnoccupiedNodeAtIndex(int index, out Node node)
+    {
+        if(_graph.Nodes[index].IsOccupied)
+        {
+            node = null;
+            Debug.Log($"Node at Index {index} is Occupied");
+            return false;
+        }
+
+        node = _graph.Nodes[index];
+        return true;
+    }
+    public bool TryGetNodeAtCell(Vector3Int cell, out Node node)
+    {
+        return _cellToNode.TryGetValue(cell, out node);
     }
 
     public void ClearGraphNodeOccupancy()
     {
-        graph?.ClearAllNodeOccupancy();
+        _graph?.ClearAllNodeOccupancy();
     }
 
     public void Reset()
     {
-        graph = null;
-        tileList.Clear();
-        _startPositionForTeam?.Clear();
-        _startPositionForTeam = null;
+        _cellToNode.Clear();
+        _graph = null;
+        _tilemap = null;
     }
 }
