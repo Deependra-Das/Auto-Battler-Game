@@ -2,15 +2,16 @@ using AutoBattler.Event;
 using AutoBattler.Main;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 
 
 public class GameplayManager : MonoBehaviour
 {
     [SerializeField] private float _roundEndDelay = 1.5f;
-
+    [SerializeField] private Grid _tileGrid;
 
     public static GameplayManager Instance;
 
@@ -30,6 +31,7 @@ public class GameplayManager : MonoBehaviour
     private CurrencyService _currencyServiceObj;
     private DragVisualPoolService _dragVisualPoolServiceObj;
     private VfxPoolService _vfxPoolServiceObj;
+    private HighlightTileService _highlightTileServiceObj;
 
     public int fromIndex = 0;
     public int toIndex = 0;
@@ -41,7 +43,7 @@ public class GameplayManager : MonoBehaviour
     private bool _waitingForRoundDecision = false;
     private bool _waitingForStageDecision = false;
     private Coroutine _roundCheckRoutine;
-
+    Tilemap tilemap;
     public GameplayStateEnum CurrentGameplayState { get; private set; }
 
     private void Awake()
@@ -83,11 +85,6 @@ public class GameplayManager : MonoBehaviour
 
         _dragVisualPoolServiceObj.Initialize(UIManager.Instance.UICanvas, UIManager.Instance.DragVisualPoolContainerRectTransform);
         UIManager.Instance.InitializeGameplayUI();
-
-        _tileGridServiceObj.CreateTileMap();
-        _graphServiceObj.Initialize(_tileGridServiceObj.GetSpawnedTilesList());
-        graph = _graphServiceObj.Graph;
-
         _buffServiceObj.InitializeBuffs();
         _inventoryServiceObj.SetMaxInventorySize(8);
         InitializeStageForGameplay(GameData.selectedStage);
@@ -96,6 +93,7 @@ public class GameplayManager : MonoBehaviour
     private void ResolveServices()
     {
         _dragVisualPoolServiceObj = GameManager.Instance.Get<DragVisualPoolService>();
+        _highlightTileServiceObj = GameManager.Instance.Get<HighlightTileService>();
         _vfxPoolServiceObj = GameManager.Instance.Get<VfxPoolService>();
         _unitPoolServiceObj = GameManager.Instance.Get<UnitPoolService>();
         _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
@@ -114,6 +112,13 @@ public class GameplayManager : MonoBehaviour
 
     public void InitializeStageForGameplay(int stageIndex)
     {
+        _tileGridServiceObj.CreateTileMap(_stageServiceObj.GetStageData(GameData.selectedStage).stageTilemapPrefab, _tileGrid);
+        tilemap = _tileGridServiceObj.CurrentTileMap;
+
+        _graphServiceObj.InitializeGraph(_tileGridServiceObj.CurrentTileMap);
+        graph = _graphServiceObj.Graph;
+
+        _highlightTileServiceObj.Initialize();
         _stageServiceObj.InitializeStage(stageIndex);
         PrepareCurrentRound();
     }
@@ -166,14 +171,19 @@ public class GameplayManager : MonoBehaviour
 
     private void InstantiateTeam2Units()
     {
+        List<RoundEnemyData> enemiesForRound = _stageServiceObj.GetCurrentRoundData().enemiyList;
+
         int team2FieldCapacity = _teamServiceObj.GetFieldCapacity(TeamEnum.Team2);
         IReadOnlyList<UnitData> team2Units = _teamServiceObj.GetTeamUnits(TeamEnum.Team2);
 
-        foreach (UnitData unitData in _teamServiceObj.GetTeamUnits(TeamEnum.Team2))
+        for (int i = 0; i< team2Units.Count; i++)
         {
-            BaseUnit newUnit = _unitPoolServiceObj.Get(unitData.unitID);
-            newUnit.Initialize(unitData, TeamEnum.Team2, _graphServiceObj.GetUnOccupiedNode(TeamEnum.Team2));
-            _teamServiceObj.MoveToField(newUnit, TeamEnum.Team2);
+            BaseUnit newUnit = _unitPoolServiceObj.Get(team2Units[i].unitID);
+            if (_graphServiceObj.GetUnoccupiedNodeAtIndex(enemiesForRound[i].enemySpawnTileIndex, out Node spawnNode))
+            {
+                newUnit.Initialize(team2Units[i], TeamEnum.Team2, spawnNode);
+                _teamServiceObj.MoveToField(newUnit, TeamEnum.Team2);
+            }
         }
     }
 
@@ -366,7 +376,7 @@ public class GameplayManager : MonoBehaviour
         _pendingReleaseUnits.Clear();
 
         CleanupRound(false);
-
+        _highlightTileServiceObj.Dispose();
         _tileGridServiceObj.Reset();
         _graphServiceObj.Reset();
         _roundSnapshotServiceObj.Reset();
@@ -621,7 +631,7 @@ public class GameplayManager : MonoBehaviour
 
         foreach (Path path in PathList)
         {
-            Debug.DrawLine(path.source.position, path.destination.position, Color.black, 100);
+            Debug.DrawLine(path.source.worldPosition, path.destination.worldPosition, Color.black, 100);
         }
 
         var NodesList = graph.Nodes;
@@ -631,7 +641,7 @@ public class GameplayManager : MonoBehaviour
         foreach (Node node in NodesList)
         {
             Gizmos.color = node.IsOccupied ? Color.red : Color.green;
-            Gizmos.DrawSphere(node.position, 0.1f);
+            Gizmos.DrawSphere(node.worldPosition, 0.1f);
         }
 
         if (fromIndex >= NodesList.Count || toIndex >= NodesList.Count) return;
@@ -642,7 +652,27 @@ public class GameplayManager : MonoBehaviour
         {
             for (int i = 1; i < pathList.Count; i++)
             {
-                Debug.DrawLine(pathList[i - 1].position, pathList[i].position, Color.red, 1);
+                Debug.DrawLine(pathList[i - 1].worldPosition, pathList[i].worldPosition, Color.red, 1);
+            }
+        }
+
+        if (tilemap == null) return;
+
+        int index = 0;
+
+
+        for (int x = tilemap.cellBounds.xMin; x < tilemap.cellBounds.xMax; x++)
+        {
+            for (int y =tilemap.cellBounds.yMin; y < tilemap.cellBounds.yMax; y++)
+            {
+                Vector3Int localPosition = new Vector3Int(x, y, (int)tilemap.transform.position.y);
+                Vector3 worldPosition = tilemap.CellToWorld(localPosition);
+
+                if (tilemap.HasTile(localPosition))
+                {
+                    Handles.Label(worldPosition, index.ToString());
+                    index++;
+                }
             }
         }
     }

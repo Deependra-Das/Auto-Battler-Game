@@ -45,8 +45,9 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new DragVisualPoolService());
             ServiceLocator.Register(new VfxPoolService(vfx_SO, _pooledVfxContainerTransform));
             ServiceLocator.Register(new RangedAbilityPoolService(_rangedAbilities_SO, _pooledRangedAbilityContainerTransform));
-            ServiceLocator.Register(new TileGridService(_tile_SO));
+            ServiceLocator.Register(new TileGridService());
             ServiceLocator.Register(new GraphService());
+            ServiceLocator.Register(new HighlightTileService(_tile_SO));
             ServiceLocator.Register(new TeamService());
             ServiceLocator.Register(new CurrencyService());
             ServiceLocator.Register(new PlayerLevelService(_playerLevelConfig_SO));
@@ -67,6 +68,7 @@ namespace AutoBattler.Main
             ServiceLocator.Unregister<RangedAbilityPoolService>();
             ServiceLocator.Unregister<TileGridService>();
             ServiceLocator.Unregister<GraphService>();
+            ServiceLocator.Unregister<HighlightTileService>();
             ServiceLocator.Unregister<TeamService>();
             ServiceLocator.Unregister<StageService>();
             ServiceLocator.Unregister<CurrencyService>();

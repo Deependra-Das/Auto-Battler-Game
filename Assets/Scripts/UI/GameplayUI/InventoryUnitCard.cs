@@ -3,6 +3,7 @@ using AutoBattler.Main;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -21,13 +22,16 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     private GameObject _placeholder;
     private Image _dragSprite;
-    private Tile _hoveredTile;
+    private Node _hoveredNode;
     private DiscardUnitDropZoneManager _hoveredDiscardDropZone;
     private bool _isOutsideContainer;
     private int _originalSiblingIndex;
 
     private TeamService _teamServiceObj;
-    private DragVisualPoolService _dragVisualPoolService;
+    private DragVisualPoolService _dragVisualPoolServiceObj;
+    private TileGridService _tileGridServiceObj;
+    private HighlightTileService _highlightTileServiceObj;
+    private GraphService _graphServiceObj;
 
     private void Awake()
     {
@@ -46,7 +50,10 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void Initialize(UnitData unitData, Canvas canvas, RectTransform cardContainer)
     {
         _teamServiceObj = GameManager.Instance.Get<TeamService>();
-        _dragVisualPoolService = GameManager.Instance.Get<DragVisualPoolService>();
+        _dragVisualPoolServiceObj = GameManager.Instance.Get<DragVisualPoolService>();
+        _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
+        _highlightTileServiceObj = GameManager.Instance.Get<HighlightTileService>();
+        _graphServiceObj = GameManager.Instance.Get<GraphService>();
 
         UnitData = unitData;
         _canvas = canvas;
@@ -65,7 +72,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         _originalSiblingIndex = transform.GetSiblingIndex();
         _isOutsideContainer = false;
-        _placeholder = _dragVisualPoolService.GetPlaceholder(_cardContainer, _originalSiblingIndex, _layoutElement.preferredWidth, _layoutElement.preferredHeight);
+        _placeholder = _dragVisualPoolServiceObj.GetPlaceholder(_cardContainer, _originalSiblingIndex, _layoutElement.preferredWidth, _layoutElement.preferredHeight);
 
         transform.SetParent(_canvas.transform);
         _canvasGroup.blocksRaycasts = false;
@@ -86,19 +93,19 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         {
             HandleReorder();
             CleanupDragSprite();
-            ClearHighlightedTile();
+            ClearHighlightedTileNode();
             ClearDiscardUnitDropZoneHighlight();
             return;
         }
         
         HandleOutsideDrag(eventData);
 
-        Tile tile = TryGetTileUnderPointer(eventData);
+        Node node = TryGetNodeUnderPointer(eventData);
 
-        if (tile != null)
+        if (node != null)
         {
             ClearDiscardUnitDropZoneHighlight();
-            HighlightTileUnderPointer(tile);
+            HighlightTileAtNode(node);
             return;
         }
 
@@ -106,12 +113,12 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         if (discardZone != null)
         {
-            ClearHighlightedTile();
+            ClearHighlightedTileNode();
             HighlightDiscardUnitDropZone(discardZone);
             return;
         }
 
-        ClearHighlightedTile();
+        ClearHighlightedTileNode();
         ClearDiscardUnitDropZoneHighlight();
     }
 
@@ -133,13 +140,13 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
                 RaiseToggleDiscardDropZoneEvent(false);
                 return;
             }
-            
-            Tile tile = TryGetTileUnderPointer(eventData);
 
-            if (tile != null)
+            Node node = TryGetNodeUnderPointer(eventData);
+
+            if (node != null)
             {
-                spawned = TrySpawnUnitOnTile(tile);
-            }  
+                spawned = TrySpawnUnitOnNode(node);
+            }
         }
 
         if (!spawned)
@@ -187,7 +194,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
             if (_unitIcon != null && _dragSprite == null)
             {
-                _dragSprite = _dragVisualPoolService.GetDragSprite(_unitIcon.sprite);
+                _dragSprite = _dragVisualPoolServiceObj.GetDragSprite(_unitIcon.sprite);
             }
         }
 
@@ -195,28 +202,22 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
             _dragSprite.transform.position = eventData.position;
     }
 
-    private Tile TryGetTileUnderPointer(PointerEventData eventData)
+    private Node TryGetNodeUnderPointer(PointerEventData eventData)
     {
+        Tilemap tilemap = _tileGridServiceObj.CurrentTileMap;
+
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
-        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
 
-        RaycastHit2D hit = Physics2D.Raycast(worldPos2D, Vector2.zero);
+        worldPos.z = 0;
 
-        if (hit.collider == null)
-        {
+        Vector3Int cell = tilemap.WorldToCell(worldPos);
+
+        if (!tilemap.HasTile(cell))
             return null;
-        }
-        else
-        {
-            if (hit.collider.gameObject.TryGetComponent<Tile>(out Tile tile))
-            {
-                return tile;
-            }
-            else
-            {
-                return null;
-            }
-        }
+
+        _graphServiceObj.TryGetNodeAtCell(cell, out Node node);
+
+        return node;
     }
 
     private DiscardUnitDropZoneManager TryGetDiscardZoneUnderPointer(PointerEventData eventData)
@@ -229,40 +230,41 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         return raycastObj.GetComponentInParent<DiscardUnitDropZoneManager>();
     }
 
-    private bool TrySpawnUnitOnTile(Tile tile)
+    private bool TrySpawnUnitOnNode(Node node)
     {
-        if (GameplayManager.Instance.CurrentGameplayState != GameplayStateEnum.Preparation) return false;
-
-        if (!_teamServiceObj.CanAddUnitToField(TeamEnum.Team1)) return false;
-
-        if (tile == null || tile.Node == null || tile.Node.IsOccupied)
-        {
+        if (GameplayManager.Instance.CurrentGameplayState != GameplayStateEnum.Preparation)
             return false;
-        }
-        else
-        {
-            GameplayManager.Instance.DeployUnit(this, tile.Node, TeamEnum.Team1);
-            return true;
-        }
+
+        if (!_teamServiceObj.CanAddUnitToField(TeamEnum.Team1))
+            return false;
+
+        if (node == null || node.IsOccupied)
+            return false;
+
+        GameplayManager.Instance.DeployUnit(this, node, TeamEnum.Team1);
+
+        return true;
     }
 
-    private void HighlightTileUnderPointer(Tile tile)
+    private void HighlightTileAtNode(Node node)
     {
-        if (tile == null) return;
-        if (_hoveredTile == tile) return;
+        if (node == null)
+            return;
 
-        ClearHighlightedTile();
-        tile.OnInteractShowHighlight();
-        _hoveredTile = tile;
+        if (_hoveredNode == node)
+            return;
+
+        _hoveredNode = node;
+
+        bool valid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation && !node.IsOccupied;
+
+        _highlightTileServiceObj.ShowTileHighlight(node.worldPosition, valid);
     }
 
-    private void ClearHighlightedTile()
+    private void ClearHighlightedTileNode()
     {
-        if (_hoveredTile != null)
-        {
-            _hoveredTile.HideHighlight();
-            _hoveredTile = null;
-        }
+        _hoveredNode = null;
+        _highlightTileServiceObj.HideTileHighlight();
     }
 
     private void HighlightDiscardUnitDropZone(DiscardUnitDropZoneManager discardUnitDropZone)
@@ -287,7 +289,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (_dragSprite != null)
         {
-            _dragVisualPoolService.ReleaseDragSprite();
+            _dragVisualPoolServiceObj.ReleaseDragSprite();
             _dragSprite = null;
         }
     }
@@ -296,7 +298,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (_placeholder != null)
         {
-            _dragVisualPoolService.ReleasePlaceholder();
+            _dragVisualPoolServiceObj.ReleasePlaceholder();
             _placeholder = null;
         }
     }
@@ -305,7 +307,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         CleanupPlaceholder();
         CleanupDragSprite();
-        ClearHighlightedTile();
+        ClearHighlightedTileNode();
         ClearDiscardUnitDropZoneHighlight();
     }
 
