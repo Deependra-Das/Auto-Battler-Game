@@ -17,7 +17,7 @@ public class Crusader_RangedAttackerUnit : BaseUnit
     {
         if (!canAttack || isAttacking || currentTarget == null) return;
 
-        Vector3 direction = (currentTarget.CurrentNode.position - this.transform.position);
+        Vector3 direction = (currentTarget.CurrentNode.worldPosition - this.transform.position);
         Vector3 dirNormalized = direction.normalized;
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);

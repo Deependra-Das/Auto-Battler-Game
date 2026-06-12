@@ -36,6 +36,7 @@ public class PathFindingGraph
             if (path.source == source && path.destination == destination)
                 return true;
         }
+
         return false;
     }
 
@@ -105,7 +106,7 @@ public class PathFindingGraph
 
             foreach (Node neighbor in GetNeighbours(currentNode))
             {
-                float length = Vector3.Distance(currentNode.position, neighbor.position);
+                float length = Vector3.Distance(currentNode.worldPosition, neighbor.worldPosition);
                 float alternateDistance = distances[currentNode] + length;
 
                 if (alternateDistance < distances[neighbor])
