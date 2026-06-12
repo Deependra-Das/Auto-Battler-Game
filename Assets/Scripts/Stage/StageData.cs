@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [System.Serializable]
 public class StageData
@@ -15,4 +16,5 @@ public class StageData
     [Range(1, 3)] public int recommendedLevel = 1;
     public List<UnitElementEnum> recommendedElements;
     public List<RoundData> roundDataList;
+    public Tilemap stageTilemapPrefab;
 }

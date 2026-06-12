@@ -17,7 +17,7 @@ MonoBehaviour:
     xpExchangeCost: 1
     xpExchangeValue: 1
     shopRefreshCost: 1
-    initialCurrency: 15
+    initialCurrency: 20
     initialPlayerLevel: 1
     maxPlayerLives: 3
     stageDifficulty: 1
@@ -29,28 +29,29 @@ MonoBehaviour:
       enemiyList:
       - enemyID: 104
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 24
     - winXPCurrency: 9
       lossXPCurrency: 7
       enemiyList:
       - enemyID: 101
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 4
       - enemyID: 102
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 42
     - winXPCurrency: 10
       lossXPCurrency: 8
       enemiyList:
       - enemyID: 101
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 4
       - enemyID: 102
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 24
       - enemyID: 104
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 42
+    stageTilemapPrefab: {fileID: 7791307170637978158, guid: e5c8566c5af334143a2fde828dba41c9, type: 3}
   - stageName: Stage 2
     xpExchangeCost: 1
     xpExchangeValue: 1
@@ -67,28 +68,29 @@ MonoBehaviour:
       enemiyList:
       - enemyID: 114
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 66
     - winXPCurrency: 12
       lossXPCurrency: 10
       enemiyList:
       - enemyID: 111
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 66
       - enemyID: 112
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 59
     - winXPCurrency: 14
       lossXPCurrency: 12
       enemiyList:
       - enemyID: 111
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 66
       - enemyID: 112
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 59
       - enemyID: 114
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 52
+    stageTilemapPrefab: {fileID: 7218448212159662726, guid: a365280b6ab5c39439fc4681f1eaf68d, type: 3}
   - stageName: Stage 3
     xpExchangeCost: 1
     xpExchangeValue: 1
@@ -105,61 +107,62 @@ MonoBehaviour:
       enemiyList:
       - enemyID: 124
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 9
     - winXPCurrency: 12
       lossXPCurrency: 10
       enemiyList:
       - enemyID: 121
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 30
       - enemyID: 121
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 37
     - winXPCurrency: 14
       lossXPCurrency: 12
       enemiyList:
       - enemyID: 121
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 9
       - enemyID: 121
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 16
       - enemyID: 124
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 23
     - winXPCurrency: 16
       lossXPCurrency: 14
       enemiyList:
       - enemyID: 121
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 23
       - enemyID: 121
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 30
       - enemyID: 122
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 37
       - enemyID: 122
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 44
     - winXPCurrency: 18
       lossXPCurrency: 16
       enemiyList:
       - enemyID: 121
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 16
       - enemyID: 121
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 23
       - enemyID: 122
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 30
       - enemyID: 122
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 37
       - enemyID: 123
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 44
       - enemyID: 124
         enemyLevel: 1
-        enemySpawnTileIndex: 0
+        enemySpawnTileIndex: 51
+    stageTilemapPrefab: {fileID: 4184980419260565432, guid: 9b448f82588763642ac4c8ce8ead88d9, type: 3}
