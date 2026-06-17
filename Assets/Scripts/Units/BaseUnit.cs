@@ -92,7 +92,7 @@ public class BaseUnit : MonoBehaviour
         this.unitData = unitData;
         this.team = team;
         currentNode = spawnNode;
-        transform.position = currentNode.position;
+        transform.position = currentNode.worldPosition;
         currentNode.SetOccupied(true);
         totalHealth = unitData.baseHealth;
         totalShield = unitData.baseShield;
@@ -213,7 +213,7 @@ public class BaseUnit : MonoBehaviour
             GraphService graphService = GameManager.Instance.Get<GraphService>();
             destination = null;
             List<Node> availableNodes = graphService.GetNodesCloseTo(currentTarget.CurrentNode);
-            availableNodes = availableNodes.OrderBy(x => Vector3.Distance(x.position, this.transform.position)).ToList();
+            availableNodes = availableNodes.OrderBy(x => Vector3.Distance(x.worldPosition, this.transform.position)).ToList();
 
             for (int i = 0; i < availableNodes.Count; i++)
             {
@@ -247,7 +247,7 @@ public class BaseUnit : MonoBehaviour
 
     protected bool MoveTowardsNode(Node nextNode)
     {
-        Vector3 direction = (nextNode.position - this.transform.position);
+        Vector3 direction = (nextNode.worldPosition - this.transform.position);
         Vector3 dirNormalized = direction.normalized;
         animator.SetFloat("MoveX", dirNormalized.x);
         animator.SetFloat("MoveY", dirNormalized.y);
@@ -256,7 +256,7 @@ public class BaseUnit : MonoBehaviour
 
         if (direction.sqrMagnitude <= 0.005f)
         {
-            transform.position = nextNode.position;
+            transform.position = nextNode.worldPosition;
             animator.SetBool("IsWalking", false);
             return true;
         }
@@ -401,7 +401,7 @@ public class BaseUnit : MonoBehaviour
 
     public void SnapToNode(Node node)
     {
-        transform.position = node.position;
+        transform.position = node.worldPosition;
         node.SetOccupied(true);
         SetCurrentNode(node);
     }

@@ -2,6 +2,7 @@ using AutoBattler.Event;
 using AutoBattler.Main;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -15,12 +16,15 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private Image _dragSprite;
     private Vector3 _dragOffset;
-    private Tile _hoveredTile;
+    private Node _hoveredNode;
     private InventoryDropZoneManager _hoveredInventoryDropZone;
     private DiscardUnitDropZoneManager _hoveredDiscardDropZone;
     private Node _originalNode;
     private bool isDragging;
     private DragVisualPoolService _dragVisualPoolService;
+    private TileGridService _tileGridServiceObj;
+    private HighlightTileService _highlightTileServiceObj;
+    private GraphService _graphServiceObj;
     private RectTransform _dragSpriteRectTransform;
 
     void Awake()
@@ -35,6 +39,9 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         _canvas = UIManager.Instance.UICanvas;
         _canvasRect = UIManager.Instance.CanvasRect;
         _dragVisualPoolService = GameManager.Instance.Get<DragVisualPoolService>();
+        _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
+        _highlightTileServiceObj = GameManager.Instance.Get<HighlightTileService>();
+        _graphServiceObj = GameManager.Instance.Get<GraphService>();
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -65,13 +72,13 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         UpdateDragPosition(eventData);
 
-        Tile tile = TryGetTileUnderPointer(eventData);
+        Node node = TryGetNodeUnderPointer(eventData);
 
-        if (tile != null)
+        if (node != null)
         {
             ClearDiscardUnitDropZoneHighlight();
             ClearInventoryDropZoneHighlight();
-            HighlightTileUnderPointer(tile);
+            HighlightTileAtNode(node);
             return;
         }
 
@@ -79,7 +86,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         if (discardZone != null)
         {
-            ClearHighlightedTile();
+            ClearHighlightedTileNode();
             ClearInventoryDropZoneHighlight();
             HighlightDiscardUnitDropZone(discardZone);
             return;
@@ -89,13 +96,13 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         if (inventoryDropZone != null)
         {
-            ClearHighlightedTile();
+            ClearHighlightedTileNode();
             ClearDiscardUnitDropZoneHighlight();
             HighlightInventoryDropZone(inventoryDropZone);
             return;
         }
 
-        ClearHighlightedTile();
+        ClearHighlightedTileNode();
         ClearInventoryDropZoneHighlight();
         ClearDiscardUnitDropZoneHighlight();
     }
@@ -125,7 +132,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             return;
         }
 
-        Node targetNode = GetNodeUnderPointer(eventData);
+        Node targetNode = TryGetNodeUnderPointer(eventData);
 
         if (targetNode != null && !targetNode.IsOccupied)
             _unit.SnapToNode(targetNode);
@@ -135,28 +142,22 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         CleanupAfterDrag();  
     }
 
-    private Tile TryGetTileUnderPointer(PointerEventData eventData)
+    private Node TryGetNodeUnderPointer(PointerEventData eventData)
     {
+        Tilemap tilemap = _tileGridServiceObj.CurrentTileMap;
+
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
-        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
 
-        RaycastHit2D hit = Physics2D.Raycast(worldPos2D, Vector2.zero);
+        worldPos.z = 0;
 
-        if (hit.collider == null)
-        {
+        Vector3Int cell = tilemap.WorldToCell(worldPos);
+
+        if (!tilemap.HasTile(cell))
             return null;
-        }
-        else
-        {
-            if (hit.collider.gameObject.TryGetComponent<Tile>(out Tile tile))
-            {
-                return tile;
-            }
-            else
-            {
-                return null;
-            }
-        }
+
+        _graphServiceObj.TryGetNodeAtCell(cell, out Node node);
+
+        return node;
     }
 
     private DiscardUnitDropZoneManager TryGetDiscardZoneUnderPointer(PointerEventData eventData)
@@ -198,34 +199,25 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         _dragSpriteRectTransform.localPosition = localPoint;
     }
 
-    private Node GetNodeUnderPointer(PointerEventData eventData)
+    private void HighlightTileAtNode(Node node)
     {
-        var tile_GO = eventData.pointerCurrentRaycast.gameObject;
-        if (tile_GO == null) return null;
+        if (node == null)
+            return;
 
-        Tile tile = tile_GO.GetComponent<Tile>() ?? tile_GO.GetComponentInParent<Tile>();
-        return tile?.Node;
+        if (_hoveredNode == node)
+            return;
+
+        _hoveredNode = node;
+
+        bool valid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation && !node.IsOccupied;
+
+        _highlightTileServiceObj.ShowTileHighlight(node.worldPosition, valid);
     }
 
-    private void HighlightTileUnderPointer(Tile tile)
+    private void ClearHighlightedTileNode()
     {
-        if (tile == null) return;
-        if (_hoveredTile == tile) return;
-
-        ClearHighlightedTile();
-
-        bool valid = !tile.Node.IsOccupied;
-        tile.OnInteractShowHighlight();
-        _hoveredTile = tile;
-    }
-
-    private void ClearHighlightedTile()
-    {
-        if (_hoveredTile != null)
-        {
-            _hoveredTile.HideHighlight();
-            _hoveredTile = null;
-        }
+        _hoveredNode = null;
+        _highlightTileServiceObj.HideTileHighlight();
     }
 
     private void HighlightInventoryDropZone(InventoryDropZoneManager inventoryDropZone)
@@ -266,7 +258,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private void CleanupAfterDrag()
     {
         CleanupDragSprite();
-        ClearHighlightedTile();
+        ClearHighlightedTileNode();
         ClearInventoryDropZoneHighlight();
         ClearDiscardUnitDropZoneHighlight();
         RaiseToggleInventoryDropZoneEvent(false);

@@ -88,7 +88,7 @@ public class RangedAbilityPoolService
         }
 
         elementalBurst.transform.SetParent(null, false);
-        elementalBurst.transform.position = target.CurrentNode.position;
+        elementalBurst.transform.position = target.CurrentNode.worldPosition;
         elementalBurst.gameObject.SetActive(true);
         elementalBurst.Initialize(owner, target, damage, attackElement, _elementalBurstLifetime, this);
     }

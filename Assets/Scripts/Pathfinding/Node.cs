@@ -3,13 +3,14 @@ using UnityEngine;
 public class Node
 {
     public int index;
-    public Vector3 position;
+    public Vector3 worldPosition;
+
     private bool _isOccupied = false;
 
     public Node(int index, Vector3 position)
     {
         this.index = index;
-        this.position = position;
+        this.worldPosition = position;
         _isOccupied = false;
     }
 
