@@ -16,5 +16,5 @@ public class StageData
     [Range(1, 3)] public int recommendedLevel = 1;
     public List<UnitElementEnum> recommendedElements;
     public List<RoundData> roundDataList;
-    public Tilemap stageTilemapPrefab;
+    public Tilemap gameplayTilemapPrefab;
 }

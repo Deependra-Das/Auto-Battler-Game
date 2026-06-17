@@ -51,7 +51,7 @@ MonoBehaviour:
       - enemyID: 104
         enemyLevel: 1
         enemySpawnTileIndex: 42
-    stageTilemapPrefab: {fileID: 7791307170637978158, guid: e5c8566c5af334143a2fde828dba41c9, type: 3}
+    gameplayTilemapPrefab: {fileID: 7791307170637978158, guid: e5c8566c5af334143a2fde828dba41c9, type: 3}
   - stageName: Stage 2
     xpExchangeCost: 1
     xpExchangeValue: 1
@@ -90,7 +90,7 @@ MonoBehaviour:
       - enemyID: 114
         enemyLevel: 1
         enemySpawnTileIndex: 52
-    stageTilemapPrefab: {fileID: 7218448212159662726, guid: a365280b6ab5c39439fc4681f1eaf68d, type: 3}
+    gameplayTilemapPrefab: {fileID: 7218448212159662726, guid: a365280b6ab5c39439fc4681f1eaf68d, type: 3}
   - stageName: Stage 3
     xpExchangeCost: 1
     xpExchangeValue: 1
@@ -165,4 +165,4 @@ MonoBehaviour:
       - enemyID: 124
         enemyLevel: 1
         enemySpawnTileIndex: 51
-    stageTilemapPrefab: {fileID: 4184980419260565432, guid: 9b448f82588763642ac4c8ce8ead88d9, type: 3}
+    gameplayTilemapPrefab: {fileID: 4184980419260565432, guid: 9b448f82588763642ac4c8ce8ead88d9, type: 3}

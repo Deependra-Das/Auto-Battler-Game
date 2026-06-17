@@ -5430,7 +5430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 886117465118168413}
   m_Layer: 0
-  m_Name: Background_2
+  m_Name: BackgroundTilemap_2_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
