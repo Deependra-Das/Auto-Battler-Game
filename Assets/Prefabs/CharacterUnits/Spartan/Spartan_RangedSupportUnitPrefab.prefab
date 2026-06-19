@@ -62,7 +62,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: ddcdd1a3dfc3d0e4383556a4cfb03bed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -177,26 +177,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Spartan_RangedSupportUnit
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
-  characterName: 
-  unitType: 3
-  unitFaction: 1
-  unitElement: 3
-  baseDamage: 3
-  baseHealth: 80
-  baseShield: 0
-  baseHealing: 1
-  baseAttackSpeed: 0.5
-  baseElementalDamageScalingFactor: 0.5
-  teamShieldScalingFactor: 30
-  baseRange: 5
-  baseMovementSpeed: 1
   unitUIContainer: {fileID: 8244604720886512290}
   healthBar: {fileID: 2366627180484258635}
   shieldBar: {fileID: 6651588795322150730}
   shieldFillImage: {fileID: 2520261242293017754}
-  delayBeforeRangedAttack: 1
-  lifetime: 1
-  damageDelay: 0.2
+  material: {fileID: 0}
 --- !u!114 &7706574788225107642
 MonoBehaviour:
   m_ObjectHideFlags: 0

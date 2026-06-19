@@ -62,7 +62,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: ddcdd1a3dfc3d0e4383556a4cfb03bed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -177,24 +177,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Viking_MeleeAttackerUnit
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
-  characterName: 
-  unitType: 0
-  unitFaction: 2
-  unitElement: 2
-  baseDamage: 8
-  baseHealth: 70
-  baseShield: 0
-  baseHealing: 0
-  baseAttackSpeed: 0.65
-  baseElementalDamageScalingFactor: 0.5
-  teamShieldScalingFactor: 30
-  baseRange: 1
-  baseMovementSpeed: 1
   unitUIContainer: {fileID: 3279025182254906450}
   healthBar: {fileID: 9168267442443759035}
   shieldBar: {fileID: 262607962249030074}
   shieldFillImage: {fileID: 9012279510906739306}
-  delayBeforeRangedAttack: 0
+  material: {fileID: 0}
 --- !u!114 &5621455976533373444
 MonoBehaviour:
   m_ObjectHideFlags: 0

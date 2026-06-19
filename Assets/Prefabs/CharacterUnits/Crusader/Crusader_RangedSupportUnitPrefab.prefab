@@ -62,7 +62,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: ddcdd1a3dfc3d0e4383556a4cfb03bed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -177,26 +177,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Crusader_RangedSupportUnit
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
-  characterName: 
-  unitType: 3
-  unitFaction: 0
-  unitElement: 1
-  baseDamage: 3
-  baseHealth: 80
-  baseShield: 0
-  baseHealing: 1
-  baseAttackSpeed: 0.5
-  baseElementalDamageScalingFactor: 0.5
-  teamShieldScalingFactor: 30
-  baseRange: 5
-  baseMovementSpeed: 1
   unitUIContainer: {fileID: 6582667221171649368}
   healthBar: {fileID: 713572431380720305}
   shieldBar: {fileID: 8466728255190003376}
   shieldFillImage: {fileID: 849254564979187040}
-  delayBeforeRangedAttack: 1
-  lifetime: 1
-  damageDelay: 0.2
 --- !u!114 &7048440773081004562
 MonoBehaviour:
   m_ObjectHideFlags: 0
