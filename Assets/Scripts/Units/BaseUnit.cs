@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class BaseUnit : MonoBehaviour
 {
     [SerializeField] protected SpriteRenderer spriteRenderer;
@@ -15,6 +16,7 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected Slider shieldBar;
     [SerializeField] protected Image shieldFillImage;
 
+    private Material _material;    
     private UnitDragHandler _unitDragHandler;
 
     protected UnitData unitData;
@@ -46,10 +48,14 @@ public class BaseUnit : MonoBehaviour
     protected bool isActive = false;
     protected TeamEnum team;
 
+    protected const float tintFadeSpeed = 5f;
+    protected float tintMaxAlpha = 1f;
+
     protected Coroutine combatRoutine;
     protected Coroutine attackRoutine;
     protected Coroutine cooldownRoutine;
     protected Coroutine deathRoutine;
+    protected Coroutine fadeTintCoroutine;
 
     public bool IsDead => isDead;
     public UnitData UnitData => unitData;
@@ -62,6 +68,7 @@ public class BaseUnit : MonoBehaviour
     public bool CanBeDragged => !isActive && !isDead;
 
     protected GraphService _graphServiceObj;
+    protected UnitColorService _unitColorService;
 
     void OnEnable() => SubscribeToEvents();
 
@@ -83,11 +90,13 @@ public class BaseUnit : MonoBehaviour
     {
         unitCollider = GetComponent<Collider2D>();
         _unitDragHandler = GetComponent<UnitDragHandler>();
+        _material = GetComponent<SpriteRenderer>().material;
     }
 
     public virtual void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
     {
         _graphServiceObj = GameManager.Instance.Get<GraphService>();
+        _unitColorService = GameManager.Instance.Get<UnitColorService>();
 
         this.unitData = unitData;
         this.team = team;
@@ -297,6 +306,8 @@ public class BaseUnit : MonoBehaviour
 
         if (currentShield > 0)
         {
+            StartFadeTintCoroutine(_unitColorService.GetShieldDamageColor());
+
             float multiplier = GetShieldDepletionMultiplier(incomingElement);
 
             int shieldDamage = Mathf.Min(currentShield, Mathf.RoundToInt(remainingDamage * multiplier));
@@ -307,6 +318,7 @@ public class BaseUnit : MonoBehaviour
 
         if (remainingDamage > 0)
         {
+            StartFadeTintCoroutine(_unitColorService.GeHealthDamageColor());
             currentHealth -= remainingDamage;
             UpdateHealthBar(currentHealth);
         }
@@ -343,6 +355,7 @@ public class BaseUnit : MonoBehaviour
     {
         if (isDead) return;
 
+        StartFadeTintCoroutine(_unitColorService.GetHealingColor());
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, totalHealth);
         UpdateHealthBar(currentHealth);
@@ -465,13 +478,33 @@ public class BaseUnit : MonoBehaviour
 
     protected Color GetShieldColor(UnitElementEnum element)
     {
-        return element switch
+        return _unitColorService.GetElementColor(element);
+    }
+
+    public void StartFadeTintCoroutine(Color color)
+    {
+        if (fadeTintCoroutine != null)
+            StopCoroutine(fadeTintCoroutine);
+
+        fadeTintCoroutine = StartCoroutine(FadeTintCoroutine(color));
+    }
+
+    protected IEnumerator FadeTintCoroutine(Color color)
+    {
+        Color current = color;
+        _material.SetColor("_Tint", current);
+
+        while (current.a > 0f)
         {
-            UnitElementEnum.Fire => new Color(1f, 0.78f, 0.72f),
-            UnitElementEnum.Thunder => new Color(0.65f, 0.9f, 1f),
-            UnitElementEnum.Nature => new Color(0.78f, 1f, 0.65f),
-            _ => new Color(0.95f, 0.95f, 0.95f)
-        };
+            current.a = Mathf.Clamp01(current.a - tintFadeSpeed * Time.deltaTime);
+            _material.SetColor("_Tint", current);
+            yield return null;
+        }
+
+        current.a = 0f;
+        _material.SetColor("_Tint", current);
+
+        fadeTintCoroutine = null;
     }
 
     private void StopAttackLoop()
