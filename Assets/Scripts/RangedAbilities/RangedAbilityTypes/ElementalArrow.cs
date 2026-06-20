@@ -1,8 +1,17 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class ElementalArrow : MonoBehaviour
 {
+    [SerializeField] private TrailRenderer _outerTrailRenderer;
+    [SerializeField] private TrailRenderer _innerTrailRenderer;
+    [SerializeField] private VisualEffect _vfxParticleGraph;
+    [SerializeField] private List<RangedAbilityElementTrailMaterialEntry> _elementalTrailMaterialList;
+    private Dictionary<UnitElementEnum, RangedAbilityElementTrailMaterialEntry> _elementalTrailMaterialDictionary;
+
+
     private BaseUnit _ownerUnit;
     private BaseUnit _targetUnit;
     private int _damage;
@@ -14,6 +23,16 @@ public class ElementalArrow : MonoBehaviour
     private float _hitDistance = 0.15f;
     private Coroutine _moveCoroutine;
     private RangedAbilityPoolService _rangedAbilityPoolServiceObj;
+
+    private void Awake()
+    {
+        _elementalTrailMaterialDictionary = new Dictionary<UnitElementEnum, RangedAbilityElementTrailMaterialEntry>();
+
+        foreach (var entry in _elementalTrailMaterialList)
+        {
+            _elementalTrailMaterialDictionary[entry.element] = entry;
+        }
+    }
 
     public void Initialize(BaseUnit ownerUnit, BaseUnit targetUnit, int damage, UnitElementEnum attackElement, Vector3 adjustedDirection, Vector3 adjustedTargetPosition, float arrowLifetime, RangedAbilityPoolService rangedAbilityPoolServiceObj)
     {
@@ -27,7 +46,17 @@ public class ElementalArrow : MonoBehaviour
             _adjustedTargetPosition = adjustedTargetPosition;
             _arrowLifetime = arrowLifetime;
             _rangedAbilityPoolServiceObj = rangedAbilityPoolServiceObj;
+
             RotateTowards(_direction);
+            SetTrailMaterial(attackElement);
+            SetVfxTrailParticleColor(attackElement);
+
+            _outerTrailRenderer.Clear();
+            _outerTrailRenderer.emitting = true;
+            _innerTrailRenderer.Clear();
+            _innerTrailRenderer.emitting = true;
+            _vfxParticleGraph.Reinit();
+            _vfxParticleGraph.Play();
 
             if (_moveCoroutine != null)
                 StopCoroutine(_moveCoroutine);
@@ -73,6 +102,19 @@ public class ElementalArrow : MonoBehaviour
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
+    private void SetTrailMaterial(UnitElementEnum element)
+    {
+        _outerTrailRenderer.material = _elementalTrailMaterialDictionary[element].outerTrailMaterial;
+        _innerTrailRenderer.material = _elementalTrailMaterialDictionary[element].innerTrailMaterial;
+    }
+
+    private void SetVfxTrailParticleColor(UnitElementEnum element)
+    {
+        Color color = _elementalTrailMaterialDictionary[element].outerTrailMaterial.GetColor("_Color01");
+        _vfxParticleGraph.SetVector4("HeadColor", color);
+        _vfxParticleGraph.SetVector4("ParticleColor", color);
+    }
+
     public void Reset()
     {
         if (_moveCoroutine != null)
@@ -87,7 +129,17 @@ public class ElementalArrow : MonoBehaviour
         _adjustedTargetPosition = Vector3.zero;
         _arrowLifetime = 0;
         _rangedAbilityPoolServiceObj = null;
+
+        _outerTrailRenderer.emitting = false;
+        _outerTrailRenderer.Clear();
+
+        _innerTrailRenderer.emitting = false;
+        _innerTrailRenderer.Clear();
+
+        _vfxParticleGraph.Stop();
+        _vfxParticleGraph.Reinit();
     }
+
     private void OnDisable()
     {
         StopAllCoroutines();
