@@ -8,7 +8,7 @@ public class SmokeVfx : MonoBehaviour
 
     private Coroutine _despawnCoroutine;
 
-    public void PlaySmokeEffectVfxAnimation(VfxPoolService vFXPoolServiceObj)
+    public void Play(VfxPoolService vFXPoolServiceObj)
     {
         if (_despawnCoroutine != null)
         {
@@ -20,14 +20,14 @@ public class SmokeVfx : MonoBehaviour
             _animator.SetTrigger("PlaySmoke");
         }
 
-        _despawnCoroutine = StartCoroutine(DespawnSmokeEffectVfxAfterAnimation(vFXPoolServiceObj));
+        _despawnCoroutine = StartCoroutine(DespawnSmokeVfx(vFXPoolServiceObj));
     }
 
-    IEnumerator DespawnSmokeEffectVfxAfterAnimation(VfxPoolService vFXPoolServiceObj)
+    IEnumerator DespawnSmokeVfx(VfxPoolService vFXPoolServiceObj)
     {
         yield return new WaitForSeconds(_lifetime);
         _despawnCoroutine = null;
-        vFXPoolServiceObj.DespawnSmokeEffectVFX(this);
+        vFXPoolServiceObj.DespawnSmokeVfx(this);
     }
 
     public void Reset()

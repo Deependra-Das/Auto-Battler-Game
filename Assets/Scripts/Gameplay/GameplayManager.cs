@@ -224,7 +224,7 @@ public class GameplayManager : MonoBehaviour
                 continue;
 
             unit.ReleaseCurrentNode();
-            _vfxPoolServiceObj.SpawnSmokeEffectVFX(unit.gameObject.transform.position);
+            _vfxPoolServiceObj.SpawnSmokeVfx(unit.gameObject.transform.position);
             _teamServiceObj.RemoveUnitFromField(unit, unit.Team, false);
 
             _pendingReleaseUnits.Add(unit);

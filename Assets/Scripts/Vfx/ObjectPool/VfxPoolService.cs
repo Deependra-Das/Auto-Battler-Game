@@ -4,48 +4,48 @@ using UnityEngine.UI;
 
 public class VfxPoolService
 {
-    private SmokeVfx _smokeEffectVfxPrefab;
+    private SmokeVfx _smokeVfxPrefab;
     private Transform _vfxPoolContainerTransform;
-    private readonly Queue<SmokeVfx> _smokeEffectVfxPoolQueue = new();
+    private readonly Queue<SmokeVfx> _smokeVfxPoolQueue = new();
 
     public VfxPoolService(VfxScriptableObjectScript vfx_SO, Transform vfxPoolContainerTransform)
     {
-        _smokeEffectVfxPrefab = vfx_SO._smokeEffectVfxPrefab;
+        _smokeVfxPrefab = vfx_SO.smokeVfxPrefab;
         _vfxPoolContainerTransform = vfxPoolContainerTransform;
     }
 
-    public void SpawnSmokeEffectVFX(Vector3 position)
+    public void SpawnSmokeVfx(Vector3 position)
     {
         SmokeVfx smokeEffectVfx = null;
 
-        if (_smokeEffectVfxPoolQueue.Count > 0)
+        if (_smokeVfxPoolQueue.Count > 0)
         {
-            smokeEffectVfx = _smokeEffectVfxPoolQueue.Dequeue();
+            smokeEffectVfx = _smokeVfxPoolQueue.Dequeue();
         }
         else
         {
-            smokeEffectVfx = CreateSmokeEffectVFX();
+            smokeEffectVfx = CreateSmokeVfx();
         }
 
         smokeEffectVfx.transform.SetParent(null, false);
         smokeEffectVfx.transform.position = position;
         smokeEffectVfx.gameObject.SetActive(true);
-        smokeEffectVfx.PlaySmokeEffectVfxAnimation(this);
+        smokeEffectVfx.Play(this);
     }
 
-    private SmokeVfx CreateSmokeEffectVFX()
+    private SmokeVfx CreateSmokeVfx()
     {
-        SmokeVfx smokeEffectVfx = Object.Instantiate(_smokeEffectVfxPrefab);
+        SmokeVfx smokeEffectVfx = Object.Instantiate(_smokeVfxPrefab);
         smokeEffectVfx.gameObject.SetActive(false);
         return smokeEffectVfx;
     }
 
-    public void DespawnSmokeEffectVFX(SmokeVfx smokeEffectVfx)
+    public void DespawnSmokeVfx(SmokeVfx smokeVfx)
     {
-        smokeEffectVfx.gameObject.SetActive(false);
-        smokeEffectVfx.Reset();
-        smokeEffectVfx.transform.SetParent(_vfxPoolContainerTransform, false);
-        smokeEffectVfx.transform.localPosition = Vector3.zero;
-        _smokeEffectVfxPoolQueue.Enqueue(smokeEffectVfx);
+        smokeVfx.gameObject.SetActive(false);
+        smokeVfx.Reset();
+        smokeVfx.transform.SetParent(_vfxPoolContainerTransform, false);
+        smokeVfx.transform.localPosition = Vector3.zero;
+        _smokeVfxPoolQueue.Enqueue(smokeVfx);
     }
 }
