@@ -69,7 +69,7 @@ public class BaseUnit : MonoBehaviour
 
     protected GraphService _graphServiceObj;
     protected UnitColorService _unitColorServiceObj;
-    protected VfxPoolService _vfxPoolServiceObj;
+    protected VfxPoolService vfxPoolServiceObj;
 
     void OnEnable() => SubscribeToEvents();
 
@@ -98,7 +98,7 @@ public class BaseUnit : MonoBehaviour
     {
         _graphServiceObj = GameManager.Instance.Get<GraphService>();
         _unitColorServiceObj = GameManager.Instance.Get<UnitColorService>();
-        _vfxPoolServiceObj = GameManager.Instance.Get<VfxPoolService>();
+        vfxPoolServiceObj = GameManager.Instance.Get<VfxPoolService>();
 
         this.unitData = unitData;
         this.team = team;
@@ -357,7 +357,7 @@ public class BaseUnit : MonoBehaviour
     {
         if (isDead) return;
 
-        _vfxPoolServiceObj.SpawnHealingVfx(currentNode.worldPosition);
+        vfxPoolServiceObj.SpawnHealingVfx(currentNode.worldPosition);
         StartFadeTintCoroutine(_unitColorServiceObj.GetHealingColor());
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, totalHealth);
@@ -508,6 +508,25 @@ public class BaseUnit : MonoBehaviour
         _material.SetColor("_Tint", current);
 
         fadeTintCoroutine = null;
+    }
+
+    protected void SpawnElementalVfx()
+    {
+        if (currentTarget == null ||  currentTarget.IsDead) return; 
+        
+        switch (unitData.unitElement)
+        {
+            case UnitElementEnum.Fire:
+                vfxPoolServiceObj.SpawnFireVfx(currentTarget.CurrentNode.worldPosition);
+                break;
+            case UnitElementEnum.Nature:
+                vfxPoolServiceObj.SpawnNatureVfx(currentTarget.CurrentNode.worldPosition);
+                break;
+            case UnitElementEnum.Thunder:
+                vfxPoolServiceObj.SpawnThunderVfx(currentTarget.CurrentNode.worldPosition);
+                break;
+        }
+        
     }
 
     private void StopAttackLoop()

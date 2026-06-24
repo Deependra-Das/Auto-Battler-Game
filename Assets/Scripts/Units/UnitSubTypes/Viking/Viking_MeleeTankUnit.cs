@@ -21,6 +21,7 @@ public class Viking_MeleeTankUnit : BaseUnit
         yield return null;
         animator.SetTrigger("Attack");
         yield return new WaitForSeconds(unitData.attackAnimationDelay);
+        SpawnElementalVfx();
         DealDamage();
         isAttacking = false;
         cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());

@@ -1,3 +1,4 @@
+using AutoBattler.Main;
 using System.Collections;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class ElementalBurst : MonoBehaviour
     private float _lifetime;
     private UnitElementEnum _element;
     private RangedAbilityPoolService _rangedAbilityPoolServiceObj;
+    private VfxPoolService _vfxPoolServiceObj;
+
     private Coroutine _executeCoroutine;
 
     public void Initialize(BaseUnit ownerUnit, BaseUnit targetUnit, int damage, UnitElementEnum attackElement, float lifetime, RangedAbilityPoolService rangedAbilityPoolServiceObj)
@@ -19,10 +22,12 @@ public class ElementalBurst : MonoBehaviour
         _element = attackElement;
         _lifetime = lifetime;
         _rangedAbilityPoolServiceObj = rangedAbilityPoolServiceObj;
+        _vfxPoolServiceObj = GameManager.Instance.Get<VfxPoolService>();
 
         if (_executeCoroutine != null)
             StopCoroutine(_executeCoroutine);
 
+        SpawnElementalVfx(attackElement, _targetUnit.CurrentNode.worldPosition);
         _executeCoroutine = StartCoroutine(Execute());
     }
 
@@ -54,6 +59,26 @@ public class ElementalBurst : MonoBehaviour
         _lifetime = 0;
         _rangedAbilityPoolServiceObj = null;
     }
+
+    private void SpawnElementalVfx(UnitElementEnum element, Vector3 position)
+    {
+        if (_targetUnit == null || _targetUnit.IsDead) return;
+
+        switch (element)
+        {
+            case UnitElementEnum.Fire:
+                _vfxPoolServiceObj.SpawnFireVfx(position);
+                break;
+            case UnitElementEnum.Nature:
+                _vfxPoolServiceObj.SpawnNatureVfx(position);
+                break;
+            case UnitElementEnum.Thunder:
+                _vfxPoolServiceObj.SpawnThunderVfx(position);
+                break;
+        }
+    }
+
+
     private void OnDisable()
     {
         StopAllCoroutines();

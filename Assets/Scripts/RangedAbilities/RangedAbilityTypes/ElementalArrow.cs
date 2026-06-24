@@ -1,3 +1,4 @@
+using AutoBattler.Main;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,6 +24,7 @@ public class ElementalArrow : MonoBehaviour
     private float _hitDistance = 0.15f;
     private Coroutine _moveCoroutine;
     private RangedAbilityPoolService _rangedAbilityPoolServiceObj;
+    private VfxPoolService _vfxPoolServiceObj;
 
     private void Awake()
     {
@@ -46,6 +48,7 @@ public class ElementalArrow : MonoBehaviour
             _adjustedTargetPosition = adjustedTargetPosition;
             _arrowLifetime = arrowLifetime;
             _rangedAbilityPoolServiceObj = rangedAbilityPoolServiceObj;
+            _vfxPoolServiceObj = GameManager.Instance.Get<VfxPoolService>();
 
             RotateTowards(_direction);
             SetTrailMaterial(attackElement);
@@ -81,9 +84,9 @@ public class ElementalArrow : MonoBehaviour
 
             Vector3 toTarget = _adjustedTargetPosition - transform.position;
 
-            if (Vector3.Dot(toTarget, _direction) <= 0f ||
-                Vector3.Distance(transform.position, _adjustedTargetPosition) <= _hitDistance)
+            if (Vector3.Dot(toTarget, _direction) <= 0f || Vector3.Distance(transform.position, _adjustedTargetPosition) <= _hitDistance)
             {
+                SpawnElementalVfx(_element, _targetUnit.CurrentNode.worldPosition);
                 _targetUnit.TakeDamage(_damage, _element);
                 _rangedAbilityPoolServiceObj.DespawnElementalArrow(this);
                 yield break;
@@ -113,6 +116,24 @@ public class ElementalArrow : MonoBehaviour
         Color color = _elementalTrailMaterialDictionary[element].outerTrailMaterial.GetColor("_Color01");
         _vfxParticleGraph.SetVector4("HeadColor", color);
         _vfxParticleGraph.SetVector4("ParticleColor", color);
+    }
+
+    private void SpawnElementalVfx(UnitElementEnum element, Vector3 position)
+    {
+        if (_targetUnit == null || _targetUnit.IsDead) return;
+
+        switch (element)
+        {
+            case UnitElementEnum.Fire:
+            _vfxPoolServiceObj.SpawnFireVfx(position);
+                break;
+            case UnitElementEnum.Nature:
+                _vfxPoolServiceObj.SpawnNatureVfx(position);
+                break;
+            case UnitElementEnum.Thunder:
+                _vfxPoolServiceObj.SpawnThunderVfx(position);
+                break;
+        }
     }
 
     public void Reset()
