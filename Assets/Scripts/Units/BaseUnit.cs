@@ -68,7 +68,8 @@ public class BaseUnit : MonoBehaviour
     public bool CanBeDragged => !isActive && !isDead;
 
     protected GraphService _graphServiceObj;
-    protected UnitColorService _unitColorService;
+    protected UnitColorService _unitColorServiceObj;
+    protected VfxPoolService _vfxPoolServiceObj;
 
     void OnEnable() => SubscribeToEvents();
 
@@ -96,7 +97,8 @@ public class BaseUnit : MonoBehaviour
     public virtual void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
     {
         _graphServiceObj = GameManager.Instance.Get<GraphService>();
-        _unitColorService = GameManager.Instance.Get<UnitColorService>();
+        _unitColorServiceObj = GameManager.Instance.Get<UnitColorService>();
+        _vfxPoolServiceObj = GameManager.Instance.Get<VfxPoolService>();
 
         this.unitData = unitData;
         this.team = team;
@@ -306,7 +308,7 @@ public class BaseUnit : MonoBehaviour
 
         if (currentShield > 0)
         {
-            StartFadeTintCoroutine(_unitColorService.GetShieldDamageColor());
+            StartFadeTintCoroutine(_unitColorServiceObj.GetShieldDamageColor());
 
             float multiplier = GetShieldDepletionMultiplier(incomingElement);
 
@@ -318,7 +320,7 @@ public class BaseUnit : MonoBehaviour
 
         if (remainingDamage > 0)
         {
-            StartFadeTintCoroutine(_unitColorService.GeHealthDamageColor());
+            StartFadeTintCoroutine(_unitColorServiceObj.GeHealthDamageColor());
             currentHealth -= remainingDamage;
             UpdateHealthBar(currentHealth);
         }
@@ -355,7 +357,8 @@ public class BaseUnit : MonoBehaviour
     {
         if (isDead) return;
 
-        StartFadeTintCoroutine(_unitColorService.GetHealingColor());
+        _vfxPoolServiceObj.SpawnHealingVfx(currentNode.worldPosition);
+        StartFadeTintCoroutine(_unitColorServiceObj.GetHealingColor());
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, totalHealth);
         UpdateHealthBar(currentHealth);
@@ -478,7 +481,7 @@ public class BaseUnit : MonoBehaviour
 
     protected Color GetShieldColor(UnitElementEnum element)
     {
-        return _unitColorService.GetElementColor(element);
+        return _unitColorServiceObj.GetElementColor(element);
     }
 
     public void StartFadeTintCoroutine(Color color)

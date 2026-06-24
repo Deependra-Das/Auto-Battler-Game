@@ -4,4 +4,5 @@ using UnityEngine;
 public class VfxScriptableObjectScript : ScriptableObject
 {
     public SmokeVfx smokeVfxPrefab;
+    public HealingVfx healingVfxPrefab;
 }
