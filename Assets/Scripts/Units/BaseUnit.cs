@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 
 public class BaseUnit : MonoBehaviour
@@ -15,6 +16,7 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider shieldBar;
     [SerializeField] protected Image shieldFillImage;
+    [SerializeField] private VisualEffect _vfxParticleGraph;
 
     private Material _material;    
     private UnitDragHandler _unitDragHandler;
@@ -109,6 +111,7 @@ public class BaseUnit : MonoBehaviour
         totalShield = unitData.baseShield;
         shieldFillImage.color = GetShieldColor(unitData.unitElement);
         _unitDragHandler.Initialize();
+        _vfxParticleGraph.Stop();
 
         ResetVitals();
         ApplyTeamBuffs();
@@ -404,6 +407,7 @@ public class BaseUnit : MonoBehaviour
                 break;
 
             case GameplayStateEnum.Combat:
+                _vfxParticleGraph.Stop();
                 StartCombatLoop();
                 break;
         }
@@ -450,6 +454,17 @@ public class BaseUnit : MonoBehaviour
 
     protected void ApplyTeamBuffs()
     {
+        bool hasAnyBuff = currentTeamBuffData.attackBonus > 0f || currentTeamBuffData.shieldBonus > 0f ||
+       currentTeamBuffData.hpBonus > 0f || currentTeamBuffData.attackSpeedBonus > 0f || GetElementBonus() > 0f;
+
+        _vfxParticleGraph.Stop();
+
+        if (hasAnyBuff)
+        {
+            _vfxParticleGraph.Reinit();
+            _vfxParticleGraph.Play();
+        }
+
         float attackBonusContribution = currentTeamBuffData.attackBonus;
         float elementBonusContribution = GetElementBonus() * unitData.baseElementalDamageScalingFactor;
 
@@ -584,5 +599,8 @@ public class BaseUnit : MonoBehaviour
         animator.SetBool("IsDead", false);
         animator.SetBool("IsWalking", false);
         animator.ResetTrigger("Attack");
+
+        _vfxParticleGraph.Stop();
+        _vfxParticleGraph.Reinit();
     }
 }
