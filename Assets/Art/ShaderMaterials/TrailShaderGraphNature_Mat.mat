@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TrailShaderGraphFire01_Mat
+  m_Name: TrailShaderGraphNature_Mat
   m_Shader: {fileID: -6465566751694194690, guid: 1520a2747425ba448b6f02dc566e4a3a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -46,8 +46,8 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color01: {r: 0.8113208, g: 0.106534444, b: 0.04209684, a: 1}
-    - _Color02: {r: 0.16981131, g: 0.015193644, b: 0, a: 1}
+    - _Color01: {r: 2.0399995, g: 6, b: 0.059999943, a: 0}
+    - _Color02: {r: 0.2546666, g: 0.7490196, b: 0.007490189, a: 0}
     - _DissolveSpeed: {r: -0.5, g: 0, b: 0, a: 0}
     - _MainTexSpeed: {r: -0.1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

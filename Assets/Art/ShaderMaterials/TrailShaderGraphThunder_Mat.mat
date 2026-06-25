@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TrailShaderGraphThunder01_Mat
+  m_Name: TrailShaderGraphThunder_Mat
   m_Shader: {fileID: -6465566751694194690, guid: 1520a2747425ba448b6f02dc566e4a3a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -46,8 +46,8 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color01: {r: 0, g: 0.6436125, b: 0.8509804, a: 1}
-    - _Color02: {r: 0, g: 0.014436049, b: 0.08627451, a: 1}
+    - _Color01: {r: 0.71905893, g: 1.4401156, b: 2.9960787, a: 1}
+    - _Color02: {r: 0.1797647, g: 0.36002883, b: 0.74901956, a: 1}
     - _DissolveSpeed: {r: -0.5, g: 0, b: 0, a: 0}
     - _MainTexSpeed: {r: -0.1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

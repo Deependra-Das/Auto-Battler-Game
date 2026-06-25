@@ -6,11 +6,10 @@ using UnityEngine.VFX;
 
 public class ElementalArrow : MonoBehaviour
 {
-    [SerializeField] private TrailRenderer _outerTrailRenderer;
-    [SerializeField] private TrailRenderer _innerTrailRenderer;
+    [SerializeField] private TrailRenderer _trailRenderer;
     [SerializeField] private VisualEffect _vfxParticleGraph;
     [SerializeField] private List<RangedAbilityElementTrailMaterialEntry> _elementalTrailMaterialList;
-    private Dictionary<UnitElementEnum, RangedAbilityElementTrailMaterialEntry> _elementalTrailMaterialDictionary;
+    private Dictionary<UnitElementEnum, Material> _elementalTrailMaterialDictionary;
 
 
     private BaseUnit _ownerUnit;
@@ -28,11 +27,11 @@ public class ElementalArrow : MonoBehaviour
 
     private void Awake()
     {
-        _elementalTrailMaterialDictionary = new Dictionary<UnitElementEnum, RangedAbilityElementTrailMaterialEntry>();
+        _elementalTrailMaterialDictionary = new Dictionary<UnitElementEnum, Material>();
 
         foreach (var entry in _elementalTrailMaterialList)
         {
-            _elementalTrailMaterialDictionary[entry.element] = entry;
+            _elementalTrailMaterialDictionary[entry.element] = entry.trailMaterial;
         }
     }
 
@@ -54,10 +53,8 @@ public class ElementalArrow : MonoBehaviour
             SetTrailMaterial(attackElement);
             SetVfxTrailParticleColor(attackElement);
 
-            _outerTrailRenderer.Clear();
-            _outerTrailRenderer.emitting = true;
-            _innerTrailRenderer.Clear();
-            _innerTrailRenderer.emitting = true;
+            _trailRenderer.Clear();
+            _trailRenderer.emitting = true;
             _vfxParticleGraph.Reinit();
             _vfxParticleGraph.Play();
 
@@ -107,15 +104,13 @@ public class ElementalArrow : MonoBehaviour
 
     private void SetTrailMaterial(UnitElementEnum element)
     {
-        _outerTrailRenderer.material = _elementalTrailMaterialDictionary[element].outerTrailMaterial;
-        _innerTrailRenderer.material = _elementalTrailMaterialDictionary[element].innerTrailMaterial;
+        _trailRenderer.material = _elementalTrailMaterialDictionary[element];
     }
 
     private void SetVfxTrailParticleColor(UnitElementEnum element)
     {
-        Color color = _elementalTrailMaterialDictionary[element].outerTrailMaterial.GetColor("_Color01");
+        Color color = _elementalTrailMaterialDictionary[element].GetColor("_Color01");
         _vfxParticleGraph.SetVector4("HeadColor", color);
-        _vfxParticleGraph.SetVector4("ParticleColor", color);
     }
 
     private void SpawnElementalVfx(UnitElementEnum element, Vector3 position)
@@ -151,11 +146,8 @@ public class ElementalArrow : MonoBehaviour
         _arrowLifetime = 0;
         _rangedAbilityPoolServiceObj = null;
 
-        _outerTrailRenderer.emitting = false;
-        _outerTrailRenderer.Clear();
-
-        _innerTrailRenderer.emitting = false;
-        _innerTrailRenderer.Clear();
+        _trailRenderer.emitting = false;
+        _trailRenderer.Clear();
 
         _vfxParticleGraph.Stop();
         _vfxParticleGraph.Reinit();

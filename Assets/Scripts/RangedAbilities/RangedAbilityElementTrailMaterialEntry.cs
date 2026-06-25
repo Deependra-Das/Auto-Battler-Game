@@ -5,6 +5,5 @@ using UnityEngine;
 public struct RangedAbilityElementTrailMaterialEntry
 {
     public UnitElementEnum element;
-    public Material outerTrailMaterial;
-    public Material innerTrailMaterial;
+    public Material trailMaterial;
 }
