@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 328c3ee1b6e985a40923a9603c166b31, type: 3}
   m_Name: Vfx_SO
   m_EditorClassIdentifier: Assembly-CSharp::VFXScriptableObjectScript
-  _smokeEffectVfxPrefab: {fileID: 8736847432331916958, guid: 1e778f21b1a7a8642948e25d314a5e44, type: 3}
+  smokeVfxPrefab: {fileID: 8736847432331916958, guid: 1e778f21b1a7a8642948e25d314a5e44, type: 3}
+  healingVfxPrefab: {fileID: 61163578565752929, guid: 878a94095f5d78a44a8f43f4c5c1c73a, type: 3}
+  fireVfxPrefab: {fileID: 6884450697582202449, guid: fb7ed075337f6ea4f97a1070d233482b, type: 3}
+  natureVfxPrefab: {fileID: 8853500082711409685, guid: aec4dc8889c4296458144ed0acce5e16, type: 3}
+  thunderVfxPrefab: {fileID: 1044909732016913894, guid: 6df08107cee893a40bb102165408e256, type: 3}
+  thunderVfxOffset: 5

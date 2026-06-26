@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
+
 
 public class BaseUnit : MonoBehaviour
 {
@@ -14,7 +16,9 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider shieldBar;
     [SerializeField] protected Image shieldFillImage;
+    [SerializeField] private VisualEffect _vfxParticleGraph;
 
+    private Material _material;    
     private UnitDragHandler _unitDragHandler;
 
     protected UnitData unitData;
@@ -46,10 +50,14 @@ public class BaseUnit : MonoBehaviour
     protected bool isActive = false;
     protected TeamEnum team;
 
+    protected const float tintFadeSpeed = 5f;
+    protected float tintMaxAlpha = 1f;
+
     protected Coroutine combatRoutine;
     protected Coroutine attackRoutine;
     protected Coroutine cooldownRoutine;
     protected Coroutine deathRoutine;
+    protected Coroutine fadeTintCoroutine;
 
     public bool IsDead => isDead;
     public UnitData UnitData => unitData;
@@ -62,6 +70,8 @@ public class BaseUnit : MonoBehaviour
     public bool CanBeDragged => !isActive && !isDead;
 
     protected GraphService _graphServiceObj;
+    protected UnitColorService _unitColorServiceObj;
+    protected VfxPoolService vfxPoolServiceObj;
 
     void OnEnable() => SubscribeToEvents();
 
@@ -83,11 +93,14 @@ public class BaseUnit : MonoBehaviour
     {
         unitCollider = GetComponent<Collider2D>();
         _unitDragHandler = GetComponent<UnitDragHandler>();
+        _material = GetComponent<SpriteRenderer>().material;
     }
 
     public virtual void Initialize(UnitData unitData, TeamEnum team, Node spawnNode)
     {
         _graphServiceObj = GameManager.Instance.Get<GraphService>();
+        _unitColorServiceObj = GameManager.Instance.Get<UnitColorService>();
+        vfxPoolServiceObj = GameManager.Instance.Get<VfxPoolService>();
 
         this.unitData = unitData;
         this.team = team;
@@ -98,6 +111,7 @@ public class BaseUnit : MonoBehaviour
         totalShield = unitData.baseShield;
         shieldFillImage.color = GetShieldColor(unitData.unitElement);
         _unitDragHandler.Initialize();
+        _vfxParticleGraph.Stop();
 
         ResetVitals();
         ApplyTeamBuffs();
@@ -297,6 +311,8 @@ public class BaseUnit : MonoBehaviour
 
         if (currentShield > 0)
         {
+            StartFadeTintCoroutine(_unitColorServiceObj.GetShieldDamageColor());
+
             float multiplier = GetShieldDepletionMultiplier(incomingElement);
 
             int shieldDamage = Mathf.Min(currentShield, Mathf.RoundToInt(remainingDamage * multiplier));
@@ -307,6 +323,7 @@ public class BaseUnit : MonoBehaviour
 
         if (remainingDamage > 0)
         {
+            StartFadeTintCoroutine(_unitColorServiceObj.GeHealthDamageColor());
             currentHealth -= remainingDamage;
             UpdateHealthBar(currentHealth);
         }
@@ -343,6 +360,8 @@ public class BaseUnit : MonoBehaviour
     {
         if (isDead) return;
 
+        vfxPoolServiceObj.SpawnHealingVfx(currentNode.worldPosition);
+        StartFadeTintCoroutine(_unitColorServiceObj.GetHealingColor());
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, totalHealth);
         UpdateHealthBar(currentHealth);
@@ -388,6 +407,7 @@ public class BaseUnit : MonoBehaviour
                 break;
 
             case GameplayStateEnum.Combat:
+                _vfxParticleGraph.Stop();
                 StartCombatLoop();
                 break;
         }
@@ -434,6 +454,17 @@ public class BaseUnit : MonoBehaviour
 
     protected void ApplyTeamBuffs()
     {
+        bool hasAnyBuff = currentTeamBuffData.attackBonus > 0f || currentTeamBuffData.shieldBonus > 0f ||
+       currentTeamBuffData.hpBonus > 0f || currentTeamBuffData.attackSpeedBonus > 0f || GetElementBonus() > 0f;
+
+        _vfxParticleGraph.Stop();
+
+        if (hasAnyBuff)
+        {
+            _vfxParticleGraph.Reinit();
+            _vfxParticleGraph.Play();
+        }
+
         float attackBonusContribution = currentTeamBuffData.attackBonus;
         float elementBonusContribution = GetElementBonus() * unitData.baseElementalDamageScalingFactor;
 
@@ -465,13 +496,52 @@ public class BaseUnit : MonoBehaviour
 
     protected Color GetShieldColor(UnitElementEnum element)
     {
-        return element switch
+        return _unitColorServiceObj.GetElementColor(element);
+    }
+
+    public void StartFadeTintCoroutine(Color color)
+    {
+        if (fadeTintCoroutine != null)
+            StopCoroutine(fadeTintCoroutine);
+
+        fadeTintCoroutine = StartCoroutine(FadeTintCoroutine(color));
+    }
+
+    protected IEnumerator FadeTintCoroutine(Color color)
+    {
+        Color current = color;
+        _material.SetColor("_Tint", current);
+
+        while (current.a > 0f)
         {
-            UnitElementEnum.Fire => new Color(1f, 0.78f, 0.72f),
-            UnitElementEnum.Thunder => new Color(0.65f, 0.9f, 1f),
-            UnitElementEnum.Nature => new Color(0.78f, 1f, 0.65f),
-            _ => new Color(0.95f, 0.95f, 0.95f)
-        };
+            current.a = Mathf.Clamp01(current.a - tintFadeSpeed * Time.deltaTime);
+            _material.SetColor("_Tint", current);
+            yield return null;
+        }
+
+        current.a = 0f;
+        _material.SetColor("_Tint", current);
+
+        fadeTintCoroutine = null;
+    }
+
+    protected void SpawnElementalVfx()
+    {
+        if (currentTarget == null ||  currentTarget.IsDead) return; 
+        
+        switch (unitData.unitElement)
+        {
+            case UnitElementEnum.Fire:
+                vfxPoolServiceObj.SpawnFireVfx(currentTarget.CurrentNode.worldPosition);
+                break;
+            case UnitElementEnum.Nature:
+                vfxPoolServiceObj.SpawnNatureVfx(currentTarget.CurrentNode.worldPosition);
+                break;
+            case UnitElementEnum.Thunder:
+                vfxPoolServiceObj.SpawnThunderVfx(currentTarget.CurrentNode.worldPosition);
+                break;
+        }
+        
     }
 
     private void StopAttackLoop()
@@ -529,5 +599,8 @@ public class BaseUnit : MonoBehaviour
         animator.SetBool("IsDead", false);
         animator.SetBool("IsWalking", false);
         animator.ResetTrigger("Attack");
+
+        _vfxParticleGraph.Stop();
+        _vfxParticleGraph.Reinit();
     }
 }

@@ -21,6 +21,7 @@ public class Spartan_MeleeTankUnit : BaseUnit
         yield return null;
         animator.SetTrigger("Attack");
         yield return new WaitForSeconds(unitData.attackAnimationDelay);
+        vfxPoolServiceObj.SpawnNatureVfx(currentTarget.CurrentNode.worldPosition);
         DealDamage();
         isAttacking = false;
         cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());

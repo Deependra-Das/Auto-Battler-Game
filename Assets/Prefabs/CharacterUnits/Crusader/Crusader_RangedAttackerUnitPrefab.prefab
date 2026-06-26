@@ -1,5 +1,134 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1676157637335041191
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2063458875627259707}
+  - component: {fileID: 3090246744008615437}
+  - component: {fileID: 9214080930794219286}
+  m_Layer: 0
+  m_Name: BuffParticleVfxGraph
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2063458875627259707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676157637335041191}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 396713096338241575}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!2083052967 &3090246744008615437
+VisualEffect:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676157637335041191}
+  m_Enabled: 1
+  m_Asset: {fileID: 8926484042661614526, guid: 1ceefa603ae942341955f9af20cd2e59, type: 3}
+  m_InitialEventName: OnPlay
+  m_InitialEventNameOverriden: 0
+  m_StartSeed: 0
+  m_ResetSeedOnPlay: 1
+  m_AllowInstancing: 1
+  m_ResourceVersion: 1
+  m_PropertySheet:
+    m_Float:
+      m_Array:
+      - m_Value: 2
+        m_Name: Speed
+        m_Overridden: 1
+      - m_Value: 1
+        m_Name: Lifetime
+        m_Overridden: 1
+    m_Vector2f:
+      m_Array: []
+    m_Vector3f:
+      m_Array: []
+    m_Vector4f:
+      m_Array:
+      - m_Value: {x: 23.968626, y: 22.885237, z: 5.145098, w: 1}
+        m_Name: HeadColor
+        m_Overridden: 1
+      - m_Value: {x: 1.2093272, y: 3.4197018, z: 5.962264, w: 1}
+        m_Name: TrailColor
+        m_Overridden: 1
+    m_Uint:
+      m_Array: []
+    m_Int:
+      m_Array: []
+    m_Matrix4x4f:
+      m_Array: []
+    m_AnimationCurve:
+      m_Array: []
+    m_Gradient:
+      m_Array: []
+    m_NamedObject:
+      m_Array: []
+    m_Bool:
+      m_Array: []
+--- !u!73398921 &9214080930794219286
+VFXRenderer:
+  serializedVersion: 1
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1676157637335041191}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 0
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 6
 --- !u!1 &6120299871593806300
 GameObject:
   m_ObjectHideFlags: 0
@@ -35,6 +164,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3079093695033804139}
+  - {fileID: 2063458875627259707}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4168147060520492052
@@ -62,7 +192,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: ddcdd1a3dfc3d0e4383556a4cfb03bed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -177,24 +307,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Crusader_RangedAttackerUnit
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
-  characterName: 
-  unitType: 1
-  unitFaction: 0
-  unitElement: 1
-  baseDamage: 6
-  baseHealth: 50
-  baseShield: 0
-  baseHealing: 0
-  baseAttackSpeed: 0.8
-  baseElementalDamageScalingFactor: 0.5
-  teamShieldScalingFactor: 30
-  baseRange: 3
-  baseMovementSpeed: 1
   unitUIContainer: {fileID: 3079093695033804139}
   healthBar: {fileID: 8648716444539556994}
   shieldBar: {fileID: 332892460062953603}
   shieldFillImage: {fileID: 8802390020047446867}
-  delayBeforeRangedAttack: 1
+  _vfxParticleGraph: {fileID: 3090246744008615437}
 --- !u!114 &3156820330159349052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,6 +483,18 @@ PrefabInstance:
     - target: {fileID: 6310746877297881744, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7719493447728165077, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7719493447728165077, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7719493447728165077, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7823402532262611925, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
       propertyPath: m_AnchorMax.y

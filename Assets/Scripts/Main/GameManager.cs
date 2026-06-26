@@ -13,7 +13,8 @@ namespace AutoBattler.Main
         [SerializeField] private BuffScriptableObjectScript _buff_SO;
         [SerializeField] private StageConfigScriptableObjectScript _stageConfig_SO;
         [SerializeField] private PlayerLevelConfigScriptableObjectScript _playerLevelConfig_SO;
-        [SerializeField] private VfxScriptableObjectScript vfx_SO;
+        [SerializeField] private VfxScriptableObjectScript _vfx_SO;
+        [SerializeField] private UnitColorScriptableObjectScript _unitColor_SO;
 
         [SerializeField] private Transform _pooledUnitContainerTransform;
         [SerializeField] private Transform _activeUnitContainerTransform;
@@ -43,7 +44,8 @@ namespace AutoBattler.Main
             ServiceLocator.Register(new UnitDataService(_unitData_SO));
             ServiceLocator.Register(new UnitPoolService(_unitPrefab_SO, _pooledUnitContainerTransform, _activeUnitContainerTransform));
             ServiceLocator.Register(new DragVisualPoolService());
-            ServiceLocator.Register(new VfxPoolService(vfx_SO, _pooledVfxContainerTransform));
+            ServiceLocator.Register(new VfxPoolService(_vfx_SO, _pooledVfxContainerTransform));
+            ServiceLocator.Register(new UnitColorService(_unitColor_SO));
             ServiceLocator.Register(new RangedAbilityPoolService(_rangedAbilities_SO, _pooledRangedAbilityContainerTransform));
             ServiceLocator.Register(new TileGridService());
             ServiceLocator.Register(new GraphService());
@@ -65,6 +67,7 @@ namespace AutoBattler.Main
             ServiceLocator.Unregister<UnitPoolService>();
             ServiceLocator.Unregister<DragVisualPoolService>();
             ServiceLocator.Unregister<VfxPoolService>();
+            ServiceLocator.Unregister<UnitColorService>();
             ServiceLocator.Unregister<RangedAbilityPoolService>();
             ServiceLocator.Unregister<TileGridService>();
             ServiceLocator.Unregister<GraphService>();

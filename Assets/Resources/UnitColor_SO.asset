@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcda89ec837ccc84aa49e98660c9ea37, type: 3}
+  m_Name: UnitColor_SO
+  m_EditorClassIdentifier: Assembly-CSharp::UnitStatusEffectColorScriptableObjectScript
+  unitElementColorEntryList:
+  - element: 0
+    color: {r: 0.6981132, g: 0.6760502, b: 0.4774831, a: 1}
+  - element: 1
+    color: {r: 0.8396226, g: 0.37689406, b: 0.23366857, a: 1}
+  - element: 2
+    color: {r: 0.21293166, g: 0.5501484, b: 0.8207547, a: 1}
+  - element: 3
+    color: {r: 0.5262287, g: 0.735849, b: 0.16313633, a: 1}
+  healthDamageColor: {r: 0.990566, g: 0.3504361, b: 0.3504361, a: 1}
+  shieldDamageColor: {r: 0.8632076, g: 1, b: 0.96626526, a: 1}
+  healingColor: {r: 0.17221434, g: 0.8113208, b: 0.600816, a: 1}
