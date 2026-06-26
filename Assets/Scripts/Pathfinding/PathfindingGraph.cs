@@ -64,7 +64,7 @@ public class PathFindingGraph
         return Mathf.Infinity;
     }
 
-    public virtual List<Node> GetShortestPath(Node source, Node destination)
+    public List<Node> GetShortestPath(Node source, Node destination)
     {
         List<Node> path = new List<Node>();
 
@@ -74,50 +74,76 @@ public class PathFindingGraph
             return path;
         }
 
-        List<Node> unvisited = new List<Node>();
-        Dictionary<Node, Node> predecessor = new Dictionary<Node, Node>();
-        Dictionary<Node, float> distances = new Dictionary<Node, float>();
+        var openSet = new List<Node> { source };
+        var closedSet = new HashSet<Node>();
 
-        foreach (Node node in _nodeList)
+        Dictionary<Node, Node> cameFrom = new Dictionary<Node, Node>();
+        Dictionary<Node, float> gScore = new Dictionary<Node, float>();
+        Dictionary<Node, float> fScore = new Dictionary<Node, float>();
+
+        foreach (var node in _nodeList)
         {
-            unvisited.Add(node);
-            distances[node] = float.MaxValue;
+            gScore[node] = float.MaxValue;
+            fScore[node] = float.MaxValue;
         }
 
-        distances[source] = 0f;
+        gScore[source] = 0f;
+        fScore[source] = Heuristic(source, destination);
 
-        while (unvisited.Count > 0)
+        while (openSet.Count > 0)
         {
-            unvisited = unvisited.OrderBy(node => distances[node]).ToList();
-            Node currentNode = unvisited[0];
-            unvisited.Remove(currentNode);
+            Node current = openSet.OrderBy(n => fScore[n]).First();
 
-            if (currentNode == destination)
+            if (current == destination)
             {
-                while (predecessor.ContainsKey(currentNode))
-                {
-                    path.Insert(0, currentNode);
-                    currentNode = predecessor[currentNode];
-                }
-
-                path.Insert(0, currentNode);
-                break;
+                return ReconstructPath(cameFrom, current);
             }
 
-            foreach (Node neighbor in GetNeighbours(currentNode))
-            {
-                float length = Vector3.Distance(currentNode.worldPosition, neighbor.worldPosition);
-                float alternateDistance = distances[currentNode] + length;
+            openSet.Remove(current);
+            closedSet.Add(current);
 
-                if (alternateDistance < distances[neighbor])
-                {
-                    distances[neighbor] = alternateDistance;
-                    predecessor[neighbor] = currentNode;
-                }
+            foreach (Node neighbor in GetNeighbours(current))
+            {
+                if (closedSet.Contains(neighbor))
+                    continue;
+
+                if (neighbor.IsOccupied && neighbor != destination)
+                    continue;
+
+                float tentativeG = gScore[current] +
+                                   Vector3.Distance(current.worldPosition, neighbor.worldPosition);
+
+                if (!openSet.Contains(neighbor))
+                    openSet.Add(neighbor);
+                else if (tentativeG >= gScore[neighbor])
+                    continue;
+
+                cameFrom[neighbor] = current;
+                gScore[neighbor] = tentativeG;
+                fScore[neighbor] = gScore[neighbor] + Heuristic(neighbor, destination);
             }
         }
 
         return path;
+    }
+
+    private float Heuristic(Node a, Node b)
+    {
+        return Vector3.Distance(a.worldPosition, b.worldPosition);
+    }
+
+    private List<Node> ReconstructPath(Dictionary<Node, Node> cameFrom, Node current)
+    {
+        List<Node> totalPath = new List<Node>();
+        totalPath.Add(current);
+
+        while (cameFrom.ContainsKey(current))
+        {
+            current = cameFrom[current];
+            totalPath.Insert(0, current);
+        }
+
+        return totalPath;
     }
 
     public void ClearAllNodeOccupancy()
