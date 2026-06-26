@@ -8,6 +8,7 @@ public class BuffService
 {
     private Dictionary<BuffNameEnum, BuffData> _buffData = new();
     private Dictionary<TeamEnum, Dictionary<BuffNameEnum, int>> _appliedBuffs = new();
+    private Dictionary<TeamEnum, TeamBuffData> _teamBuffData = new();
 
     public BuffService(BuffScriptableObjectScript buff_SO)
     {
@@ -17,6 +18,11 @@ public class BuffService
         {
             _buffData.Add(buffs.buffName, buffs);
         }
+
+        foreach (TeamEnum team in Enum.GetValues(typeof(TeamEnum)))
+        {
+            _teamBuffData[team] = new TeamBuffData();
+        }
     }
 
     public void Dispose() 
@@ -24,6 +30,7 @@ public class BuffService
         UnsubscribeToEvents();
         _buffData.Clear();
         _appliedBuffs.Clear();
+        _teamBuffData.Clear();
     }
 
     void SubscribeToEvents()
@@ -88,7 +95,7 @@ public class BuffService
         if (oldTier == newTier) return;
 
         TeamBuffData teamBuff = CalculateTeamBuff(team);
-
+        _teamBuffData[team] = teamBuff;
         UIManager.Instance.UpdateBuffParticipantCountUI(buff, newCount, team);
         EventBusManager.Instance.Raise(EventNameEnum.TeamBuffUpdated, team, teamBuff);        
     }
@@ -170,9 +177,28 @@ public class BuffService
         _appliedBuffs[team].Keys.ToList().ForEach(key => _appliedBuffs[team][key] = 0);
     }
 
+    public TeamBuffData GetTeamBuffData(TeamEnum team)
+    {
+        return _teamBuffData[team];
+    }
+
     public void Reset()
     {
         UIManager.Instance.RemoveAllBuffDetailUICards();
-        _appliedBuffs.Clear();
+
+        foreach (var team in _appliedBuffs.Keys.ToList())
+        {
+            RemoveAllAppliedBuffs(team);
+        }
+
+        foreach (var team in _teamBuffData.Keys.ToList())
+        {
+            _teamBuffData[team] = new TeamBuffData();
+        }
+
+        foreach (TeamEnum team in _teamBuffData.Keys.ToList())
+        {
+            _teamBuffData[team] = new TeamBuffData();
+        }
     }
 }

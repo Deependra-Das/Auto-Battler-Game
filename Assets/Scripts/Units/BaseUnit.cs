@@ -114,6 +114,8 @@ public class BaseUnit : MonoBehaviour
         _vfxParticleGraph.Stop();
 
         ResetVitals();
+
+        currentTeamBuffData = GameManager.Instance.Get<BuffService>().GetTeamBuffData(team);
         ApplyTeamBuffs();
     }
 
