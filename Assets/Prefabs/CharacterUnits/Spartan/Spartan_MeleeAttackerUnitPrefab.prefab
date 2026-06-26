@@ -179,6 +179,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 4168147060520492052}
   animator: {fileID: 9161870426814276127}
   unitUIContainer: {fileID: 2011053484715663848}
+  _levelText: {fileID: 6667883008818330340}
   healthBar: {fileID: 5284403323610820609}
   shieldBar: {fileID: 3876819682876863488}
   shieldFillImage: {fileID: 5439167533048678352}
@@ -508,6 +509,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7826484004295151490, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7826484004295151490, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7826484004295151490, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7826484004295151490, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7872914829202650854, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -567,3 +584,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!114 &6667883008818330340 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7674670135564813086, guid: e238f5eb156bc6340b04d234c8b752a2, type: 3}
+  m_PrefabInstance: {fileID: 3893629710929328634}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI

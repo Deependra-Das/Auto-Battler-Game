@@ -3,16 +3,17 @@ using AutoBattler.Main;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VFX;
-
 
 public class BaseUnit : MonoBehaviour
 {
     [SerializeField] protected SpriteRenderer spriteRenderer;
     [SerializeField] protected Animator animator;
     [SerializeField] protected Transform unitUIContainer;
+    [SerializeField] protected TMP_Text _levelText;
     [SerializeField] protected Slider healthBar;
     [SerializeField] protected Slider shieldBar;
     [SerializeField] protected Image shieldFillImage;
@@ -107,6 +108,7 @@ public class BaseUnit : MonoBehaviour
         currentNode = spawnNode;
         transform.position = currentNode.worldPosition;
         currentNode.SetOccupied(true);
+        _levelText.text = unitData.unitLevel.ToString();
         totalHealth = unitData.baseHealth;
         totalShield = unitData.baseShield;
         shieldFillImage.color = GetShieldColor(unitData.unitElement);
