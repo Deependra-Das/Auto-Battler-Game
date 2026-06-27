@@ -101,8 +101,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Image _levelXpBarBackgroundImage;
     [SerializeField] private Image _levelXpBarfillImage;
     [SerializeField] private Button _buyLevelXpButton;
-    [SerializeField] private float _maxFillAmount = 0.75f;
-    [SerializeField] private float _roatationForLevelXPBar = 45f;
+    [SerializeField] private float _maxFillAmount = 0.92f;
+    [SerializeField] private float _roatationForLevelXPBar = -104f;
     [SerializeField] private float _xpLerpSpeed = 8f;
 
     [Header("Delay Values UI")]
