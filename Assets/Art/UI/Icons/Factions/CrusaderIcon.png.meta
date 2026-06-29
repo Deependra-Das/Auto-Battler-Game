@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e84770acb28fdad49a8a2fcb7293c21c
+guid: 2a4821b85f2f55248a7c3d9246f0df78
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6624427858913442705
-    second: BuyXpInnerContainer_0
+      213: 8610409486859414228
+    second: CrusaderIcon_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: BuyXpInnerContainer_0
+      name: CrusaderIcon_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 180
-        height: 180
+        x: 31
+        y: 15
+        width: 194
+        height: 234
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 19bbcba3a02beeb50800000000000000
-      internalID: 6624427858913442705
+      spriteID: 4daa8e2fec15e7770800000000000000
+      internalID: 8610409486859414228
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      BuyXpInnerContainer_0: 6624427858913442705
+      CrusaderIcon_0: 8610409486859414228
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
