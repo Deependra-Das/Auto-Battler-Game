@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bee19cc9c0522849aa9372d5a03e5fa, type: 3}
+  m_Name: UnitIcon_SO
+  m_EditorClassIdentifier: Assembly-CSharp::UnitSpriteIconScriptableObjectScript
+  factionIconList:
+  - faction: 0
+    factionIcon: {fileID: 21300000, guid: 2a4821b85f2f55248a7c3d9246f0df78, type: 3}
+  - faction: 1
+    factionIcon: {fileID: 21300000, guid: 0efa947fc5c1a2948b369addbd552756, type: 3}
+  - faction: 2
+    factionIcon: {fileID: 21300000, guid: 6ad52e870232d394bb41ce21c6e60452, type: 3}
+  elementIconList:
+  - element: 0
+    elementIcon: {fileID: 21300000, guid: ebab89ba0c2ff12418d7eb4cc44295ed, type: 3}
+  - element: 1
+    elementIcon: {fileID: 21300000, guid: dd548cc01f45bd94c9759e84e7e25138, type: 3}
+  - element: 2
+    elementIcon: {fileID: 21300000, guid: 3e07bda14cdb3f942aefbefe4e75771a, type: 3}
+  - element: 3
+    elementIcon: {fileID: 21300000, guid: 34cc8867b7f136144b90945381be0a6e, type: 3}
+  unitTypeIconList:
+  - unitType: 0
+    unitTypeIcon: {fileID: 21300000, guid: f288c26b5fd63e649a8f58f8ab4b6a86, type: 3}
+  - unitType: 1
+    unitTypeIcon: {fileID: 21300000, guid: 841d508fb8884b54d8674a6b8c2c74fb, type: 3}
+  - unitType: 2
+    unitTypeIcon: {fileID: 21300000, guid: 108adbe52b8a7514f8b8d6ae4d338ecd, type: 3}
+  - unitType: 3
+    unitTypeIcon: {fileID: 21300000, guid: 020573922536be049af0059dec384aa8, type: 3}
+  unitIconList:
+  - unitID: 101
+    unitIcon: {fileID: 339261780, guid: f0c17ea6448c3044886123d9637721f4, type: 3}
+  - unitID: 102
+    unitIcon: {fileID: 1001853020, guid: 78c22cb21167b5f4ca9186d6a14d92dc, type: 3}
+  - unitID: 103
+    unitIcon: {fileID: 790496568, guid: 894d701e06960094a8ffee743e4f6f93, type: 3}
+  - unitID: 104
+    unitIcon: {fileID: 1345224006, guid: e02f90bd308d92a4cb906d41812f26ae, type: 3}
+  - unitID: 111
+    unitIcon: {fileID: -206191039, guid: 6c42f13f5634a6b4bb42c1dcdcd08b30, type: 3}
+  - unitID: 112
+    unitIcon: {fileID: 5267402234816793484, guid: 8befd0a79752b1144ba01631f15cae44, type: 3}
+  - unitID: 113
+    unitIcon: {fileID: 2786025090814906546, guid: 4a4f9b371ba5fff4198d5de6b44a37ef, type: 3}
+  - unitID: 114
+    unitIcon: {fileID: 8804136043111226768, guid: 3e4fb1de7b585a34886d8db2273ade44, type: 3}
+  - unitID: 121
+    unitIcon: {fileID: -1896043947, guid: 957559c7da87ab148a51d2ea5060cd70, type: 3}
+  - unitID: 122
+    unitIcon: {fileID: -5259514187705045419, guid: a6bfec389189c3c40ae22eabec81c943, type: 3}
+  - unitID: 123
+    unitIcon: {fileID: 3791042181826488500, guid: c916b3176dc090e46950da4c1f8c9e2b, type: 3}
+  - unitID: 124
+    unitIcon: {fileID: 2477030900967564349, guid: a3f7f9770d6088d4faa37d08a43f7471, type: 3}
