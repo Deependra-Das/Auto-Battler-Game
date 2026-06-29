@@ -7,14 +7,19 @@ public class ShopUnitCard : MonoBehaviour
 {
     [SerializeField] private Button _btnShopUnitCard;
     [SerializeField] private Image _unitIcon;
-    [SerializeField] private Image _unitFaction;
-    [SerializeField] private Image _unitType;
+    [SerializeField] private Image _unitFactionIcon;
+    [SerializeField] private Image _unitTypeIcon;
+    [SerializeField] private Image _unitElementIcon;
+    [SerializeField] private Image _unitElementIconContainer;
+    [SerializeField] private Image _overlay;
     [SerializeField] private TMP_Text _unitName;
     [SerializeField] private TMP_Text _unitCost;
     [SerializeField] private TMP_Text _unitLevel;
 
     public UnitData UnitData { get; private set; }
     private bool _isInitialized;
+    private UnitIconService _unitIconServiceObj;
+    private UnitColorService _unitColorServiceObj;
 
     private void Awake() => SubscribeToEvents();
 
@@ -32,6 +37,8 @@ public class ShopUnitCard : MonoBehaviour
 
     public void Initialize(UnitData unitData)
     {
+        _unitIconServiceObj = GameManager.Instance.Get<UnitIconService>();
+        _unitColorServiceObj = GameManager.Instance.Get<UnitColorService>();
         _isInitialized = true;
         UnitData = unitData;
         _btnShopUnitCard.interactable = true;
@@ -43,6 +50,13 @@ public class ShopUnitCard : MonoBehaviour
         _unitIcon.sprite = UnitData.unitIcon;
         _unitName.text = UnitData.unitName.ToString();
         _unitCost.text = UnitData.baseUnitCost.ToString();
+        _unitLevel.text = UnitData.unitLevel.ToString();
+        _unitFactionIcon.sprite = _unitIconServiceObj.GetFactionIcon(UnitData.unitFaction);
+        _unitTypeIcon.sprite = _unitIconServiceObj.GetUnitTypeIcon(UnitData.unitType);
+        _unitElementIcon.sprite = _unitIconServiceObj.GetElementIcon(UnitData.unitElement);
+        Color elementColor  = _unitColorServiceObj.GetElementColor(UnitData.unitElement);
+        _unitElementIconContainer.color = elementColor;
+        _overlay.color = elementColor;
     }
 
     private void OnShopUnitCardClicked()
@@ -57,8 +71,9 @@ public class ShopUnitCard : MonoBehaviour
         UnitData = default;
         _isInitialized = false;
         _unitIcon.sprite = null;
-        _unitFaction.sprite = null;
-        _unitType.sprite = null;
+        _unitFactionIcon.sprite = null;
+        _unitTypeIcon.sprite = null;
+        _unitElementIcon.sprite = null;
         _unitName.text = string.Empty;
         _unitCost.text = string.Empty;
         _unitLevel.text = string.Empty;
