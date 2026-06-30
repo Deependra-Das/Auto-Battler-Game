@@ -35,10 +35,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Button _enterCombatButton;
     [SerializeField] private Button _shopToggleButton;
     [SerializeField] private TMP_Text _balanceCurrencyText;
-    [SerializeField] private Button _pausePlayGameplayButton;
+    [SerializeField] private Button _pauseGameplayButton;
     [SerializeField] private TMP_Text _roundInfoGameplayUIText;
     [SerializeField] private TMP_Text _stageInfoGameplayUIText;
     [SerializeField] private GameObject _bottomControlPanel;
+    [SerializeField] private TMP_Text _playerLivesInfoGameplayUIText;
 
     [Header("--Gameplay Paused UI")]
     [SerializeField] private GameObject _gameplayPausedContainer;
@@ -123,7 +124,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private InventoryUnitCardPool _inventoryCardPoolObj;
     private DiscardUnitDropZoneManager _discardUnitDropZoneManagerObj;
     private InventoryDropZoneManager _inventoryDropZoneManagerObj;
-
+    
     public Canvas UICanvas => _uiCanvas;
 
     public RectTransform CanvasRect { get; private set; }
@@ -165,7 +166,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _resetStageButton.onClick.AddListener(OnResetStageButtonClicked);
         _resetStageConfirmationYesButton.onClick.AddListener(OnResetStageConfirmationYesButtonClicked);
         _resetStageConfirmationNoButton.onClick.AddListener(OnResetStageConfirmationNoButtonClicked);
-        _pausePlayGameplayButton.onClick.AddListener(OnPausePlayGameplayToggleChanged);
+        _pauseGameplayButton.onClick.AddListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.AddListener(OnResumeGameplayButtonClicked);
         _restartRoundPauseMenuButton.onClick.AddListener(OnRestartRoundPauseMenuButtonClicked);
         _nextRoundGameplayOverButton.onClick.AddListener(OnNextRoundButtonGameplayOverButtonClicked);
@@ -187,7 +188,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _resetStageButton.onClick.RemoveListener(OnResetStageButtonClicked);
         _resetStageConfirmationYesButton.onClick.RemoveListener(OnResetStageConfirmationYesButtonClicked);
         _resetStageConfirmationNoButton.onClick.RemoveListener(OnResetStageConfirmationNoButtonClicked);
-        _pausePlayGameplayButton.onClick.RemoveListener(OnPausePlayGameplayToggleChanged);
+        _pauseGameplayButton.onClick.RemoveListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.RemoveListener(OnResumeGameplayButtonClicked);
         _restartRoundPauseMenuButton.onClick.RemoveListener(OnRestartRoundPauseMenuButtonClicked);
         _nextRoundGameplayOverButton.onClick.RemoveListener(OnNextRoundButtonGameplayOverButtonClicked);
@@ -855,7 +856,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         SetStageInfoGameplayUIText(stageIndex + 1);
         SetRoundInfoGameplayUIText(roundIndex + 1);
-
+        SetPlayerLivesInfoGameplayUI();
         StartCoroutine(HandleRoundStartNotificationRoutine());
     }
 
@@ -1022,6 +1023,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         int roundCount = GameManager.Instance.Get<StageService>().GetRoundCount();
         _roundInfoGameplayUIText.text = value.ToString()+" / "+ roundCount.ToString();
+    }
+
+    private void SetPlayerLivesInfoGameplayUI()
+    {
+        int currentLives = GameManager.Instance.Get<PlayerLevelService>().Lives;
+        int maxLives = GameManager.Instance.Get<StageService>().GetCurrentStageData().maxPlayerLives;
+        _playerLivesInfoGameplayUIText.text = currentLives.ToString() + " / " + maxLives.ToString();
     }
 
     private void SetStageDifficultyOnSelectionUI(StageDifficultyEnum difficultyEnumValue)
