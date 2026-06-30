@@ -431,9 +431,9 @@ MonoBehaviour:
   _unitElementIcon: {fileID: 898847357419431127}
   _unitElementIconContainer: {fileID: 3156371008906802596}
   _overlay: {fileID: 3928137387940289070}
-  _unitName: {fileID: 3528417737459518074}
-  _unitCost: {fileID: 4531092419240276899}
-  _unitLevel: {fileID: 1421269159635968548}
+  _unitNameText: {fileID: 3528417737459518074}
+  _unitCostText: {fileID: 4531092419240276899}
+  _unitLevelText: {fileID: 1421269159635968548}
 --- !u!1 &2287258013849752761
 GameObject:
   m_ObjectHideFlags: 0
@@ -1236,7 +1236,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -28.4}
+  m_AnchoredPosition: {x: 0, y: -28}
   m_SizeDelta: {x: 64, y: 26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4919022188090642208
