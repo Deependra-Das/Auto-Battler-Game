@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 605c9e9ab78e31d43bb402b2a218d2ec
+guid: 4b24d32ae78182b409030c08cd47a51d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6710309734856972444
-    second: ShopCardUnitFactionContainerBackground_0
+      213: 5890238682087130880
+    second: TopStageRoundInfoContainerBackground_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -139,12 +139,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ShopCardUnitFactionContainerBackground_0
+      name: TopStageRoundInfoContainerBackground_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
+        width: 320
         height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c98defea62fcf1d50800000000000000
-      internalID: 6710309734856972444
+      spriteID: 0078110afd45eb150800000000000000
+      internalID: 5890238682087130880
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ShopCardUnitFactionContainerBackground_0: 6710309734856972444
+      TopStageRoundInfoContainerBackground_0: 5890238682087130880
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

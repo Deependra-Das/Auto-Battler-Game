@@ -1020,7 +1020,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void SetRoundInfoGameplayUIText(int value)
     {
-        _roundInfoGameplayUIText.text = "Round "+ value.ToString();
+        int roundCount = GameManager.Instance.Get<StageService>().GetRoundCount();
+        _roundInfoGameplayUIText.text = value.ToString()+" / "+ roundCount.ToString();
     }
 
     private void SetStageDifficultyOnSelectionUI(StageDifficultyEnum difficultyEnumValue)
