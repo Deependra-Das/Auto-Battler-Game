@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f2a50e24e40149f49a461d6aca73880f
+guid: aaf12f3f5d533d14caf003ddb88f268a
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - HarmonyOS Sans
+  - Nunito Sans
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
