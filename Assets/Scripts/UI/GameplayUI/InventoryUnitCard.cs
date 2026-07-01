@@ -36,7 +36,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private TileGridService _tileGridServiceObj;
     private HighlightTileService _highlightTileServiceObj;
     private GraphService _graphServiceObj;
-    private UnitIconService _unitIconServiceObj;
+    private IconService _unitIconServiceObj;
     private UnitColorService _unitColorServiceObj;
 
 
@@ -61,7 +61,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
         _highlightTileServiceObj = GameManager.Instance.Get<HighlightTileService>();
         _graphServiceObj = GameManager.Instance.Get<GraphService>();
-        _unitIconServiceObj = GameManager.Instance.Get<UnitIconService>();
+        _unitIconServiceObj = GameManager.Instance.Get<IconService>();
         _unitColorServiceObj = GameManager.Instance.Get<UnitColorService>();
 
         UnitData = unitData;

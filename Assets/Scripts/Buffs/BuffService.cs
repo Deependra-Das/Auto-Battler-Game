@@ -115,8 +115,8 @@ public class BuffService
                 case BuffNameEnum.Recovery: data.hpBonus = value; break;
                 case BuffNameEnum.Haste: data.attackSpeedBonus = value; break;
 
-                case BuffNameEnum.Flame: data.fireDamageBonus = value; break;
-                case BuffNameEnum.Thunder: data.thunderDamageBonus = value; break;
+                case BuffNameEnum.Blaze: data.fireDamageBonus = value; break;
+                case BuffNameEnum.Surge: data.thunderDamageBonus = value; break;
                 case BuffNameEnum.Verdant: data.natureDamageBonus = value; break;
             }
         }
@@ -140,8 +140,8 @@ public class BuffService
     {
         return faction switch
         {
-            UnitFactionEnum.Crusader => BuffNameEnum.Flame,
-            UnitFactionEnum.Viking => BuffNameEnum.Thunder,
+            UnitFactionEnum.Crusader => BuffNameEnum.Blaze,
+            UnitFactionEnum.Viking => BuffNameEnum.Surge,
             UnitFactionEnum.Spartan => BuffNameEnum.Verdant,
             _ => throw new Exception($"Unhandled UnitFactionEnum: {faction}")
         };

@@ -506,12 +506,16 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 _team2ToggleButton.isOn = false;
                 _buffTeam1ToggleContent.SetActive(true);
                 _buffTeam2ToggleContent.SetActive(false);
+                _team1ToggleButton.image.color = Color.white;
+                _team2ToggleButton.image.color = Color.grey;
             }
             else if (tabIndex == 2)
             {
                 _team1ToggleButton.isOn = false;
                 _buffTeam1ToggleContent.SetActive(false);
                 _buffTeam2ToggleContent.SetActive(true);
+                _team2ToggleButton.image.color = Color.white;
+                _team1ToggleButton.image.color = Color.grey;
             }
         }
     }

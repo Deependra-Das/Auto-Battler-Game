@@ -18,7 +18,7 @@ public class ShopUnitCard : MonoBehaviour
 
     public UnitData UnitData { get; private set; }
     private bool _isInitialized;
-    private UnitIconService _unitIconServiceObj;
+    private IconService _unitIconServiceObj;
     private UnitColorService _unitColorServiceObj;
 
     private void Awake() => SubscribeToEvents();
@@ -37,7 +37,7 @@ public class ShopUnitCard : MonoBehaviour
 
     public void Initialize(UnitData unitData)
     {
-        _unitIconServiceObj = GameManager.Instance.Get<UnitIconService>();
+        _unitIconServiceObj = GameManager.Instance.Get<IconService>();
         _unitColorServiceObj = GameManager.Instance.Get<UnitColorService>();
         _isInitialized = true;
         UnitData = unitData;
