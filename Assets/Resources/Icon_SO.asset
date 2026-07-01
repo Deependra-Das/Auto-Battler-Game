@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3bee19cc9c0522849aa9372d5a03e5fa, type: 3}
-  m_Name: UnitIcon_SO
+  m_Script: {fileID: 11500000, guid: 87d953723e1114e4d9d36997b28f19d5, type: 3}
+  m_Name: Icon_SO
   m_EditorClassIdentifier: Assembly-CSharp::UnitSpriteIconScriptableObjectScript
   factionIconList:
   - faction: 0
@@ -37,28 +37,19 @@ MonoBehaviour:
     unitTypeIcon: {fileID: 21300000, guid: 108adbe52b8a7514f8b8d6ae4d338ecd, type: 3}
   - unitType: 3
     unitTypeIcon: {fileID: 21300000, guid: 020573922536be049af0059dec384aa8, type: 3}
-  unitIconList:
-  - unitID: 101
-    unitIcon: {fileID: 339261780, guid: f0c17ea6448c3044886123d9637721f4, type: 3}
-  - unitID: 102
-    unitIcon: {fileID: 1001853020, guid: 78c22cb21167b5f4ca9186d6a14d92dc, type: 3}
-  - unitID: 103
-    unitIcon: {fileID: 790496568, guid: 894d701e06960094a8ffee743e4f6f93, type: 3}
-  - unitID: 104
-    unitIcon: {fileID: 1345224006, guid: e02f90bd308d92a4cb906d41812f26ae, type: 3}
-  - unitID: 111
-    unitIcon: {fileID: -206191039, guid: 6c42f13f5634a6b4bb42c1dcdcd08b30, type: 3}
-  - unitID: 112
-    unitIcon: {fileID: 5267402234816793484, guid: 8befd0a79752b1144ba01631f15cae44, type: 3}
-  - unitID: 113
-    unitIcon: {fileID: 2786025090814906546, guid: 4a4f9b371ba5fff4198d5de6b44a37ef, type: 3}
-  - unitID: 114
-    unitIcon: {fileID: 8804136043111226768, guid: 3e4fb1de7b585a34886d8db2273ade44, type: 3}
-  - unitID: 121
-    unitIcon: {fileID: -1896043947, guid: 957559c7da87ab148a51d2ea5060cd70, type: 3}
-  - unitID: 122
-    unitIcon: {fileID: -5259514187705045419, guid: a6bfec389189c3c40ae22eabec81c943, type: 3}
-  - unitID: 123
-    unitIcon: {fileID: 3791042181826488500, guid: c916b3176dc090e46950da4c1f8c9e2b, type: 3}
-  - unitID: 124
-    unitIcon: {fileID: 2477030900967564349, guid: a3f7f9770d6088d4faa37d08a43f7471, type: 3}
+  buffIconList:
+  - buffName: 0
+    buffIcon: {fileID: 21300000, guid: 65f25fbe287e5b3499ba49c06ec328e0, type: 3}
+  - buffName: 1
+    buffIcon: {fileID: 21300000, guid: 2832ac7bb55d5714994541e29f3e71ac, type: 3}
+  - buffName: 2
+    buffIcon: {fileID: 21300000, guid: 66756b5a307da294a9fb737d3f8d4d2e, type: 3}
+  - buffName: 3
+    buffIcon: {fileID: 21300000, guid: 59d20e2980900704aa6cc73350bff625, type: 3}
+  - buffName: 4
+    buffIcon: {fileID: 21300000, guid: b6e8de6d63ce00a479df6e5a284abfa9, type: 3}
+  - buffName: 5
+    buffIcon: {fileID: 21300000, guid: 536a008d288663c4c852db58fc9503fe, type: 3}
+  - buffName: 6
+    buffIcon: {fileID: 21300000, guid: 6b9a0dc51cbcee849a23b1f57364412f, type: 3}
+  unitIconList: []
