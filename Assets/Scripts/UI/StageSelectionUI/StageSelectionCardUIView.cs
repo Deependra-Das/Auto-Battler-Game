@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Timeline;
 using UnityEngine.UI;
 
 public class StageSelectionCardUIView : MonoBehaviour
@@ -16,14 +15,18 @@ public class StageSelectionCardUIView : MonoBehaviour
     public StageDifficultyEnum StageDifficulty { get; private set; }
     public List<UnitElementEnum> RecommendedElements { get; private set; }
 
-    [SerializeField] private GameObject _selectedHighlight;
+    [SerializeField] private Image _background;
     [SerializeField] private TMP_Text _stageNameText;
     [SerializeField] private Image _stageClearedImage;
     [SerializeField] private Button _stageButton;
     [SerializeField] private Transform _roundResultListContainer;
     [SerializeField] private RoundResultCardUIView _roundResultCardPrefab;
+    [SerializeField] private Color _activeTextColor;
+    [SerializeField] private Color _inactiveTextColor;
 
     private Dictionary<int, RoundResultCardUIView> _roundResultCardDictionary = new();
+
+    private int _roundIndexToContinueFrom = 0;
 
     private void OnEnable() => SubscribeToEvents();
     private void OnDisable() => UnsubscribeToEvents();
@@ -85,7 +88,19 @@ public class StageSelectionCardUIView : MonoBehaviour
 
     public void SetStageCardUISelectedHighlight(bool value)
     {
-        _selectedHighlight.SetActive(value);
+        if(value)
+        {
+            _background.color = _inactiveTextColor;
+            _stageNameText.color = _activeTextColor;
+            _roundResultCardDictionary[_roundIndexToContinueFrom]?.SetRoundMarkerColor(_activeTextColor);
+        }
+        else
+        {
+            _background.color = _activeTextColor;
+            _stageNameText.color = _inactiveTextColor;
+            _roundResultCardDictionary[_roundIndexToContinueFrom]?.SetRoundMarkerColor(_inactiveTextColor);
+        }
+      
     }
 
     public void SetStageRoundData(List<RoundResultEnum> roundResults,int roundsCleared, int lastRoundPlayed)
@@ -117,6 +132,7 @@ public class StageSelectionCardUIView : MonoBehaviour
 
         _roundResultCardDictionary.Values.ToList().ForEach(card => card.ToggleRoundMarker(false));
         _roundResultCardDictionary[index].ToggleRoundMarker(true);
+        _roundIndexToContinueFrom = index;
     }
 
     public void InvokeClick()
