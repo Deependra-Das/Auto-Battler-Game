@@ -4330,7 +4330,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -6071,9 +6071,11 @@ MonoBehaviour:
   _resetStageConfirmationNoButton: {fileID: 597160238}
   _recommendedLevelText: {fileID: 1288591111}
   _recommendedElementList:
-  - elementIconImage: {fileID: 1658882334}
+  - elementIcon: {fileID: 1658882334}
+    elementIconContainer: {fileID: 1674301097}
     elementNameText: {fileID: 1085726731}
-  - elementIconImage: {fileID: 437620907}
+  - elementIcon: {fileID: 437620907}
+    elementIconContainer: {fileID: 62777005}
     elementNameText: {fileID: 2089767639}
   _difficultyImageList:
   - {fileID: 1942427495}
@@ -6081,6 +6083,11 @@ MonoBehaviour:
   - {fileID: 468105893}
   - {fileID: 1362163999}
   - {fileID: 235333638}
+  _selectedStageBackgroundImage: {fileID: 687525763}
+  _stageBackgroundImageList:
+  - {fileID: 21300000, guid: 29f4775ca2665824aabd1bc2989529ac, type: 3}
+  - {fileID: 21300000, guid: e33a95742e0f1d54983e160a55ec0bb9, type: 3}
+  - {fileID: 21300000, guid: 2fafca1c688273640941f04a0782b330, type: 3}
   _gameplayUIContainer: {fileID: 117397676}
   _enterCombatButton: {fileID: 1348752693}
   _shopToggleButton: {fileID: 287041312}
@@ -13880,7 +13887,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

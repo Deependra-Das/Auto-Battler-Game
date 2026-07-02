@@ -29,6 +29,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private TMP_Text _recommendedLevelText;
     [SerializeField] private List<RecommendedElementCard> _recommendedElementList;
     [SerializeField] private List<Image> _difficultyImageList;
+    [SerializeField] private Image _selectedStageBackgroundImage;
+    [SerializeField] private List<Sprite> _stageBackgroundImageList;
 
     [Header("Gameplay UI")]
     [SerializeField] private GameObject _gameplayUIContainer;
@@ -124,7 +126,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private InventoryUnitCardPool _inventoryCardPoolObj;
     private DiscardUnitDropZoneManager _discardUnitDropZoneManagerObj;
     private InventoryDropZoneManager _inventoryDropZoneManagerObj;
-    
+
     public Canvas UICanvas => _uiCanvas;
 
     public RectTransform CanvasRect { get; private set; }
@@ -688,6 +690,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         _selectedStage = (int)parameters[0];
         int roundCount = 0;
+        _selectedStageBackgroundImage.sprite = _stageBackgroundImageList[_selectedStage];
 
         foreach (var stage in _stageSelectionUICardList)
         {
@@ -698,7 +701,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 SetStageRecommendedLevelOnSelectionUI(stage.RecommendedLevel);
                 SetStageRecommendedElementsOnSelectionUI(stage);
                 SetStageDifficultyOnSelectionUI(stage.StageDifficulty);
-
                 stage.SetStageCardUISelectedHighlight(true);
             }
             else
@@ -1055,29 +1057,21 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void SetStageRecommendedLevelOnSelectionUI(int value)
     {
-        _recommendedLevelText.text = value.ToString();
+        _recommendedLevelText.text = value.ToString("D2");
     }
 
     private void SetStageRecommendedElementsOnSelectionUI(StageSelectionCardUIView stage)
     {
         List<UnitElementEnum> recommendedElements = stage.RecommendedElements;
+        IconService iconServiceObj = GameManager.Instance.Get<IconService>();
+        UnitColorService colorServiceObj = GameManager.Instance.Get<UnitColorService>();
 
         for (int index = 0; index < recommendedElements.Count; index++)
         {
-            _recommendedElementList[index].elementIconImage.color = GetElementColor(recommendedElements[index]);
+            _recommendedElementList[index].elementIcon.sprite = iconServiceObj.GetElementIcon(recommendedElements[index]);
+            _recommendedElementList[index].elementIconContainer.color = colorServiceObj.GetElementColor(recommendedElements[index]);
             _recommendedElementList[index].elementNameText.text = recommendedElements[index].ToString();
         }
-    }
-
-    private Color GetElementColor(UnitElementEnum element)
-    {
-        return element switch
-        {
-            UnitElementEnum.Fire => new Color(1f, 0.78f, 0.72f),
-            UnitElementEnum.Thunder => new Color(0.65f, 0.9f, 1f),
-            UnitElementEnum.Nature => new Color(0.78f, 1f, 0.65f),
-            _ => new Color(0.95f, 0.95f, 0.95f)
-        };
     }
 
     private void OnGameplayStateChanged(object[] parameters)
