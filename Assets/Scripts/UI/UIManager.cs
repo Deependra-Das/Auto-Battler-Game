@@ -63,6 +63,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private GameObject _stageOverStatusContainer;
     [SerializeField] private TMP_Text _stageOverStatusMessageText;
     [SerializeField] private TMP_Text _stageOverSubText;
+    [SerializeField] private GameObject _nextRoundButtonContainer;
     [SerializeField] private Button _nextRoundGameplayOverButton;
     [SerializeField] private Button _restartRoundGameplayOverButton;
     [SerializeField] private Button _backToStageSelectGameplayOverButton;
@@ -787,7 +788,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void SetMessageForResetStageConfirmation()
     {
-        _resetStageConfirmationMessageText.text = "Are you sure you want to reset Stage " + (_selectedStage + 1).ToString() + " ?";
+        _resetStageConfirmationMessageText.text = "Are you sure you want to reset Stage " + (_selectedStage + 1).ToString("D2") + " ?";
     }
 
     private void OnResetStageConfirmationYesButtonClicked()
@@ -883,18 +884,18 @@ public class UIManager : GenericMonoSingleton<UIManager>
         RoundResultEnum result = (RoundResultEnum)parameters[2];
         int rewardQuantity = (int)parameters[3];
 
-        string roundInfoStatusMessage = "Round "+(roundIndex + 1).ToString();
+        string roundInfoStatusMessage = "Round "+(roundIndex + 1).ToString("D2");
 
         switch (result)
         {
             case RoundResultEnum.Win:
-                roundInfoStatusMessage += " Won!";
+                roundInfoStatusMessage += " Won";
                 break;
             case RoundResultEnum.Lose:
-                roundInfoStatusMessage += " Lost!";
+                roundInfoStatusMessage += " Lost";
                 break;
             case RoundResultEnum.Draw:
-                roundInfoStatusMessage += " Draw!";
+                roundInfoStatusMessage += " Draw";
                 break;
         }
 
@@ -959,21 +960,22 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void ToggleGameplayOverNextRoundButton(bool value)
     {
         _nextRoundGameplayOverButton.gameObject.SetActive(value);
+        _nextRoundButtonContainer.SetActive(value);
     }
 
     private void SetStageStartNotificationText(int value)
     {
-        _stageStartNotificationText.text = "Stage " + value.ToString();
+        _stageStartNotificationText.text = "Stage " + value.ToString("D2");
     }
 
     private void SetRoundStartNotificationText(int value)
     {
-        _roundStartNotificationText.text = "Round " + value.ToString();
+        _roundStartNotificationText.text = "Round " + value.ToString("D2");
     }
 
     private void SetStageInfoGameplayOverText(int value)
     {
-        _stageInfoGameplayOverText.text = "Stage " + value.ToString();
+        _stageInfoGameplayOverText.text = "Stage " + value.ToString("D2");
     }
 
     private void SetRoundInfoGameplayOverText(string value)
