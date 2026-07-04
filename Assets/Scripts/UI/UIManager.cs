@@ -3,10 +3,10 @@ using AutoBattler.Main;
 using AutoBattler.Utilities;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
 
 public class UIManager : GenericMonoSingleton<UIManager>
 {
@@ -622,7 +622,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void UpdateXPText(int currentXP, int requiredXPToNextLevel)
     {
-        _xpText.text = currentXP.ToString() + "/" + requiredXPToNextLevel.ToString();
+        _xpText.text = currentXP.ToString() + " / " + requiredXPToNextLevel.ToString();
     }
 
     private void CreateStageSelectionButtons()
@@ -840,7 +840,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void ToggleGameplayPausedContainer(bool value)
     {
+        ToggleGameplayUIContainer(!value);
         _gameplayPausedContainer.SetActive(value);
+        PostProcessingManager.Instance.ToggleBlur(value);
     }
 
     private void OnResumeGameplayButtonClicked()
@@ -944,7 +946,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void ToggleGameplayOverNoticationContainer(bool value)
     {
+        ToggleGameplayUIContainer(!value);
         _gameplayOverNotificationContainer.SetActive(value);
+        PostProcessingManager.Instance.ToggleBlur(value);
     }
 
     private void ToggleGameplayOverRewardsContainer(bool value)
@@ -1025,13 +1029,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void SetStageInfoGameplayUIText(int value)
     {
-        _stageInfoGameplayUIText.text = value.ToString();
+        _stageInfoGameplayUIText.text = value.ToString("D2");
     }
 
     private void SetRoundInfoGameplayUIText(int value)
     {
         int roundCount = GameManager.Instance.Get<StageService>().GetRoundCount();
-        _roundInfoGameplayUIText.text = value.ToString()+" / "+ roundCount.ToString();
+        _roundInfoGameplayUIText.text = value.ToString("D2") +" / "+ roundCount.ToString("D2");
     }
 
     private void SetPlayerLivesInfoGameplayUI()
