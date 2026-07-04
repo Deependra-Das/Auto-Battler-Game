@@ -1025,7 +1025,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 826417434855265373, guid: 4e1b2373f618d1449ad20ef746d22bc1, type: 3}
       propertyPath: m_Name
-      value: RestartRoundButton
+      value: RestartRoundGameplayOverButton
       objectReference: {fileID: 0}
     - target: {fileID: 1440374066241449684, guid: 4e1b2373f618d1449ad20ef746d22bc1, type: 3}
       propertyPath: m_Sprite
@@ -6219,7 +6219,7 @@ MonoBehaviour:
   _gameplayPausedContainer: {fileID: 1038920522}
   _resumeGameplayButton: {fileID: 888890751}
   _restartRoundPauseMenuButton: {fileID: 1225274994}
-  _backToStageSelectGameplayPausedButton: {fileID: 1951226509}
+  _returnToMenuGameplayPausedButton: {fileID: 1951226509}
   _gameplayStartNotificationContainer: {fileID: 1016546090}
   _stageStartNotificationText: {fileID: 299267107}
   _roundStartNotificationText: {fileID: 1842400629}
@@ -6233,8 +6233,8 @@ MonoBehaviour:
   _stageOverSubText: {fileID: 380349062}
   _nextRoundButtonContainer: {fileID: 1003843048}
   _nextRoundGameplayOverButton: {fileID: 248236235}
-  _restartRoundGameplayOverButton: {fileID: 1225274994}
-  _backToStageSelectGameplayOverButton: {fileID: 1951226509}
+  _restartRoundGameplayOverButton: {fileID: 1616745871}
+  _returnToMenuGameplayOverButton: {fileID: 2134710812}
   _shopPanel: {fileID: 500423642}
   _refreshCostText: {fileID: 792801057}
   _refreshShopButton: {fileID: 1490154947}
@@ -11266,7 +11266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 826417434855265373, guid: 4e1b2373f618d1449ad20ef746d22bc1, type: 3}
       propertyPath: m_Name
-      value: RestartRoundButton
+      value: RestartRoundGameplayPausedButton
       objectReference: {fileID: 0}
     - target: {fileID: 1440374066241449684, guid: 4e1b2373f618d1449ad20ef746d22bc1, type: 3}
       propertyPath: m_Sprite
@@ -13069,7 +13069,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 826417434855265373, guid: 4e1b2373f618d1449ad20ef746d22bc1, type: 3}
       propertyPath: m_Name
-      value: ReturnToMenuButton
+      value: ReturnToMenuGameplayPausedButton
       objectReference: {fileID: 0}
     - target: {fileID: 1440374066241449684, guid: 4e1b2373f618d1449ad20ef746d22bc1, type: 3}
       propertyPath: m_Sprite
@@ -14612,6 +14612,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1609649300}
   m_CullTransparentMesh: 1
+--- !u!114 &1616745871 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5336722373570884442, guid: 4e1b2373f618d1449ad20ef746d22bc1, type: 3}
+  m_PrefabInstance: {fileID: 136725981}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &1641734144
 GameObject:
   m_ObjectHideFlags: 0
@@ -14778,7 +14789,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 826417434855265373, guid: 4e1b2373f618d1449ad20ef746d22bc1, type: 3}
       propertyPath: m_Name
-      value: ResturnToMenuButton
+      value: ResturnToMenuGameplayOverButton
       objectReference: {fileID: 0}
     - target: {fileID: 1440374066241449684, guid: 4e1b2373f618d1449ad20ef746d22bc1, type: 3}
       propertyPath: m_Sprite
@@ -18551,6 +18562,17 @@ MonoBehaviour:
   m_FillOrigin: 3
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2134710812 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5336722373570884442, guid: 4e1b2373f618d1449ad20ef746d22bc1, type: 3}
+  m_PrefabInstance: {fileID: 1648254386}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!1 &291494231584283312
 GameObject:
   m_ObjectHideFlags: 0

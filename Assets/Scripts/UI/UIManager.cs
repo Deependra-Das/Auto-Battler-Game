@@ -47,7 +47,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private GameObject _gameplayPausedContainer;
     [SerializeField] private Button _resumeGameplayButton;
     [SerializeField] private Button _restartRoundPauseMenuButton;
-    [SerializeField] private Button _backToStageSelectGameplayPausedButton;
+    [SerializeField] private Button _returnToMenuGameplayPausedButton;
 
     [Header("--Gameplay Start Notification UI")]
     [SerializeField] private GameObject _gameplayStartNotificationContainer;
@@ -66,7 +66,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private GameObject _nextRoundButtonContainer;
     [SerializeField] private Button _nextRoundGameplayOverButton;
     [SerializeField] private Button _restartRoundGameplayOverButton;
-    [SerializeField] private Button _backToStageSelectGameplayOverButton;
+    [SerializeField] private Button _returnToMenuGameplayOverButton;
 
     [Header("--Shop UI")]
     [SerializeField] private GameObject _shopPanel;
@@ -174,8 +174,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _restartRoundPauseMenuButton.onClick.AddListener(OnRestartRoundPauseMenuButtonClicked);
         _nextRoundGameplayOverButton.onClick.AddListener(OnNextRoundButtonGameplayOverButtonClicked);
         _restartRoundGameplayOverButton.onClick.AddListener(OnRestartRoundGameplayOverButtonClicked);
-        _backToStageSelectGameplayOverButton.onClick.AddListener(OnBackToStageSelectionGameplayOverButtonClicked);
-        _backToStageSelectGameplayPausedButton.onClick.AddListener(OnBackToStagePauseMenuButtonClicked);
+        _returnToMenuGameplayOverButton.onClick.AddListener(OnBackToStageSelectionGameplayOverButtonClicked);
+        _returnToMenuGameplayPausedButton.onClick.AddListener(OnBackToStagePauseMenuButtonClicked);
     }
 
     private void OnDisable()
@@ -196,8 +196,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _restartRoundPauseMenuButton.onClick.RemoveListener(OnRestartRoundPauseMenuButtonClicked);
         _nextRoundGameplayOverButton.onClick.RemoveListener(OnNextRoundButtonGameplayOverButtonClicked);
         _restartRoundGameplayOverButton.onClick.RemoveListener(OnRestartRoundGameplayOverButtonClicked);
-        _backToStageSelectGameplayOverButton.onClick.RemoveListener(OnBackToStageSelectionGameplayOverButtonClicked);
-        _backToStageSelectGameplayPausedButton.onClick.RemoveListener(OnBackToStagePauseMenuButtonClicked);
+        _returnToMenuGameplayOverButton.onClick.RemoveListener(OnBackToStageSelectionGameplayOverButtonClicked);
+        _returnToMenuGameplayPausedButton.onClick.RemoveListener(OnBackToStagePauseMenuButtonClicked);
     }
 
     public void OnDestroy()
@@ -1006,6 +1006,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnRestartRoundGameplayOverButtonClicked()
     {
+        Debug.Log("RestartClicked");
         ToggleGameplayOverNoticationContainer(false);
         GameplayManager.Instance.OnPlayerChooseRestartRound();
     }
