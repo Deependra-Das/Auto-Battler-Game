@@ -6200,10 +6200,6 @@ MonoBehaviour:
   - {fileID: 1362163999}
   - {fileID: 235333638}
   _selectedStageBackgroundImage: {fileID: 687525763}
-  _stageBackgroundImageList:
-  - {fileID: 21300000, guid: 29f4775ca2665824aabd1bc2989529ac, type: 3}
-  - {fileID: 21300000, guid: e33a95742e0f1d54983e160a55ec0bb9, type: 3}
-  - {fileID: 21300000, guid: 2fafca1c688273640941f04a0782b330, type: 3}
   _gameplayUIContainer: {fileID: 117397676}
   _enterCombatButton: {fileID: 1348752693}
   _shopToggleButton: {fileID: 287041312}
@@ -6220,6 +6216,7 @@ MonoBehaviour:
   _gameplayStartNotificationContainer: {fileID: 1016546090}
   _stageStartNotificationText: {fileID: 299267107}
   _roundStartNotificationText: {fileID: 1842400629}
+  _stageBackgroundImage: {fileID: 1523763703}
   _gameplayOverNotificationContainer: {fileID: 1205725232}
   _stageInfoGameplayOverText: {fileID: 1854176632}
   _roundInfoGameplayOverText: {fileID: 1593695322}
@@ -14123,7 +14120,7 @@ GameObject:
   - component: {fileID: 1523763704}
   - component: {fileID: 1523763703}
   m_Layer: 5
-  m_Name: BackgroundImage
+  m_Name: StageBackgroundImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14160,7 +14157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: dcff1d6f8c2740c438f91ff025bf1011, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 0.39215687}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -14168,7 +14165,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ba32759bc92fc934b9a73f766199f640, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 29f4775ca2665824aabd1bc2989529ac, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

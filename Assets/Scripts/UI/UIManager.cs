@@ -30,7 +30,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private List<RecommendedElementCard> _recommendedElementList;
     [SerializeField] private List<Image> _difficultyImageList;
     [SerializeField] private Image _selectedStageBackgroundImage;
-    [SerializeField] private List<Sprite> _stageBackgroundImageList;
 
     [Header("Gameplay UI")]
     [SerializeField] private GameObject _gameplayUIContainer;
@@ -53,6 +52,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private GameObject _gameplayStartNotificationContainer;
     [SerializeField] private TMP_Text _stageStartNotificationText;
     [SerializeField] private TMP_Text _roundStartNotificationText;
+    [SerializeField] private Image _stageBackgroundImage;
 
     [Header("--Gameplay Over Notification UI")]
     [SerializeField] private GameObject _gameplayOverNotificationContainer;
@@ -691,7 +691,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         _selectedStage = (int)parameters[0];
         int roundCount = 0;
-        _selectedStageBackgroundImage.sprite = _stageBackgroundImageList[_selectedStage];
+        _selectedStageBackgroundImage.sprite = GameManager.Instance.Get<StageService>().GetStageBackgroundImage(_selectedStage);
 
         foreach (var stage in _stageSelectionUICardList)
         {
@@ -866,6 +866,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         SetStageInfoGameplayUIText(stageIndex + 1);
         SetRoundInfoGameplayUIText(roundIndex + 1);
         SetPlayerLivesInfoGameplayUI();
+
+        _stageBackgroundImage.sprite = GameManager.Instance.Get<StageService>().GetStageBackgroundImage(stageIndex);
         StartCoroutine(HandleRoundStartNotificationRoutine());
     }
 

@@ -242,6 +242,11 @@ public class StageService
         return _stageConfigDataList[index];
     }
 
+    public Sprite GetStageBackgroundImage(int index)
+    {
+        return _stageConfigDataList[index].stageBackgroundImage;
+    }
+
     public void Reset()
     {
         CurrentStageIndex = 0;
