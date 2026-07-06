@@ -751,10 +751,12 @@ public class UIManager : GenericMonoSingleton<UIManager>
         switch (sceneLoaded)
         {
             case SceneNameEnum.MainMenuScene:
+                PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
                 ToggleMainMenuUIContainer(true);
                 break;
 
             case SceneNameEnum.StageSelectionScene:
+                PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
                 CreateStageSelectionButtons();
                 UpdateStageSelectionRoundData();
                 ToggleStageSelectionUIContainer(true);

@@ -5,6 +5,7 @@ using UnityEngine.Rendering.Universal;
 
 public class PostProcessingManager : GenericMonoSingleton<PostProcessingManager>
 {
+    [SerializeField] private ScriptableRendererFeature _fullscreenVornoiEffect;
     [SerializeField] private Volume volume;
 
     private DepthOfField _depthOfFieldObj;
@@ -19,5 +20,10 @@ public class PostProcessingManager : GenericMonoSingleton<PostProcessingManager>
     public void ToggleBlur(bool value)
     {
         _depthOfFieldObj.active = value;
+    }
+
+    public void ToggleFullscreenVornoiEffect(bool value)
+    {
+        _fullscreenVornoiEffect.SetActive(value);
     }
 }
