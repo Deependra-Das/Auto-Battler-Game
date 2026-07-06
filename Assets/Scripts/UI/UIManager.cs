@@ -15,8 +15,18 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [Header("MainMenu UI")]
     [SerializeField] private GameObject _mainMenuUIContainer;
     [SerializeField] private Button _mainMenuPlayButton;
+    [SerializeField] private Button _audioSettingsButton;
+    [SerializeField] private Button _howToPlayButton;
+    [SerializeField] private Button _creditsButton;
+    [SerializeField] private Button _exitGameButton;
     [SerializeField] private Graphic _flashingGraphic;
     [SerializeField] private float _fadeDuration = 1f;
+    [SerializeField] private GameObject _audioSettingsUIContainer;
+    [SerializeField] private GameObject _howToPlayUIContainer;
+    [SerializeField] private GameObject _creditsUIContainer;
+    [SerializeField] private Button _closeAudioSettingsButton;
+    [SerializeField] private Button _closeHowToPlayButton;
+    [SerializeField] private Button _closeCreditsButton;
 
     [Header("StageSelection UI")]
     [SerializeField] private GameObject _stageSelectionUIContainer;
@@ -162,6 +172,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnEnable()
     {
         _mainMenuPlayButton.onClick.AddListener(OnMainMenuPlayButtonClicked);
+        _exitGameButton.onClick.AddListener(OnExitGameButtonClicked);
+        _audioSettingsButton.onClick.AddListener(OnAudioSettingsButtonClicked);
+        _howToPlayButton.onClick.AddListener(OnHowToPlayButtonClicked);
+        _creditsButton.onClick.AddListener(OnCreditsButtonClicked);
+        _closeAudioSettingsButton.onClick.AddListener(OnCloseAudioSettingsButtonClicked);
+        _closeHowToPlayButton.onClick.AddListener(OnCloseHowToPlayButtonClicked);
+        _closeCreditsButton.onClick.AddListener(OnCloseCreditsButtonClicked);
         _enterCombatButton.onClick.AddListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
@@ -184,6 +201,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnDisable()
     {
         _mainMenuPlayButton.onClick.RemoveListener(OnMainMenuPlayButtonClicked);
+        _exitGameButton.onClick.RemoveListener(OnExitGameButtonClicked);
+        _audioSettingsButton.onClick.RemoveListener(OnAudioSettingsButtonClicked);
+        _howToPlayButton.onClick.RemoveListener(OnHowToPlayButtonClicked);
+        _creditsButton.onClick.RemoveListener(OnCreditsButtonClicked);
+        _closeAudioSettingsButton.onClick.RemoveListener(OnCloseAudioSettingsButtonClicked);
+        _closeHowToPlayButton.onClick.RemoveListener(OnCloseHowToPlayButtonClicked);
+        _closeCreditsButton.onClick.RemoveListener(OnCloseCreditsButtonClicked);
         _enterCombatButton.onClick.RemoveListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
@@ -1168,5 +1192,67 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         color.a = endAlpha;
         _flashingGraphic.color = color;
+    }
+
+    private void OnAudioSettingsButtonClicked()
+    {
+        ToggleAudioSettingsUI(true);
+        ToggleMainMenuUIContainer(false);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
+    }
+
+    private void OnCloseAudioSettingsButtonClicked()
+    {
+        ToggleAudioSettingsUI(false);
+        ToggleMainMenuUIContainer(true);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
+    }
+
+    private void OnHowToPlayButtonClicked()
+    {
+        ToggleHowToPlayUI(true);
+        ToggleMainMenuUIContainer(false);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
+    }
+
+    private void OnCloseHowToPlayButtonClicked()
+    {
+        ToggleHowToPlayUI(false);
+        ToggleMainMenuUIContainer(true);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
+    }
+
+    private void OnCreditsButtonClicked()
+    {
+        ToggleCreditsUI(true);
+        ToggleMainMenuUIContainer(false);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
+    }
+
+    private void OnCloseCreditsButtonClicked()
+    {
+        ToggleCreditsUI(false);
+        ToggleMainMenuUIContainer(true);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
+    }
+
+    private void ToggleAudioSettingsUI(bool value)
+    {
+        _audioSettingsUIContainer.SetActive(value);
+    }
+
+    private void ToggleHowToPlayUI(bool value)
+    {
+        _howToPlayUIContainer.SetActive(value);
+    }
+
+    private void ToggleCreditsUI(bool value)
+    {
+        _creditsUIContainer.SetActive(value);
+    }
+
+    private void OnExitGameButtonClicked()
+    {
+        Application.Quit();
     }
 }
