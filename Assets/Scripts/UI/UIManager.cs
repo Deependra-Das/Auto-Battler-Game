@@ -14,7 +14,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     [Header("MainMenu UI")]
     [SerializeField] private GameObject _mainMenuUIContainer;
-    [SerializeField] private Button _chooseStageButton;
+    [SerializeField] private Button _mainMenuPlayButton;
+    [SerializeField] private Graphic _flashingGraphic;
+    [SerializeField] private float _fadeDuration = 1f;
 
     [Header("StageSelection UI")]
     [SerializeField] private GameObject _stageSelectionUIContainer;
@@ -115,6 +117,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private float _displayedXP;
     private float _targetXP;
     private Coroutine _xpRoutine;
+    private Coroutine _flashCoroutine;
     private int _selectedStage = -1;
 
     private List<ShopUnitCard> _shopUnitCardList;
@@ -158,7 +161,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnEnable()
     {
-        _chooseStageButton.onClick.AddListener(OnChooseStageButtonClicked);
+        _mainMenuPlayButton.onClick.AddListener(OnMainMenuPlayButtonClicked);
         _enterCombatButton.onClick.AddListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
@@ -180,7 +183,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnDisable()
     {
-        _chooseStageButton.onClick.RemoveListener(OnChooseStageButtonClicked);
+        _mainMenuPlayButton.onClick.RemoveListener(OnMainMenuPlayButtonClicked);
         _enterCombatButton.onClick.RemoveListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
@@ -670,8 +673,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _stageSelectionUICardList.Clear();
     }
 
-    private void OnChooseStageButtonClicked()
+    private void OnMainMenuPlayButtonClicked()
     {
+        StopFlashing();
         SceneLoader.Instance.LoadScene(SceneNameEnum.StageSelectionScene);
     }
 
@@ -753,6 +757,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
             case SceneNameEnum.MainMenuScene:
                 PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
                 ToggleMainMenuUIContainer(true);
+                StartFlashing();
                 break;
 
             case SceneNameEnum.StageSelectionScene:
@@ -1115,5 +1120,53 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void HideShopPanel()
     {
         _shopPanel.gameObject.SetActive(false);
+    }
+
+    public void StartFlashing()
+    {
+        if (_flashCoroutine == null)
+        {
+            _flashCoroutine = StartCoroutine(FlashCoroutine());
+        }
+    }
+
+    public void StopFlashing()
+    {
+        if (_flashCoroutine != null)
+        {
+            StopCoroutine(_flashCoroutine);
+            _flashCoroutine = null;
+
+            Color color = _flashingGraphic.color;
+            color.a = 1f;
+            _flashingGraphic.color = color;
+        }
+    }
+
+    IEnumerator FlashCoroutine()
+    {
+        while (true)
+        {
+            yield return FadeCoroutine(1f, 0f);
+            yield return FadeCoroutine(0f, 1f);
+        }
+    }
+
+    IEnumerator FadeCoroutine(float startAlpha, float endAlpha)
+    {
+        float timer = 0f;
+
+        Color color = _flashingGraphic.color;
+
+        while (timer < _fadeDuration)
+        {
+            timer += Time.deltaTime;
+            color.a = Mathf.Lerp(startAlpha, endAlpha, timer / _fadeDuration);
+            _flashingGraphic.color = color;
+            yield return null;
+        }
+
+        color.a = endAlpha;
+        _flashingGraphic.color = color;
     }
 }
