@@ -1,12 +1,14 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class UIManager : GenericMonoSingleton<UIManager>
 {
@@ -21,12 +23,25 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Button _exitGameButton;
     [SerializeField] private Graphic _flashingGraphic;
     [SerializeField] private float _fadeDuration = 1f;
-    [SerializeField] private GameObject _audioSettingsUIContainer;
+
+    [Header("HowToPlay UI")]
     [SerializeField] private GameObject _howToPlayUIContainer;
-    [SerializeField] private GameObject _creditsUIContainer;
-    [SerializeField] private Button _closeAudioSettingsButton;
     [SerializeField] private Button _closeHowToPlayButton;
+    [SerializeField] private Button _previousButton;
+    [SerializeField] private Button _nextButton;
+    [SerializeField] private VideoPlayer _videoPlayer;
+    [SerializeField] private TMP_Text _currentInstructionIndexText;
+    [SerializeField] private TMP_Text _totalInstructionCountText;
+    [SerializeField] private TMP_Text _instructionTitleText;
+    [SerializeField] private TMP_Text _instructionDescriptionText;
+
+    [Header("Credits UI")]
+    [SerializeField] private GameObject _creditsUIContainer;
     [SerializeField] private Button _closeCreditsButton;
+
+    [Header("AudioSettings UI")]
+    [SerializeField] private GameObject _audioSettingsUIContainer;
+    [SerializeField] private Button _closeAudioSettingsButton;
 
     [Header("StageSelection UI")]
     [SerializeField] private GameObject _stageSelectionUIContainer;
@@ -131,6 +146,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private Coroutine _xpRoutine;
     private Coroutine _flashCoroutine;
     private int _selectedStage = -1;
+    private int _currentInstructionIndex;
+    private int _totalInstructionCount = 0;
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
@@ -142,6 +159,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private InventoryUnitCardPool _inventoryCardPoolObj;
     private DiscardUnitDropZoneManager _discardUnitDropZoneManagerObj;
     private InventoryDropZoneManager _inventoryDropZoneManagerObj;
+    private VideoInstructionService _videoInstructionServiceObj;
 
     public Canvas UICanvas => _uiCanvas;
 
@@ -169,6 +187,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleResetStageStageButton(false);
         ToggleStageSelectionConfirmationContainer(false);
         ToggleGameplayPausedContainer(false);
+        _videoInstructionServiceObj = GameManager.Instance.Get<VideoInstructionService>();
     }
 
     private void OnEnable()
@@ -181,6 +200,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _closeAudioSettingsButton.onClick.AddListener(OnCloseAudioSettingsButtonClicked);
         _closeHowToPlayButton.onClick.AddListener(OnCloseHowToPlayButtonClicked);
         _closeCreditsButton.onClick.AddListener(OnCloseCreditsButtonClicked);
+        _previousButton.onClick.AddListener(OnPreviousButtonClicked);
+        _nextButton.onClick.AddListener(OnNextButtonClicked);
         _enterCombatButton.onClick.AddListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
@@ -1235,13 +1256,33 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnHowToPlayButtonClicked()
     {
+
+        if (_videoInstructionServiceObj == null || _videoInstructionServiceObj.Count == 0)
+        {
+            Debug.LogWarning("No tutorials found.");
+            return;
+        }
+
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
         ToggleHowToPlayUI(true);
         ToggleMainMenuUIContainer(false);
-        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
+        _currentInstructionIndex = 0;
+        _totalInstructionCount = _videoInstructionServiceObj.Count;
+        _totalInstructionCountText.text = _totalInstructionCount.ToString("D2");
+        DisplayTutorial(_currentInstructionIndex);
     }
 
     private void OnCloseHowToPlayButtonClicked()
     {
+        _videoPlayer.prepareCompleted -= OnVideoPrepared;
+        if (_videoPlayer.isPlaying)
+            _videoPlayer.Stop();
+
+        _videoPlayer.clip = null;
+
+        _instructionTitleText.text = string.Empty;
+        _instructionDescriptionText.text = string.Empty;
+
         ToggleHowToPlayUI(false);
         ToggleMainMenuUIContainer(true);
         PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
@@ -1279,5 +1320,49 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnExitGameButtonClicked()
     {
         Application.Quit();
+    }
+
+    private void DisplayTutorial(int index)
+    {
+        VideoInstructionEntry videoInstructionEntry = _videoInstructionServiceObj.GetVideoInstructionEntry(index);
+
+        _currentInstructionIndexText.text = (index+1).ToString("D2");
+        _instructionTitleText.text = videoInstructionEntry.title;
+        _instructionDescriptionText.text = videoInstructionEntry.instruction;
+
+        _videoPlayer.Stop();
+        _videoPlayer.clip = videoInstructionEntry.videoClip;
+
+        _videoPlayer.prepareCompleted -= OnVideoPrepared;
+        _videoPlayer.prepareCompleted += OnVideoPrepared;
+
+        _videoPlayer.Prepare();
+
+        _previousButton.interactable = index > 0;
+        _nextButton.interactable = index < _totalInstructionCount - 1;
+    }
+
+    private void OnVideoPrepared(VideoPlayer player)
+    {
+        player.prepareCompleted -= OnVideoPrepared;
+        player.Play();
+    }
+
+    private void OnNextButtonClicked()
+    {
+        if (_currentInstructionIndex >= _totalInstructionCount - 1)
+            return;
+
+        _currentInstructionIndex++;
+        DisplayTutorial(_currentInstructionIndex);
+    }
+
+    private void OnPreviousButtonClicked()
+    {
+        if (_currentInstructionIndex <= 0)
+            return;
+
+        _currentInstructionIndex--;
+        DisplayTutorial(_currentInstructionIndex);
     }
 }
