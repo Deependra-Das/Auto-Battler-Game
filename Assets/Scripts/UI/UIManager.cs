@@ -764,6 +764,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     public void ToggleGameplayUIContainer(bool value)
     {
+        PostProcessingManager.Instance.ToggleBlur(!value);
         _gameplayUIContainer.SetActive(value);
     }
 
@@ -861,19 +862,19 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnGameplayResumed_UI(object[] parameters)
     {
+        ToggleGameplayUIContainer(true);
         ToggleGameplayPausedContainer(false);
     }
 
     private void OnGameplayPaused_UI(object[] parameters)
     {
+        ToggleGameplayUIContainer(false);
         ToggleGameplayPausedContainer(true);
     }
 
     private void ToggleGameplayPausedContainer(bool value)
     {
-        ToggleGameplayUIContainer(!value);
         _gameplayPausedContainer.SetActive(value);
-        PostProcessingManager.Instance.ToggleBlur(value);
     }
 
     private void OnResumeGameplayButtonClicked()
@@ -907,6 +908,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleGameplayStartNoticationContainer(true);
         yield return new WaitForSeconds(_roundStartUIDisplayDuration);
         ToggleGameplayStartNoticationContainer(false);
+        ToggleGameplayUIContainer(true);
     }
 
     private void OnRoundOver(object[] parameters)
@@ -939,6 +941,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleGameplayOverRewardsContainer(true);
         ToggleGameplayOverNextRoundButton(true);
         ToggleStageOverStatusContainer(false);
+        ToggleGameplayUIContainer(false);
         ToggleGameplayOverNoticationContainer(true);
     }
 
@@ -979,9 +982,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void ToggleGameplayOverNoticationContainer(bool value)
     {
-        ToggleGameplayUIContainer(!value);
         _gameplayOverNotificationContainer.SetActive(value);
-        PostProcessingManager.Instance.ToggleBlur(value);
     }
 
     private void ToggleGameplayOverRewardsContainer(bool value)
