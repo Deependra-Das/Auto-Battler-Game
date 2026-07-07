@@ -245,6 +245,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         _hoveredDiscardDropZone = discardUnitDropZone;
         _hoveredDiscardDropZone.ShowDiscardDropZoneHighlight();
+        _hoveredDiscardDropZone.ShowRefundAmount(_unit.UnitData.baseUnitCost);
     }
 
     private void ClearDiscardUnitDropZoneHighlight()
@@ -252,6 +253,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if (_hoveredDiscardDropZone == null) return;
 
         _hoveredDiscardDropZone.HideDiscardDropZoneHighlight();
+        _hoveredDiscardDropZone.RevertRefundAmount();
         _hoveredDiscardDropZone = null;
     }
 

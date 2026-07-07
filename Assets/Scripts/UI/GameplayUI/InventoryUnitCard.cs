@@ -291,6 +291,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         _hoveredDiscardDropZone = discardUnitDropZone;
         _hoveredDiscardDropZone.ShowDiscardDropZoneHighlight();
+        _hoveredDiscardDropZone.ShowRefundAmount(UnitData.baseUnitCost);
     }
 
     private void ClearDiscardUnitDropZoneHighlight()
@@ -298,6 +299,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (_hoveredDiscardDropZone == null) return;
 
         _hoveredDiscardDropZone.HideDiscardDropZoneHighlight();
+        _hoveredDiscardDropZone.RevertRefundAmount();
         _hoveredDiscardDropZone = null;
     }
 

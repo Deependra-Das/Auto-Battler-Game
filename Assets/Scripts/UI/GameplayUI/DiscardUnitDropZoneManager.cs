@@ -1,16 +1,20 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DiscardUnitDropZoneManager : MonoBehaviour
 {
     [SerializeField] private Image _highlightDiscardImage;
+    [SerializeField] private TMP_Text _refundAmountText;
 
     private TeamService _teamServiceObj;
     private InventoryService _inventoryServiceObj;
     private CurrencyService _currencyServiceObj;
     private UnitPoolService _unitPoolServiceObj;
+
+    private string _zeroAmount = "0";
 
     private void Awake()
     {
@@ -19,6 +23,7 @@ public class DiscardUnitDropZoneManager : MonoBehaviour
         _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
         _unitPoolServiceObj = GameManager.Instance.Get<UnitPoolService>();
         ToggleHighlight(false);
+        RevertRefundAmount();
     }
 
     private void OnDestroy()
@@ -69,5 +74,15 @@ public class DiscardUnitDropZoneManager : MonoBehaviour
     public void HideDiscardDropZoneHighlight()
     {
         ToggleHighlight(false);
+    }
+
+    public void ShowRefundAmount(int refundAmount)
+    {
+        _refundAmountText.text = refundAmount.ToString();
+    }
+
+    public void RevertRefundAmount()
+    {
+        _refundAmountText.text = _zeroAmount;
     }
 }
