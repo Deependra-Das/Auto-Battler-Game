@@ -53,6 +53,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private TMP_Text _stageInfoGameplayUIText;
     [SerializeField] private GameObject _bottomControlPanel;
     [SerializeField] private TMP_Text _playerLivesInfoGameplayUIText;
+    [SerializeField] private TMP_Text _unitsOnFieldUIText;
+    [SerializeField] private TMP_Text _maxUnitsAllowedOnFieldUIText;
 
     [Header("--Gameplay Paused UI")]
     [SerializeField] private GameObject _gameplayPausedContainer;
@@ -251,6 +253,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Subscribe(EventNameEnum.StageClearedPartial, OnStageClearedPartial);
         EventBusManager.Instance.Subscribe(EventNameEnum.StageFailed, OnStageFailed);
         EventBusManager.Instance.Subscribe(EventNameEnum.GameplayStateChanged, OnGameplayStateChanged);
+        EventBusManager.Instance.Subscribe(EventNameEnum.FieldUnitsUpdated, OnUnitUpdatedOnField_UI);
     }
 
     private void UnsubscribeToEvents()
@@ -527,6 +530,17 @@ public class UIManager : GenericMonoSingleton<UIManager>
         }
     }
 
+    private void OnUnitUpdatedOnField_UI(object[] parameters)
+    {
+        TeamEnum team = (TeamEnum)parameters[0];
+        int fieldUnitCount = (int)parameters[1];
+
+        if(team == TeamEnum.Team1)
+        {
+            UpdateUnitsOnFieldUIText(fieldUnitCount);
+        }
+    }
+
     void HandleTeamBuffTabSwitch(bool isOn, int tabIndex)
     {
         if (isOn)
@@ -601,6 +615,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         UpdateLevelText(level);
         UpdateXPText(currentXP, requiredXPToNextLevel);
+        UpdateMaxUnitsAllowedOnFieldUIText(maxUnitsAllowedOnField);
     }
 
     void UpdateLevelXPBar(float progressValue)
@@ -645,6 +660,16 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void UpdateLevelText(int currentPlayerLevel)
     {
         _currentLevelText.text = currentPlayerLevel.ToString();
+    }
+    
+    private void UpdateMaxUnitsAllowedOnFieldUIText(int maxUnitsAllowedOnField)
+    {
+        _maxUnitsAllowedOnFieldUIText.text = maxUnitsAllowedOnField.ToString("D2");
+    }
+
+    private void UpdateUnitsOnFieldUIText(int unitsOnField)
+    {
+        _unitsOnFieldUIText.text = unitsOnField.ToString("D2");
     }
 
     private void UpdateXPText(int currentXP, int requiredXPToNextLevel)
@@ -898,7 +923,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         SetStageInfoGameplayUIText(stageIndex + 1);
         SetRoundInfoGameplayUIText(roundIndex + 1);
         SetPlayerLivesInfoGameplayUI();
-
+        UpdateUnitsOnFieldUIText(0);
         _stageBackgroundImage.sprite = GameManager.Instance.Get<StageService>().GetStageBackgroundImage(stageIndex);
         StartCoroutine(HandleRoundStartNotificationRoutine());
     }
@@ -1044,7 +1069,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnRestartRoundGameplayOverButtonClicked()
     {
-        Debug.Log("RestartClicked");
         ToggleGameplayOverNoticationContainer(false);
         GameplayManager.Instance.OnPlayerChooseRestartRound();
     }

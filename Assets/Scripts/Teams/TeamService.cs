@@ -164,7 +164,8 @@ public class TeamService
         _typeCount[team][type]++;
         _factionCount[team][faction]++;
 
-        EventBusManager.Instance.Raise(EventNameEnum.UnitAddedOnField, team, type, faction); 
+        EventBusManager.Instance.Raise(EventNameEnum.UnitAddedOnField, team, type, faction);
+        EventBusManager.Instance.Raise(EventNameEnum.FieldUnitsUpdated, team, GetFieldUnitsCount(team));
     }
 
     private void RemoveUnitCount(BaseUnit unit, TeamEnum team)
@@ -176,6 +177,7 @@ public class TeamService
         _factionCount[team][faction]--;
 
         EventBusManager.Instance.Raise(EventNameEnum.UnitRemovedFromField, team, type, faction);
+        EventBusManager.Instance.Raise(EventNameEnum.FieldUnitsUpdated, team, GetFieldUnitsCount(team));
     }
 
     public int GetTypeCount(TeamEnum team, UnitTypeEnum type)
