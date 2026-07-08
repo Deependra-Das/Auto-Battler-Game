@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class RoundResultCardUIView : MonoBehaviour
 {
     [SerializeField] private TMP_Text _roundNumberText;
-    [SerializeField] private GameObject _roundMarker;
+    [SerializeField] private Image _roundMarker;
     [SerializeField] private Image _roundDefaultImage;
     [SerializeField] private Image _roundWinImage;
     [SerializeField] private Image _roundDrawImage;
@@ -53,6 +53,11 @@ public class RoundResultCardUIView : MonoBehaviour
 
     public void ToggleRoundMarker(bool value)
     {
-        _roundMarker.SetActive(value);
+        _roundMarker.gameObject.SetActive(value);
+    }
+
+    public void SetRoundMarkerColor(Color color)
+    {
+        _roundMarker.color = color;
     }
 }

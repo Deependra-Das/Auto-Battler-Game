@@ -6,7 +6,7 @@ using UnityEngine;
 public class ShopService
 {
     private List<UnitData> _currentUnitsInShop = new List<UnitData>();
-    private const int SHOP_SIZE = 4;
+    private const int SHOP_SIZE = 5;
     private int _shopRefreshCost = 0;
     private CurrencyService _currencyServiceObj;
     private InventoryService _inventoryServiceObj;

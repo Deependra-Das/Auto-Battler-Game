@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnitStatusEffectColorScriptableObjectScript
   unitElementColorEntryList:
   - element: 0
-    color: {r: 0.6981132, g: 0.6760502, b: 0.4774831, a: 1}
+    color: {r: 0.7294118, g: 0.67058825, b: 0.40784314, a: 1}
   - element: 1
     color: {r: 0.8396226, g: 0.37689406, b: 0.23366857, a: 1}
   - element: 2
-    color: {r: 0.21293166, g: 0.5501484, b: 0.8207547, a: 1}
+    color: {r: 0.8901961, g: 0.70980394, b: 0.019607844, a: 1}
   - element: 3
     color: {r: 0.5262287, g: 0.735849, b: 0.16313633, a: 1}
   healthDamageColor: {r: 0.990566, g: 0.3504361, b: 0.3504361, a: 1}

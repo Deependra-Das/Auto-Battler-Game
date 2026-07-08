@@ -1,12 +1,14 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
+using UnityEngine.Video;
 
 public class UIManager : GenericMonoSingleton<UIManager>
 {
@@ -14,7 +16,32 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     [Header("MainMenu UI")]
     [SerializeField] private GameObject _mainMenuUIContainer;
-    [SerializeField] private Button _chooseStageButton;
+    [SerializeField] private Button _mainMenuPlayButton;
+    [SerializeField] private Button _audioSettingsButton;
+    [SerializeField] private Button _howToPlayButton;
+    [SerializeField] private Button _creditsButton;
+    [SerializeField] private Button _exitGameButton;
+    [SerializeField] private Graphic _flashingGraphic;
+    [SerializeField] private float _fadeDuration = 1f;
+
+    [Header("HowToPlay UI")]
+    [SerializeField] private GameObject _howToPlayUIContainer;
+    [SerializeField] private Button _closeHowToPlayButton;
+    [SerializeField] private Button _previousButton;
+    [SerializeField] private Button _nextButton;
+    [SerializeField] private VideoPlayer _videoPlayer;
+    [SerializeField] private TMP_Text _currentInstructionIndexText;
+    [SerializeField] private TMP_Text _totalInstructionCountText;
+    [SerializeField] private TMP_Text _instructionTitleText;
+    [SerializeField] private TMP_Text _instructionDescriptionText;
+
+    [Header("Credits UI")]
+    [SerializeField] private GameObject _creditsUIContainer;
+    [SerializeField] private Button _closeCreditsButton;
+
+    [Header("AudioSettings UI")]
+    [SerializeField] private GameObject _audioSettingsUIContainer;
+    [SerializeField] private Button _closeAudioSettingsButton;
 
     [Header("StageSelection UI")]
     [SerializeField] private GameObject _stageSelectionUIContainer;
@@ -29,27 +56,32 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private TMP_Text _recommendedLevelText;
     [SerializeField] private List<RecommendedElementCard> _recommendedElementList;
     [SerializeField] private List<Image> _difficultyImageList;
+    [SerializeField] private Image _selectedStageBackgroundImage;
 
     [Header("Gameplay UI")]
     [SerializeField] private GameObject _gameplayUIContainer;
     [SerializeField] private Button _enterCombatButton;
     [SerializeField] private Button _shopToggleButton;
     [SerializeField] private TMP_Text _balanceCurrencyText;
-    [SerializeField] private Button _pausePlayGameplayButton;
+    [SerializeField] private Button _pauseGameplayButton;
     [SerializeField] private TMP_Text _roundInfoGameplayUIText;
     [SerializeField] private TMP_Text _stageInfoGameplayUIText;
     [SerializeField] private GameObject _bottomControlPanel;
+    [SerializeField] private TMP_Text _playerLivesInfoGameplayUIText;
+    [SerializeField] private TMP_Text _unitsOnFieldUIText;
+    [SerializeField] private TMP_Text _maxUnitsAllowedOnFieldUIText;
 
     [Header("--Gameplay Paused UI")]
     [SerializeField] private GameObject _gameplayPausedContainer;
     [SerializeField] private Button _resumeGameplayButton;
     [SerializeField] private Button _restartRoundPauseMenuButton;
-    [SerializeField] private Button _backToStageSelectGameplayPausedButton;
+    [SerializeField] private Button _returnToMenuGameplayPausedButton;
 
     [Header("--Gameplay Start Notification UI")]
     [SerializeField] private GameObject _gameplayStartNotificationContainer;
     [SerializeField] private TMP_Text _stageStartNotificationText;
     [SerializeField] private TMP_Text _roundStartNotificationText;
+    [SerializeField] private Image _stageBackgroundImage;
 
     [Header("--Gameplay Over Notification UI")]
     [SerializeField] private GameObject _gameplayOverNotificationContainer;
@@ -60,9 +92,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private GameObject _stageOverStatusContainer;
     [SerializeField] private TMP_Text _stageOverStatusMessageText;
     [SerializeField] private TMP_Text _stageOverSubText;
+    [SerializeField] private GameObject _nextRoundButtonContainer;
     [SerializeField] private Button _nextRoundGameplayOverButton;
     [SerializeField] private Button _restartRoundGameplayOverButton;
-    [SerializeField] private Button _backToStageSelectGameplayOverButton;
+    [SerializeField] private Button _returnToMenuGameplayOverButton;
 
     [Header("--Shop UI")]
     [SerializeField] private GameObject _shopPanel;
@@ -101,8 +134,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Image _levelXpBarBackgroundImage;
     [SerializeField] private Image _levelXpBarfillImage;
     [SerializeField] private Button _buyLevelXpButton;
-    [SerializeField] private float _maxFillAmount = 0.75f;
-    [SerializeField] private float _roatationForLevelXPBar = 45f;
+    [SerializeField] private float _maxFillAmount = 0.92f;
+    [SerializeField] private float _roatationForLevelXPBar = -104f;
     [SerializeField] private float _xpLerpSpeed = 8f;
 
     [Header("Delay Values UI")]
@@ -111,7 +144,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private float _displayedXP;
     private float _targetXP;
     private Coroutine _xpRoutine;
+    private Coroutine _flashCoroutine;
     private int _selectedStage = -1;
+    private int _currentInstructionIndex;
+    private int _totalInstructionCount = 0;
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
@@ -123,6 +159,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private InventoryUnitCardPool _inventoryCardPoolObj;
     private DiscardUnitDropZoneManager _discardUnitDropZoneManagerObj;
     private InventoryDropZoneManager _inventoryDropZoneManagerObj;
+    private VideoInstructionService _videoInstructionServiceObj;
 
     public Canvas UICanvas => _uiCanvas;
 
@@ -150,11 +187,21 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleResetStageStageButton(false);
         ToggleStageSelectionConfirmationContainer(false);
         ToggleGameplayPausedContainer(false);
+        _videoInstructionServiceObj = GameManager.Instance.Get<VideoInstructionService>();
     }
 
     private void OnEnable()
     {
-        _chooseStageButton.onClick.AddListener(OnChooseStageButtonClicked);
+        _mainMenuPlayButton.onClick.AddListener(OnMainMenuPlayButtonClicked);
+        _exitGameButton.onClick.AddListener(OnExitGameButtonClicked);
+        _audioSettingsButton.onClick.AddListener(OnAudioSettingsButtonClicked);
+        _howToPlayButton.onClick.AddListener(OnHowToPlayButtonClicked);
+        _creditsButton.onClick.AddListener(OnCreditsButtonClicked);
+        _closeAudioSettingsButton.onClick.AddListener(OnCloseAudioSettingsButtonClicked);
+        _closeHowToPlayButton.onClick.AddListener(OnCloseHowToPlayButtonClicked);
+        _closeCreditsButton.onClick.AddListener(OnCloseCreditsButtonClicked);
+        _previousButton.onClick.AddListener(OnPreviousButtonClicked);
+        _nextButton.onClick.AddListener(OnNextButtonClicked);
         _enterCombatButton.onClick.AddListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
@@ -165,18 +212,25 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _resetStageButton.onClick.AddListener(OnResetStageButtonClicked);
         _resetStageConfirmationYesButton.onClick.AddListener(OnResetStageConfirmationYesButtonClicked);
         _resetStageConfirmationNoButton.onClick.AddListener(OnResetStageConfirmationNoButtonClicked);
-        _pausePlayGameplayButton.onClick.AddListener(OnPausePlayGameplayToggleChanged);
+        _pauseGameplayButton.onClick.AddListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.AddListener(OnResumeGameplayButtonClicked);
         _restartRoundPauseMenuButton.onClick.AddListener(OnRestartRoundPauseMenuButtonClicked);
         _nextRoundGameplayOverButton.onClick.AddListener(OnNextRoundButtonGameplayOverButtonClicked);
         _restartRoundGameplayOverButton.onClick.AddListener(OnRestartRoundGameplayOverButtonClicked);
-        _backToStageSelectGameplayOverButton.onClick.AddListener(OnBackToStageSelectionGameplayOverButtonClicked);
-        _backToStageSelectGameplayPausedButton.onClick.AddListener(OnBackToStagePauseMenuButtonClicked);
+        _returnToMenuGameplayOverButton.onClick.AddListener(OnBackToStageSelectionGameplayOverButtonClicked);
+        _returnToMenuGameplayPausedButton.onClick.AddListener(OnBackToStagePauseMenuButtonClicked);
     }
 
     private void OnDisable()
     {
-        _chooseStageButton.onClick.RemoveListener(OnChooseStageButtonClicked);
+        _mainMenuPlayButton.onClick.RemoveListener(OnMainMenuPlayButtonClicked);
+        _exitGameButton.onClick.RemoveListener(OnExitGameButtonClicked);
+        _audioSettingsButton.onClick.RemoveListener(OnAudioSettingsButtonClicked);
+        _howToPlayButton.onClick.RemoveListener(OnHowToPlayButtonClicked);
+        _creditsButton.onClick.RemoveListener(OnCreditsButtonClicked);
+        _closeAudioSettingsButton.onClick.RemoveListener(OnCloseAudioSettingsButtonClicked);
+        _closeHowToPlayButton.onClick.RemoveListener(OnCloseHowToPlayButtonClicked);
+        _closeCreditsButton.onClick.RemoveListener(OnCloseCreditsButtonClicked);
         _enterCombatButton.onClick.RemoveListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
@@ -187,13 +241,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _resetStageButton.onClick.RemoveListener(OnResetStageButtonClicked);
         _resetStageConfirmationYesButton.onClick.RemoveListener(OnResetStageConfirmationYesButtonClicked);
         _resetStageConfirmationNoButton.onClick.RemoveListener(OnResetStageConfirmationNoButtonClicked);
-        _pausePlayGameplayButton.onClick.RemoveListener(OnPausePlayGameplayToggleChanged);
+        _pauseGameplayButton.onClick.RemoveListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.RemoveListener(OnResumeGameplayButtonClicked);
         _restartRoundPauseMenuButton.onClick.RemoveListener(OnRestartRoundPauseMenuButtonClicked);
         _nextRoundGameplayOverButton.onClick.RemoveListener(OnNextRoundButtonGameplayOverButtonClicked);
         _restartRoundGameplayOverButton.onClick.RemoveListener(OnRestartRoundGameplayOverButtonClicked);
-        _backToStageSelectGameplayOverButton.onClick.RemoveListener(OnBackToStageSelectionGameplayOverButtonClicked);
-        _backToStageSelectGameplayPausedButton.onClick.RemoveListener(OnBackToStagePauseMenuButtonClicked);
+        _returnToMenuGameplayOverButton.onClick.RemoveListener(OnBackToStageSelectionGameplayOverButtonClicked);
+        _returnToMenuGameplayPausedButton.onClick.RemoveListener(OnBackToStagePauseMenuButtonClicked);
     }
 
     public void OnDestroy()
@@ -220,6 +274,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Subscribe(EventNameEnum.StageClearedPartial, OnStageClearedPartial);
         EventBusManager.Instance.Subscribe(EventNameEnum.StageFailed, OnStageFailed);
         EventBusManager.Instance.Subscribe(EventNameEnum.GameplayStateChanged, OnGameplayStateChanged);
+        EventBusManager.Instance.Subscribe(EventNameEnum.FieldUnitsUpdated, OnUnitUpdatedOnField_UI);
     }
 
     private void UnsubscribeToEvents()
@@ -496,6 +551,17 @@ public class UIManager : GenericMonoSingleton<UIManager>
         }
     }
 
+    private void OnUnitUpdatedOnField_UI(object[] parameters)
+    {
+        TeamEnum team = (TeamEnum)parameters[0];
+        int fieldUnitCount = (int)parameters[1];
+
+        if(team == TeamEnum.Team1)
+        {
+            UpdateUnitsOnFieldUIText(fieldUnitCount);
+        }
+    }
+
     void HandleTeamBuffTabSwitch(bool isOn, int tabIndex)
     {
         if (isOn)
@@ -505,12 +571,16 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 _team2ToggleButton.isOn = false;
                 _buffTeam1ToggleContent.SetActive(true);
                 _buffTeam2ToggleContent.SetActive(false);
+                _team1ToggleButton.image.color = Color.white;
+                _team2ToggleButton.image.color = Color.grey;
             }
             else if (tabIndex == 2)
             {
                 _team1ToggleButton.isOn = false;
                 _buffTeam1ToggleContent.SetActive(false);
                 _buffTeam2ToggleContent.SetActive(true);
+                _team2ToggleButton.image.color = Color.white;
+                _team1ToggleButton.image.color = Color.grey;
             }
         }
     }
@@ -566,6 +636,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         UpdateLevelText(level);
         UpdateXPText(currentXP, requiredXPToNextLevel);
+        UpdateMaxUnitsAllowedOnFieldUIText(maxUnitsAllowedOnField);
     }
 
     void UpdateLevelXPBar(float progressValue)
@@ -611,10 +682,20 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         _currentLevelText.text = currentPlayerLevel.ToString();
     }
+    
+    private void UpdateMaxUnitsAllowedOnFieldUIText(int maxUnitsAllowedOnField)
+    {
+        _maxUnitsAllowedOnFieldUIText.text = maxUnitsAllowedOnField.ToString("D2");
+    }
+
+    private void UpdateUnitsOnFieldUIText(int unitsOnField)
+    {
+        _unitsOnFieldUIText.text = unitsOnField.ToString("D2");
+    }
 
     private void UpdateXPText(int currentXP, int requiredXPToNextLevel)
     {
-        _xpText.text = currentXP.ToString() + "/" + requiredXPToNextLevel.ToString();
+        _xpText.text = currentXP.ToString() + " / " + requiredXPToNextLevel.ToString();
     }
 
     private void CreateStageSelectionButtons()
@@ -662,8 +743,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _stageSelectionUICardList.Clear();
     }
 
-    private void OnChooseStageButtonClicked()
+    private void OnMainMenuPlayButtonClicked()
     {
+        StopFlashing();
         SceneLoader.Instance.LoadScene(SceneNameEnum.StageSelectionScene);
     }
 
@@ -683,6 +765,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         _selectedStage = (int)parameters[0];
         int roundCount = 0;
+        _selectedStageBackgroundImage.sprite = GameManager.Instance.Get<StageService>().GetStageBackgroundImage(_selectedStage);
 
         foreach (var stage in _stageSelectionUICardList)
         {
@@ -693,7 +776,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 SetStageRecommendedLevelOnSelectionUI(stage.RecommendedLevel);
                 SetStageRecommendedElementsOnSelectionUI(stage);
                 SetStageDifficultyOnSelectionUI(stage.StageDifficulty);
-
                 stage.SetStageCardUISelectedHighlight(true);
             }
             else
@@ -728,6 +810,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     public void ToggleGameplayUIContainer(bool value)
     {
+        PostProcessingManager.Instance.ToggleBlur(!value);
         _gameplayUIContainer.SetActive(value);
     }
 
@@ -743,10 +826,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
         switch (sceneLoaded)
         {
             case SceneNameEnum.MainMenuScene:
+                PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
                 ToggleMainMenuUIContainer(true);
+                StartFlashing();
                 break;
 
             case SceneNameEnum.StageSelectionScene:
+                PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
                 CreateStageSelectionButtons();
                 UpdateStageSelectionRoundData();
                 ToggleStageSelectionUIContainer(true);
@@ -780,7 +866,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void SetMessageForResetStageConfirmation()
     {
-        _resetStageConfirmationMessageText.text = "Are you sure you want to reset Stage " + (_selectedStage + 1).ToString() + " ?";
+        _resetStageConfirmationMessageText.text = "Are you sure you want to reset Stage " + (_selectedStage + 1).ToString("D2") + " ?";
     }
 
     private void OnResetStageConfirmationYesButtonClicked()
@@ -822,11 +908,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnGameplayResumed_UI(object[] parameters)
     {
+        ToggleGameplayUIContainer(true);
         ToggleGameplayPausedContainer(false);
     }
 
     private void OnGameplayPaused_UI(object[] parameters)
     {
+        ToggleGameplayUIContainer(false);
         ToggleGameplayPausedContainer(true);
     }
 
@@ -855,7 +943,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         SetStageInfoGameplayUIText(stageIndex + 1);
         SetRoundInfoGameplayUIText(roundIndex + 1);
-
+        SetPlayerLivesInfoGameplayUI();
+        UpdateUnitsOnFieldUIText(0);
+        _stageBackgroundImage.sprite = GameManager.Instance.Get<StageService>().GetStageBackgroundImage(stageIndex);
         StartCoroutine(HandleRoundStartNotificationRoutine());
     }
 
@@ -864,6 +954,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleGameplayStartNoticationContainer(true);
         yield return new WaitForSeconds(_roundStartUIDisplayDuration);
         ToggleGameplayStartNoticationContainer(false);
+        ToggleGameplayUIContainer(true);
     }
 
     private void OnRoundOver(object[] parameters)
@@ -876,18 +967,18 @@ public class UIManager : GenericMonoSingleton<UIManager>
         RoundResultEnum result = (RoundResultEnum)parameters[2];
         int rewardQuantity = (int)parameters[3];
 
-        string roundInfoStatusMessage = "Round "+(roundIndex + 1).ToString();
+        string roundInfoStatusMessage = "Round "+(roundIndex + 1).ToString("D2");
 
         switch (result)
         {
             case RoundResultEnum.Win:
-                roundInfoStatusMessage += " Won!";
+                roundInfoStatusMessage += " Won";
                 break;
             case RoundResultEnum.Lose:
-                roundInfoStatusMessage += " Lost!";
+                roundInfoStatusMessage += " Lost";
                 break;
             case RoundResultEnum.Draw:
-                roundInfoStatusMessage += " Draw!";
+                roundInfoStatusMessage += " Draw";
                 break;
         }
 
@@ -896,6 +987,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleGameplayOverRewardsContainer(true);
         ToggleGameplayOverNextRoundButton(true);
         ToggleStageOverStatusContainer(false);
+        ToggleGameplayUIContainer(false);
         ToggleGameplayOverNoticationContainer(true);
     }
 
@@ -952,21 +1044,22 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void ToggleGameplayOverNextRoundButton(bool value)
     {
         _nextRoundGameplayOverButton.gameObject.SetActive(value);
+        _nextRoundButtonContainer.SetActive(value);
     }
 
     private void SetStageStartNotificationText(int value)
     {
-        _stageStartNotificationText.text = "Stage " + value.ToString();
+        _stageStartNotificationText.text = "Stage " + value.ToString("D2");
     }
 
     private void SetRoundStartNotificationText(int value)
     {
-        _roundStartNotificationText.text = "Round " + value.ToString();
+        _roundStartNotificationText.text = "Round " + value.ToString("D2");
     }
 
     private void SetStageInfoGameplayOverText(int value)
     {
-        _stageInfoGameplayOverText.text = "Stage " + value.ToString();
+        _stageInfoGameplayOverText.text = "Stage " + value.ToString("D2");
     }
 
     private void SetRoundInfoGameplayOverText(string value)
@@ -1015,12 +1108,20 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void SetStageInfoGameplayUIText(int value)
     {
-        _stageInfoGameplayUIText.text = value.ToString();
+        _stageInfoGameplayUIText.text = value.ToString("D2");
     }
 
     private void SetRoundInfoGameplayUIText(int value)
     {
-        _roundInfoGameplayUIText.text = "Round "+ value.ToString();
+        int roundCount = GameManager.Instance.Get<StageService>().GetRoundCount();
+        _roundInfoGameplayUIText.text = value.ToString("D2") +" / "+ roundCount.ToString("D2");
+    }
+
+    private void SetPlayerLivesInfoGameplayUI()
+    {
+        int currentLives = GameManager.Instance.Get<PlayerLevelService>().Lives;
+        int maxLives = GameManager.Instance.Get<StageService>().GetCurrentStageData().maxPlayerLives;
+        _playerLivesInfoGameplayUIText.text = currentLives.ToString() + " / " + maxLives.ToString();
     }
 
     private void SetStageDifficultyOnSelectionUI(StageDifficultyEnum difficultyEnumValue)
@@ -1042,29 +1143,21 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void SetStageRecommendedLevelOnSelectionUI(int value)
     {
-        _recommendedLevelText.text = value.ToString();
+        _recommendedLevelText.text = value.ToString("D2");
     }
 
     private void SetStageRecommendedElementsOnSelectionUI(StageSelectionCardUIView stage)
     {
         List<UnitElementEnum> recommendedElements = stage.RecommendedElements;
+        IconService iconServiceObj = GameManager.Instance.Get<IconService>();
+        UnitColorService colorServiceObj = GameManager.Instance.Get<UnitColorService>();
 
         for (int index = 0; index < recommendedElements.Count; index++)
         {
-            _recommendedElementList[index].elementIconImage.color = GetElementColor(recommendedElements[index]);
+            _recommendedElementList[index].elementIcon.sprite = iconServiceObj.GetElementIcon(recommendedElements[index]);
+            _recommendedElementList[index].elementIconContainer.color = colorServiceObj.GetElementColor(recommendedElements[index]);
             _recommendedElementList[index].elementNameText.text = recommendedElements[index].ToString();
         }
-    }
-
-    private Color GetElementColor(UnitElementEnum element)
-    {
-        return element switch
-        {
-            UnitElementEnum.Fire => new Color(1f, 0.78f, 0.72f),
-            UnitElementEnum.Thunder => new Color(0.65f, 0.9f, 1f),
-            UnitElementEnum.Nature => new Color(0.78f, 1f, 0.65f),
-            _ => new Color(0.95f, 0.95f, 0.95f)
-        };
     }
 
     private void OnGameplayStateChanged(object[] parameters)
@@ -1097,5 +1190,179 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void HideShopPanel()
     {
         _shopPanel.gameObject.SetActive(false);
+    }
+
+    public void StartFlashing()
+    {
+        if (_flashCoroutine == null)
+        {
+            _flashCoroutine = StartCoroutine(FlashCoroutine());
+        }
+    }
+
+    public void StopFlashing()
+    {
+        if (_flashCoroutine != null)
+        {
+            StopCoroutine(_flashCoroutine);
+            _flashCoroutine = null;
+
+            Color color = _flashingGraphic.color;
+            color.a = 1f;
+            _flashingGraphic.color = color;
+        }
+    }
+
+    IEnumerator FlashCoroutine()
+    {
+        while (true)
+        {
+            yield return FadeCoroutine(1f, 0f);
+            yield return FadeCoroutine(0f, 1f);
+        }
+    }
+
+    IEnumerator FadeCoroutine(float startAlpha, float endAlpha)
+    {
+        float timer = 0f;
+
+        Color color = _flashingGraphic.color;
+
+        while (timer < _fadeDuration)
+        {
+            timer += Time.deltaTime;
+            color.a = Mathf.Lerp(startAlpha, endAlpha, timer / _fadeDuration);
+            _flashingGraphic.color = color;
+            yield return null;
+        }
+
+        color.a = endAlpha;
+        _flashingGraphic.color = color;
+    }
+
+    private void OnAudioSettingsButtonClicked()
+    {
+        ToggleAudioSettingsUI(true);
+        ToggleMainMenuUIContainer(false);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
+    }
+
+    private void OnCloseAudioSettingsButtonClicked()
+    {
+        ToggleAudioSettingsUI(false);
+        ToggleMainMenuUIContainer(true);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
+    }
+
+    private void OnHowToPlayButtonClicked()
+    {
+
+        if (_videoInstructionServiceObj == null || _videoInstructionServiceObj.Count == 0)
+        {
+            Debug.LogWarning("No tutorials found.");
+            return;
+        }
+
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
+        ToggleHowToPlayUI(true);
+        ToggleMainMenuUIContainer(false);
+        _currentInstructionIndex = 0;
+        _totalInstructionCount = _videoInstructionServiceObj.Count;
+        _totalInstructionCountText.text = _totalInstructionCount.ToString("D2");
+        DisplayTutorial(_currentInstructionIndex);
+    }
+
+    private void OnCloseHowToPlayButtonClicked()
+    {
+        _videoPlayer.prepareCompleted -= OnVideoPrepared;
+        if (_videoPlayer.isPlaying)
+            _videoPlayer.Stop();
+
+        _videoPlayer.clip = null;
+
+        _instructionTitleText.text = string.Empty;
+        _instructionDescriptionText.text = string.Empty;
+
+        ToggleHowToPlayUI(false);
+        ToggleMainMenuUIContainer(true);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
+    }
+
+    private void OnCreditsButtonClicked()
+    {
+        ToggleCreditsUI(true);
+        ToggleMainMenuUIContainer(false);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
+    }
+
+    private void OnCloseCreditsButtonClicked()
+    {
+        ToggleCreditsUI(false);
+        ToggleMainMenuUIContainer(true);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
+    }
+
+    private void ToggleAudioSettingsUI(bool value)
+    {
+        _audioSettingsUIContainer.SetActive(value);
+    }
+
+    private void ToggleHowToPlayUI(bool value)
+    {
+        _howToPlayUIContainer.SetActive(value);
+    }
+
+    private void ToggleCreditsUI(bool value)
+    {
+        _creditsUIContainer.SetActive(value);
+    }
+
+    private void OnExitGameButtonClicked()
+    {
+        Application.Quit();
+    }
+
+    private void DisplayTutorial(int index)
+    {
+        VideoInstructionEntry videoInstructionEntry = _videoInstructionServiceObj.GetVideoInstructionEntry(index);
+
+        _currentInstructionIndexText.text = (index+1).ToString("D2");
+        _instructionTitleText.text = videoInstructionEntry.title;
+        _instructionDescriptionText.text = videoInstructionEntry.instruction;
+
+        _videoPlayer.Stop();
+        _videoPlayer.clip = videoInstructionEntry.videoClip;
+
+        _videoPlayer.prepareCompleted -= OnVideoPrepared;
+        _videoPlayer.prepareCompleted += OnVideoPrepared;
+
+        _videoPlayer.Prepare();
+
+        _previousButton.interactable = index > 0;
+        _nextButton.interactable = index < _totalInstructionCount - 1;
+    }
+
+    private void OnVideoPrepared(VideoPlayer player)
+    {
+        player.prepareCompleted -= OnVideoPrepared;
+        player.Play();
+    }
+
+    private void OnNextButtonClicked()
+    {
+        if (_currentInstructionIndex >= _totalInstructionCount - 1)
+            return;
+
+        _currentInstructionIndex++;
+        DisplayTutorial(_currentInstructionIndex);
+    }
+
+    private void OnPreviousButtonClicked()
+    {
+        if (_currentInstructionIndex <= 0)
+            return;
+
+        _currentInstructionIndex--;
+        DisplayTutorial(_currentInstructionIndex);
     }
 }

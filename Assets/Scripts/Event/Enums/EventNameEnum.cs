@@ -11,6 +11,7 @@ namespace AutoBattler.Event
         ReorderInventoryLayout,
         UnitAddedOnField,
         UnitRemovedFromField,
+        FieldUnitsUpdated,
         TeamBuffUpdated,
         StageStarted,
         StageFailed,

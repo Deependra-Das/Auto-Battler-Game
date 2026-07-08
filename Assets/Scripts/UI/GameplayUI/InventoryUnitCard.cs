@@ -9,8 +9,12 @@ using UnityEngine.UI;
 public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] private Image _unitIcon;
-    [SerializeField] private Image _unitFaction;
-    [SerializeField] private Image _unitType;
+    [SerializeField] private Image _unitFactionIcon;
+    [SerializeField] private Image _unitTypeIcon;
+    [SerializeField] private Image _unitElementIcon;
+    [SerializeField] private Image _unitElementIconContainer;
+    [SerializeField] private Image _overlay;
+    [SerializeField] private TMP_Text _unitNameText;
     [SerializeField] private TMP_Text _unitLevelText;
 
     public UnitData UnitData { get; private set; }
@@ -32,6 +36,9 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private TileGridService _tileGridServiceObj;
     private HighlightTileService _highlightTileServiceObj;
     private GraphService _graphServiceObj;
+    private IconService _unitIconServiceObj;
+    private UnitColorService _unitColorServiceObj;
+
 
     private void Awake()
     {
@@ -54,6 +61,8 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         _tileGridServiceObj = GameManager.Instance.Get<TileGridService>();
         _highlightTileServiceObj = GameManager.Instance.Get<HighlightTileService>();
         _graphServiceObj = GameManager.Instance.Get<GraphService>();
+        _unitIconServiceObj = GameManager.Instance.Get<IconService>();
+        _unitColorServiceObj = GameManager.Instance.Get<UnitColorService>();
 
         UnitData = unitData;
         _canvas = canvas;
@@ -65,7 +74,14 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private void SetupCardData()
     {
         _unitIcon.sprite = UnitData.unitIcon;
+        _unitNameText.text = UnitData.unitName.ToString();
         _unitLevelText.text = UnitData.unitLevel.ToString();
+        _unitFactionIcon.sprite = _unitIconServiceObj.GetFactionIcon(UnitData.unitFaction);
+        _unitTypeIcon.sprite = _unitIconServiceObj.GetUnitTypeIcon(UnitData.unitType);
+        _unitElementIcon.sprite = _unitIconServiceObj.GetElementIcon(UnitData.unitElement);
+        Color elementColor = _unitColorServiceObj.GetElementColor(UnitData.unitElement);
+        _unitElementIconContainer.color = elementColor;
+        _overlay.color = elementColor;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -275,6 +291,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         _hoveredDiscardDropZone = discardUnitDropZone;
         _hoveredDiscardDropZone.ShowDiscardDropZoneHighlight();
+        _hoveredDiscardDropZone.ShowRefundAmount(UnitData.baseUnitCost);
     }
 
     private void ClearDiscardUnitDropZoneHighlight()
@@ -282,6 +299,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (_hoveredDiscardDropZone == null) return;
 
         _hoveredDiscardDropZone.HideDiscardDropZoneHighlight();
+        _hoveredDiscardDropZone.RevertRefundAmount();
         _hoveredDiscardDropZone = null;
     }
 
@@ -325,8 +343,10 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         UnitData = default;
         _unitIcon.sprite = null;
-        _unitFaction.sprite = null;
-        _unitType.sprite = null;
+        _unitFactionIcon.sprite = null;
+        _unitTypeIcon.sprite = null;
+        _unitElementIcon.sprite = null;
+        _unitNameText.text = string.Empty;
         _unitLevelText.text = string.Empty;
     }
 }

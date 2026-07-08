@@ -1,6 +1,9 @@
+using AutoBattler.Main;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,25 +11,28 @@ public class BuffDetailsUICard : MonoBehaviour
 {
     [SerializeField] private TMP_Text _buffNameText;
     [SerializeField] private Image _buffIcon;
-    [SerializeField] private Image _activatedBlockImage;
-    [SerializeField] private Image _deactivatedBlockImage;
+    [SerializeField] private Image _buffIconContainer;
     [SerializeField] private List<TMP_Text> _buffParticipantsTextList;
     [SerializeField] private List<Image> _buffParticipantsBlockImageList;
+    [SerializeField] private Color _color1;
+    [SerializeField] private Color _color2;
 
     private int _activatedParticipantBlock = -1;
     private BuffData _buffData;
+    private IconService _unitIconServiceObj;
 
     public void Initialize(BuffData buffData)
     {
+        _unitIconServiceObj = GameManager.Instance.Get<IconService>();
+
         _buffData = buffData;
         _buffNameText.text = buffData.buffName.ToString();
-        //_buffIcon.sprite = buffData.buffImage.sprite;
-
-        for(int num = 0; num < buffData.buffParticipantTierList.Length; num++)
+        _buffIcon.sprite = _unitIconServiceObj.GetBuffIcon(_buffData.buffName);
+        for (int num = 0; num < buffData.buffParticipantTierList.Length; num++)
         {
             _buffParticipantsTextList[num].text = buffData.buffParticipantTierList[num].participants.ToString();
-            //_buffParticipantsBlockImageList[num].sprite = _deactivatedBlockImage.sprite;
-            _buffParticipantsBlockImageList[num].color = Color.lightGray;
+            _buffParticipantsBlockImageList[num].color = _color2;
+            _buffParticipantsTextList[num].color = _color1;
         }
     }
 
@@ -43,8 +49,8 @@ public class BuffDetailsUICard : MonoBehaviour
 
         if (index != -1)
         {
-            //_buffParticipantsBlockImageList[index].sprite = _activatedBlockImage.sprite;
-            _buffParticipantsBlockImageList[index].color = Color.white;
+            _buffParticipantsBlockImageList[index].color = _color1;
+            _buffParticipantsTextList[index].color = _color2;
             _activatedParticipantBlock = index;
         }
     }
@@ -53,8 +59,8 @@ public class BuffDetailsUICard : MonoBehaviour
     {
         if (_activatedParticipantBlock >= 0 && _activatedParticipantBlock < _buffParticipantsBlockImageList.Count)
         {
-            //_buffParticipantsBlockImageList[_activatedParticipantBlock].sprite = _deactivatedBlockImage.sprite;
-            _buffParticipantsBlockImageList[_activatedParticipantBlock].color = Color.lightGray;
+            _buffParticipantsBlockImageList[_activatedParticipantBlock].color = _color2;
+            _buffParticipantsTextList[_activatedParticipantBlock].color = _color1;
         }
 
         _activatedParticipantBlock = -1;

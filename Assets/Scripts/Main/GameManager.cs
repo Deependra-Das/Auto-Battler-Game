@@ -15,6 +15,8 @@ namespace AutoBattler.Main
         [SerializeField] private PlayerLevelConfigScriptableObjectScript _playerLevelConfig_SO;
         [SerializeField] private VfxScriptableObjectScript _vfx_SO;
         [SerializeField] private UnitColorScriptableObjectScript _unitColor_SO;
+        [SerializeField] private IconScriptableObjectScript _unitIcon_SO;
+        [SerializeField] private VideoInstructionScriptableObjectScript _videoInstruction_SO;
 
         [SerializeField] private Transform _pooledUnitContainerTransform;
         [SerializeField] private Transform _activeUnitContainerTransform;
@@ -41,7 +43,9 @@ namespace AutoBattler.Main
 
         private void RegisterServices()
         {
+            ServiceLocator.Register(new VideoInstructionService(_videoInstruction_SO));
             ServiceLocator.Register(new UnitDataService(_unitData_SO));
+            ServiceLocator.Register(new IconService(_unitIcon_SO));
             ServiceLocator.Register(new UnitPoolService(_unitPrefab_SO, _pooledUnitContainerTransform, _activeUnitContainerTransform));
             ServiceLocator.Register(new DragVisualPoolService());
             ServiceLocator.Register(new VfxPoolService(_vfx_SO, _pooledVfxContainerTransform));
@@ -63,7 +67,9 @@ namespace AutoBattler.Main
 
         private void DeregisterServices()
         {
+            ServiceLocator.Unregister<VideoInstructionService>();
             ServiceLocator.Unregister<UnitDataService>();
+            ServiceLocator.Unregister<IconService>();
             ServiceLocator.Unregister<UnitPoolService>();
             ServiceLocator.Unregister<DragVisualPoolService>();
             ServiceLocator.Unregister<VfxPoolService>();

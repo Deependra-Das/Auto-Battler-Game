@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87d953723e1114e4d9d36997b28f19d5, type: 3}
+  m_Name: Icon_SO
+  m_EditorClassIdentifier: Assembly-CSharp::UnitSpriteIconScriptableObjectScript
+  factionIconList:
+  - faction: 0
+    factionIcon: {fileID: 21300000, guid: 2a4821b85f2f55248a7c3d9246f0df78, type: 3}
+  - faction: 1
+    factionIcon: {fileID: 21300000, guid: 0efa947fc5c1a2948b369addbd552756, type: 3}
+  - faction: 2
+    factionIcon: {fileID: 21300000, guid: 6ad52e870232d394bb41ce21c6e60452, type: 3}
+  elementIconList:
+  - element: 0
+    elementIcon: {fileID: 21300000, guid: ebab89ba0c2ff12418d7eb4cc44295ed, type: 3}
+  - element: 1
+    elementIcon: {fileID: 21300000, guid: dd548cc01f45bd94c9759e84e7e25138, type: 3}
+  - element: 2
+    elementIcon: {fileID: 21300000, guid: 3e07bda14cdb3f942aefbefe4e75771a, type: 3}
+  - element: 3
+    elementIcon: {fileID: 21300000, guid: 34cc8867b7f136144b90945381be0a6e, type: 3}
+  unitTypeIconList:
+  - unitType: 0
+    unitTypeIcon: {fileID: 21300000, guid: f288c26b5fd63e649a8f58f8ab4b6a86, type: 3}
+  - unitType: 1
+    unitTypeIcon: {fileID: 21300000, guid: 841d508fb8884b54d8674a6b8c2c74fb, type: 3}
+  - unitType: 2
+    unitTypeIcon: {fileID: 21300000, guid: 108adbe52b8a7514f8b8d6ae4d338ecd, type: 3}
+  - unitType: 3
+    unitTypeIcon: {fileID: 21300000, guid: 020573922536be049af0059dec384aa8, type: 3}
+  buffIconList:
+  - buffName: 0
+    buffIcon: {fileID: 21300000, guid: 65f25fbe287e5b3499ba49c06ec328e0, type: 3}
+  - buffName: 1
+    buffIcon: {fileID: 21300000, guid: 2832ac7bb55d5714994541e29f3e71ac, type: 3}
+  - buffName: 2
+    buffIcon: {fileID: 21300000, guid: 66756b5a307da294a9fb737d3f8d4d2e, type: 3}
+  - buffName: 3
+    buffIcon: {fileID: 21300000, guid: 59d20e2980900704aa6cc73350bff625, type: 3}
+  - buffName: 4
+    buffIcon: {fileID: 21300000, guid: b6e8de6d63ce00a479df6e5a284abfa9, type: 3}
+  - buffName: 5
+    buffIcon: {fileID: 21300000, guid: 536a008d288663c4c852db58fc9503fe, type: 3}
+  - buffName: 6
+    buffIcon: {fileID: 21300000, guid: 6b9a0dc51cbcee849a23b1f57364412f, type: 3}
+  unitIconList: []
