@@ -42,6 +42,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [Header("AudioSettings UI")]
     [SerializeField] private GameObject _audioSettingsUIContainer;
     [SerializeField] private Button _closeAudioSettingsButton;
+    [SerializeField] private Sprite _mutedIconSprite;
+    [SerializeField] private Sprite _unmutedIconSprite;
+    [SerializeField] private AudioControlUI[] _audioControls;
 
     [Header("StageSelection UI")]
     [SerializeField] private GameObject _stageSelectionUIContainer;
@@ -182,11 +185,16 @@ public class UIManager : GenericMonoSingleton<UIManager>
         HandleTeamBuffTabSwitch(true, 1);
         ToggleMainMenuUIContainer(false);
         ToggleStageSelectionUIContainer(false);
+        ToggleCreditsUI(false);
+        ToggleAudioSettingsUI(false);
+        ToggleHowToPlayUI(false);
         ToggleGameplayUIContainer(false);
         ToggleStartContinueStageButton(false);
         ToggleResetStageStageButton(false);
+        ToggleGameplayStartNoticationContainer(false);
         ToggleStageSelectionConfirmationContainer(false);
         ToggleGameplayPausedContainer(false);
+        InitializeAudioUI();
         _videoInstructionServiceObj = GameManager.Instance.Get<VideoInstructionService>();
     }
 
@@ -826,6 +834,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         switch (sceneLoaded)
         {
             case SceneNameEnum.MainMenuScene:
+                AudioManager.Instance.PlayMusic(AudioTypeEnum.MainMenuMusic);
                 PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
                 ToggleMainMenuUIContainer(true);
                 StartFlashing();
@@ -1364,5 +1373,84 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         _currentInstructionIndex--;
         DisplayTutorial(_currentInstructionIndex);
+    }
+
+    private void InitializeAudioUI()
+    {
+        foreach (var audioControl in _audioControls)
+        {
+            float value = AudioManager.Instance.GetVolume(audioControl.channel);
+
+            audioControl.slider.SetValueWithoutNotify(value);
+            audioControl.previousVolume = value;
+
+            bool muted = value <= 0.001f;
+
+            audioControl.muteToggle.SetIsOnWithoutNotify(muted);
+
+            UpdateAudioVolumeLabel(audioControl, value);
+            UpdateMuteIcon(audioControl, muted);
+
+            audioControl.slider.onValueChanged.RemoveAllListeners();
+            audioControl.muteToggle.onValueChanged.RemoveAllListeners();
+
+            audioControl.slider.onValueChanged.AddListener(volume =>
+            {
+                AudioManager.Instance.SetVolume(audioControl.channel, volume);
+
+                if (volume > 0f)
+                    audioControl.previousVolume = volume;
+
+                bool isMuted = volume <= 0.001f;
+
+                audioControl.muteToggle.SetIsOnWithoutNotify(isMuted);
+
+                UpdateAudioVolumeLabel(audioControl, volume);
+                UpdateMuteIcon(audioControl, isMuted);
+            });
+
+            audioControl.muteToggle.onValueChanged.AddListener(isMuted =>
+            {
+                if (isMuted)
+                {
+                    if (audioControl.slider.value > 0f)
+                        audioControl.previousVolume = audioControl.slider.value;
+
+                    audioControl.slider.SetValueWithoutNotify(0f);
+
+                    AudioManager.Instance.SetVolume(audioControl.channel, 0f);
+
+                    UpdateAudioVolumeLabel(audioControl, 0f);
+                    UpdateMuteIcon(audioControl, true);
+                }
+                else
+                {
+                    float restore = Mathf.Max(audioControl.previousVolume, 0.5f);
+
+                    audioControl.slider.SetValueWithoutNotify(restore);
+
+                    AudioManager.Instance.SetVolume(audioControl.channel, restore);
+
+                    UpdateAudioVolumeLabel(audioControl, restore);
+                    UpdateMuteIcon(audioControl, false);
+                }
+            });
+        }
+    }
+
+    private void UpdateAudioVolumeLabel(AudioControlUI control, float value)
+    {
+        if (control.valueText != null)
+            control.valueText.text = $"{Mathf.RoundToInt(value * 100)}";
+    }
+
+    private void UpdateMuteIcon(AudioControlUI control, bool muted)
+    {
+        Image icon = control.muteIcon;
+
+        if (icon == null)
+            return;
+
+        icon.sprite = muted ? _mutedIconSprite : _unmutedIconSprite;
     }
 }
