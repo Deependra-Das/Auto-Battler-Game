@@ -83,6 +83,7 @@ public class StageSelectionCardUIView : MonoBehaviour
 
     private void OnStageButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.CardClick);
         EventBusManager.Instance.Raise(EventNameEnum.SelectedStageChanged, StageIndex);
     }
 

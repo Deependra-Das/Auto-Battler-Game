@@ -63,6 +63,7 @@ public class ShopUnitCard : MonoBehaviour
     {
         if (!_isInitialized) return;
 
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.CardClick);
         GameManager.Instance.Get<ShopService>().BuyUnit(this);
     }
 

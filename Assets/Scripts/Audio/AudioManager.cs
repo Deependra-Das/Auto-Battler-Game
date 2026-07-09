@@ -137,6 +137,7 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
 
     public void PlaySoundEffectsAudio(AudioTypeEnum audioType)
     {
+        Debug.Log("X");
         AudioData audioData = GetAudioData(audioType);
         _soundEffectsAudioSource.Stop();
         _soundEffectsAudioSource.PlayOneShot(audioData.audioClip);

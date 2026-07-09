@@ -9,4 +9,5 @@ public enum AudioTypeEnum
     CombatMusic2,
     CombatMusic3,
     ButtonClick,
+    CardClick,
 }
