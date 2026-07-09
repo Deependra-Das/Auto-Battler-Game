@@ -88,6 +88,7 @@ public class GameplayManager : MonoBehaviour
         UIManager.Instance.InitializeGameplayUI();
         _buffServiceObj.InitializeBuffs();
         _inventoryServiceObj.SetMaxInventorySize(8);
+        SetStageMusic(GameData.selectedStage);
         InitializeStageForGameplay(GameData.selectedStage);
     }
 
@@ -634,6 +635,25 @@ public class GameplayManager : MonoBehaviour
         foreach(GameObject background in _stageBackgroundList)
         {
             background.SetActive(false);
+        }
+    }
+
+    private void SetStageMusic(int stage)
+    {
+        switch (stage)
+        {
+            case 0:
+                AudioManager.Instance.PlayMusic(AudioTypeEnum.CombatMusic1);
+                break;
+
+            case 1:
+                AudioManager.Instance.PlayMusic(AudioTypeEnum.CombatMusic2);
+                break;
+
+            case 2:
+                AudioManager.Instance.PlayMusic(AudioTypeEnum.CombatMusic3);
+                break;
+
         }
     }
 

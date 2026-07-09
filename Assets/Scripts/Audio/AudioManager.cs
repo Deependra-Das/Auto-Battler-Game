@@ -84,8 +84,23 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
     {
         AudioData audioData = GetAudioData(audioType);
 
+        if (_musicAudioSource.isPlaying && _musicAudioSource.clip == audioData.audioClip)
+        {
+            return;
+        }
+
         if (_musicTransitionCoroutine != null)
+        {
             StopCoroutine(_musicTransitionCoroutine);
+        }
+
+        if (!_musicAudioSource.isPlaying)
+        {
+            _musicAudioSource.clip = audioData.audioClip;
+            _musicAudioSource.loop = loop;
+            _musicAudioSource.Play();
+            return;
+        }
 
         _musicTransitionCoroutine = StartCoroutine(ChangeMusicRoutine(audioData.audioClip, loop));
     }

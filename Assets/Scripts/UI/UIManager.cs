@@ -841,6 +841,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 break;
 
             case SceneNameEnum.StageSelectionScene:
+                AudioManager.Instance.PlayMusic(AudioTypeEnum.MainMenuMusic);
                 PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
                 CreateStageSelectionButtons();
                 UpdateStageSelectionRoundData();

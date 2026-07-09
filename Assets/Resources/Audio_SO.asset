@@ -15,3 +15,9 @@ MonoBehaviour:
   audioDataList:
   - audioType: 1
     audioClip: {fileID: 8300000, guid: d7ba9f6544c27514a9c30f04646b1dab, type: 3}
+  - audioType: 2
+    audioClip: {fileID: 8300000, guid: 5a17c84e98a283c4481cdf69f594163c, type: 3}
+  - audioType: 3
+    audioClip: {fileID: 8300000, guid: 559556fd9267b0149874cbc70a8d26a8, type: 3}
+  - audioType: 4
+    audioClip: {fileID: 8300000, guid: 04008c96b6643fd469b8ae994475d301, type: 3}
