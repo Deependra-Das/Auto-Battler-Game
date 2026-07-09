@@ -10,4 +10,8 @@ public enum AudioTypeEnum
     CombatMusic3,
     ButtonClick,
     CardClick,
+    Popup,
+    BuyXP,
+    LevelUp,
+    SpendCoin,
 }

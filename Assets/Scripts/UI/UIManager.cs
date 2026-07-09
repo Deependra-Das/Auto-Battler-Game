@@ -1,7 +1,6 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -164,6 +163,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private DiscardUnitDropZoneManager _discardUnitDropZoneManagerObj;
     private InventoryDropZoneManager _inventoryDropZoneManagerObj;
     private VideoInstructionService _videoInstructionServiceObj;
+    private ShopService _shopServiceObj;
 
     public Canvas UICanvas => _uiCanvas;
 
@@ -197,6 +197,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleGameplayPausedContainer(false);
         InitializeAudioUI();
         _videoInstructionServiceObj = GameManager.Instance.Get<VideoInstructionService>();
+        _shopServiceObj = GameManager.Instance.Get<ShopService>();
     }
 
     private void OnEnable()
@@ -419,9 +420,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnRefreshShopButtonClicked()
     {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        ShopService shopServiceObj = GameManager.Instance.Get<ShopService>();
-        shopServiceObj.RefreshShop();
+        _shopServiceObj.RefreshShop();
     }
 
     private void OnEnterCombatButtonClicked()
@@ -614,7 +613,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnBuyLevelXpButtonClicked()
     {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.BuyXP);
         EventBusManager.Instance.Raise(EventNameEnum.BuyLevelXP);
     }
 
@@ -652,6 +651,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
             _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
 
             StartCoroutine(LevelUpReset());
+            AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.LevelUp);
         }
 
         UpdateLevelText(level);
@@ -887,6 +887,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void ToggleStageSelectionConfirmationContainer(bool value)
     {
         _stageSelectionConfirmationContainer.SetActive(value);
+        if (value)
+        {
+            AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
+        }
     }
 
     private void SetMessageForResetStageConfirmation()
@@ -948,6 +952,11 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void ToggleGameplayPausedContainer(bool value)
     {
         _gameplayPausedContainer.SetActive(value);
+
+        if(value)
+        {
+            AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
+        }
     }
 
     private void OnResumeGameplayButtonClicked()
@@ -1018,6 +1027,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleStageOverStatusContainer(false);
         ToggleGameplayUIContainer(false);
         ToggleGameplayOverNoticationContainer(true);
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
     }
 
     private void OnStageClearedFull(object[] parameters)
