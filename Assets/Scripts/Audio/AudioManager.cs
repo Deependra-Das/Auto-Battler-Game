@@ -84,10 +84,11 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
     {
         AudioData audioData = GetAudioData(audioType);
 
-        if (_musicAudioSource.isPlaying && _musicAudioSource.clip == audioData.audioClip)
-        {
+        if (audioData == null || audioData.audioClip == null)
             return;
-        }
+
+        if (_musicAudioSource.isPlaying && _musicAudioSource.clip == audioData.audioClip)
+            return;
 
         if (_musicTransitionCoroutine != null)
         {
@@ -103,6 +104,39 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
         }
 
         _musicTransitionCoroutine = StartCoroutine(ChangeMusicRoutine(audioData.audioClip, loop));
+    }
+
+    public void PauseMusic()
+    {
+        if (_musicTransitionCoroutine != null)
+        {
+            StopCoroutine(_musicTransitionCoroutine);
+            _musicTransitionCoroutine = null;
+        }
+
+        if (_musicAudioSource.isPlaying)
+        {
+            _musicAudioSource.Pause();
+        }
+    }
+
+    public void ResumeMusic()
+    {
+        if (_musicAudioSource.clip != null && !_musicAudioSource.isPlaying)
+        {
+            _musicAudioSource.UnPause();
+        }
+    }
+
+    public void StopMusic()
+    {
+        if (_musicTransitionCoroutine != null)
+        {
+            StopCoroutine(_musicTransitionCoroutine);
+            _musicTransitionCoroutine = null;
+        }
+
+        _musicAudioSource.Stop();
     }
 
     private IEnumerator ChangeMusicRoutine(AudioClip clip, bool loop)

@@ -498,6 +498,7 @@ public class GameplayManager : MonoBehaviour
 
         Time.timeScale = 0f;
 
+        AudioManager.Instance.PauseMusic();
         EventBusManager.Instance.Raise(EventNameEnum.GameplayPaused);
     }
 
@@ -510,6 +511,7 @@ public class GameplayManager : MonoBehaviour
 
         Time.timeScale = 1f;
 
+        AudioManager.Instance.ResumeMusic();
         EventBusManager.Instance.Raise(EventNameEnum.GameplayResumed);
     }
 

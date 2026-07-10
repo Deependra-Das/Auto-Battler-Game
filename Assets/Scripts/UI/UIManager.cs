@@ -933,6 +933,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnPausePlayGameplayToggleChanged()
     {
+        AudioManager.Instance.PauseMusic();
         GameplayManager.Instance.PauseGameplay();
     }
 
@@ -961,12 +962,14 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnResumeGameplayButtonClicked()
     {
         AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         GameplayManager.Instance.ResumeGameplay();
     }
 
     private void OnRestartRoundPauseMenuButtonClicked()
     {
         AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         GameplayManager.Instance.OnRestartRoundFromPauseMenu();
     }
 
@@ -1026,7 +1029,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleStageOverStatusContainer(false);
         ToggleGameplayUIContainer(false);
         ToggleGameplayOverNoticationContainer(true);
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
+        AudioManager.Instance.PauseMusic();
     }
 
     private void OnStageClearedFull(object[] parameters)
@@ -1123,6 +1126,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnNextRoundButtonGameplayOverButtonClicked()
     {
         AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         ToggleGameplayOverNoticationContainer(false);
         GameplayManager.Instance.OnPlayerChooseNextRound();
     }
@@ -1130,6 +1134,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnRestartRoundGameplayOverButtonClicked()
     {
         AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         ToggleGameplayOverNoticationContainer(false);
         GameplayManager.Instance.OnPlayerChooseRestartRound();
     }
@@ -1137,6 +1142,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnBackToStageSelectionGameplayOverButtonClicked()
     {
         AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         ToggleGameplayOverNoticationContainer(false);
         GameplayManager.Instance.OnPlayerLeaveStageGameplayOver();
     }
@@ -1144,6 +1150,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void OnBackToStagePauseMenuButtonClicked()
     {
         AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         ToggleGameplayPausedContainer(false);
         GameplayManager.Instance.OnPlayerLeaveStageFromPauseMenu();
     }
