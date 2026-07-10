@@ -1030,10 +1030,12 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleGameplayUIContainer(false);
         ToggleGameplayOverNoticationContainer(true);
         AudioManager.Instance.PauseMusic();
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.RoundOver);
     }
 
     private void OnStageClearedFull(object[] parameters)
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.StageCleared);
         string statusMessage = "- Stage Successfully Completed -";
         SetStageOverStatusMessageText(statusMessage);
         SetStageOverSubText("All Rounds Cleared.");

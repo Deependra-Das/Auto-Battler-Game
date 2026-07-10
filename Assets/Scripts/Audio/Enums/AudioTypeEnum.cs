@@ -14,4 +14,6 @@ public enum AudioTypeEnum
     BuyXP,
     LevelUp,
     SpendCoin,
+    RoundOver,
+    StageCleared,
 }
