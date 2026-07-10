@@ -580,7 +580,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
             if (_initialBuffTabSwitched)
             {
-                AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+                AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.CardClick);
             }
             _initialBuffTabSwitched = true;
 
@@ -651,7 +651,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
             _xpRoutine = StartCoroutine(SmoothLevelXPFillAnimation());
 
             StartCoroutine(LevelUpReset());
-            AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.LevelUp);
         }
 
         UpdateLevelText(level);
@@ -741,7 +740,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         if (_stageSelectionUICardList.Count > 0)
         {
-            _stageSelectionUICardList[0].InvokeClick();
+            EventBusManager.Instance.Raise(EventNameEnum.SelectedStageChanged, 0);
         }
     }
 

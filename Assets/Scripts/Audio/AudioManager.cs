@@ -107,14 +107,14 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
 
     private IEnumerator ChangeMusicRoutine(AudioClip clip, bool loop)
     {
-        yield return FadeMusicRoutine(0f, 1f);
+        yield return FadeMusicRoutine(0f, 0.5f);
 
         _musicAudioSource.Stop();
         _musicAudioSource.clip = clip;
         _musicAudioSource.loop = loop;
         _musicAudioSource.Play();
 
-        yield return FadeMusicRoutine(1f, 1f);
+        yield return FadeMusicRoutine(0.25f, 0.5f);
 
         _musicTransitionCoroutine = null;
     }
@@ -137,7 +137,6 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
 
     public void PlaySoundEffectsAudio(AudioTypeEnum audioType)
     {
-        Debug.Log("X");
         AudioData audioData = GetAudioData(audioType);
         _soundEffectsAudioSource.Stop();
         _soundEffectsAudioSource.PlayOneShot(audioData.audioClip);
