@@ -27,4 +27,9 @@ public class Spartan_MeleeAttackerUnit : BaseUnit
         cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
         cooldownRoutine = null;
     }
+
+    public override void PlayFootstep()
+    {
+        AudioManager.Instance.PlayFootstepAudio();
+    }
 }

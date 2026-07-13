@@ -37,4 +37,9 @@ public class Spartan_RangedAttackerUnit : BaseUnit
         cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
         cooldownRoutine = null;
     }
+
+    public override void PlayFootstep()
+    {
+        AudioManager.Instance.PlayFootstepAudio();
+    }
 }
