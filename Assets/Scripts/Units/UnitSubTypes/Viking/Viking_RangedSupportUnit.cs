@@ -49,4 +49,9 @@ public class Viking_RangedSupportUnit : BaseUnit
             unit.Heal(unitData.baseHealing);
         }
     }
+
+    public override void PlayFootstep()
+    {
+        AudioManager.Instance.PlayFootstepAudio();
+    }
 }
