@@ -2,6 +2,7 @@ using AutoBattler.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -185,6 +186,22 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
         combatAudioSource.PlayOneShot(audioData.audioClip);
 
         StartCoroutine(ReturnAudioSource(combatAudioSource, audioData.audioClip.length));
+    }
+
+    public void PlayFootstepAudio()
+    {
+        int randomFootstep = UnityEngine.Random.Range((int)AudioTypeEnum.Footstep1, (int)AudioTypeEnum.Footstep10 + 1);
+        AudioData audioData = GetAudioData((AudioTypeEnum)randomFootstep);
+
+        if (audioData == null || audioData.audioClip == null)
+            return;
+
+        AudioSource source = GetAudioSource();
+
+        source.gameObject.SetActive(true);
+        source.PlayOneShot(audioData.audioClip);
+
+        StartCoroutine(ReturnAudioSource(source, audioData.audioClip.length));
     }
 
     private AudioSource GetAudioSource()

@@ -548,6 +548,11 @@ public class BaseUnit : MonoBehaviour
         
     }
 
+    public virtual void PlayFootstep()
+    {
+        Debug.Log("Play Footstep");
+    }
+
     private void StopAttackLoop()
     {
         if (attackRoutine != null)
