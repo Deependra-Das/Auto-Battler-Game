@@ -364,6 +364,7 @@ public class BaseUnit : MonoBehaviour
     {
         if (isDead) return;
 
+        AudioManager.Instance.PlayHealAudio();
         vfxPoolServiceObj.SpawnHealingVfx(currentNode.worldPosition);
         StartFadeTintCoroutine(_unitColorServiceObj.GetHealingColor());
         currentHealth += amount;
