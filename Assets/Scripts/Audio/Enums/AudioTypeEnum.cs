@@ -26,4 +26,11 @@ public enum AudioTypeEnum
     Footstep8,
     Footstep9,
     Footstep10,
+    Heal,
+    MeleeAttack,
+    ArrowShot,
+    ElementalBurst,
+    FireAttack,
+    NatureAttack,
+    ThunderAttack
 }
