@@ -1493,7 +1493,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void UpdateAudioVolumeLabel(AudioControlUI control, float value)
     {
         if (control.valueText != null)
-            control.valueText.text = $"{Mathf.RoundToInt(value * 100)}";
+            control.valueText.text = $"{Mathf.RoundToInt(value * 10)}";
     }
 
     private void UpdateMuteIcon(AudioControlUI control, bool muted)
