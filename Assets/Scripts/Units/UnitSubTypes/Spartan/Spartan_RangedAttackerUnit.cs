@@ -31,6 +31,7 @@ public class Spartan_RangedAttackerUnit : BaseUnit
     {
         yield return null;
         animator.SetTrigger("Attack");
+        AudioManager.Instance.PlayArrowShotAudio();
         yield return new WaitForSeconds(UnitData.attackAnimationDelay);
         _rangedAbilityPoolService.SpawnElementalArrow(this, currentTarget, totalDamage, unitData.unitElement);
         isAttacking = false;

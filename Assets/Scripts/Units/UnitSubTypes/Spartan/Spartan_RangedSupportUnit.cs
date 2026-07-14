@@ -31,6 +31,7 @@ public class Spartan_RangedSupportUnit : BaseUnit
     {
         yield return null;
         animator.SetTrigger("Attack");
+        AudioManager.Instance.PlayElementalBurstAudio();
         _rangedAbilityPoolService.SpawnElementalBurst(this, currentTarget, totalDamage, unitData.unitElement, UnitData.attackAnimationDelay);
         yield return new WaitForSeconds(UnitData.attackAnimationDelay);
         HealAllTeammates();
