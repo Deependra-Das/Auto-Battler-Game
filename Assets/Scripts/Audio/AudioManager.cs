@@ -2,7 +2,6 @@ using AutoBattler.Utilities;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -22,11 +21,15 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
     [Header("Sound Effects AudioSource")]
     [SerializeField] private AudioSource _soundEffectsAudioSource;
 
-    [Header("Combat AudioSource Pool")]
-    [SerializeField] private AudioSource _combatAudioSourcePrefab;
-    [SerializeField] private int _poolSize = 20;
-
-    private readonly Queue<AudioSource> _audioSourcePool = new();
+    [Header("Combat AudioSources")]
+    [SerializeField] private AudioSource _footstepAudioSource;
+    [SerializeField] private AudioSource _healAudioSource;
+    [SerializeField] private AudioSource _meleeAttackAudioSource;
+    [SerializeField] private AudioSource _arrowShotAudioSource;
+    [SerializeField] private AudioSource _elementalBurstAudioSource;
+    [SerializeField] private AudioSource _fireAttackAudioSource;
+    [SerializeField] private AudioSource _natureAttackAudioSource;
+    [SerializeField] private AudioSource _thunderAttackAudioSource;
 
     private readonly Dictionary<AudioChannelEnum, float> _audioVolumeDictionary = new();
 
@@ -37,19 +40,7 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
     protected override void Awake()
     {
         base.Awake();
-
-        CreatePool();
         LoadVolumes();
-    }
-
-    private void CreatePool()
-    {
-        for (int i = 0; i < _poolSize; i++)
-        {
-            AudioSource source = Instantiate(_combatAudioSourcePrefab, transform);
-            source.gameObject.SetActive(false);
-            _audioSourcePool.Enqueue(source);
-        }
     }
 
     private void LoadVolumes()
@@ -177,17 +168,6 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
         _soundEffectsAudioSource.PlayOneShot(audioData.audioClip);
     }
 
-    public void PlayCombatAudio(AudioTypeEnum audioType)
-    {
-        AudioData audioData = GetAudioData(audioType);
-        AudioSource combatAudioSource = GetAudioSource();
-
-        combatAudioSource.gameObject.SetActive(true);
-        combatAudioSource.PlayOneShot(audioData.audioClip);
-
-        StartCoroutine(ReturnAudioSource(combatAudioSource, audioData.audioClip.length));
-    }
-
     public void PlayFootstepAudio()
     {
         int randomFootstep = UnityEngine.Random.Range((int)AudioTypeEnum.Footstep1, (int)AudioTypeEnum.Footstep10 + 1);
@@ -196,30 +176,57 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
         if (audioData == null || audioData.audioClip == null)
             return;
 
-        AudioSource source = GetAudioSource();
-
-        source.gameObject.SetActive(true);
-        source.PlayOneShot(audioData.audioClip);
-
-        StartCoroutine(ReturnAudioSource(source, audioData.audioClip.length));
+        _footstepAudioSource.Stop();
+        _footstepAudioSource.PlayOneShot(audioData.audioClip);
     }
 
-    private AudioSource GetAudioSource()
+    public void PlayHealAudio()
     {
-        if (_audioSourcePool.Count > 0)
-            return _audioSourcePool.Dequeue();
-
-        return Instantiate(_combatAudioSourcePrefab, transform);
+        AudioData audioData = GetAudioData(AudioTypeEnum.Heal);
+        _healAudioSource.Stop();
+        _healAudioSource.PlayOneShot(audioData.audioClip);
     }
 
-    private IEnumerator ReturnAudioSource(AudioSource source, float delay)
+    public void PlayMeleeAttackAudio()
     {
-        yield return new WaitForSeconds(delay);
+        AudioData audioData = GetAudioData(AudioTypeEnum.MeleeAttack);
+        _meleeAttackAudioSource.Stop();
+        _meleeAttackAudioSource.PlayOneShot(audioData.audioClip);
+    }
 
-        source.Stop();
-        source.gameObject.SetActive(false);
+    public void PlayArrowShotAudio()
+    {
+        AudioData audioData = GetAudioData(AudioTypeEnum.ArrowShot);
+        _arrowShotAudioSource.Stop();
+        _arrowShotAudioSource.PlayOneShot(audioData.audioClip);
+    }
 
-        _audioSourcePool.Enqueue(source);
+    public void PlayElementalBurstAudio()
+    {
+        AudioData audioData = GetAudioData(AudioTypeEnum.ElementalBurst);
+        _elementalBurstAudioSource.Stop();
+        _elementalBurstAudioSource.PlayOneShot(audioData.audioClip);
+    }
+
+    public void PlayFireAttackAudio()
+    {
+        AudioData audioData = GetAudioData(AudioTypeEnum.FireAttack);
+        _fireAttackAudioSource.Stop();
+        _fireAttackAudioSource.PlayOneShot(audioData.audioClip);
+    }
+
+    public void PlayNatureAttackAudio()
+    {
+        AudioData audioData = GetAudioData(AudioTypeEnum.NatureAttack);
+        _natureAttackAudioSource.Stop();
+        _natureAttackAudioSource.PlayOneShot(audioData.audioClip);
+    }
+
+    public void PlayThunderAttackAudio()
+    {
+        AudioData audioData = GetAudioData(AudioTypeEnum.ThunderAttack);
+        _thunderAttackAudioSource.Stop();
+        _thunderAttackAudioSource.PlayOneShot(audioData.audioClip);
     }
 
     public void SetVolume(AudioChannelEnum channel, float value)
