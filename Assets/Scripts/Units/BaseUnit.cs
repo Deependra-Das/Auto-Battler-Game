@@ -311,25 +311,27 @@ public class BaseUnit : MonoBehaviour
     {
         if (isDead) return;
 
-        int remainingDamage = amount;
+        float damageMultiplier = GetDamageMultiplier(incomingElement);
+        int damageToDeal = Mathf.RoundToInt(amount * damageMultiplier);
 
         if (currentShield > 0)
         {
             StartFadeTintCoroutine(_unitColorServiceObj.GetShieldDamageColor());
-
-            float multiplier = GetShieldDepletionMultiplier(incomingElement);
             AudioManager.Instance.PlayDamageShieldAudio();
-            int shieldDamage = Mathf.Min(currentShield, Mathf.RoundToInt(remainingDamage * multiplier));
-            currentShield -= shieldDamage;
-            remainingDamage -= Mathf.RoundToInt(shieldDamage / multiplier);
+
+            int absorbed = Mathf.Min(currentShield, damageToDeal);
+            currentShield -= absorbed;
+            damageToDeal -= absorbed;
+
             UpdateShieldBar(currentShield);
         }
 
-        if (remainingDamage > 0)
+        if (damageToDeal > 0)
         {
             StartFadeTintCoroutine(_unitColorServiceObj.GeHealthDamageColor());
             AudioManager.Instance.PlayDamageUnitAudio();
-            currentHealth -= remainingDamage;
+
+            currentHealth -= damageToDeal;
             UpdateHealthBar(currentHealth);
         }
 
@@ -496,9 +498,9 @@ public class BaseUnit : MonoBehaviour
         };
     }
 
-    protected float GetShieldDepletionMultiplier(UnitElementEnum attackElement)
+    protected float GetDamageMultiplier(UnitElementEnum attackElement)
     {
-        return attackElement == unitData.unitElement ? 0.5f : 1f;
+        return ElementDamageMultiplierMatrix.GetMultiplier(attackElement, unitData.unitElement);
     }
 
     protected Color GetShieldColor(UnitElementEnum element)
