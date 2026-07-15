@@ -82,12 +82,15 @@ public class ElementalBurst : MonoBehaviour
         switch (element)
         {
             case UnitElementEnum.Fire:
+                AudioManager.Instance.PlayFireAttackAudio();
                 _vfxPoolServiceObj.SpawnFireVfx(position);
                 break;
             case UnitElementEnum.Nature:
+                AudioManager.Instance.PlayNatureAttackAudio();
                 _vfxPoolServiceObj.SpawnNatureVfx(position);
                 break;
             case UnitElementEnum.Thunder:
+                AudioManager.Instance.PlayThunderAttackAudio();
                 _vfxPoolServiceObj.SpawnThunderVfx(position);
                 break;
         }

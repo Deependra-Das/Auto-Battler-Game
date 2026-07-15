@@ -62,7 +62,6 @@ public class ShopUnitCard : MonoBehaviour
     private void OnShopUnitCardClicked()
     {
         if (!_isInitialized) return;
-
         GameManager.Instance.Get<ShopService>().BuyUnit(this);
     }
 

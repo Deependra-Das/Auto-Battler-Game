@@ -1,0 +1,39 @@
+using UnityEngine;
+
+public enum AudioTypeEnum
+{
+    None,
+
+    MainMenuMusic,
+    CombatMusic1,
+    CombatMusic2,
+    CombatMusic3,
+    ButtonClick,
+    CardClick,
+    Popup,
+    BuyXP,
+    LevelUp,
+    CoinSpend,
+    CoinRefund,
+    PlaceUnitOnField,
+    MoveUnitToInventory,
+    RoundOver,
+    StageCleared,
+    Footstep1,
+    Footstep2,
+    Footstep3,
+    Footstep4,
+    Footstep5,
+    Footstep6,
+    Footstep7,
+    Footstep8,
+    Footstep9,
+    Footstep10,
+    Heal,
+    MeleeAttack,
+    ArrowShot,
+    ElementalBurst,
+    FireAttack,
+    NatureAttack,
+    ThunderAttack
+}

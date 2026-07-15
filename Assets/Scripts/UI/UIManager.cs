@@ -1,7 +1,6 @@
 using AutoBattler.Event;
 using AutoBattler.Main;
 using AutoBattler.Utilities;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,6 +41,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [Header("AudioSettings UI")]
     [SerializeField] private GameObject _audioSettingsUIContainer;
     [SerializeField] private Button _closeAudioSettingsButton;
+    [SerializeField] private Sprite _mutedIconSprite;
+    [SerializeField] private Sprite _unmutedIconSprite;
+    [SerializeField] private AudioControlUI[] _audioControls;
 
     [Header("StageSelection UI")]
     [SerializeField] private GameObject _stageSelectionUIContainer;
@@ -148,6 +150,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private int _selectedStage = -1;
     private int _currentInstructionIndex;
     private int _totalInstructionCount = 0;
+    private bool _initialBuffTabSwitched = false;
 
     private List<ShopUnitCard> _shopUnitCardList;
     private List<InventoryUnitCard> _inventoryUnitCardList;
@@ -160,6 +163,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private DiscardUnitDropZoneManager _discardUnitDropZoneManagerObj;
     private InventoryDropZoneManager _inventoryDropZoneManagerObj;
     private VideoInstructionService _videoInstructionServiceObj;
+    private ShopService _shopServiceObj;
 
     public Canvas UICanvas => _uiCanvas;
 
@@ -182,12 +186,18 @@ public class UIManager : GenericMonoSingleton<UIManager>
         HandleTeamBuffTabSwitch(true, 1);
         ToggleMainMenuUIContainer(false);
         ToggleStageSelectionUIContainer(false);
+        ToggleCreditsUI(false);
+        ToggleAudioSettingsUI(false);
+        ToggleHowToPlayUI(false);
         ToggleGameplayUIContainer(false);
         ToggleStartContinueStageButton(false);
         ToggleResetStageStageButton(false);
+        ToggleGameplayStartNoticationContainer(false);
         ToggleStageSelectionConfirmationContainer(false);
         ToggleGameplayPausedContainer(false);
+        InitializeAudioUI();
         _videoInstructionServiceObj = GameManager.Instance.Get<VideoInstructionService>();
+        _shopServiceObj = GameManager.Instance.Get<ShopService>();
     }
 
     private void OnEnable()
@@ -384,6 +394,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnShopToggleButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         ToggleShopPanelVisibility();
     }
 
@@ -409,12 +420,12 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnRefreshShopButtonClicked()
     {
-        ShopService shopServiceObj = GameManager.Instance.Get<ShopService>();
-        shopServiceObj.RefreshShop();
+        _shopServiceObj.RefreshShop();
     }
 
     private void OnEnterCombatButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         GameplayManager.Instance.UpdateGameplayState(GameplayStateEnum.Combat);
     }
 
@@ -566,6 +577,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         if (isOn)
         {
+
+            if (_initialBuffTabSwitched)
+            {
+                AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.CardClick);
+            }
+            _initialBuffTabSwitched = true;
+
             if (tabIndex == 1)
             {
                 _team2ToggleButton.isOn = false;
@@ -595,6 +613,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnBuyLevelXpButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.BuyXP);
         EventBusManager.Instance.Raise(EventNameEnum.BuyLevelXP);
     }
 
@@ -721,7 +740,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
         if (_stageSelectionUICardList.Count > 0)
         {
-            _stageSelectionUICardList[0].InvokeClick();
+            EventBusManager.Instance.Raise(EventNameEnum.SelectedStageChanged, 0);
         }
     }
 
@@ -745,18 +764,21 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnMainMenuPlayButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         StopFlashing();
         SceneLoader.Instance.LoadScene(SceneNameEnum.StageSelectionScene);
     }
 
     private void OnStartContinueStageButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         GameData.selectedStage = _selectedStage;
         SceneLoader.Instance.LoadScene(SceneNameEnum.GameplayScene);
     }
 
     private void OnResetStageButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         SetMessageForResetStageConfirmation();
         ToggleStageSelectionConfirmationContainer(true);
     }
@@ -826,12 +848,14 @@ public class UIManager : GenericMonoSingleton<UIManager>
         switch (sceneLoaded)
         {
             case SceneNameEnum.MainMenuScene:
+                AudioManager.Instance.PlayMusic(AudioTypeEnum.MainMenuMusic);
                 PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
                 ToggleMainMenuUIContainer(true);
                 StartFlashing();
                 break;
 
             case SceneNameEnum.StageSelectionScene:
+                AudioManager.Instance.PlayMusic(AudioTypeEnum.MainMenuMusic);
                 PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
                 CreateStageSelectionButtons();
                 UpdateStageSelectionRoundData();
@@ -862,6 +886,10 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void ToggleStageSelectionConfirmationContainer(bool value)
     {
         _stageSelectionConfirmationContainer.SetActive(value);
+        if (value)
+        {
+            AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
+        }
     }
 
     private void SetMessageForResetStageConfirmation()
@@ -871,6 +899,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnResetStageConfirmationYesButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         GameManager.Instance.Get<StageSnapshotService>().DeleteStageSnapshot(_selectedStage);
         UpdateStageSelectionRoundData();
         ToggleStartContinueStageButton(true);
@@ -879,6 +908,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnResetStageConfirmationNoButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         ToggleStageSelectionConfirmationContainer(false);
     }
 
@@ -903,6 +933,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnPausePlayGameplayToggleChanged()
     {
+        AudioManager.Instance.PauseMusic();
         GameplayManager.Instance.PauseGameplay();
     }
 
@@ -921,15 +952,24 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void ToggleGameplayPausedContainer(bool value)
     {
         _gameplayPausedContainer.SetActive(value);
+
+        if(value)
+        {
+            AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
+        }
     }
 
     private void OnResumeGameplayButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         GameplayManager.Instance.ResumeGameplay();
     }
 
     private void OnRestartRoundPauseMenuButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         GameplayManager.Instance.OnRestartRoundFromPauseMenu();
     }
 
@@ -989,10 +1029,13 @@ public class UIManager : GenericMonoSingleton<UIManager>
         ToggleStageOverStatusContainer(false);
         ToggleGameplayUIContainer(false);
         ToggleGameplayOverNoticationContainer(true);
+        AudioManager.Instance.PauseMusic();
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.RoundOver);
     }
 
     private void OnStageClearedFull(object[] parameters)
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.StageCleared);
         string statusMessage = "- Stage Successfully Completed -";
         SetStageOverStatusMessageText(statusMessage);
         SetStageOverSubText("All Rounds Cleared.");
@@ -1084,24 +1127,32 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnNextRoundButtonGameplayOverButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         ToggleGameplayOverNoticationContainer(false);
         GameplayManager.Instance.OnPlayerChooseNextRound();
     }
 
     private void OnRestartRoundGameplayOverButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         ToggleGameplayOverNoticationContainer(false);
         GameplayManager.Instance.OnPlayerChooseRestartRound();
     }
 
     private void OnBackToStageSelectionGameplayOverButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         ToggleGameplayOverNoticationContainer(false);
         GameplayManager.Instance.OnPlayerLeaveStageGameplayOver();
     }
 
     private void OnBackToStagePauseMenuButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.ResumeMusic();
         ToggleGameplayPausedContainer(false);
         GameplayManager.Instance.OnPlayerLeaveStageFromPauseMenu();
     }
@@ -1242,6 +1293,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnAudioSettingsButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         ToggleAudioSettingsUI(true);
         ToggleMainMenuUIContainer(false);
         PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
@@ -1249,6 +1301,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnCloseAudioSettingsButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         ToggleAudioSettingsUI(false);
         ToggleMainMenuUIContainer(true);
         PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
@@ -1256,7 +1309,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnHowToPlayButtonClicked()
     {
-
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         if (_videoInstructionServiceObj == null || _videoInstructionServiceObj.Count == 0)
         {
             Debug.LogWarning("No tutorials found.");
@@ -1274,6 +1327,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnCloseHowToPlayButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         _videoPlayer.prepareCompleted -= OnVideoPrepared;
         if (_videoPlayer.isPlaying)
             _videoPlayer.Stop();
@@ -1290,6 +1344,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnCreditsButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         ToggleCreditsUI(true);
         ToggleMainMenuUIContainer(false);
         PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
@@ -1297,6 +1352,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnCloseCreditsButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         ToggleCreditsUI(false);
         ToggleMainMenuUIContainer(true);
         PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
@@ -1319,6 +1375,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnExitGameButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         Application.Quit();
     }
 
@@ -1350,6 +1407,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnNextButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         if (_currentInstructionIndex >= _totalInstructionCount - 1)
             return;
 
@@ -1359,10 +1417,92 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnPreviousButtonClicked()
     {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         if (_currentInstructionIndex <= 0)
             return;
 
         _currentInstructionIndex--;
         DisplayTutorial(_currentInstructionIndex);
+    }
+
+    private void InitializeAudioUI()
+    {
+        foreach (var audioControl in _audioControls)
+        {
+            float value = AudioManager.Instance.GetVolume(audioControl.channel);
+
+            audioControl.slider.SetValueWithoutNotify(value);
+            audioControl.previousVolume = value;
+
+            bool muted = value <= 0.001f;
+
+            audioControl.muteToggle.SetIsOnWithoutNotify(muted);
+
+            UpdateAudioVolumeLabel(audioControl, value);
+            UpdateMuteIcon(audioControl, muted);
+
+            audioControl.slider.onValueChanged.RemoveAllListeners();
+            audioControl.muteToggle.onValueChanged.RemoveAllListeners();
+
+            audioControl.slider.onValueChanged.AddListener(volume =>
+            {
+                AudioManager.Instance.SetVolume(audioControl.channel, volume);
+
+                if (volume > 0f)
+                    audioControl.previousVolume = volume;
+
+                bool isMuted = volume <= 0.001f;
+
+                audioControl.muteToggle.SetIsOnWithoutNotify(isMuted);
+
+                UpdateAudioVolumeLabel(audioControl, volume);
+                UpdateMuteIcon(audioControl, isMuted);
+            });
+
+            audioControl.muteToggle.onValueChanged.AddListener(isMuted =>
+            {
+                AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+
+                if (isMuted)
+                {
+                    if (audioControl.slider.value > 0f)
+                        audioControl.previousVolume = audioControl.slider.value;
+
+                    audioControl.slider.SetValueWithoutNotify(0f);
+
+                    AudioManager.Instance.SetVolume(audioControl.channel, 0f);
+
+                    UpdateAudioVolumeLabel(audioControl, 0f);
+                    UpdateMuteIcon(audioControl, true);
+                }
+                else
+                {
+                    float restore = Mathf.Max(audioControl.previousVolume, 0.5f);
+
+                    audioControl.slider.SetValueWithoutNotify(restore);
+
+                    AudioManager.Instance.SetVolume(audioControl.channel, restore);
+
+                    UpdateAudioVolumeLabel(audioControl, restore);
+                    UpdateMuteIcon(audioControl, false);
+                }
+            });
+        }
+    }
+
+    private void UpdateAudioVolumeLabel(AudioControlUI control, float value)
+    {
+        if (control.valueText != null)
+            control.valueText.text = $"{Mathf.RoundToInt(value * 10)}";
+    }
+
+    private void UpdateMuteIcon(AudioControlUI control, bool muted)
+    {
+        Image icon = control.muteIcon;
+
+        if (icon == null)
+            return;
+
+        icon.sprite = muted ? _mutedIconSprite : _unmutedIconSprite;
     }
 }

@@ -101,7 +101,10 @@ public class PlayerLevelService
         }
         if (leveledUp)
         {
-            int index = Level - 1;
+            if (Level > 1)
+            {
+                AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.LevelUp);
+            }
             RaiseLevelChangedEvent();
         }
     }

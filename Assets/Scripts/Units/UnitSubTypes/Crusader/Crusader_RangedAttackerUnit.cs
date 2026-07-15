@@ -31,10 +31,16 @@ public class Crusader_RangedAttackerUnit : BaseUnit
     {
         yield return null;
         animator.SetTrigger("Attack");
-        yield return new WaitForSeconds(UnitData.attackAnimationDelay);
+        AudioManager.Instance.PlayArrowShotAudio();
+        yield return new WaitForSeconds(UnitData.attackAnimationDelay);        
         _rangedAbilityPoolService.SpawnElementalArrow(this, currentTarget, totalDamage, unitData.unitElement);
         isAttacking = false;
         cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
         cooldownRoutine = null;
+    }
+
+    public override void PlayFootstep()
+    {
+        AudioManager.Instance.PlayFootstepAudio();
     }
 }

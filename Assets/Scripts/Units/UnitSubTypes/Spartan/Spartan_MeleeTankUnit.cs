@@ -20,11 +20,18 @@ public class Spartan_MeleeTankUnit : BaseUnit
     {
         yield return null;
         animator.SetTrigger("Attack");
+        AudioManager.Instance.PlayMeleeAttackAudio();
         yield return new WaitForSeconds(unitData.attackAnimationDelay);
-        vfxPoolServiceObj.SpawnNatureVfx(currentTarget.CurrentNode.worldPosition);
+        AudioManager.Instance.PlayNatureAttackAudio();
+        SpawnElementalVfx();
         DealDamage();
         isAttacking = false;
         cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
         cooldownRoutine = null;
+    }
+
+    public override void PlayFootstep()
+    {
+        AudioManager.Instance.PlayFootstepAudio();
     }
 }

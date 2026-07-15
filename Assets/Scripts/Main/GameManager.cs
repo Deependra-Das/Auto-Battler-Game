@@ -17,6 +17,7 @@ namespace AutoBattler.Main
         [SerializeField] private UnitColorScriptableObjectScript _unitColor_SO;
         [SerializeField] private IconScriptableObjectScript _unitIcon_SO;
         [SerializeField] private VideoInstructionScriptableObjectScript _videoInstruction_SO;
+        [SerializeField] private AudioScriptableObjectScript _audio_SO;
 
         [SerializeField] private Transform _pooledUnitContainerTransform;
         [SerializeField] private Transform _activeUnitContainerTransform;
@@ -33,6 +34,7 @@ namespace AutoBattler.Main
         private void Start()
         {
             RegisterServices();
+            AudioManager.Instance.Initialize(_audio_SO);
             UIManager.Instance.Initialize();
         }
 

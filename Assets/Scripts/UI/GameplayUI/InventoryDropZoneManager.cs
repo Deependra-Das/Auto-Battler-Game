@@ -24,6 +24,7 @@ public class InventoryDropZoneManager : MonoBehaviour
     {
         if (!_inventoryServiceObj.CanAddUnit) return;
 
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.MoveUnitToInventory);
         _teamServiceObj.MoveToInventory(baseUnit, baseUnit.Team);
         _inventoryServiceObj.AddUnit(baseUnit.UnitData);
         _unitPoolServiceObj.Release(baseUnit.UnitData.unitID, baseUnit);

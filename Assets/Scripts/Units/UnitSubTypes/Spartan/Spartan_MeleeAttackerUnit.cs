@@ -20,11 +20,18 @@ public class Spartan_MeleeAttackerUnit : BaseUnit
     {
         yield return null;
         animator.SetTrigger("Attack");
+        AudioManager.Instance.PlayMeleeAttackAudio();
         yield return new WaitForSeconds(unitData.attackAnimationDelay);
+        AudioManager.Instance.PlayNatureAttackAudio();
         SpawnElementalVfx();
         DealDamage();
         isAttacking = false;
         cooldownRoutine = StartCoroutine(AttackCoolDownWaitCoroutine());
         cooldownRoutine = null;
+    }
+
+    public override void PlayFootstep()
+    {
+        AudioManager.Instance.PlayFootstepAudio();
     }
 }

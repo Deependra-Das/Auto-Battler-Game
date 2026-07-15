@@ -31,6 +31,7 @@ public class Viking_RangedSupportUnit : BaseUnit
     {
         yield return null;
         animator.SetTrigger("Attack");
+        AudioManager.Instance.PlayElementalBurstAudio();
         _rangedAbilityPoolService.SpawnElementalBurst(this, currentTarget, totalDamage, unitData.unitElement, UnitData.attackAnimationDelay);
         yield return new WaitForSeconds(UnitData.attackAnimationDelay);
         HealAllTeammates();
@@ -48,5 +49,10 @@ public class Viking_RangedSupportUnit : BaseUnit
             if (unit == null || unit.IsDead) continue;
             unit.Heal(unitData.baseHealing);
         }
+    }
+
+    public override void PlayFootstep()
+    {
+        AudioManager.Instance.PlayFootstepAudio();
     }
 }

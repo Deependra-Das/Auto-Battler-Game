@@ -15,12 +15,6 @@ public class SceneLoader : GenericMonoSingleton<SceneLoader>
         base.Awake();
     }
 
-    private void Start()
-    {
-       
-        RaiseSceneLoadEventForInitialScene();
-    }
-
     void SubscribeToEvents()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -46,11 +40,6 @@ public class SceneLoader : GenericMonoSingleton<SceneLoader>
         yield return null;
 
         RaiseSceneLoadEvent(scene);
-    }
-
-    private void RaiseSceneLoadEventForInitialScene()
-    {
-        RaiseSceneLoadEvent(SceneManager.GetActiveScene());
     }
 
     private void RaiseSceneLoadEvent(Scene scene)
