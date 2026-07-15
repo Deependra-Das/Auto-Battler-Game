@@ -318,7 +318,7 @@ public class BaseUnit : MonoBehaviour
             StartFadeTintCoroutine(_unitColorServiceObj.GetShieldDamageColor());
 
             float multiplier = GetShieldDepletionMultiplier(incomingElement);
-
+            AudioManager.Instance.PlayDamageShieldAudio();
             int shieldDamage = Mathf.Min(currentShield, Mathf.RoundToInt(remainingDamage * multiplier));
             currentShield -= shieldDamage;
             remainingDamage -= Mathf.RoundToInt(shieldDamage / multiplier);
@@ -328,6 +328,7 @@ public class BaseUnit : MonoBehaviour
         if (remainingDamage > 0)
         {
             StartFadeTintCoroutine(_unitColorServiceObj.GeHealthDamageColor());
+            AudioManager.Instance.PlayDamageUnitAudio();
             currentHealth -= remainingDamage;
             UpdateHealthBar(currentHealth);
         }
@@ -346,6 +347,7 @@ public class BaseUnit : MonoBehaviour
     IEnumerator DeathCoroutine()
     {
         yield return new WaitForSeconds(1f);
+        AudioManager.Instance.PlayUnitDeathAudio();
         GameplayManager.Instance.MarkUnitDead(this);
         deathRoutine = null;
     }

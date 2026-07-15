@@ -30,6 +30,9 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
     [SerializeField] private AudioSource _fireAttackAudioSource;
     [SerializeField] private AudioSource _natureAttackAudioSource;
     [SerializeField] private AudioSource _thunderAttackAudioSource;
+    [SerializeField] private AudioSource _damageShieldAudioSource;
+    [SerializeField] private AudioSource _damageUnitAudioSource;
+    [SerializeField] private AudioSource _unitDeathAudioSource;
 
     private readonly Dictionary<AudioChannelEnum, float> _audioVolumeDictionary = new();
 
@@ -227,6 +230,27 @@ public class AudioManager : GenericMonoSingleton<AudioManager>
         AudioData audioData = GetAudioData(AudioTypeEnum.ThunderAttack);
         _thunderAttackAudioSource.Stop();
         _thunderAttackAudioSource.PlayOneShot(audioData.audioClip);
+    }
+
+    public void PlayDamageShieldAudio()
+    {
+        AudioData audioData = GetAudioData(AudioTypeEnum.DamageShield);
+        _damageShieldAudioSource.Stop();
+        _damageShieldAudioSource.PlayOneShot(audioData.audioClip);
+    }
+
+    public void PlayDamageUnitAudio()
+    {
+        AudioData audioData = GetAudioData(AudioTypeEnum.DamageUnit);
+        _damageUnitAudioSource.Stop();
+        _damageUnitAudioSource.PlayOneShot(audioData.audioClip);
+    }
+
+    public void PlayUnitDeathAudio()
+    {
+        AudioData audioData = GetAudioData(AudioTypeEnum.UnitDeath);
+        _unitDeathAudioSource.Stop();
+        _unitDeathAudioSource.PlayOneShot(audioData.audioClip);
     }
 
     public void SetVolume(AudioChannelEnum channel, float value)

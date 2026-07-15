@@ -35,5 +35,8 @@ public enum AudioTypeEnum
     ElementalBurst,
     FireAttack,
     NatureAttack,
-    ThunderAttack
+    ThunderAttack,
+    DamageShield,
+    DamageUnit,
+    UnitDeath,
 }

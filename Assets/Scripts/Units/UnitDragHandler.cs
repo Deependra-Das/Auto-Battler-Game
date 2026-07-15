@@ -135,7 +135,10 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         Node targetNode = TryGetNodeUnderPointer(eventData);
 
         if (targetNode != null && !targetNode.IsOccupied)
+        {
+            AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.PlaceUnitOnField);
             _unit.SnapToNode(targetNode);
+        }
         else
             _unit.OnDragCancelled(_originalNode);
 

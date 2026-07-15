@@ -257,6 +257,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (node == null || node.IsOccupied)
             return false;
 
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.PlaceUnitOnField);
         GameplayManager.Instance.DeployUnit(this, node, TeamEnum.Team1);
 
         return true;
