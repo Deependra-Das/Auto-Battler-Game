@@ -778,7 +778,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnResetStageButtonClicked()
     {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
         SetMessageForResetStageConfirmation();
         ToggleStageSelectionConfirmationContainer(true);
     }
@@ -886,10 +886,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void ToggleStageSelectionConfirmationContainer(bool value)
     {
         _stageSelectionConfirmationContainer.SetActive(value);
-        if (value)
-        {
-            AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
-        }
     }
 
     private void SetMessageForResetStageConfirmation()
