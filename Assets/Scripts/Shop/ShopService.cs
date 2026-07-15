@@ -74,7 +74,7 @@ public class ShopService
             return;
         }
 
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.SpendCoin);
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.CoinSpend);
         _teamServiceObj.AddUnitToTeam(card.UnitData, TeamEnum.Team1);
         _inventoryServiceObj.AddUnit(card.UnitData);
         _currentUnitsInShop.Remove(card.UnitData);
@@ -90,7 +90,7 @@ public class ShopService
             return;
         }
 
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.SpendCoin);
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.CoinSpend);
         _currentUnitsInShop.Clear();
         UIManager.Instance.RemoveAllShopUnitCards();
 

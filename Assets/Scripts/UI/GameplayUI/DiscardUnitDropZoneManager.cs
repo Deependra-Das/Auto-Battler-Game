@@ -40,6 +40,7 @@ public class DiscardUnitDropZoneManager : MonoBehaviour
         _teamServiceObj.RemoveUnitFromField(baseUnit, baseUnit.Team, true);
         _teamServiceObj.RemoveUnitFromTeam(baseUnit.UnitData, baseUnit.Team);
         _unitPoolServiceObj.Release(baseUnit.UnitData.unitID, baseUnit);
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.CoinRefund);
         HandleRefund(refundAmount);
         ToggleHighlight(false);
     }
@@ -51,6 +52,7 @@ public class DiscardUnitDropZoneManager : MonoBehaviour
         _teamServiceObj.RemoveUnitFromTeam(inventoryUnitCard.UnitData, TeamEnum.Team1);
         _inventoryServiceObj.RemoveUnit(inventoryUnitCard);
         EventBusManager.Instance.Raise(EventNameEnum.InventoryUnitCardDiscarded);
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.CoinRefund);
         HandleRefund(refundAmount);
         ToggleHighlight(false);
     }
