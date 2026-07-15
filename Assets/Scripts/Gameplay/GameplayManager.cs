@@ -136,7 +136,6 @@ public class GameplayManager : MonoBehaviour
 
     public void DeployUnit(InventoryUnitCard card, Node node, TeamEnum team)
     {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.PlaceUnitOnField);
         BaseUnit newUnit = _unitPoolServiceObj.Get(card.UnitData.unitID);
 
         if (newUnit != null)
