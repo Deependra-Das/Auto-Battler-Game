@@ -480,6 +480,15 @@ public class GameplayManager : MonoBehaviour
         CurrentGameplayState = newState;
 
         EventBusManager.Instance.Raise(EventNameEnum.GameplayStateChanged, CurrentGameplayState);
+
+        if(CurrentGameplayState==GameplayStateEnum.Preparation)
+        {
+            ToggleDeploymentTilemap(true);
+        }
+        else
+        {
+            ToggleDeploymentTilemap(false);
+        }
     }
 
     public void TogglePause()
@@ -666,6 +675,11 @@ public class GameplayManager : MonoBehaviour
                 break;
 
         }
+    }
+
+    public void ToggleDeploymentTilemap(bool value)
+    {
+        _deploymentTilemap.gameObject.SetActive(value);
     }
 
     //private void OnDrawGizmos()
