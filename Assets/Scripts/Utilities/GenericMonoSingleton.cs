@@ -38,5 +38,9 @@ namespace AutoBattler.Utilities
                 Destroy(gameObject);
             }
         }
+        protected bool IsSingletonInstance()
+        {
+            return _instance == this;
+        }
     }
 }
