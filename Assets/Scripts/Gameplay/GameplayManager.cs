@@ -35,6 +35,7 @@ public class GameplayManager : MonoBehaviour
     private DragVisualPoolService _dragVisualPoolServiceObj;
     private VfxPoolService _vfxPoolServiceObj;
     private HighlightTileService _highlightTileServiceObj;
+    private RangedAbilityPoolService _rangedAbilityPoolServiceObj;
 
     private readonly HashSet<BaseUnit> _pendingDeadUnits = new();
     private readonly List<BaseUnit> _pendingReleaseUnits = new();
@@ -110,6 +111,7 @@ public class GameplayManager : MonoBehaviour
         _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
         _shopServiceObj = GameManager.Instance.Get<ShopService>();
         _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
+        _rangedAbilityPoolServiceObj = GameManager.Instance.Get<RangedAbilityPoolService>();
     }
 
     public void InitializeStageForGameplay(int stageIndex)
@@ -379,6 +381,7 @@ public class GameplayManager : MonoBehaviour
         _pendingReleaseUnits.Clear();
 
         CleanupRound(false);
+        _rangedAbilityPoolServiceObj.Reset();
         _highlightTileServiceObj.Dispose();
         _tileGridServiceObj.Reset();
         _graphServiceObj.Reset();

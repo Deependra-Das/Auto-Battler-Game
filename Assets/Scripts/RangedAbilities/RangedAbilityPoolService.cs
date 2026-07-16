@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class RangedAbilityPoolService
@@ -13,6 +14,8 @@ public class RangedAbilityPoolService
 
     private readonly Queue<ElementalArrow> _elementalArrowPoolQueue = new();
     private readonly Queue<ElementalBurst> _elementalBurstPoolQueue = new();
+    private readonly HashSet<ElementalArrow> _activeElementalArrows = new();
+    private readonly HashSet<ElementalBurst> _activeElementalBursts = new();
 
     public RangedAbilityPoolService(RangedAbilitiesScriptableObjectScript rangedAbilities_SO, Transform rangedAbilityPoolContainerTransform)
     {
@@ -51,7 +54,7 @@ public class RangedAbilityPoolService
         elementalArrow.transform.SetParent(null, false);
         elementalArrow.transform.position = spawnPosition;
         elementalArrow.gameObject.SetActive(true);
-
+        _activeElementalArrows.Add(elementalArrow);
         Vector3 adjustedDirection = (adjustedTargetPosition - spawnPosition);
         elementalArrow.Initialize(owner, target, damage, attackElement, adjustedDirection.normalized, adjustedTargetPosition, _arrowLifetime, this);
     }
@@ -65,6 +68,9 @@ public class RangedAbilityPoolService
 
     public void DespawnElementalArrow(ElementalArrow elementalArrow)
     {
+        if (!_activeElementalArrows.Remove(elementalArrow))
+            return;
+
         elementalArrow.gameObject.SetActive(false);
         elementalArrow.Reset();
         elementalArrow.transform.SetParent(_rangedAbilityPoolContainerTransform, false);
@@ -90,6 +96,7 @@ public class RangedAbilityPoolService
         elementalBurst.transform.SetParent(null, false);
         elementalBurst.transform.position = target.CurrentNode.worldPosition;
         elementalBurst.gameObject.SetActive(true);
+        _activeElementalBursts.Add(elementalBurst);
         elementalBurst.Initialize(owner, target, damage, attackElement, _elementalBurstLifetime, this);
     }
 
@@ -102,10 +109,35 @@ public class RangedAbilityPoolService
 
     public void DespawnElementalBurst(ElementalBurst elementalBurst)
     {
+        if (!_activeElementalBursts.Remove(elementalBurst))
+            return;
+
         elementalBurst.gameObject.SetActive(false);
         elementalBurst.Reset();
         elementalBurst.transform.SetParent(_rangedAbilityPoolContainerTransform, false);
         elementalBurst.transform.localPosition = Vector3.zero;
         _elementalBurstPoolQueue.Enqueue(elementalBurst);
+    }
+
+    private void DespawnAllElementalArrows()
+    {
+        foreach (var arrow in _activeElementalArrows.ToArray())
+        {
+            DespawnElementalArrow(arrow);
+        }
+    }
+
+    private void DespawnAllElementalBursts()
+    {
+        foreach (var burst in _activeElementalBursts.ToArray())
+        {
+            DespawnElementalBurst(burst);
+        }
+    }
+
+    public void Reset()
+    {
+        DespawnAllElementalArrows();
+        DespawnAllElementalBursts();
     }
 }
