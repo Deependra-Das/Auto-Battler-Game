@@ -20,7 +20,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Button _howToPlayButton;
     [SerializeField] private Button _creditsButton;
     [SerializeField] private Button _exitGameButton;
-    [SerializeField] private Graphic _flashingGraphic; 
+    [SerializeField] private Graphic _flashingGraphic;
     [SerializeField] private float _fadeDuration = 1f;
 
     [Header("HowToPlay UI")]
@@ -319,6 +319,538 @@ public class UIManager : GenericMonoSingleton<UIManager>
         EventBusManager.Instance.Unsubscribe(EventNameEnum.StageClearedPartial, OnStageClearedPartial);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.StageFailed, OnStageFailed);
         EventBusManager.Instance.Unsubscribe(EventNameEnum.GameplayStateChanged, OnGameplayStateChanged);
+    }
+
+    private void OnSceneLoaded_UI(object[] parameters)
+    {
+        SceneNameEnum sceneLoaded = (SceneNameEnum)parameters[0];
+
+        ToggleMainMenuUIContainer(false);
+        ToggleStageSelectionUIContainer(false);
+        ToggleGameplayUIContainer(false);
+        ClearStageSelectionButtons();
+
+        switch (sceneLoaded)
+        {
+            case SceneNameEnum.MainMenuScene:
+                AudioManager.Instance.PlayMusic(AudioTypeEnum.MainMenuMusic);
+                PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
+                ToggleMainMenuUIContainer(true);
+                StartFlashing();
+                break;
+
+            case SceneNameEnum.StageSelectionScene:
+                AudioManager.Instance.PlayMusic(AudioTypeEnum.MainMenuMusic);
+                PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
+                CreateStageSelectionButtons();
+                UpdateStageSelectionRoundData();
+                ToggleStageSelectionUIContainer(true);
+                break;
+
+            case SceneNameEnum.GameplayScene:
+                ToggleGameplayUIContainer(true);
+                break;
+        }
+    }
+
+    #region MainMenu
+
+    public void ToggleMainMenuUIContainer(bool value)
+    {
+        _mainMenuUIContainer.SetActive(value);
+    }
+
+    private void OnMainMenuPlayButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        StopFlashing();
+        SceneLoader.Instance.LoadScene(SceneNameEnum.StageSelectionScene);
+    }
+
+    private void OnHowToPlayButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        if (_videoInstructionServiceObj == null || _videoInstructionServiceObj.Count == 0)
+        {
+            Debug.LogWarning("No tutorials found.");
+            return;
+        }
+
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
+        ToggleHowToPlayUI(true);
+        ToggleMainMenuUIContainer(false);
+        _currentInstructionIndex = 0;
+        _totalInstructionCount = _videoInstructionServiceObj.Count;
+        _totalInstructionCountText.text = _totalInstructionCount.ToString("D2");
+        DisplayTutorial(_currentInstructionIndex);
+    }
+
+    private void OnCreditsButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        ToggleCreditsUI(true);
+        ToggleMainMenuUIContainer(false);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
+    }
+
+    private void OnAudioSettingsButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        ToggleAudioSettingsUI(true);
+        ToggleMainMenuUIContainer(false);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
+    }
+
+    private void OnExitGameButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        Application.Quit();
+    }
+
+    public void StartFlashing()
+    {
+        if (_flashCoroutine == null)
+        {
+            _flashCoroutine = StartCoroutine(FlashCoroutine());
+        }
+    }
+
+    public void StopFlashing()
+    {
+        if (_flashCoroutine != null)
+        {
+            StopCoroutine(_flashCoroutine);
+            _flashCoroutine = null;
+
+            Color color = _flashingGraphic.color;
+            color.a = 1f;
+            _flashingGraphic.color = color;
+        }
+    }
+
+    IEnumerator FlashCoroutine()
+    {
+        while (true)
+        {
+            yield return FadeCoroutine(1f, 0f);
+            yield return FadeCoroutine(0f, 1f);
+        }
+    }
+
+    IEnumerator FadeCoroutine(float startAlpha, float endAlpha)
+    {
+        float timer = 0f;
+
+        Color color = _flashingGraphic.color;
+
+        while (timer < _fadeDuration)
+        {
+            timer += Time.deltaTime;
+            color.a = Mathf.Lerp(startAlpha, endAlpha, timer / _fadeDuration);
+            _flashingGraphic.color = color;
+            yield return null;
+        }
+
+        color.a = endAlpha;
+        _flashingGraphic.color = color;
+    }
+
+    #endregion
+
+    #region HowToPlay
+
+    private void OnCloseHowToPlayButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        _videoPlayer.prepareCompleted -= OnVideoPrepared;
+        if (_videoPlayer.isPlaying)
+            _videoPlayer.Stop();
+
+        _videoPlayer.clip = null;
+
+        _instructionTitleText.text = string.Empty;
+        _instructionDescriptionText.text = string.Empty;
+
+        ToggleHowToPlayUI(false);
+        ToggleMainMenuUIContainer(true);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
+    }
+
+    private void ToggleHowToPlayUI(bool value)
+    {
+        _howToPlayUIContainer.SetActive(value);
+    }
+
+    private void DisplayTutorial(int index)
+    {
+        VideoInstructionEntry videoInstructionEntry = _videoInstructionServiceObj.GetVideoInstructionEntry(index);
+
+        _currentInstructionIndexText.text = (index + 1).ToString("D2");
+        _instructionTitleText.text = videoInstructionEntry.title;
+        _instructionDescriptionText.text = videoInstructionEntry.instruction;
+
+        _videoPlayer.Stop();
+        _videoPlayer.clip = videoInstructionEntry.videoClip;
+
+        _videoPlayer.prepareCompleted -= OnVideoPrepared;
+        _videoPlayer.prepareCompleted += OnVideoPrepared;
+
+        _videoPlayer.Prepare();
+
+        _previousButton.interactable = index > 0;
+        _nextButton.interactable = index < _totalInstructionCount - 1;
+    }
+
+    private void OnVideoPrepared(VideoPlayer player)
+    {
+        player.prepareCompleted -= OnVideoPrepared;
+        player.Play();
+    }
+
+    #endregion
+
+    #region Credits
+
+    private void OnCloseCreditsButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        ToggleCreditsUI(false);
+        ToggleMainMenuUIContainer(true);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
+    }
+
+    private void ToggleCreditsUI(bool value)
+    {
+        _creditsUIContainer.SetActive(value);
+    }
+
+    private void OnNextButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        if (_currentInstructionIndex >= _totalInstructionCount - 1)
+            return;
+
+        _currentInstructionIndex++;
+        DisplayTutorial(_currentInstructionIndex);
+    }
+
+    private void OnPreviousButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        if (_currentInstructionIndex <= 0)
+            return;
+
+        _currentInstructionIndex--;
+        DisplayTutorial(_currentInstructionIndex);
+    }
+
+    #endregion
+
+    #region AudioSettings
+
+    private void OnCloseAudioSettingsButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        ToggleAudioSettingsUI(false);
+        ToggleMainMenuUIContainer(true);
+        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
+    }
+
+    private void ToggleAudioSettingsUI(bool value)
+    {
+        _audioSettingsUIContainer.SetActive(value);
+    }
+
+    private void InitializeAudioUI()
+    {
+        foreach (var audioControl in _audioControls)
+        {
+            float value = AudioManager.Instance.GetVolume(audioControl.channel);
+
+            audioControl.slider.SetValueWithoutNotify(value);
+            audioControl.previousVolume = value;
+
+            bool muted = value <= 0.001f;
+
+            audioControl.muteToggle.SetIsOnWithoutNotify(muted);
+
+            UpdateAudioVolumeLabel(audioControl, value);
+            UpdateMuteIcon(audioControl, muted);
+
+            audioControl.slider.onValueChanged.RemoveAllListeners();
+            audioControl.muteToggle.onValueChanged.RemoveAllListeners();
+
+            audioControl.slider.onValueChanged.AddListener(volume =>
+            {
+                AudioManager.Instance.SetVolume(audioControl.channel, volume);
+
+                if (volume > 0f)
+                    audioControl.previousVolume = volume;
+
+                bool isMuted = volume <= 0.001f;
+
+                audioControl.muteToggle.SetIsOnWithoutNotify(isMuted);
+
+                UpdateAudioVolumeLabel(audioControl, volume);
+                UpdateMuteIcon(audioControl, isMuted);
+            });
+
+            audioControl.muteToggle.onValueChanged.AddListener(isMuted =>
+            {
+                AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+
+                if (isMuted)
+                {
+                    if (audioControl.slider.value > 0f)
+                        audioControl.previousVolume = audioControl.slider.value;
+
+                    audioControl.slider.SetValueWithoutNotify(0f);
+
+                    AudioManager.Instance.SetVolume(audioControl.channel, 0f);
+
+                    UpdateAudioVolumeLabel(audioControl, 0f);
+                    UpdateMuteIcon(audioControl, true);
+                }
+                else
+                {
+                    float restore = Mathf.Max(audioControl.previousVolume, 0.5f);
+
+                    audioControl.slider.SetValueWithoutNotify(restore);
+
+                    AudioManager.Instance.SetVolume(audioControl.channel, restore);
+
+                    UpdateAudioVolumeLabel(audioControl, restore);
+                    UpdateMuteIcon(audioControl, false);
+                }
+            });
+        }
+    }
+
+    private void UpdateAudioVolumeLabel(AudioControlUI control, float value)
+    {
+        if (control.valueText != null)
+            control.valueText.text = $"{Mathf.RoundToInt(value * 10)}";
+    }
+
+    private void UpdateMuteIcon(AudioControlUI control, bool muted)
+    {
+        Image icon = control.muteIcon;
+
+        if (icon == null)
+            return;
+
+        icon.sprite = muted ? _mutedIconSprite : _unmutedIconSprite;
+    }
+
+    #endregion
+
+    #region StageSelection
+
+    public void ToggleStageSelectionUIContainer(bool value)
+    {
+        _stageSelectionUIContainer.SetActive(value);
+    }
+
+    private void CreateStageSelectionButtons()
+    {
+        StageService stageObj = GameManager.Instance.Get<StageService>();
+        int totalStages = stageObj.GetStageCount();
+
+        for (int index = 0; index < totalStages; index++)
+        {
+            StageData stageData = stageObj.GetStageData(index);
+            GameObject stageButton = Instantiate(_stageSelectionCardUIPrefab, _stageSelectionContent);
+            StageSelectionCardUIView stageSelectionCardUIViewObj = stageButton.GetComponent<StageSelectionCardUIView>();
+            stageSelectionCardUIViewObj.Initialize(index, stageData);
+            _stageSelectionUICardList.Add(stageSelectionCardUIViewObj);
+        }
+
+        StartCoroutine(SelectFirstStage());
+    }
+
+    private IEnumerator SelectFirstStage()
+    {
+        yield return null;
+
+        if (_stageSelectionUICardList.Count > 0)
+        {
+            EventBusManager.Instance.Raise(EventNameEnum.SelectedStageChanged, 0);
+        }
+    }
+
+    private void ClearStageSelectionButtons()
+    {
+        if (_stageSelectionUICardList == null || _stageSelectionUICardList.Count == 0)
+        {
+            return;
+        }
+
+        foreach (StageSelectionCardUIView card in _stageSelectionUICardList)
+        {
+            if (card != null)
+            {
+                Destroy(card.gameObject);
+            }
+        }
+
+        _stageSelectionUICardList.Clear();
+    }
+
+    private void OnStartContinueStageButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        GameData.selectedStage = _selectedStage;
+        SceneLoader.Instance.LoadScene(SceneNameEnum.GameplayScene);
+    }
+
+    private void OnResetStageButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
+        SetMessageForResetStageConfirmation();
+        ToggleStageSelectionConfirmationContainer(true);
+    }
+
+    private void OnCloseStageSelectionButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
+        SceneLoader.Instance.LoadScene(SceneNameEnum.MainMenuScene);
+    }
+
+    private void OnSelectedStageChanged_UI(object[] parameters)
+    {
+        _selectedStage = (int)parameters[0];
+        int roundCount = 0;
+        _selectedStageBackgroundImage.sprite = GameManager.Instance.Get<StageService>().GetStageBackgroundImage(_selectedStage);
+
+        foreach (var stage in _stageSelectionUICardList)
+        {
+            if (stage.StageIndex == _selectedStage)
+            {
+                roundCount = stage.NumberOfRounds;
+
+                SetStageRecommendedLevelOnSelectionUI(stage.RecommendedLevel);
+                SetStageRecommendedElementsOnSelectionUI(stage);
+                SetStageDifficultyOnSelectionUI(stage.StageDifficulty);
+                stage.SetStageCardUISelectedHighlight(true);
+            }
+            else
+            {
+                stage.SetStageCardUISelectedHighlight(false);
+            }
+        }
+
+        StageSnapshotEntry entry = GameManager.Instance.Get<StageSnapshotService>().GetStageSnapshot(_selectedStage);
+
+        if (entry == null || entry.latestRoundSnapshot.roundIndex < roundCount - 1)
+        {
+            ToggleStartContinueStageButton(true);
+        }
+        else
+        {
+            ToggleStartContinueStageButton(false);
+        }
+
+        ToggleResetStageStageButton(true);
+    }
+
+    private void ToggleStartContinueStageButton(bool value)
+    {
+        _startContinueStageButton.interactable = value;
+    }
+
+    private void ToggleResetStageStageButton(bool value)
+    {
+        _resetStageButton.interactable = value;
+    }
+
+    private void ToggleStageSelectionConfirmationContainer(bool value)
+    {
+        _stageSelectionConfirmationContainer.SetActive(value);
+    }
+
+    private void SetMessageForResetStageConfirmation()
+    {
+        _resetStageConfirmationMessageText.text = "Are you sure you want to reset Stage " + (_selectedStage + 1).ToString("D2") + " ?";
+    }
+
+    private void OnResetStageConfirmationYesButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        GameManager.Instance.Get<StageSnapshotService>().DeleteStageSnapshot(_selectedStage);
+        UpdateStageSelectionRoundData();
+        ToggleStartContinueStageButton(true);
+        ToggleStageSelectionConfirmationContainer(false);
+    }
+
+    private void OnResetStageConfirmationNoButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
+        ToggleStageSelectionConfirmationContainer(false);
+    }
+
+    private void UpdateStageSelectionRoundData()
+    {
+        StageSnapshotService stageSnapshotService = GameManager.Instance.Get<StageSnapshotService>();
+
+        foreach (StageSelectionCardUIView cardObj in _stageSelectionUICardList)
+        {
+            StageSnapshotEntry data = stageSnapshotService.GetStageSnapshot(cardObj.StageIndex);
+
+            if (data != null)
+            {
+                cardObj.SetStageRoundData(data.roundResults, (data.winCount + data.drawCount), data.latestRoundSnapshot.roundIndex);
+            }
+            else
+            {
+                cardObj.SetStageRoundData(null, 0, -1);
+            }
+        }
+    }
+
+    private void SetStageDifficultyOnSelectionUI(StageDifficultyEnum difficultyEnumValue)
+    {
+        int difficulty = (int)difficultyEnumValue;
+
+        for (int index = 0; index < _difficultyImageList.Count; index++)
+        {
+            if (index < difficulty)
+            {
+                _difficultyImageList[index].gameObject.SetActive(true);
+            }
+            else
+            {
+                _difficultyImageList[index].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void SetStageRecommendedLevelOnSelectionUI(int value)
+    {
+        _recommendedLevelText.text = value.ToString("D2");
+    }
+
+    private void SetStageRecommendedElementsOnSelectionUI(StageSelectionCardUIView stage)
+    {
+        List<UnitElementEnum> recommendedElements = stage.RecommendedElements;
+        IconService iconServiceObj = GameManager.Instance.Get<IconService>();
+        UnitColorService colorServiceObj = GameManager.Instance.Get<UnitColorService>();
+
+        for (int index = 0; index < recommendedElements.Count; index++)
+        {
+            _recommendedElementList[index].elementIcon.sprite = iconServiceObj.GetElementIcon(recommendedElements[index]);
+            _recommendedElementList[index].elementIconContainer.color = colorServiceObj.GetElementColor(recommendedElements[index]);
+            _recommendedElementList[index].elementNameText.text = recommendedElements[index].ToString();
+        }
+    }
+
+    #endregion
+
+    #region GameplayUI
+
+    public void ToggleGameplayUIContainer(bool value)
+    {
+        PostProcessingManager.Instance.ToggleBlur(!value);
+        _gameplayUIContainer.SetActive(value);
     }
 
     public void InitializeGameplayUI()
@@ -730,220 +1262,9 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _xpText.text = currentXP.ToString() + " / " + requiredXPToNextLevel.ToString();
     }
 
-    private void CreateStageSelectionButtons()
-    {
-        StageService stageObj = GameManager.Instance.Get<StageService>();
-        int totalStages = stageObj.GetStageCount();
-
-        for (int index = 0; index < totalStages; index++)
-        {
-            StageData stageData = stageObj.GetStageData(index);
-            GameObject stageButton = Instantiate(_stageSelectionCardUIPrefab, _stageSelectionContent);
-            StageSelectionCardUIView stageSelectionCardUIViewObj = stageButton.GetComponent<StageSelectionCardUIView>();
-            stageSelectionCardUIViewObj.Initialize(index, stageData);
-            _stageSelectionUICardList.Add(stageSelectionCardUIViewObj);
-        }
-
-        StartCoroutine(SelectFirstStage());
-    }
-
-    private IEnumerator SelectFirstStage()
-    {
-        yield return null;
-
-        if (_stageSelectionUICardList.Count > 0)
-        {
-            EventBusManager.Instance.Raise(EventNameEnum.SelectedStageChanged, 0);
-        }
-    }
-
-    private void ClearStageSelectionButtons()
-    {
-        if (_stageSelectionUICardList == null || _stageSelectionUICardList.Count == 0)
-        {
-            return;
-        }
-
-        foreach (StageSelectionCardUIView card in _stageSelectionUICardList)
-        {
-            if (card != null)
-            {
-                Destroy(card.gameObject);
-            }
-        }
-
-        _stageSelectionUICardList.Clear();
-    }
-
-    private void OnMainMenuPlayButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        StopFlashing();
-        SceneLoader.Instance.LoadScene(SceneNameEnum.StageSelectionScene);
-    }
-
-    private void OnStartContinueStageButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        GameData.selectedStage = _selectedStage;
-        SceneLoader.Instance.LoadScene(SceneNameEnum.GameplayScene);
-    }
-
-    private void OnResetStageButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
-        SetMessageForResetStageConfirmation();
-        ToggleStageSelectionConfirmationContainer(true);
-    }
-
-    private void OnCloseStageSelectionButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
-        SceneLoader.Instance.LoadScene(SceneNameEnum.MainMenuScene);
-    }    
-
-    private void OnSelectedStageChanged_UI(object[] parameters)
-    {
-        _selectedStage = (int)parameters[0];
-        int roundCount = 0;
-        _selectedStageBackgroundImage.sprite = GameManager.Instance.Get<StageService>().GetStageBackgroundImage(_selectedStage);
-
-        foreach (var stage in _stageSelectionUICardList)
-        {
-            if (stage.StageIndex == _selectedStage)
-            {
-                roundCount = stage.NumberOfRounds;
-
-                SetStageRecommendedLevelOnSelectionUI(stage.RecommendedLevel);
-                SetStageRecommendedElementsOnSelectionUI(stage);
-                SetStageDifficultyOnSelectionUI(stage.StageDifficulty);
-                stage.SetStageCardUISelectedHighlight(true);
-            }
-            else
-            {
-                stage.SetStageCardUISelectedHighlight(false);
-            }
-        }
-
-        StageSnapshotEntry entry = GameManager.Instance.Get<StageSnapshotService>().GetStageSnapshot(_selectedStage);
-
-        if (entry == null || entry.latestRoundSnapshot.roundIndex < roundCount - 1)
-        {
-            ToggleStartContinueStageButton(true);
-        }
-        else
-        {
-            ToggleStartContinueStageButton(false);
-        }
-
-        ToggleResetStageStageButton(true);
-    }
-
-    public void ToggleMainMenuUIContainer(bool value)
-    {
-        _mainMenuUIContainer.SetActive(value);
-    }
-
-    public void ToggleStageSelectionUIContainer(bool value)
-    {
-        _stageSelectionUIContainer.SetActive(value);
-    }
-
-    public void ToggleGameplayUIContainer(bool value)
-    {
-        PostProcessingManager.Instance.ToggleBlur(!value);
-        _gameplayUIContainer.SetActive(value);
-    }
-
-    private void OnSceneLoaded_UI(object[] parameters)
-    {
-        SceneNameEnum sceneLoaded = (SceneNameEnum)parameters[0];
-
-        ToggleMainMenuUIContainer(false);
-        ToggleStageSelectionUIContainer(false);
-        ToggleGameplayUIContainer(false);
-        ClearStageSelectionButtons();
-
-        switch (sceneLoaded)
-        {
-            case SceneNameEnum.MainMenuScene:
-                AudioManager.Instance.PlayMusic(AudioTypeEnum.MainMenuMusic);
-                PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
-                ToggleMainMenuUIContainer(true);
-                StartFlashing();
-                break;
-
-            case SceneNameEnum.StageSelectionScene:
-                AudioManager.Instance.PlayMusic(AudioTypeEnum.MainMenuMusic);
-                PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
-                CreateStageSelectionButtons();
-                UpdateStageSelectionRoundData();
-                ToggleStageSelectionUIContainer(true);
-                break;
-
-            case SceneNameEnum.GameplayScene:
-                ToggleGameplayUIContainer(true);
-                break;
-        }
-    }
-
     private void OnStageStarted_UI(object[] parameters)
     {
         UpdateXpExchangeCostUI((int)parameters[6]);
-    }
-
-    private void ToggleStartContinueStageButton(bool value)
-    {
-        _startContinueStageButton.interactable = value;
-    }
-
-    private void ToggleResetStageStageButton(bool value)
-    {
-        _resetStageButton.interactable = value;
-    }
-
-    private void ToggleStageSelectionConfirmationContainer(bool value)
-    {
-        _stageSelectionConfirmationContainer.SetActive(value);
-    }
-
-    private void SetMessageForResetStageConfirmation()
-    {
-        _resetStageConfirmationMessageText.text = "Are you sure you want to reset Stage " + (_selectedStage + 1).ToString("D2") + " ?";
-    }
-
-    private void OnResetStageConfirmationYesButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        GameManager.Instance.Get<StageSnapshotService>().DeleteStageSnapshot(_selectedStage);
-        UpdateStageSelectionRoundData();
-        ToggleStartContinueStageButton(true);
-        ToggleStageSelectionConfirmationContainer(false);
-    }
-
-    private void OnResetStageConfirmationNoButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        ToggleStageSelectionConfirmationContainer(false);
-    }
-
-    private void UpdateStageSelectionRoundData()
-    {
-        StageSnapshotService stageSnapshotService = GameManager.Instance.Get<StageSnapshotService>();
-
-        foreach(StageSelectionCardUIView cardObj in _stageSelectionUICardList)
-        {
-            StageSnapshotEntry data = stageSnapshotService.GetStageSnapshot(cardObj.StageIndex);
-
-            if (data != null)
-            {
-                cardObj.SetStageRoundData(data.roundResults, (data.winCount+data.drawCount), data.latestRoundSnapshot.roundIndex);
-            }
-            else
-            {
-                cardObj.SetStageRoundData(null, 0, -1);
-            }
-        }    
     }
 
     private void OnPausePlayGameplayToggleChanged()
@@ -968,7 +1289,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     {
         _gameplayPausedContainer.SetActive(value);
 
-        if(value)
+        if (value)
         {
             AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
         }
@@ -1022,7 +1343,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
         RoundResultEnum result = (RoundResultEnum)parameters[2];
         int rewardQuantity = (int)parameters[3];
 
-        string roundInfoStatusMessage = "Round "+(roundIndex + 1).ToString("D2");
+        string roundInfoStatusMessage = "Round " + (roundIndex + 1).ToString("D2");
 
         switch (result)
         {
@@ -1180,7 +1501,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     private void SetRoundInfoGameplayUIText(int value)
     {
         int roundCount = GameManager.Instance.Get<StageService>().GetRoundCount();
-        _roundInfoGameplayUIText.text = value.ToString("D2") +" / "+ roundCount.ToString("D2");
+        _roundInfoGameplayUIText.text = value.ToString("D2") + " / " + roundCount.ToString("D2");
     }
 
     private void SetPlayerLivesInfoGameplayUI()
@@ -1188,42 +1509,6 @@ public class UIManager : GenericMonoSingleton<UIManager>
         int currentLives = GameManager.Instance.Get<PlayerLevelService>().Lives;
         int maxLives = GameManager.Instance.Get<StageService>().GetCurrentStageData().maxPlayerLives;
         _playerLivesInfoGameplayUIText.text = currentLives.ToString() + " / " + maxLives.ToString();
-    }
-
-    private void SetStageDifficultyOnSelectionUI(StageDifficultyEnum difficultyEnumValue)
-    {
-        int difficulty = (int)difficultyEnumValue;
-
-        for (int index = 0; index < _difficultyImageList.Count; index++ )
-        { 
-            if (index < difficulty)
-            {
-                _difficultyImageList[index].gameObject.SetActive(true);
-            }
-            else
-            {
-                _difficultyImageList[index].gameObject.SetActive(false);
-            }
-        }
-    }
-
-    private void SetStageRecommendedLevelOnSelectionUI(int value)
-    {
-        _recommendedLevelText.text = value.ToString("D2");
-    }
-
-    private void SetStageRecommendedElementsOnSelectionUI(StageSelectionCardUIView stage)
-    {
-        List<UnitElementEnum> recommendedElements = stage.RecommendedElements;
-        IconService iconServiceObj = GameManager.Instance.Get<IconService>();
-        UnitColorService colorServiceObj = GameManager.Instance.Get<UnitColorService>();
-
-        for (int index = 0; index < recommendedElements.Count; index++)
-        {
-            _recommendedElementList[index].elementIcon.sprite = iconServiceObj.GetElementIcon(recommendedElements[index]);
-            _recommendedElementList[index].elementIconContainer.color = colorServiceObj.GetElementColor(recommendedElements[index]);
-            _recommendedElementList[index].elementNameText.text = recommendedElements[index].ToString();
-        }
     }
 
     private void OnGameplayStateChanged(object[] parameters)
@@ -1258,266 +1543,5 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _shopPanel.gameObject.SetActive(false);
     }
 
-    public void StartFlashing()
-    {
-        if (_flashCoroutine == null)
-        {
-            _flashCoroutine = StartCoroutine(FlashCoroutine());
-        }
-    }
-
-    public void StopFlashing()
-    {
-        if (_flashCoroutine != null)
-        {
-            StopCoroutine(_flashCoroutine);
-            _flashCoroutine = null;
-
-            Color color = _flashingGraphic.color;
-            color.a = 1f;
-            _flashingGraphic.color = color;
-        }
-    }
-
-    IEnumerator FlashCoroutine()
-    {
-        while (true)
-        {
-            yield return FadeCoroutine(1f, 0f);
-            yield return FadeCoroutine(0f, 1f);
-        }
-    }
-
-    IEnumerator FadeCoroutine(float startAlpha, float endAlpha)
-    {
-        float timer = 0f;
-
-        Color color = _flashingGraphic.color;
-
-        while (timer < _fadeDuration)
-        {
-            timer += Time.deltaTime;
-            color.a = Mathf.Lerp(startAlpha, endAlpha, timer / _fadeDuration);
-            _flashingGraphic.color = color;
-            yield return null;
-        }
-
-        color.a = endAlpha;
-        _flashingGraphic.color = color;
-    }
-
-    private void OnAudioSettingsButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        ToggleAudioSettingsUI(true);
-        ToggleMainMenuUIContainer(false);
-        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
-    }
-
-    private void OnCloseAudioSettingsButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        ToggleAudioSettingsUI(false);
-        ToggleMainMenuUIContainer(true);
-        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
-    }
-
-    private void OnHowToPlayButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        if (_videoInstructionServiceObj == null || _videoInstructionServiceObj.Count == 0)
-        {
-            Debug.LogWarning("No tutorials found.");
-            return;
-        }
-
-        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
-        ToggleHowToPlayUI(true);
-        ToggleMainMenuUIContainer(false);
-        _currentInstructionIndex = 0;
-        _totalInstructionCount = _videoInstructionServiceObj.Count;
-        _totalInstructionCountText.text = _totalInstructionCount.ToString("D2");
-        DisplayTutorial(_currentInstructionIndex);
-    }
-
-    private void OnCloseHowToPlayButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        _videoPlayer.prepareCompleted -= OnVideoPrepared;
-        if (_videoPlayer.isPlaying)
-            _videoPlayer.Stop();
-
-        _videoPlayer.clip = null;
-
-        _instructionTitleText.text = string.Empty;
-        _instructionDescriptionText.text = string.Empty;
-
-        ToggleHowToPlayUI(false);
-        ToggleMainMenuUIContainer(true);
-        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
-    }
-
-    private void OnCreditsButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        ToggleCreditsUI(true);
-        ToggleMainMenuUIContainer(false);
-        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
-    }
-
-    private void OnCloseCreditsButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        ToggleCreditsUI(false);
-        ToggleMainMenuUIContainer(true);
-        PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
-    }
-
-    private void ToggleAudioSettingsUI(bool value)
-    {
-        _audioSettingsUIContainer.SetActive(value);
-    }
-
-    private void ToggleHowToPlayUI(bool value)
-    {
-        _howToPlayUIContainer.SetActive(value);
-    }
-
-    private void ToggleCreditsUI(bool value)
-    {
-        _creditsUIContainer.SetActive(value);
-    }
-
-    private void OnExitGameButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        Application.Quit();
-    }
-
-    private void DisplayTutorial(int index)
-    {
-        VideoInstructionEntry videoInstructionEntry = _videoInstructionServiceObj.GetVideoInstructionEntry(index);
-
-        _currentInstructionIndexText.text = (index+1).ToString("D2");
-        _instructionTitleText.text = videoInstructionEntry.title;
-        _instructionDescriptionText.text = videoInstructionEntry.instruction;
-
-        _videoPlayer.Stop();
-        _videoPlayer.clip = videoInstructionEntry.videoClip;
-
-        _videoPlayer.prepareCompleted -= OnVideoPrepared;
-        _videoPlayer.prepareCompleted += OnVideoPrepared;
-
-        _videoPlayer.Prepare();
-
-        _previousButton.interactable = index > 0;
-        _nextButton.interactable = index < _totalInstructionCount - 1;
-    }
-
-    private void OnVideoPrepared(VideoPlayer player)
-    {
-        player.prepareCompleted -= OnVideoPrepared;
-        player.Play();
-    }
-
-    private void OnNextButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        if (_currentInstructionIndex >= _totalInstructionCount - 1)
-            return;
-
-        _currentInstructionIndex++;
-        DisplayTutorial(_currentInstructionIndex);
-    }
-
-    private void OnPreviousButtonClicked()
-    {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-        if (_currentInstructionIndex <= 0)
-            return;
-
-        _currentInstructionIndex--;
-        DisplayTutorial(_currentInstructionIndex);
-    }
-
-    private void InitializeAudioUI()
-    {
-        foreach (var audioControl in _audioControls)
-        {
-            float value = AudioManager.Instance.GetVolume(audioControl.channel);
-
-            audioControl.slider.SetValueWithoutNotify(value);
-            audioControl.previousVolume = value;
-
-            bool muted = value <= 0.001f;
-
-            audioControl.muteToggle.SetIsOnWithoutNotify(muted);
-
-            UpdateAudioVolumeLabel(audioControl, value);
-            UpdateMuteIcon(audioControl, muted);
-
-            audioControl.slider.onValueChanged.RemoveAllListeners();
-            audioControl.muteToggle.onValueChanged.RemoveAllListeners();
-
-            audioControl.slider.onValueChanged.AddListener(volume =>
-            {
-                AudioManager.Instance.SetVolume(audioControl.channel, volume);
-
-                if (volume > 0f)
-                    audioControl.previousVolume = volume;
-
-                bool isMuted = volume <= 0.001f;
-
-                audioControl.muteToggle.SetIsOnWithoutNotify(isMuted);
-
-                UpdateAudioVolumeLabel(audioControl, volume);
-                UpdateMuteIcon(audioControl, isMuted);
-            });
-
-            audioControl.muteToggle.onValueChanged.AddListener(isMuted =>
-            {
-                AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
-
-                if (isMuted)
-                {
-                    if (audioControl.slider.value > 0f)
-                        audioControl.previousVolume = audioControl.slider.value;
-
-                    audioControl.slider.SetValueWithoutNotify(0f);
-
-                    AudioManager.Instance.SetVolume(audioControl.channel, 0f);
-
-                    UpdateAudioVolumeLabel(audioControl, 0f);
-                    UpdateMuteIcon(audioControl, true);
-                }
-                else
-                {
-                    float restore = Mathf.Max(audioControl.previousVolume, 0.5f);
-
-                    audioControl.slider.SetValueWithoutNotify(restore);
-
-                    AudioManager.Instance.SetVolume(audioControl.channel, restore);
-
-                    UpdateAudioVolumeLabel(audioControl, restore);
-                    UpdateMuteIcon(audioControl, false);
-                }
-            });
-        }
-    }
-
-    private void UpdateAudioVolumeLabel(AudioControlUI control, float value)
-    {
-        if (control.valueText != null)
-            control.valueText.text = $"{Mathf.RoundToInt(value * 10)}";
-    }
-
-    private void UpdateMuteIcon(AudioControlUI control, bool muted)
-    {
-        Image icon = control.muteIcon;
-
-        if (icon == null)
-            return;
-
-        icon.sprite = muted ? _mutedIconSprite : _unmutedIconSprite;
-    }
+    #endregion
 }
