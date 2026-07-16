@@ -662,59 +662,59 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        if (graph == null) return;
+    //private void OnDrawGizmos()
+    //{
+    //    if (graph == null) return;
 
-        var PathList = graph.Paths;
+    //    var PathList = graph.Paths;
 
-        if (PathList == null) return;
+    //    if (PathList == null) return;
 
-        foreach (Path path in PathList)
-        {
-            Debug.DrawLine(path.source.worldPosition, path.destination.worldPosition, Color.black, 100);
-        }
+    //    foreach (Path path in PathList)
+    //    {
+    //        Debug.DrawLine(path.source.worldPosition, path.destination.worldPosition, Color.black, 100);
+    //    }
 
-        var NodesList = graph.Nodes;
+    //    var NodesList = graph.Nodes;
 
-        if (NodesList == null) return;
+    //    if (NodesList == null) return;
 
-        foreach (Node node in NodesList)
-        {
-            Gizmos.color = node.IsOccupied ? Color.red : Color.green;
-            Gizmos.DrawSphere(node.worldPosition, 0.1f);
-        }
+    //    foreach (Node node in NodesList)
+    //    {
+    //        Gizmos.color = node.IsOccupied ? Color.red : Color.green;
+    //        Gizmos.DrawSphere(node.worldPosition, 0.1f);
+    //    }
 
-        if (_fromIndex >= NodesList.Count || _toIndex >= NodesList.Count) return;
+    //    if (_fromIndex >= NodesList.Count || _toIndex >= NodesList.Count) return;
 
-        List<Node> pathList = graph.GetShortestPath(NodesList[_fromIndex], NodesList[_toIndex]);
+    //    List<Node> pathList = graph.GetShortestPath(NodesList[_fromIndex], NodesList[_toIndex]);
 
-        if (pathList.Count > 1)
-        {
-            for (int i = 1; i < pathList.Count; i++)
-            {
-                Debug.DrawLine(pathList[i - 1].worldPosition, pathList[i].worldPosition, Color.red, 1);
-            }
-        }
+    //    if (pathList.Count > 1)
+    //    {
+    //        for (int i = 1; i < pathList.Count; i++)
+    //        {
+    //            Debug.DrawLine(pathList[i - 1].worldPosition, pathList[i].worldPosition, Color.red, 1);
+    //        }
+    //    }
 
-        if (_tilemap == null) return;
+    //    if (_tilemap == null) return;
 
-        int index = 0;
+    //    int index = 0;
 
 
-        for (int x = _tilemap.cellBounds.xMin; x < _tilemap.cellBounds.xMax; x++)
-        {
-            for (int y =_tilemap.cellBounds.yMin; y < _tilemap.cellBounds.yMax; y++)
-            {
-                Vector3Int localPosition = new Vector3Int(x, y, (int)_tilemap.transform.position.y);
-                Vector3 worldPosition = _tilemap.CellToWorld(localPosition);
+    //    for (int x = _tilemap.cellBounds.xMin; x < _tilemap.cellBounds.xMax; x++)
+    //    {
+    //        for (int y =_tilemap.cellBounds.yMin; y < _tilemap.cellBounds.yMax; y++)
+    //        {
+    //            Vector3Int localPosition = new Vector3Int(x, y, (int)_tilemap.transform.position.y);
+    //            Vector3 worldPosition = _tilemap.CellToWorld(localPosition);
 
-                if (_tilemap.HasTile(localPosition))
-                {
-                    Handles.Label(worldPosition, index.ToString());
-                    index++;
-                }
-            }
-        }
-    }
+    //            if (_tilemap.HasTile(localPosition))
+    //            {
+    //                Handles.Label(worldPosition, index.ToString());
+    //                index++;
+    //            }
+    //        }
+    //    }
+    //}
 }

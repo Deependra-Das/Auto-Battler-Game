@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    [SerializeField] private VisualEffect _vfxParticleGraph;
+
     private BaseUnit _unit;
     private Collider2D _unitCollider;
     private Camera _mainCamera;
@@ -62,6 +65,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         ClearInventoryDropZoneHighlight();
         RaiseToggleInventoryDropZoneEvent(true);
         RaiseToggleDiscardDropZoneEvent(true);
+        _vfxParticleGraph.Stop();
         CreateDragSprite();
         UpdateDragPosition(eventData);
     }
@@ -138,6 +142,14 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.PlaceUnitOnField);
             _unit.SnapToNode(targetNode);
+
+        _vfxParticleGraph.Stop();
+
+        if (_unit.hasAnyBuff)
+        {
+            _vfxParticleGraph.Reinit();
+            _vfxParticleGraph.Play();
+        }
         }
         else
             _unit.OnDragCancelled(_originalNode);

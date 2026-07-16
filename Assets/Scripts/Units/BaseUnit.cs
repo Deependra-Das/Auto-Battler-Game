@@ -73,6 +73,8 @@ public class BaseUnit : MonoBehaviour
     public UnitFacingDirectionEnum DirectionFacing => directionFacing;
     public bool CanBeDragged => !isActive && !isDead;
 
+    public bool hasAnyBuff = false;
+
     protected GraphService _graphServiceObj;
     protected UnitColorService _unitColorServiceObj;
     protected VfxPoolService vfxPoolServiceObj;
@@ -123,7 +125,7 @@ public class BaseUnit : MonoBehaviour
         _vfxParticleGraph.Stop();
 
         ResetVitals();
-
+        hasAnyBuff = false;
         currentTeamBuffData = GameManager.Instance.Get<BuffService>().GetTeamBuffData(team);
         ApplyTeamBuffs();
     }
@@ -470,7 +472,7 @@ public class BaseUnit : MonoBehaviour
 
     protected void ApplyTeamBuffs()
     {
-        bool hasAnyBuff = currentTeamBuffData.attackBonus > 0f || currentTeamBuffData.shieldBonus > 0f ||
+        hasAnyBuff = currentTeamBuffData.attackBonus > 0f || currentTeamBuffData.shieldBonus > 0f ||
        currentTeamBuffData.hpBonus > 0f || currentTeamBuffData.attackSpeedBonus > 0f || GetElementBonus() > 0f;
 
         _vfxParticleGraph.Stop();
