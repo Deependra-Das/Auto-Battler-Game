@@ -19,7 +19,10 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected Image shieldFillImage;
     [SerializeField] private VisualEffect _vfxParticleGraph;
 
-    private Material _material;    
+    private Material _material;
+    private Color _shieldDamageColor = Color.white;
+    private Color _healthDamageColor = Color.red;
+    private Color _healingColor = Color.darkSeaGreen;
     private UnitDragHandler _unitDragHandler;
 
     protected UnitData unitData;
@@ -111,7 +114,11 @@ public class BaseUnit : MonoBehaviour
         _levelText.text = unitData.unitLevel.ToString();
         totalHealth = unitData.baseHealth;
         totalShield = unitData.baseShield;
+        _material.SetColor("_Tint", Color.clear);
         shieldFillImage.color = GetShieldColor(unitData.unitElement);
+        _shieldDamageColor = _unitColorServiceObj.GetShieldDamageColor();
+        _healthDamageColor = _unitColorServiceObj.GeHealthDamageColor();
+        _healingColor = _unitColorServiceObj.GetHealingColor();
         _unitDragHandler.Initialize();
         _vfxParticleGraph.Stop();
 
@@ -309,14 +316,14 @@ public class BaseUnit : MonoBehaviour
 
     public void TakeDamage(int amount, UnitElementEnum incomingElement)
     {
-        if (isDead) return;
+        if (isDead || !gameObject.activeInHierarchy) return;
 
         float damageMultiplier = GetDamageMultiplier(incomingElement);
         int damageToDeal = Mathf.RoundToInt(amount * damageMultiplier);
 
         if (currentShield > 0)
         {
-            StartFadeTintCoroutine(_unitColorServiceObj.GetShieldDamageColor());
+            StartFadeTintCoroutine(_shieldDamageColor);
             AudioManager.Instance.PlayDamageShieldAudio();
 
             int absorbed = Mathf.Min(currentShield, damageToDeal);
@@ -328,7 +335,7 @@ public class BaseUnit : MonoBehaviour
 
         if (damageToDeal > 0)
         {
-            StartFadeTintCoroutine(_unitColorServiceObj.GeHealthDamageColor());
+            StartFadeTintCoroutine(_healthDamageColor);
             AudioManager.Instance.PlayDamageUnitAudio();
 
             currentHealth -= damageToDeal;
@@ -370,7 +377,7 @@ public class BaseUnit : MonoBehaviour
 
         AudioManager.Instance.PlayHealAudio();
         vfxPoolServiceObj.SpawnHealingVfx(currentNode.worldPosition);
-        StartFadeTintCoroutine(_unitColorServiceObj.GetHealingColor());
+        StartFadeTintCoroutine(_healingColor);
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, totalHealth);
         UpdateHealthBar(currentHealth);
@@ -585,8 +592,18 @@ public class BaseUnit : MonoBehaviour
         }
     }
 
+    private void StopFadeTintCoroutine()
+    {
+        if (fadeTintCoroutine != null)
+        {
+            StopCoroutine(fadeTintCoroutine);
+            fadeTintCoroutine = null;
+        }
+    }
+
     public virtual void Reset()
     {
+        StopFadeTintCoroutine();
         StopCombatLoop();
         StopAttackLoop();
         StopCoolDownLoop();
