@@ -17,5 +17,6 @@ public class StageData
     public List<UnitElementEnum> recommendedElements;
     public List<RoundData> roundDataList;
     public Tilemap gameplayTilemapPrefab;
+    public Tilemap deploymentTilemapPrefab;
     public Sprite stageBackgroundImage;
 }

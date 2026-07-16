@@ -4,7 +4,7 @@ public class Node
 {
     public int index;
     public Vector3 worldPosition;
-
+    public bool canPlayerDeploy;
     private bool _isOccupied = false;
 
     public Node(int index, Vector3 position)

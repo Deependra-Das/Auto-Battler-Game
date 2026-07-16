@@ -44,7 +44,9 @@ public class GameplayManager : MonoBehaviour
     private bool _waitingForRoundDecision = false;
     private bool _waitingForStageDecision = false;
     private Coroutine _roundCheckRoutine;
-    private Tilemap _tilemap;
+    private Tilemap _gameplayTilemap;
+    private Tilemap _deploymentTilemap;
+
 
     public GameplayStateEnum CurrentGameplayState { get; private set; }
 
@@ -117,10 +119,14 @@ public class GameplayManager : MonoBehaviour
     public void InitializeStageForGameplay(int stageIndex)
     {
         ActivateBackgroundTilemap(stageIndex);
-        _tileGridServiceObj.CreateGameplayTileMap(_stageServiceObj.GetStageData(GameData.selectedStage).gameplayTilemapPrefab, _gameplayTileGridTransform);
-        _tilemap = _tileGridServiceObj.CurrentTileMap;
+        StageData stageData = _stageServiceObj.GetStageData(GameData.selectedStage);
+        _tileGridServiceObj.CreateGameplayTileMap(stageData.gameplayTilemapPrefab, _gameplayTileGridTransform);
+        _gameplayTilemap = _tileGridServiceObj.CurrentGameplayTileMap;
 
-        _graphServiceObj.InitializeGraph(_tileGridServiceObj.CurrentTileMap);
+        _tileGridServiceObj.CreateDeploymentTileMap(stageData.deploymentTilemapPrefab, _gameplayTileGridTransform);
+        _deploymentTilemap = _tileGridServiceObj.CurrentDeploymentTilemap;
+
+        _graphServiceObj.InitializeGraph(_tileGridServiceObj.CurrentGameplayTileMap, _deploymentTilemap);
         graph = _graphServiceObj.Graph;
 
         _highlightTileServiceObj.Initialize();
