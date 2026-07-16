@@ -20,7 +20,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Button _howToPlayButton;
     [SerializeField] private Button _creditsButton;
     [SerializeField] private Button _exitGameButton;
-    [SerializeField] private Graphic _flashingGraphic;
+    [SerializeField] private Graphic _flashingGraphic; 
     [SerializeField] private float _fadeDuration = 1f;
 
     [Header("HowToPlay UI")]
@@ -51,6 +51,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
     [SerializeField] private Transform _stageSelectionContent;
     [SerializeField] private Button _startContinueStageButton;
     [SerializeField] private Button _resetStageButton;
+    [SerializeField] private Button _closeStageSelectionButton;
     [SerializeField] private GameObject _stageSelectionConfirmationContainer;
     [SerializeField] private TMP_Text _resetStageConfirmationMessageText;
     [SerializeField] private Button _resetStageConfirmationYesButton;
@@ -212,16 +213,20 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _closeCreditsButton.onClick.AddListener(OnCloseCreditsButtonClicked);
         _previousButton.onClick.AddListener(OnPreviousButtonClicked);
         _nextButton.onClick.AddListener(OnNextButtonClicked);
+
+        _startContinueStageButton.onClick.AddListener(OnStartContinueStageButtonClicked);
+        _resetStageButton.onClick.AddListener(OnResetStageButtonClicked);
+        _resetStageConfirmationYesButton.onClick.AddListener(OnResetStageConfirmationYesButtonClicked);
+        _resetStageConfirmationNoButton.onClick.AddListener(OnResetStageConfirmationNoButtonClicked);
+        _closeStageSelectionButton.onClick.AddListener(OnCloseStageSelectionButtonClicked);
+
         _enterCombatButton.onClick.AddListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.AddListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.AddListener(OnRefreshShopButtonClicked);
         _team1ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.AddListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
         _buyLevelXpButton.onClick.AddListener(OnBuyLevelXpButtonClicked);
-        _startContinueStageButton.onClick.AddListener(OnStartContinueStageButtonClicked);
-        _resetStageButton.onClick.AddListener(OnResetStageButtonClicked);
-        _resetStageConfirmationYesButton.onClick.AddListener(OnResetStageConfirmationYesButtonClicked);
-        _resetStageConfirmationNoButton.onClick.AddListener(OnResetStageConfirmationNoButtonClicked);
+        
         _pauseGameplayButton.onClick.AddListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.AddListener(OnResumeGameplayButtonClicked);
         _restartRoundPauseMenuButton.onClick.AddListener(OnRestartRoundPauseMenuButtonClicked);
@@ -241,16 +246,22 @@ public class UIManager : GenericMonoSingleton<UIManager>
         _closeAudioSettingsButton.onClick.RemoveListener(OnCloseAudioSettingsButtonClicked);
         _closeHowToPlayButton.onClick.RemoveListener(OnCloseHowToPlayButtonClicked);
         _closeCreditsButton.onClick.RemoveListener(OnCloseCreditsButtonClicked);
+        _previousButton.onClick.RemoveListener(OnPreviousButtonClicked);
+        _nextButton.onClick.RemoveListener(OnNextButtonClicked);
+
+        _startContinueStageButton.onClick.RemoveListener(OnStartContinueStageButtonClicked);
+        _resetStageButton.onClick.RemoveListener(OnResetStageButtonClicked);
+        _resetStageConfirmationYesButton.onClick.RemoveListener(OnResetStageConfirmationYesButtonClicked);
+        _resetStageConfirmationNoButton.onClick.RemoveListener(OnResetStageConfirmationNoButtonClicked);
+        _closeStageSelectionButton.onClick.RemoveListener(OnCloseStageSelectionButtonClicked);
+
         _enterCombatButton.onClick.RemoveListener(OnEnterCombatButtonClicked);
         _shopToggleButton.onClick.RemoveListener(OnShopToggleButtonClicked);
         _refreshShopButton.onClick.RemoveListener(OnRefreshShopButtonClicked);
         _team1ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 1));
         _team2ToggleButton.onValueChanged.RemoveListener((isOn) => HandleTeamBuffTabSwitch(isOn, 2));
         _buyLevelXpButton.onClick.RemoveListener(OnBuyLevelXpButtonClicked);
-        _startContinueStageButton.onClick.RemoveListener(OnStartContinueStageButtonClicked);
-        _resetStageButton.onClick.RemoveListener(OnResetStageButtonClicked);
-        _resetStageConfirmationYesButton.onClick.RemoveListener(OnResetStageConfirmationYesButtonClicked);
-        _resetStageConfirmationNoButton.onClick.RemoveListener(OnResetStageConfirmationNoButtonClicked);
+       
         _pauseGameplayButton.onClick.RemoveListener(OnPausePlayGameplayToggleChanged);
         _resumeGameplayButton.onClick.RemoveListener(OnResumeGameplayButtonClicked);
         _restartRoundPauseMenuButton.onClick.RemoveListener(OnRestartRoundPauseMenuButtonClicked);
@@ -782,6 +793,12 @@ public class UIManager : GenericMonoSingleton<UIManager>
         SetMessageForResetStageConfirmation();
         ToggleStageSelectionConfirmationContainer(true);
     }
+
+    private void OnCloseStageSelectionButtonClicked()
+    {
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
+        SceneLoader.Instance.LoadScene(SceneNameEnum.MainMenuScene);
+    }    
 
     private void OnSelectedStageChanged_UI(object[] parameters)
     {
