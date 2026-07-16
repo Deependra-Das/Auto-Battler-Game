@@ -138,7 +138,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         Node targetNode = TryGetNodeUnderPointer(eventData);
 
-        if (targetNode != null && !targetNode.IsOccupied)
+        if (targetNode != null && targetNode.canPlayerDeploy && !targetNode.IsOccupied)
         {
             AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.PlaceUnitOnField);
             _unit.SnapToNode(targetNode);
@@ -159,7 +159,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private Node TryGetNodeUnderPointer(PointerEventData eventData)
     {
-        Tilemap tilemap = _tileGridServiceObj.CurrentTileMap;
+        Tilemap tilemap = _tileGridServiceObj.CurrentGameplayTileMap;
 
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
 
@@ -224,7 +224,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         _hoveredNode = node;
 
-        bool valid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation && !node.IsOccupied;
+        bool valid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation && node.canPlayerDeploy && !node.IsOccupied;
 
         _highlightTileServiceObj.ShowTileHighlight(node.worldPosition, valid);
     }

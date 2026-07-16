@@ -220,7 +220,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     private Node TryGetNodeUnderPointer(PointerEventData eventData)
     {
-        Tilemap tilemap = _tileGridServiceObj.CurrentTileMap;
+        Tilemap tilemap = _tileGridServiceObj.CurrentGameplayTileMap;
 
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
 
@@ -254,7 +254,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (!_teamServiceObj.CanAddUnitToField(TeamEnum.Team1))
             return false;
 
-        if (node == null || node.IsOccupied)
+        if (node == null || node.IsOccupied || !node.canPlayerDeploy)
             return false;
 
         AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.PlaceUnitOnField);
@@ -273,7 +273,7 @@ public class InventoryUnitCard : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         _hoveredNode = node;
 
-        bool valid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation && !node.IsOccupied;
+        bool valid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation && node.canPlayerDeploy && !node.IsOccupied;
 
         _highlightTileServiceObj.ShowTileHighlight(node.worldPosition, valid);
     }
