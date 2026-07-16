@@ -273,6 +273,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     public void OnDestroy()
     {
+        if (!IsSingletonInstance())
+            return;
         UnsubscribeToEvents();
     }
 
