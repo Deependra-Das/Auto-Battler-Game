@@ -422,6 +422,7 @@ public class BaseUnit : MonoBehaviour
             case GameplayStateEnum.Preparation:
             case GameplayStateEnum.StageOver:
             case GameplayStateEnum.RoundOver:
+                currentTarget = null;
                 StopCombatLoop();
                 break;
 
