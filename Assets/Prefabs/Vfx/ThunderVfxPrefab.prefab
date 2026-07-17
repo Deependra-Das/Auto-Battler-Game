@@ -125,16 +125,16 @@ VisualEffect:
       - m_Value: {x: 0.7727999, y: 1.5480525, z: 3.68, w: 1}
         m_Name: FlashGlowColor
         m_Overridden: 1
-      - m_Value: {x: 0.71905893, y: 1.4401156, z: 2.9960787, w: 1}
+      - m_Value: {x: 3.5607848, y: 2.839216, z: 0.07843138, w: 1}
         m_Name: ThunderColor
         m_Overridden: 1
-      - m_Value: {x: 0.7727999, y: 1.5480525, z: 3.68, w: 1}
+      - m_Value: {x: 3.5607848, y: 2.839216, z: 0.07843138, w: 1}
         m_Name: ImpactSparksColor
         m_Overridden: 1
-      - m_Value: {x: 0.7727999, y: 1.5480525, z: 3.68, w: 1}
+      - m_Value: {x: 3.5607848, y: 2.839216, z: 0.07843138, w: 1}
         m_Name: TopFlashGlowColor
         m_Overridden: 1
-      - m_Value: {x: 0.7727999, y: 1.5480525, z: 3.68, w: 1}
+      - m_Value: {x: 3.5607848, y: 2.839216, z: 0.07843138, w: 1}
         m_Name: ImpactFlashGlowColor
         m_Overridden: 1
     m_Uint:

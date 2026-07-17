@@ -35,6 +35,7 @@ public class GameplayManager : MonoBehaviour
     private DragVisualPoolService _dragVisualPoolServiceObj;
     private VfxPoolService _vfxPoolServiceObj;
     private HighlightTileService _highlightTileServiceObj;
+    private RangedAbilityPoolService _rangedAbilityPoolServiceObj;
 
     private readonly HashSet<BaseUnit> _pendingDeadUnits = new();
     private readonly List<BaseUnit> _pendingReleaseUnits = new();
@@ -43,7 +44,9 @@ public class GameplayManager : MonoBehaviour
     private bool _waitingForRoundDecision = false;
     private bool _waitingForStageDecision = false;
     private Coroutine _roundCheckRoutine;
-    private Tilemap _tilemap;
+    private Tilemap _gameplayTilemap;
+    private Tilemap _deploymentTilemap;
+
 
     public GameplayStateEnum CurrentGameplayState { get; private set; }
 
@@ -110,15 +113,20 @@ public class GameplayManager : MonoBehaviour
         _playerLevelServiceObj = GameManager.Instance.Get<PlayerLevelService>();
         _shopServiceObj = GameManager.Instance.Get<ShopService>();
         _currencyServiceObj = GameManager.Instance.Get<CurrencyService>();
+        _rangedAbilityPoolServiceObj = GameManager.Instance.Get<RangedAbilityPoolService>();
     }
 
     public void InitializeStageForGameplay(int stageIndex)
     {
         ActivateBackgroundTilemap(stageIndex);
-        _tileGridServiceObj.CreateGameplayTileMap(_stageServiceObj.GetStageData(GameData.selectedStage).gameplayTilemapPrefab, _gameplayTileGridTransform);
-        _tilemap = _tileGridServiceObj.CurrentTileMap;
+        StageData stageData = _stageServiceObj.GetStageData(GameData.selectedStage);
+        _tileGridServiceObj.CreateGameplayTileMap(stageData.gameplayTilemapPrefab, _gameplayTileGridTransform);
+        _gameplayTilemap = _tileGridServiceObj.CurrentGameplayTileMap;
 
-        _graphServiceObj.InitializeGraph(_tileGridServiceObj.CurrentTileMap);
+        _tileGridServiceObj.CreateDeploymentTileMap(stageData.deploymentTilemapPrefab, _gameplayTileGridTransform);
+        _deploymentTilemap = _tileGridServiceObj.CurrentDeploymentTilemap;
+
+        _graphServiceObj.InitializeGraph(_tileGridServiceObj.CurrentGameplayTileMap, _deploymentTilemap);
         graph = _graphServiceObj.Graph;
 
         _highlightTileServiceObj.Initialize();
@@ -379,6 +387,7 @@ public class GameplayManager : MonoBehaviour
         _pendingReleaseUnits.Clear();
 
         CleanupRound(false);
+        _rangedAbilityPoolServiceObj.Reset();
         _highlightTileServiceObj.Dispose();
         _tileGridServiceObj.Reset();
         _graphServiceObj.Reset();
@@ -471,6 +480,15 @@ public class GameplayManager : MonoBehaviour
         CurrentGameplayState = newState;
 
         EventBusManager.Instance.Raise(EventNameEnum.GameplayStateChanged, CurrentGameplayState);
+
+        if(CurrentGameplayState==GameplayStateEnum.Preparation)
+        {
+            ToggleDeploymentTilemap(true);
+        }
+        else
+        {
+            ToggleDeploymentTilemap(false);
+        }
     }
 
     public void TogglePause()
@@ -659,59 +677,64 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    public void ToggleDeploymentTilemap(bool value)
     {
-        if (graph == null) return;
-
-        var PathList = graph.Paths;
-
-        if (PathList == null) return;
-
-        foreach (Path path in PathList)
-        {
-            Debug.DrawLine(path.source.worldPosition, path.destination.worldPosition, Color.black, 100);
-        }
-
-        var NodesList = graph.Nodes;
-
-        if (NodesList == null) return;
-
-        foreach (Node node in NodesList)
-        {
-            Gizmos.color = node.IsOccupied ? Color.red : Color.green;
-            Gizmos.DrawSphere(node.worldPosition, 0.1f);
-        }
-
-        if (_fromIndex >= NodesList.Count || _toIndex >= NodesList.Count) return;
-
-        List<Node> pathList = graph.GetShortestPath(NodesList[_fromIndex], NodesList[_toIndex]);
-
-        if (pathList.Count > 1)
-        {
-            for (int i = 1; i < pathList.Count; i++)
-            {
-                Debug.DrawLine(pathList[i - 1].worldPosition, pathList[i].worldPosition, Color.red, 1);
-            }
-        }
-
-        if (_tilemap == null) return;
-
-        int index = 0;
-
-
-        for (int x = _tilemap.cellBounds.xMin; x < _tilemap.cellBounds.xMax; x++)
-        {
-            for (int y =_tilemap.cellBounds.yMin; y < _tilemap.cellBounds.yMax; y++)
-            {
-                Vector3Int localPosition = new Vector3Int(x, y, (int)_tilemap.transform.position.y);
-                Vector3 worldPosition = _tilemap.CellToWorld(localPosition);
-
-                if (_tilemap.HasTile(localPosition))
-                {
-                    Handles.Label(worldPosition, index.ToString());
-                    index++;
-                }
-            }
-        }
+        _deploymentTilemap.gameObject.SetActive(value);
     }
+
+    //private void OnDrawGizmos()
+    //{
+    //    if (graph == null) return;
+
+    //    var PathList = graph.Paths;
+
+    //    if (PathList == null) return;
+
+    //    foreach (Path path in PathList)
+    //    {
+    //        Debug.DrawLine(path.source.worldPosition, path.destination.worldPosition, Color.black, 100);
+    //    }
+
+    //    var NodesList = graph.Nodes;
+
+    //    if (NodesList == null) return;
+
+    //    foreach (Node node in NodesList)
+    //    {
+    //        Gizmos.color = node.IsOccupied ? Color.red : Color.green;
+    //        Gizmos.DrawSphere(node.worldPosition, 0.1f);
+    //    }
+
+    //    if (_fromIndex >= NodesList.Count || _toIndex >= NodesList.Count) return;
+
+    //    List<Node> pathList = graph.GetShortestPath(NodesList[_fromIndex], NodesList[_toIndex]);
+
+    //    if (pathList.Count > 1)
+    //    {
+    //        for (int i = 1; i < pathList.Count; i++)
+    //        {
+    //            Debug.DrawLine(pathList[i - 1].worldPosition, pathList[i].worldPosition, Color.red, 1);
+    //        }
+    //    }
+
+    //    if (_tilemap == null) return;
+
+    //    int index = 0;
+
+
+    //    for (int x = _tilemap.cellBounds.xMin; x < _tilemap.cellBounds.xMax; x++)
+    //    {
+    //        for (int y =_tilemap.cellBounds.yMin; y < _tilemap.cellBounds.yMax; y++)
+    //        {
+    //            Vector3Int localPosition = new Vector3Int(x, y, (int)_tilemap.transform.position.y);
+    //            Vector3 worldPosition = _tilemap.CellToWorld(localPosition);
+
+    //            if (_tilemap.HasTile(localPosition))
+    //            {
+    //                Handles.Label(worldPosition, index.ToString());
+    //                index++;
+    //            }
+    //        }
+    //    }
+    //}
 }

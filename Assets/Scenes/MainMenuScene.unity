@@ -11380,6 +11380,7 @@ MonoBehaviour:
   _stageSelectionContent: {fileID: 1866400007}
   _startContinueStageButton: {fileID: 2007632092}
   _resetStageButton: {fileID: 927551545}
+  _closeStageSelectionButton: {fileID: 7371948648949770654}
   _stageSelectionConfirmationContainer: {fileID: 211745336}
   _resetStageConfirmationMessageText: {fileID: 524347896}
   _resetStageConfirmationYesButton: {fileID: 2066048736}
@@ -39027,6 +39028,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8443426293394947771, guid: f29c1498bf230a04b9b100d73a8736dc, type: 3}
   m_PrefabInstance: {fileID: 6822893833052277992}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7371948648949770654 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8724988296790500886, guid: f29c1498bf230a04b9b100d73a8736dc, type: 3}
+  m_PrefabInstance: {fileID: 6822893833052277992}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!4 &7449021517162495575
 Transform:
   m_ObjectHideFlags: 0

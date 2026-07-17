@@ -40,6 +40,9 @@ namespace AutoBattler.Main
 
         private void OnDestroy()
         {
+            if (!IsSingletonInstance())
+                return;
+
             DeregisterServices();
         }
 

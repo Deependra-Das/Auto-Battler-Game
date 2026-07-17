@@ -11,11 +11,11 @@ public class GraphService
 
     private Dictionary<Vector3Int, Node> _cellToNode = new Dictionary<Vector3Int, Node>();
 
-    public void InitializeGraph(Tilemap tilemap)
+    public void InitializeGraph(Tilemap gameplayTilemap, Tilemap deploymentTilemap)
     {
         _cellToNode.Clear();
 
-        _tilemap = tilemap;
+        _tilemap = gameplayTilemap;
         _graph = new PathFindingGraph();
 
         for (int x = _tilemap.cellBounds.xMin; x < _tilemap.cellBounds.xMax; x++)
@@ -29,6 +29,7 @@ public class GraphService
                     Vector3 worldPosition = _tilemap.GetCellCenterWorld(cell);
                     Node node = _graph.AddNode(worldPosition);
                     _cellToNode[cell] = node;
+                    node.canPlayerDeploy = deploymentTilemap.HasTile(cell);
                 }
             }
         }

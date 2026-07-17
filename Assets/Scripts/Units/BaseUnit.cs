@@ -18,8 +18,12 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected Slider shieldBar;
     [SerializeField] protected Image shieldFillImage;
     [SerializeField] private VisualEffect _vfxParticleGraph;
+    [SerializeField] private GameObject _shadow;
 
-    private Material _material;    
+    private Material _material;
+    private Color _shieldDamageColor = Color.white;
+    private Color _healthDamageColor = Color.red;
+    private Color _healingColor = Color.darkSeaGreen;
     private UnitDragHandler _unitDragHandler;
 
     protected UnitData unitData;
@@ -70,6 +74,8 @@ public class BaseUnit : MonoBehaviour
     public UnitFacingDirectionEnum DirectionFacing => directionFacing;
     public bool CanBeDragged => !isActive && !isDead;
 
+    public bool hasAnyBuff = false;
+
     protected GraphService _graphServiceObj;
     protected UnitColorService _unitColorServiceObj;
     protected VfxPoolService vfxPoolServiceObj;
@@ -111,12 +117,16 @@ public class BaseUnit : MonoBehaviour
         _levelText.text = unitData.unitLevel.ToString();
         totalHealth = unitData.baseHealth;
         totalShield = unitData.baseShield;
+        _material.SetColor("_Tint", Color.clear);
         shieldFillImage.color = GetShieldColor(unitData.unitElement);
+        _shieldDamageColor = _unitColorServiceObj.GetShieldDamageColor();
+        _healthDamageColor = _unitColorServiceObj.GeHealthDamageColor();
+        _healingColor = _unitColorServiceObj.GetHealingColor();
         _unitDragHandler.Initialize();
         _vfxParticleGraph.Stop();
-
+        _shadow.gameObject.SetActive(true);
         ResetVitals();
-
+        hasAnyBuff = false;
         currentTeamBuffData = GameManager.Instance.Get<BuffService>().GetTeamBuffData(team);
         ApplyTeamBuffs();
     }
@@ -309,27 +319,29 @@ public class BaseUnit : MonoBehaviour
 
     public void TakeDamage(int amount, UnitElementEnum incomingElement)
     {
-        if (isDead) return;
+        if (isDead || !gameObject.activeInHierarchy) return;
 
-        int remainingDamage = amount;
+        float damageMultiplier = GetDamageMultiplier(incomingElement);
+        int damageToDeal = Mathf.RoundToInt(amount * damageMultiplier);
 
         if (currentShield > 0)
         {
-            StartFadeTintCoroutine(_unitColorServiceObj.GetShieldDamageColor());
-
-            float multiplier = GetShieldDepletionMultiplier(incomingElement);
+            StartFadeTintCoroutine(_shieldDamageColor);
             AudioManager.Instance.PlayDamageShieldAudio();
-            int shieldDamage = Mathf.Min(currentShield, Mathf.RoundToInt(remainingDamage * multiplier));
-            currentShield -= shieldDamage;
-            remainingDamage -= Mathf.RoundToInt(shieldDamage / multiplier);
+
+            int absorbed = Mathf.Min(currentShield, damageToDeal);
+            currentShield -= absorbed;
+            damageToDeal -= absorbed;
+
             UpdateShieldBar(currentShield);
         }
 
-        if (remainingDamage > 0)
+        if (damageToDeal > 0)
         {
-            StartFadeTintCoroutine(_unitColorServiceObj.GeHealthDamageColor());
+            StartFadeTintCoroutine(_healthDamageColor);
             AudioManager.Instance.PlayDamageUnitAudio();
-            currentHealth -= remainingDamage;
+
+            currentHealth -= damageToDeal;
             UpdateHealthBar(currentHealth);
         }
 
@@ -368,7 +380,7 @@ public class BaseUnit : MonoBehaviour
 
         AudioManager.Instance.PlayHealAudio();
         vfxPoolServiceObj.SpawnHealingVfx(currentNode.worldPosition);
-        StartFadeTintCoroutine(_unitColorServiceObj.GetHealingColor());
+        StartFadeTintCoroutine(_healingColor);
         currentHealth += amount;
         currentHealth = Mathf.Min(currentHealth, totalHealth);
         UpdateHealthBar(currentHealth);
@@ -410,6 +422,7 @@ public class BaseUnit : MonoBehaviour
             case GameplayStateEnum.Preparation:
             case GameplayStateEnum.StageOver:
             case GameplayStateEnum.RoundOver:
+                currentTarget = null;
                 StopCombatLoop();
                 break;
 
@@ -461,7 +474,7 @@ public class BaseUnit : MonoBehaviour
 
     protected void ApplyTeamBuffs()
     {
-        bool hasAnyBuff = currentTeamBuffData.attackBonus > 0f || currentTeamBuffData.shieldBonus > 0f ||
+        hasAnyBuff = currentTeamBuffData.attackBonus > 0f || currentTeamBuffData.shieldBonus > 0f ||
        currentTeamBuffData.hpBonus > 0f || currentTeamBuffData.attackSpeedBonus > 0f || GetElementBonus() > 0f;
 
         _vfxParticleGraph.Stop();
@@ -496,9 +509,9 @@ public class BaseUnit : MonoBehaviour
         };
     }
 
-    protected float GetShieldDepletionMultiplier(UnitElementEnum attackElement)
+    protected float GetDamageMultiplier(UnitElementEnum attackElement)
     {
-        return attackElement == unitData.unitElement ? 0.5f : 1f;
+        return ElementDamageMultiplierMatrix.GetMultiplier(attackElement, unitData.unitElement);
     }
 
     protected Color GetShieldColor(UnitElementEnum element)
@@ -583,8 +596,18 @@ public class BaseUnit : MonoBehaviour
         }
     }
 
+    private void StopFadeTintCoroutine()
+    {
+        if (fadeTintCoroutine != null)
+        {
+            StopCoroutine(fadeTintCoroutine);
+            fadeTintCoroutine = null;
+        }
+    }
+
     public virtual void Reset()
     {
+        StopFadeTintCoroutine();
         StopCombatLoop();
         StopAttackLoop();
         StopCoolDownLoop();

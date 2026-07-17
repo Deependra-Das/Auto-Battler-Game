@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    [SerializeField] private VisualEffect _vfxParticleGraph;
+    [SerializeField] private GameObject _shadow;
     private BaseUnit _unit;
     private Collider2D _unitCollider;
     private Camera _mainCamera;
@@ -62,6 +65,8 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         ClearInventoryDropZoneHighlight();
         RaiseToggleInventoryDropZoneEvent(true);
         RaiseToggleDiscardDropZoneEvent(true);
+        _vfxParticleGraph.Stop();
+        _shadow.gameObject.SetActive(false);
         CreateDragSprite();
         UpdateDragPosition(eventData);
     }
@@ -134,20 +139,29 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         Node targetNode = TryGetNodeUnderPointer(eventData);
 
-        if (targetNode != null && !targetNode.IsOccupied)
+        if (targetNode != null && targetNode.canPlayerDeploy && !targetNode.IsOccupied)
         {
             AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.PlaceUnitOnField);
             _unit.SnapToNode(targetNode);
+            _vfxParticleGraph.Stop();
+
+            if (_unit.hasAnyBuff)
+            {
+                _vfxParticleGraph.Reinit();
+                _vfxParticleGraph.Play();
+            }
         }
         else
             _unit.OnDragCancelled(_originalNode);
+
+            _shadow.gameObject.SetActive(true);
 
         CleanupAfterDrag();  
     }
 
     private Node TryGetNodeUnderPointer(PointerEventData eventData)
     {
-        Tilemap tilemap = _tileGridServiceObj.CurrentTileMap;
+        Tilemap tilemap = _tileGridServiceObj.CurrentGameplayTileMap;
 
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(eventData.position);
 
@@ -212,7 +226,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         _hoveredNode = node;
 
-        bool valid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation && !node.IsOccupied;
+        bool valid = GameplayManager.Instance.CurrentGameplayState == GameplayStateEnum.Preparation && node.canPlayerDeploy && !node.IsOccupied;
 
         _highlightTileServiceObj.ShowTileHighlight(node.worldPosition, valid);
     }

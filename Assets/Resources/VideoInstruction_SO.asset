@@ -14,7 +14,69 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VideoInstructionScriptableObjectScript
   videoInstructionList:
   - id: 0
-    title: Test
-    videoClip: {fileID: 32900000, guid: f5e3e630b5632d74aba69a5b016f6a3a, type: 3}
+    title: Buy Units From The Shop
+    videoClip: {fileID: 32900000, guid: 8ae93fbe0c6d4fc4c8ea250675288d2b, type: 3}
     videoThumbnail: {fileID: 0}
-    instruction: Test Instruction
+    instruction: Click the Shop button to open the Shop. The button shows your current
+      coin balance and updates as you earn or spend coins. Click a Unit Card to buy
+      & add it to your inventory. You can also spend coins to refresh the available
+      Unit Cards in the Shop.
+  - id: 1
+    title: Elemental Counters
+    videoClip: {fileID: 32900000, guid: 0a943143f85111c4da24faf8315a379a, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: When deploying units, pay attention to elemental counters. Each
+      element has a weakness & exploiting that with a counter element will let you
+      to deal extra damage & break enemy shields faster.
+  - id: 2
+    title: Discard Unit Cards from Inventory
+    videoClip: {fileID: 32900000, guid: ad9fa1e148250084f9993a5248105eaf, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Drag and drop unwanted Unit cards from your inventory into the Discard
+      panel to sell them back and recover some of the coins you spent
+  - id: 3
+    title: Valid & Invalid Tiles for deployment
+    videoClip: {fileID: 32900000, guid: 51e09c0fce0170248b05ae5183e8ab47, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Units can only be placed on valid tiles within the deployment zone.
+      Valid tiles are highlighted in green, while invalid tiles are highlighted in
+      red. If you place a unit on an invalid tile, it will return to your inventory
+      or its previous valid position.
+  - id: 4
+    title: Deployment Limit
+    videoClip: {fileID: 32900000, guid: bc4764205f4e04f49a9413866a7aca19, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: The bottom-right corner shows your Player Level, XP progress, and
+      Unit Deployment Limit. As your level increases, you can deploy more units.
+      You cannot place more units than your current deployment limit.
+  - id: 5
+    title: Increase Player Level
+    videoClip: {fileID: 32900000, guid: 3056912d34d534e4cbe3c2b860ca5dda, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Click the Buy XP button to spend coins and gain XP. Each level requires
+      more XP than the last. You start the first round with a set amount of coins.
+      At the end of each round, you earn more coins whether you win, lose, or draw.
+  - id: 6
+    title: Increase Deployment Limit
+    videoClip: {fileID: 32900000, guid: cb0e906cfdbce1243a869d00b3c1b45a, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: As you level up, you'll unlock a higher unit deployment limit.
+  - id: 7
+    title: Discard Units from Field
+    videoClip: {fileID: 32900000, guid: 846befe1eaaffcf4198ef633fc79155c, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Drag and drop a unit directly from the field to the Discard panel
+      to sell it and receive a coin refund.
+  - id: 8
+    title: Move Units to Inventory From Field
+    videoClip: {fileID: 32900000, guid: ea07f19e5e3aa5045a77adde517b5197, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Drag and drop a deployed unit from the field back into your inventory.
+  - id: 9
+    title: 'Unit Faction & Type Buffs '
+    videoClip: {fileID: 32900000, guid: b735292893359764ba0805212f82abc5, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Deployed units receive stat buffs based on your field lineup. These
+      buffs depend on the number of units from the same faction or type. Building
+      the right combinations with the deployed units can increase damage, improve
+      shields, enhance healing, and strengthen your team in a battle.

@@ -70,7 +70,7 @@ public class VfxPoolService
     {
         HealingVfx healingEffectVfx = null;
 
-        if (_smokeVfxPoolQueue.Count > 0)
+        if (_healingVfxPoolQueue.Count > 0)
         {
             healingEffectVfx = _healingVfxPoolQueue.Dequeue();
         }
@@ -105,7 +105,7 @@ public class VfxPoolService
     {
         FireVfx fireEffectVfx = null;
 
-        if (_smokeVfxPoolQueue.Count > 0)
+        if (_fireVfxPoolQueue.Count > 0)
         {
             fireEffectVfx = _fireVfxPoolQueue.Dequeue();
         }
@@ -140,7 +140,7 @@ public class VfxPoolService
     {
         NatureVfx natureEffectVfx = null;
 
-        if (_smokeVfxPoolQueue.Count > 0)
+        if (_natureVfxPoolQueue.Count > 0)
         {
             natureEffectVfx = _natureVfxPoolQueue.Dequeue();
         }
@@ -175,7 +175,7 @@ public class VfxPoolService
     {
         ThunderVfx thunderEffectVfx = null;
 
-        if (_smokeVfxPoolQueue.Count > 0)
+        if (_thunderVfxPoolQueue.Count > 0)
         {
             thunderEffectVfx = _thunderVfxPoolQueue.Dequeue();
         }
