@@ -18,6 +18,7 @@ public class BaseUnit : MonoBehaviour
     [SerializeField] protected Slider shieldBar;
     [SerializeField] protected Image shieldFillImage;
     [SerializeField] private VisualEffect _vfxParticleGraph;
+    [SerializeField] private GameObject _shadow;
 
     private Material _material;
     private Color _shieldDamageColor = Color.white;
@@ -123,7 +124,7 @@ public class BaseUnit : MonoBehaviour
         _healingColor = _unitColorServiceObj.GetHealingColor();
         _unitDragHandler.Initialize();
         _vfxParticleGraph.Stop();
-
+        _shadow.gameObject.SetActive(true);
         ResetVitals();
         hasAnyBuff = false;
         currentTeamBuffData = GameManager.Instance.Get<BuffService>().GetTeamBuffData(team);

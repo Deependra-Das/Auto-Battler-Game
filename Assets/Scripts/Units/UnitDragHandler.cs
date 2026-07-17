@@ -9,7 +9,7 @@ using UnityEngine.VFX;
 public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] private VisualEffect _vfxParticleGraph;
-
+    [SerializeField] private GameObject _shadow;
     private BaseUnit _unit;
     private Collider2D _unitCollider;
     private Camera _mainCamera;
@@ -66,6 +66,7 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         RaiseToggleInventoryDropZoneEvent(true);
         RaiseToggleDiscardDropZoneEvent(true);
         _vfxParticleGraph.Stop();
+        _shadow.gameObject.SetActive(false);
         CreateDragSprite();
         UpdateDragPosition(eventData);
     }
@@ -142,17 +143,18 @@ public class UnitDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         {
             AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.PlaceUnitOnField);
             _unit.SnapToNode(targetNode);
+            _vfxParticleGraph.Stop();
 
-        _vfxParticleGraph.Stop();
-
-        if (_unit.hasAnyBuff)
-        {
-            _vfxParticleGraph.Reinit();
-            _vfxParticleGraph.Play();
-        }
+            if (_unit.hasAnyBuff)
+            {
+                _vfxParticleGraph.Reinit();
+                _vfxParticleGraph.Play();
+            }
         }
         else
             _unit.OnDragCancelled(_originalNode);
+
+            _shadow.gameObject.SetActive(true);
 
         CleanupAfterDrag();  
     }
