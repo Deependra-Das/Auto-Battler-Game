@@ -712,7 +712,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void OnCloseStageSelectionButtonClicked()
     {
-        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.Popup);
+        AudioManager.Instance.PlaySoundEffectsAudio(AudioTypeEnum.ButtonClick);
         SceneLoader.Instance.LoadScene(SceneNameEnum.MainMenuScene);
     }
 
