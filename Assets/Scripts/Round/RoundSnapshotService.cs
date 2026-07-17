@@ -38,7 +38,7 @@ public class RoundSnapshotService
         RoundResultEnum roundResult = (RoundResultEnum)parameters[2];
 
         _roundStartSnapshot = CreateSnapshot(stageIndex, roundIndex, roundResult);
-        PrintRoundSnapshotData(_roundStartSnapshot);
+        //PrintRoundSnapshotData(_roundStartSnapshot);
     }
 
     private void OnRoundOverSaveSnapshot(object[] parameters)
@@ -48,7 +48,7 @@ public class RoundSnapshotService
         RoundResultEnum roundResult = (RoundResultEnum)parameters[2];
 
         _roundEndSnapshot = CreateSnapshot(stageIndex, roundIndex, roundResult);
-        PrintRoundSnapshotData(_roundEndSnapshot);
+        //PrintRoundSnapshotData(_roundEndSnapshot);
     }
 
     private RoundSnapshotData CreateSnapshot(int stageIndex, int roundIndex, RoundResultEnum roundResult)

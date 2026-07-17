@@ -62,7 +62,7 @@ public class StageService
         CurrentRoundIndex = 0;
         ApplyStageConfig();
 
-        Debug.Log($"Starting Stage {CurrentStageIndex}");
+        //Debug.Log($"Starting Stage {CurrentStageIndex}");
         RaiseStageStartedEvent();
 
         StartRound();
@@ -70,7 +70,7 @@ public class StageService
 
     public void StartRound()
     {
-        Debug.Log($"Starting Stage {CurrentStageIndex} - Round {CurrentRoundIndex}");
+        //Debug.Log($"Starting Stage {CurrentStageIndex} - Round {CurrentRoundIndex}");
         RaiseRoundStartedEvent();
     }
 
@@ -79,7 +79,7 @@ public class StageService
         RoundSnapshotData latestRoundSnapshot = GameManager.Instance.Get<RoundSnapshotService>().GetRoundStartSnapshot();
         RestorePlayerInventory(latestRoundSnapshot);
         RaiseStageStartedAfterRestoreEvent(latestRoundSnapshot);
-        Debug.Log($"Restarting Round {CurrentRoundIndex} of Stage {CurrentStageIndex}");
+        //Debug.Log($"Restarting Round {CurrentRoundIndex} of Stage {CurrentStageIndex}");
         StartRound();
     }
 
@@ -100,7 +100,7 @@ public class StageService
 
         ApplyStageConfig();
 
-        Debug.Log($"Resuming Stage {CurrentStageIndex}, Round {CurrentRoundIndex}");
+        //Debug.Log($"Resuming Stage {CurrentStageIndex}, Round {CurrentRoundIndex}");
 
         RestorePlayerInventory(saveData.latestRoundSnapshot);
         RaiseStageStartedAfterRestoreEvent(saveData.latestRoundSnapshot);
