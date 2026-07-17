@@ -15,6 +15,51 @@ MonoBehaviour:
   videoInstructionList:
   - id: 0
     title: Test
-    videoClip: {fileID: 32900000, guid: f5e3e630b5632d74aba69a5b016f6a3a, type: 3}
+    videoClip: {fileID: 32900000, guid: 8ae93fbe0c6d4fc4c8ea250675288d2b, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Test Instruction
+  - id: 1
+    title: Test
+    videoClip: {fileID: 32900000, guid: 0a943143f85111c4da24faf8315a379a, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Test Instruction
+  - id: 2
+    title: Test
+    videoClip: {fileID: 32900000, guid: ad9fa1e148250084f9993a5248105eaf, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Test Instruction
+  - id: 3
+    title: Test
+    videoClip: {fileID: 32900000, guid: 51e09c0fce0170248b05ae5183e8ab47, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Test Instruction
+  - id: 4
+    title: Test
+    videoClip: {fileID: 32900000, guid: bc4764205f4e04f49a9413866a7aca19, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Test Instruction
+  - id: 5
+    title: Test
+    videoClip: {fileID: 32900000, guid: 3056912d34d534e4cbe3c2b860ca5dda, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Test Instruction
+  - id: 6
+    title: Test
+    videoClip: {fileID: 32900000, guid: cb0e906cfdbce1243a869d00b3c1b45a, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Test Instruction
+  - id: 7
+    title: Test
+    videoClip: {fileID: 32900000, guid: 846befe1eaaffcf4198ef633fc79155c, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Test Instruction
+  - id: 8
+    title: Test
+    videoClip: {fileID: 32900000, guid: cb0e906cfdbce1243a869d00b3c1b45a, type: 3}
+    videoThumbnail: {fileID: 0}
+    instruction: Test Instruction
+  - id: 9
+    title: Test
+    videoClip: {fileID: 32900000, guid: b735292893359764ba0805212f82abc5, type: 3}
     videoThumbnail: {fileID: 0}
     instruction: Test Instruction
