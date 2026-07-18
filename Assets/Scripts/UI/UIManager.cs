@@ -334,6 +334,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
         {
             case SceneNameEnum.MainMenuScene:
                 AudioManager.Instance.PlayMusic(AudioTypeEnum.MainMenuMusic);
+                PostProcessingManager.Instance.ToggleBlur(false);
+                PostProcessingManager.Instance.ToggleBloom(false);
                 PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(true);
                 ToggleMainMenuUIContainer(true);
                 StartFlashing();
@@ -341,6 +343,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
             case SceneNameEnum.StageSelectionScene:
                 AudioManager.Instance.PlayMusic(AudioTypeEnum.MainMenuMusic);
+                PostProcessingManager.Instance.ToggleBlur(false);
+                PostProcessingManager.Instance.ToggleBloom(false);
                 PostProcessingManager.Instance.ToggleFullscreenVornoiEffect(false);
                 CreateStageSelectionButtons();
                 UpdateStageSelectionRoundData();
@@ -348,6 +352,8 @@ public class UIManager : GenericMonoSingleton<UIManager>
                 break;
 
             case SceneNameEnum.GameplayScene:
+                PostProcessingManager.Instance.ToggleBlur(false);
+                PostProcessingManager.Instance.ToggleBloom(true);
                 ToggleGameplayUIContainer(true);
                 break;
         }
@@ -478,6 +484,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void ToggleHowToPlayUI(bool value)
     {
+        PostProcessingManager.Instance.ToggleBlur(value);
         _howToPlayUIContainer.SetActive(value);
     }
 
@@ -521,6 +528,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void ToggleCreditsUI(bool value)
     {
+        PostProcessingManager.Instance.ToggleBlur(value);
         _creditsUIContainer.SetActive(value);
     }
 
@@ -558,6 +566,7 @@ public class UIManager : GenericMonoSingleton<UIManager>
 
     private void ToggleAudioSettingsUI(bool value)
     {
+        PostProcessingManager.Instance.ToggleBlur(value);
         _audioSettingsUIContainer.SetActive(value);
     }
 
