@@ -181,7 +181,7 @@ public class PlayerLevelService
 
         _xpExchangeCost = 0;
         _xpExchangeValue = 0;
-
+        RaiseXPChangedEvent();
         RaiseLevelChangedEvent();
     }
 
