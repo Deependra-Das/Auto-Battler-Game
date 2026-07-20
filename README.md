@@ -80,15 +80,19 @@ The project implements drag-and-drop feature for cards & units, JSON save/load f
 
 ## Architecture Block Diagram
 
+<img width="2241" height="720" alt="AutobattlerGameArchitectureDiagram" src="https://github.com/user-attachments/assets/2058c915-c601-4205-8390-6a75eb565c91" />
 
 ---
 
 ## Playable build
 
+https://thependragon99.itch.io/warband-tactics
 
 ---
 
 ## Gameplay Video
+
+https://www.youtube.com/watch?v=76I4bDId0WU
 
 
 
